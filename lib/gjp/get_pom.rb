@@ -7,17 +7,15 @@ require "json"
 
 class PomGetter
   def self.get_pom(file)
-    if File.directory?(file)
-      get_pom_from_dir(file)
-    elsif File.file?(file)
-      get_pom_from_jar(file) or get_pom_from_site(file)
-    end
+      get_pom_from_dir(file) or  get_pom_from_jar(file) or get_pom_from_site(file)
   end
 
   def self.get_pom_from_dir(dir)
-    pom_path = File.join(dir, "pom.xml")
-    if File.file?(pom_path)
-      return File.read(pom_path)
+    if File.directory?(dir)
+      pom_path = File.join(dir, "pom.xml")
+      if File.file?(pom_path)
+          return File.read(pom_path)
+      end
     end
   end
   
