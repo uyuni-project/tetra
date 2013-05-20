@@ -15,4 +15,11 @@
 # http://www.gnu.org/licenses/lgpl-2.1.html
 #
 
-p "Hallo!"
+begin
+  require 'gjp'
+rescue LoadError
+  require 'rubygems'
+  require 'gjp'
+end
+
+greet
