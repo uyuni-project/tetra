@@ -1,0 +1,17 @@
+#!/usr/bin/env ruby
+#
+# The (open)?SUSE ((Linux Enterprise) (Server|Desktop))?'s
+# packager Swiss Army Knife.
+#
+# Copyright 2013 Silvio Moioli <smoioli@suse.de>
+#
+# Inspired mainly by pom2spec by:
+#  Pascal Bleser <pascal.bleser@opensuse.org>
+#  Duncan Mac-Vicar Prett <dmacvicar@suse.de>
+#
+# This file is licensed under the
+# GNU Lesser General Public License version 2.1 or later:
+# http://www.gnu.org/licenses/lgpl-2.1.html
+#
+
+p "Hallo!"
