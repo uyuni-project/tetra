@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    gjp (0.2.0)
+    gjp (0.3.0)
       clamp
       json
       rest-client
