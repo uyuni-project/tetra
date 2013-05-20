@@ -32,10 +32,10 @@ class PomGetter
   
   def self.get_pom_from_site(file)
     sha1 = Digest::SHA1.hexdigest File.read(file)
-    response = RestClient.get "http://search.maven.org/solrsearch/select", {:params => {:q => "1:\"#{sha1}\"", "rows" => "1", "wt" => "json"}}
+    response = RestClient.get "http://search.maven.org/solrsearch/select", {:params => {:q => "1:\"#{sha1}\"", "rows" => "100", "wt" => "json"}}
     if response.code == 200
       json = JSON.parse(response.to_s)
-      results = json["response"]["docs"]
+      results = json["response"]["docs"].select {|result| result["ec"].include?(".pom")}
       if results.length > 0
         result = results.first
         path = "#{result["g"].gsub(".", "/")}/#{result["a"]}/#{result["v"]}/#{result["a"]}-#{result["v"]}.pom"
