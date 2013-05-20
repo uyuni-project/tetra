@@ -1,5 +1,11 @@
 # encoding: UTF-8
 
-def greet
-  p "Hallo!"
+require 'clamp'
+
+class MainCommand < Clamp::Command
+  subcommand "greet", "Greets you" do
+    def execute
+      p "Hallo!"
+    end
+  end
 end

@@ -22,4 +22,4 @@ rescue LoadError
   require 'gjp'
 end
 
-greet
+MainCommand.run
