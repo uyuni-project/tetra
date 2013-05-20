@@ -1,8 +1,9 @@
 PATH
   remote: .
   specs:
-    gjp (0.1.0)
+    gjp (0.2.0)
       clamp
+      rubyzip
 
 GEM
   remote: http://rubygems.org/
@@ -18,6 +19,7 @@ GEM
     rspec-expectations (2.13.0)
       diff-lcs (>= 1.1.3, < 2.0)
     rspec-mocks (2.13.1)
+    rubyzip (0.9.9)
 
 PLATFORMS
   ruby
