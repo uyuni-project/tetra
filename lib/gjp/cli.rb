@@ -4,7 +4,7 @@ require 'clamp'
 
 class MainCommand < Clamp::Command
   subcommand "get-pom", "Retrieves a pom file for an archive or project directory" do
-    parameter "[PATH]", "project directory or jar file path", :default => "."
+    parameter "PATH", "project directory or jar file path"
 
     def execute
       begin
