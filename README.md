@@ -15,7 +15,7 @@ Easiest install is via RubyGems:
 ## Usage
 
 Currently available tools:
-* `gjp get-pom <jarfile>` will attempt to find a jar's pom.xml if it exists (from the package itself or through search.maven.org)
+* `gjp get-pom PATH` will attempt to find a jar's pom.xml if it exists (from the package itself or through search.maven.org)
 
 ## Source
 
