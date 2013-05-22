@@ -1,7 +1,7 @@
 gjp – Green Java Packager's tools
 ===
 
-`gjp` (pronounced _[G.I Joe]_) is a set of tools to ease and partially automate Linux packaging of Java projects.
+`gjp` (pronounced _/ˈdʒiː ˈaɪ ˈd͡ʒəʊ/_) is a set of tools to ease and partially automate Linux packaging of Java projects.
 
 The project focus is on producing rpm packages for SUSE distributions, but it is general enough to be useful even for other distributions.
 
