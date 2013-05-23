@@ -11,7 +11,7 @@ class PomGetter
 
   # returns the pom corresponding to a file or directory, if it can be found
   def self.get_pom(file)
-    get_pom_from_dir(file) or  get_pom_from_jar(file) or get_pom_from_sha1(file) or get_pom_from_heuristic(file)
+    (get_pom_from_dir(file) or get_pom_from_jar(file) or get_pom_from_sha1(file) or get_pom_from_heuristic(file))
   end
 
   # returns the pom in a project directory
@@ -59,12 +59,14 @@ class PomGetter
    end
   end
   
+  # returns a JSON result from search.maven.com
   def self.repository_search(params)
     response = RestClient.get "http://search.maven.org/solrsearch/select", {:params => params.merge({"rows" => "100", "wt" => "json"})}
     json = JSON.parse(response.to_s)
     return json["response"]["docs"]
   end
   
+  # downloads a POM from a search.maven.com search result
   def self.repository_download(result)
     if result != nil
       path = "#{result["g"].gsub(".", "/")}/#{result["a"]}/#{result["v"]}/#{result["a"]}-#{result["v"]}.pom"
