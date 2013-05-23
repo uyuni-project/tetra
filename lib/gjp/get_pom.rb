@@ -19,6 +19,7 @@ class PomGetter
     if File.directory?(dir)
       pom_path = File.join(dir, "pom.xml")
       if File.file?(pom_path)
+          $log.info("pom.xml found in #{dir}/pom.xml")
           return File.read(pom_path)
       end
     end
@@ -28,6 +29,7 @@ class PomGetter
   def self.get_pom_from_jar(file)
     Zip::ZipFile.foreach(file) do |entry|
       if entry.name =~ /\/pom.xml$/
+        $log.info("pom.xml found in #{file}##{entry.name}")
         return entry.get_input_stream.read
       end
     end
@@ -38,7 +40,11 @@ class PomGetter
   def self.get_pom_from_sha1(file)
     sha1 = Digest::SHA1.hexdigest File.read(file)
     results = repository_search({:q => "1:\"#{sha1}\""}).select {|result| result["ec"].include?(".pom")}
-    return repository_download(results.first)
+    result = results.first    
+    if result != nil
+      $log.info("pom.xml for #{file} found on search.maven.org for sha1 #{sha1} (#{result["g"]}:#{result["a"]}:#{result["v"]})")
+      return repository_download(result)
+    end
   end
 
   # returns a pom from search.maven.org with a heuristic name search
@@ -53,8 +59,11 @@ class PomGetter
           results = repository_search({:q => "g:\"#{result["g"]}\" AND a:\"#{result["a"]}\"", :core => "gav"})
           their_versions = results.map {|doc| doc["v"]}
           best_matched_version = if my_version != nil then best_match(my_version, their_versions) else their_versions.max end
-          best_matched_results = results.select{|result| result["v"] == best_matched_version}
-          return repository_download(best_matched_results.first)
+          best_matched_result = (results.select{|result| result["v"] == best_matched_version}).first
+          
+          $log.warn("pom.xml for #{file} found on search.maven.org with heuristic search (#{best_matched_result["g"]}:#{best_matched_result["a"]}:#{best_matched_result["v"]})")
+          
+          return repository_download(best_matched_result)
       end
    end
   end
@@ -82,8 +91,7 @@ class PomGetter
   #  - score weighs differently on chunk index (first chunks are most important)
   #  - lowest score wins
   def self.best_match(my_version, their_versions)
-    warn "** VERSION COMPARISON **"
-    warn "#{my_version} vs #{their_versions.join(', ')}"
+    $log.debug("version comparison: #{my_version} vs #{their_versions.join(', ')}")
   
     my_chunks = my_version.split /[\.\-\_ ~,]/
     their_chunks_hash = Hash[
@@ -109,8 +117,10 @@ class PomGetter
     end
     
     scoreboard = scoreboard.sort_by {|element| element[:score]}
+
+    $log.debug("scoreboard: ")
     scoreboard.each_with_index do |element, i|
-      warn "#{i+1}. #{element[:version]} (score: #{element[:score]})"
+      $log.debug("  #{i+1}. #{element[:version]} (score: #{element[:score]})")
     end
     
     winner = scoreboard.first
