@@ -2,7 +2,7 @@
 
 require "logger"
 
-def init_logger(level)
+def init_logger(level = nil)
   $log = Logger.new(STDERR)
   $log.level = if level == nil
     if very_very_verbose?

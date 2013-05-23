@@ -1,4 +1,6 @@
 require "gjp/version"
 require "gjp/logger"
 require "gjp/cli"
+require "gjp/pom"
 require "gjp/get_pom"
+require "gjp/get_source_address"

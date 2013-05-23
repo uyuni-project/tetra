@@ -4,6 +4,7 @@ PATH
     gjp (0.3.5)
       clamp
       json
+      nokogiri
       rest-client
       rubyzip
       text
@@ -15,6 +16,7 @@ GEM
     diff-lcs (1.2.4)
     json (1.8.0)
     mime-types (1.23)
+    nokogiri (1.5.9)
     rake (10.0.4)
     rest-client (1.6.7)
       mime-types (>= 1.16)

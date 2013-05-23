@@ -3,4 +3,4 @@
 require "gjp"
 require "logger"
 
-init_logger(Logger::FATAL)
+init_logger(Logger::INFO)

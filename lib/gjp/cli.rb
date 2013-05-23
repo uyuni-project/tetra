@@ -22,4 +22,16 @@ class MainCommand < Clamp::Command
       end
     end
   end
+    
+  subcommand "get-source-address", "Retrieves a project's source Internet address" do
+    parameter "PATH", "project's pom file path"
+    option ["-v", "--verbose"], :flag, "verbose output"
+    option ["--very-verbose"], :flag, "very verbose output"
+    option ["--very-very-verbose"], :flag, "very very verbose output"
+
+    def execute
+      init_logger
+      puts SourceAddressGetter.get_source_address(path)
+    end    
+  end
 end

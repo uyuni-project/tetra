@@ -7,6 +7,7 @@ require "json"
 require "text"
 require "pathname"
 
+# implements the get-pom subcommand
 class PomGetter
 
   # returns the pom corresponding to a file or directory, if it can be found
