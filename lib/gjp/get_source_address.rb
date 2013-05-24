@@ -9,6 +9,7 @@ class SourceAddressGetter
 
   # returns the pom corresponding to a file or directory, if it can be found
   def self.get_source_address(file)
+    $log.info("looking for source address for: #{file}")
     (get_source_address_from_pom(file) or get_source_address_from_github(file))
   end
 
@@ -18,7 +19,7 @@ class SourceAddressGetter
     result = pom.connection_address
 
     if result != nil
-      $log.info("address found in pom for: #{file}")
+      $log.info("address found in pom")
       result
     end
   end
@@ -27,24 +28,21 @@ class SourceAddressGetter
   def self.get_source_address_from_github(file)
     pom = Pom.new(file)
 
-    result = (github_search(pom.artifact_id).first or github_search(pom.group_id).first)
+    result = (github_search(pom.artifact_id) or github_search(pom.artifact_id.split("-").first) or github_search(pom.group_id))
     
     if result != nil
-      $log.info("address found on Github for: #{file}")
+      $log.info("address found on Github: #{result}")
       result
     end
   end
   
-  # returns Giuthub repo addresses based on the keyword
+  # returns a Giuthub repo address based on the keyword
   def self.github_search(keyword)
-    p "doing #{keyword}"
-    if keyword != nil
-      response = RestClient.get "https://api.github.com/legacy/repos/search/" + CGI::escape(keyword), :user_agent => "gjp/" + Gjp::VERSION, :language => "java"
+    if keyword != "" and keyword != nil
+      response = RestClient.get "https://api.github.com/legacy/repos/search/" + CGI::escape(keyword), :user_agent => "gjp/" + Gjp::VERSION, :language => "java", :sort => "forks"
       json = JSON.parse(response.to_s)
     
-      json["repositories"].map do |repository|
-        "git:" + repository["url"]
-      end
+      (json["repositories"].map {|repository| "git:" + repository["url"]}).first
     end
   end
 end
