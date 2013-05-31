@@ -15,9 +15,9 @@ Easiest install is via RubyGems:
 ## Usage
 
 Currently available tools:
-* `gjp get-pom PATH` will attempt to find an artifact's pom.xml, if it exists (from the package itself or through search.maven.org)
-* `gjp get-source-address PATH` will attempt to find the SCM address of an artifact from its pom.xml (from the pom.xml itself or through api.github.com)
-* `gjp get-source PATH ADDRESS` downloads the source of a pom.xml's project from its SCM at ADDRESS
+* `gjp get-pom JAR` will attempt to find an jar's pom.xml (either from the package itself or through search.maven.org);
+* `gjp get-source-address POM` will attempt to find the SCM Internet address of a pom.xml (from the file itself or through api.github.com);
+* `gjp get-source POM ADDRESS` downloads the source of a pom.xml's project from its SCM at ADDRESS;
 
 ## Source
 
