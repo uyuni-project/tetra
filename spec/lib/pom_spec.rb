@@ -22,5 +22,11 @@ describe Pom do
       pom.artifact_id.should eq "commons-logging"
     end
   end
+  
+  describe "#version" do
+    it "reads the version" do
+      pom.version.should eq "1.1.1"
+    end
+  end
 end
 

@@ -34,4 +34,17 @@ class MainCommand < Clamp::Command
       puts SourceAddressGetter.get_source_address(path)
     end    
   end
+  
+  subcommand "get-source", "Retrieves a project's source code directory" do
+    parameter "ADDRESS", "project's source SCM address"
+    parameter "PATH", "project's pom file path"
+    option ["-v", "--verbose"], :flag, "verbose output"
+    option ["--very-verbose"], :flag, "very verbose output"
+    option ["--very-very-verbose"], :flag, "very very verbose output"
+
+    def execute
+      init_logger
+      puts SourceGetter.get_source(address, path, ".")
+    end    
+  end
 end

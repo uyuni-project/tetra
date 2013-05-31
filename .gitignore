@@ -12,6 +12,9 @@ test/tmp
 test/version_tmp
 tmp
 
+# SPEC generated files
+spec/data/tomcat/org.apache.tomcat\:tomcat\:7.0.40
+
 # YARD artifacts
 .yardoc
 _yardoc

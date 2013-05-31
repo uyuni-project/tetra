@@ -23,4 +23,8 @@ class Pom
   def artifact_id
     @doc.xpath("project/artifactId/text()").to_s
   end
+  
+  def version
+    @doc.xpath("project/version/text()").to_s
+  end
 end
