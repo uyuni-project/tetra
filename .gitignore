@@ -13,7 +13,7 @@ test/version_tmp
 tmp
 
 # SPEC generated files
-spec/data/tomcat/org.apache.tomcat\:tomcat\:7.0.40
+spec/data/nailgun/com.martiansoftware\:nailgun-all\:0.9.1
 
 # YARD artifacts
 .yardoc

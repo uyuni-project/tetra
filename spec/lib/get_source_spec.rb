@@ -7,14 +7,14 @@ describe SourceGetter do
   describe ".get_source_from_git" do
     it "gets the sources from a git repo" do
       
-      dir_path = File.join("spec", "data", "tomcat")
+      dir_path = File.join("spec", "data", "nailgun")
       pom_path = File.join(dir_path, "pom.xml")
 
-      SourceGetter.get_source("git:https://github.com/apache/tomcat", pom_path, dir_path)
+      SourceGetter.get_source("git:git@github.com:martylamb/nailgun.git", pom_path, dir_path)
 
-      repo_path = File.join(dir_path, "org.apache.tomcat:tomcat:7.0.40")
-      file_path = File.join(repo_path, "LICENSE")
-      File.open(file_path).readline.should eq "\n"
+      repo_path = File.join(dir_path, "com.martiansoftware:nailgun-all:0.9.1")
+      file_path = File.join(repo_path, "README.md")
+      File.open(file_path).readline.should eq "nailgun\n"
       
       FileUtils.rm_rf(repo_path)
     end
