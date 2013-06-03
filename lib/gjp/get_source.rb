@@ -19,7 +19,11 @@ class SourceGetter
   def self.get_source_from_scm(prefix, scm_address, pomfile, directory)
     pom = Pom.new(pomfile)
     dir = File.join(directory, "#{pom.group_id}:#{pom.artifact_id}:#{pom.version}")
-    Dir::mkdir(dir)
+		begin
+	    Dir::mkdir(dir)
+		rescue Errno::EEXIST
+			$log.warn("Source directory exists, leaving...")
+		end
     
 		if prefix == "git"
 			get_source_from_git(scm_address, dir, pom.version)
