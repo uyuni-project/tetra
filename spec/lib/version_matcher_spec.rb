@@ -3,6 +3,13 @@
 require 'spec_helper'
 
 describe VersionMatcher do      
+	
+	it "splits full names into names and version numbers" do
+		VersionMatcher.split_version("moio-3.2beta1").should eq(["moio", "3.2beta1"])
+		VersionMatcher.split_version("3.2beta1").should eq(["", "3.2beta1"])
+		VersionMatcher.split_version("v3.2beta1").should eq(["v", "3.2beta1"])
+	end
+
 	it "computes chunk distances" do
 		VersionMatcher.chunk_distance(nil, "1").should eq(1)
 		VersionMatcher.chunk_distance("alpha", nil).should eq(5)

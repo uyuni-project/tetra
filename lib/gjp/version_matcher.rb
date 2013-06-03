@@ -4,12 +4,13 @@ require "text"
 
 # heuristically matches version strings
 class VersionMatcher 
-  
-	# heuristically extracts a version string from a longer string (anything pseudo-numeric after a period
-  # or a dash).
+
+	# heuristically splits a full name into an artifact name and version string
+  # assumes that version strings begin with a numeric character and are separated
+  # by a ., -, _, ~ or space
   # returns a [name, version] pair
 	def self.split_version(full_name)	
-    matches = full_name.match(/(.*?)(?:[\.\-\_ ~,]([0-9].*))?$/)
+    matches = full_name.match(/(.*?)(?:[\.\-\_ ~,]?([0-9].*))?$/)
     if matches != nil and matches.length > 1
       [matches[1], matches[2]]
 		else
