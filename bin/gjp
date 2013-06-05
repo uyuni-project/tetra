@@ -15,6 +15,10 @@
 # http://www.gnu.org/licenses/lgpl-2.1.html
 #
 
+if File.exist?(File.join(File.dirname(__FILE__), '..', '.git'))
+  $: << File.join(File.dirname(__FILE__), '..', 'lib')
+end
+
 begin
   require 'gjp'
 rescue LoadError
