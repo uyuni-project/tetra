@@ -3,7 +3,7 @@
 require "spec_helper"
 require "fileutils"
 
-describe SourceGetter do
+describe Gjp::SourceGetter do
   describe ".get_source_from_git" do
     it "gets the sources from a git repo" do
       dir_path = File.join("spec", "data", "nailgun")
@@ -13,7 +13,7 @@ describe SourceGetter do
 
       FileUtils.rm_rf(repo_path)
 
-      SourceGetter.get_source("git:git@github.com:martylamb/nailgun.git", pom_path, dir_path)
+      Gjp::SourceGetter.get_source("git:git@github.com:martylamb/nailgun.git", pom_path, dir_path)
 
       File.open(file_path).readline.should eq "nailgun\n"
     end
@@ -28,7 +28,7 @@ describe SourceGetter do
 
       FileUtils.rm_rf(repo_path)
 
-      SourceGetter.get_source("svn:http://svn.apache.org/repos/asf/struts/struts2/tags/STRUTS_2_3_14/apps", pom_path, dir_path)
+      Gjp::SourceGetter.get_source("svn:http://svn.apache.org/repos/asf/struts/struts2/tags/STRUTS_2_3_14/apps", pom_path, dir_path)
 
       File.open(file_path).readline.should eq "README.txt - showcase\n"
     end
