@@ -1,11 +1,12 @@
 # encoding: UTF-8
 
 require "nokogiri"
+require 'open-uri'
 
 # encapsulates a pom.xml file
 class Pom
   def initialize(filename)
-    @doc = Nokogiri::XML(File.read(filename))
+    @doc = Nokogiri::XML(open(filename).read)
     @doc.remove_namespaces!
   end
   
