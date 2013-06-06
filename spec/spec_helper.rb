@@ -3,4 +3,8 @@
 require "gjp"
 require "logger"
 
-init_logger(Logger::INFO)
+Gjp.logger = ::Logger.new(STDERR)
+Gjp.logger.level = ::Logger::INFO
+Gjp.logger.formatter = proc do |severity, datetime, progname, msg|
+  "#{severity.chars.first}: #{msg}\n"
+end

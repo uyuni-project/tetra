@@ -26,4 +26,4 @@ rescue LoadError
   require 'gjp'
 end
 
-MainCommand.run
+Gjp::MainCommand.run

@@ -2,8 +2,8 @@
 
 require 'spec_helper'
 
-describe Pom do
-  let(:pom) { Pom.new(File.join("spec", "data", "commons-logging", "pom.xml")) }
+describe Gjp::Pom do
+  let(:pom) { Gjp::Pom.new(File.join("spec", "data", "commons-logging", "pom.xml")) }
   
   describe "#connection_address" do
     it "reads the SCM connection address" do
