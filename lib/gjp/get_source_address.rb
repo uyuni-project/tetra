@@ -5,10 +5,8 @@ require "json"
 require "open-uri"
 
 module Gjp
-
   # implements the get-source-address subcommand
   class SourceAddressGetter
-
     def self.log
       Gjp.logger
     end
@@ -52,5 +50,4 @@ module Gjp
       end
     end
   end
-
 end

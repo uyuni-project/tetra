@@ -3,10 +3,8 @@
 require "text"
 
 module Gjp
-
   # heuristically matches version strings
   class VersionMatcher 
-
     def self.log
       Gjp.logger
     end

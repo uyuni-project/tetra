@@ -1,5 +1,5 @@
 # encoding: UTF-8
-require 'gjp/logger'
+require "gjp/logger"
 require "clamp"
 
 # Initialize global logger
@@ -11,7 +11,6 @@ Gjp.logger.formatter = proc do |severity, datetime, progname, msg|
 end
 
 module Gjp
-
   class MainCommand < Clamp::Command
     subcommand "get-pom", "Retrieves a pom corresponding to a jar" do
       parameter "JAR", "jar file path"

@@ -15,15 +15,15 @@
 # http://www.gnu.org/licenses/lgpl-2.1.html
 #
 
-if File.exist?(File.join(File.dirname(__FILE__), '..', '.git'))
-  $: << File.join(File.dirname(__FILE__), '..', 'lib')
+if File.exist?(File.join(File.dirname(__FILE__), "..", ".git"))
+  $: << File.join(File.dirname(__FILE__), "..", "lib")
 end
 
 begin
-  require 'gjp'
+  require "gjp"
 rescue LoadError
-  require 'rubygems'
-  require 'gjp'
+  require "rubygems"
+  require "gjp"
 end
 
 Gjp::MainCommand.run

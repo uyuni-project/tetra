@@ -9,7 +9,6 @@ require "pathname"
 require "gjp/version_matcher"
 
 module Gjp
-
   # implements the get-pom subcommand
   class PomGetter
 
@@ -89,7 +88,5 @@ module Gjp
         return (RestClient.get "http://search.maven.org/remotecontent", {:params => {:filepath => path}}).to_s
       end
     end
-    
   end
-
 end

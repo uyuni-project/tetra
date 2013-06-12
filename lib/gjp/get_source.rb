@@ -3,10 +3,8 @@
 require "rest_client"
 
 module Gjp
-
   # implements the get-source subcommand
   class SourceGetter
-
     def self.log
       Gjp.logger
     end
@@ -84,5 +82,4 @@ module Gjp
   		versions_to_tags[best_version]
   	end
   end
-
 end

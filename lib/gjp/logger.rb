@@ -3,7 +3,6 @@
 require "logger"
 
 module Gjp
-
   def self.logger=(logger)
     @logger = logger
   end
@@ -15,5 +14,4 @@ module Gjp
   def logger
     Gjp.logger
   end
-
 end
