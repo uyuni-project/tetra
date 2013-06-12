@@ -29,6 +29,18 @@ module Gjp
     def version
       @doc.xpath("project/version/text()").to_s
     end
+
+    def parent_group_id
+      @doc.xpath("project/parent/groupId/text()").to_s
+    end
+    
+    def parent_artifact_id
+      @doc.xpath("project/parent/artifactId/text()").to_s
+    end
+    
+    def parent_version
+      @doc.xpath("project/parent/version/text()").to_s
+    end
   end
 end
 

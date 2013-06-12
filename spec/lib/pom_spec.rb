@@ -35,6 +35,24 @@ describe Gjp::Pom do
         pom.version.should eq "1.1.1"
       end
     end
+
+    describe "#parent_group_id" do
+      it "reads the parent's group id" do
+        pom.parent_group_id.should eq "org.apache.commons"
+      end
+    end
+
+    describe "#parent_artifact_id" do
+      it "reads the parent's artifact id" do
+        pom.parent_artifact_id.should eq "commons-parent"
+      end
+    end
+
+    describe "#parent_version" do
+      it "reads the parent's version" do
+        pom.parent_version.should eq "5"
+      end
+    end
   end
 end
 

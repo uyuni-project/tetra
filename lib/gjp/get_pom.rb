@@ -53,12 +53,14 @@ module Gjp
     def self.get_pom_from_sha1(file)
       begin
         if File.file?(file)
+          site = MavenWebsite.new
           sha1 = Digest::SHA1.hexdigest File.read(file)
-          results = repository_search({:q => "1:\"#{sha1}\""}).select {|result| result["ec"].include?(".pom")}
+          results = site.search_by_sha1(sha1).select {|result| result["ec"].include?(".pom")}
           result = results.first    
           if result != nil
             log.info("pom.xml for #{file} found on search.maven.org for sha1 #{sha1} (#{result["g"]}:#{result["a"]}:#{result["v"]})")
-            return repository_download(result)
+            group_id, artifact_id, version = site.get_maven_id_from result
+            return site.download_pom(group_id, artifact_id, version)
           end
         end
         return nil
@@ -70,37 +72,25 @@ module Gjp
     # returns a pom from search.maven.org with a heuristic name search
     def self.get_pom_from_heuristic(filename)
       begin
+        site = MavenWebsite.new
         filename = Pathname.new(filename).basename.to_s.sub(/.jar$/, "")
         my_artifact_id, my_version = VersionMatcher.split_version(filename)
 
-        result = repository_search({:q => my_artifact_id}).first
+        result = site.search_by_name(my_artifact_id).first
         if result != nil
-          results = repository_search({:q => "g:\"#{result["g"]}\" AND a:\"#{result["a"]}\"", :core => "gav"})
+          group_id, artifact_id, version = site.get_maven_id_from result
+          results = site.search_by_group_id_and_artifact_id(group_id, artifact_id)
           their_versions = results.map {|doc| doc["v"]}
           best_matched_version = if my_version != nil then VersionMatcher.best_match(my_version, their_versions) else their_versions.max end
           best_matched_result = (results.select{|result| result["v"] == best_matched_version}).first
             
-          log.warn("pom.xml for #{filename} found on search.maven.org with heuristic search (#{best_matched_result["g"]}:#{best_matched_result["a"]}:#{best_matched_result["v"]})")
+          group_id, artifact_id, version = site.get_maven_id_from(best_matched_result)
+          log.warn("pom.xml for #{filename} found on search.maven.org with heuristic search (#{group_id}:#{artifact_id}:#{version})")
             
-          return repository_download(best_matched_result)
+          return site.download_pom(group_id, artifact_id, version)
         end
       rescue RestClient::ResourceNotFound
         $stderr.puts "Got an error while looking for #{filename} in search.maven.org" 
-      end
-    end
-    
-    # returns a JSON result from search.maven.com
-    def self.repository_search(params)
-        response = RestClient.get "http://search.maven.org/solrsearch/select", {:params => params.merge({"rows" => "100", "wt" => "json"})}
-        json = JSON.parse(response.to_s)
-        return json["response"]["docs"]
-    end
-    
-    # downloads a POM from a search.maven.com search result
-    def self.repository_download(result)
-      if result != nil
-        path = "#{result["g"].gsub(".", "/")}/#{result["a"]}/#{result["v"]}/#{result["a"]}-#{result["v"]}.pom"
-        return (RestClient.get "http://search.maven.org/remotecontent", {:params => {:filepath => path}}).to_s
       end
     end
   end
