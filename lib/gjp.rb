@@ -1,3 +1,4 @@
+require 'gjp/logger'
 require "gjp/version"
 require "gjp/logger"
 require "gjp/cli"
