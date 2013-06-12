@@ -12,8 +12,8 @@ end
 
 module Gjp
   class MainCommand < Clamp::Command
-    subcommand "get-pom", "Retrieves a pom corresponding to a jar" do
-      parameter "JAR", "jar file path"
+    subcommand "get-pom", "Retrieves a pom corresponding to a filename" do
+      parameter "NAME", "a jar file path, a project directory path or a non-existing filename in the `project-version` form"
       option ["-v", "--verbose"], :flag, "verbose output"
       option ["--very-verbose"], :flag, "very verbose output"
       option ["--very-very-verbose"], :flag, "very very verbose output"
@@ -43,15 +43,7 @@ module Gjp
       end
       
       def execute
-        begin
-          puts Gjp::PomGetter.get_pom(jar)
-        rescue Zip::ZipError
-          $stderr.puts "#{jar} does not seem to be a valid jar archive, skipping"
-        rescue TypeError
-          $stderr.puts "#{jar} seems to be a valid jar archive but is corrupt, skipping"
-        rescue RestClient::ResourceNotFound
-          $stderr.puts "Got an error while looking for #{jar} in search.maven.org" 
-        end
+        puts Gjp::PomGetter.get_pom(name)
       end
     end
       
