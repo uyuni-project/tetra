@@ -12,10 +12,14 @@ module Gjp
 
     # returns the pom's parent, if any
     def self.get_parent_pom(filename)
-      pom = Pom.new(filename)
-      site = MavenWebsite.new
+      begin
+        pom = Pom.new(filename)
+        site = MavenWebsite.new
 
-      site.download_pom(pom.parent_group_id, pom.parent_artifact_id, pom.parent_version)
+        site.download_pom(pom.parent_group_id, pom.parent_artifact_id, pom.parent_version)
+      rescue RestClient::ResourceNotFound
+        $stderr.puts "Could not find a parent for this pom!" 
+      end
     end
   end
 end
