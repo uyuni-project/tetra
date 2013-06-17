@@ -35,7 +35,11 @@ module Gjp
       my_chunks = my_version.split /[\.\-\_ ~,]/
       their_chunks_hash = Hash[
         their_versions.map do |their_version|
-          their_chunks_for_version = their_version.split /[\.\-\_ ~,]/
+          their_chunks_for_version = if their_version != nil
+            their_version.split /[\.\-\_ ~,]/
+          else
+            []
+          end
           their_chunks_for_version += [nil]*[my_chunks.length - their_chunks_for_version.length, 0].max
           [their_version, their_chunks_for_version]
         end
