@@ -63,7 +63,7 @@ module Gjp
   				best_tag = get_best_tag(tags, version)		 	
   				log.info("checking out tag: #{best_tag}")
 
-  				`svn checkout #{scm_address}/tags/#{best_tag}`
+  				`svn checkout ^/tags/#{best_tag}`
   			end
   		end
   	end
