@@ -19,6 +19,7 @@ Currently available tools:
 * `gjp get-parent-pom POM` will attempt to download a pom's parent from search.maven.org, where `POM` is a filename or URI;
 * `gjp get-source-address POM` will attempt to find the SCM Internet address of a pom.xml from the file itself or through api.github.com. `POM` can either be a filename or a URI;
 * `gjp get-source POM ADDRESS` downloads the source of a pom.xml's project from its SCM at ADDRESS;
+* `gjp scaffold-jar-table DIRECTORY` looks for jars in the project's DIRECTORY and classifies them as build-time dependencies (b), run-time dependencies (r) or products (p);
 
 ## Source
 

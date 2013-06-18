@@ -74,5 +74,13 @@ module Gjp
         puts Gjp::SourceGetter.get_source(address, pom, directory)
       end    
     end
+
+    subcommand "scaffold-jar-table", "Creates a heuristic version of a project's jar table" do
+      parameter "[DIRECTORY]", "project directory", :default => "."
+
+      def execute
+        puts Gjp::JarTable.new(directory).to_s
+      end    
+    end
   end
 end

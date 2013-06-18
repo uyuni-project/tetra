@@ -19,10 +19,19 @@ module Gjp
 
       @rows = Hash[
         jars.map do |jar|
-          pathname = Pathname.new(jar)
-          [pathname.basename.to_s, {:type => get_type(jar), :directory => pathname.dirname.to_s}]
+          [jar, get_type(jar)]
         end
       ]
+    end
+
+    def to_s
+      "# Legend: "
+      "#b - jar is required for building the project"
+      "#r - jar is required runtime by the project"
+      "#p - jar is produced by the project"
+      @rows.map do |key, value|
+        "#{value.to_s[0]} #{key}"
+      end.sort
     end
 
     # jar files in the project's directory

@@ -56,11 +56,10 @@ describe Gjp::JarTable do
 
   describe "#rows" do
     it "returns jar data" do
-      
       jar_table.rows.should include(
-        "log4j-1.2.13.jar" => {:type => :required, :directory => "spec/data/ant-super-simple-code/lib"},
-        "junit-4.11.jar" => {:type => :build_required, :directory => "spec/data/ant-super-simple-code/lib"},
-        "antsimple-20130618.jar" => {:type => :produced, :directory => "spec/data/ant-super-simple-code/dist"},
+        "spec/data/ant-super-simple-code/lib/log4j-1.2.13.jar" => :required,
+        "spec/data/ant-super-simple-code/lib/junit-4.11.jar" => :build_required,
+        "spec/data/ant-super-simple-code/dist/antsimple-20130618.jar" => :produced
       )
     end
   end
