@@ -16,9 +16,9 @@ describe Gjp::JarTable do
     end
   end
 
-  describe "#jar_defined_packages" do
+  describe "#get_jar_defined_packages" do
     it "finds the package names part of a jar file" do 
-      jar_table.jar_defined_packages(File.join(dir, "lib", "junit-4.11.jar")).should include(
+      jar_table.get_jar_defined_packages(File.join(dir, "lib", "junit-4.11.jar")).should include(
         "junit.framework",
         "junit.extensions",
         "org.junit.runner",

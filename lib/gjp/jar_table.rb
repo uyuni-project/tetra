@@ -7,7 +7,7 @@ module Gjp
   # assumes the project is in a directory with jar files
   # in its (possibly nested) subdirectories
   class JarTable
-    def self.log
+    def log
       Gjp.logger
     end
 
@@ -21,6 +21,7 @@ module Gjp
       statements = get_statements(sources)
       @runtime_required_packages = get_runtime_required_packages(statements)
       @source_defined_packages = get_source_defined_packages(statements)
+      log.debug "Source defined packages are:\n#{@source_defined_packages.join("\n")}"
 
       @rows = Hash[
         jars.map do |jar|
@@ -83,9 +84,11 @@ module Gjp
     # :required or :build_required if it is needed at runtime or build time
     # (heuristically)
     def get_type(jar)
-      if source_defined?(jar)
+      jar_defined_packages = get_jar_defined_packages(jar)
+
+      if source_defined?(jar, jar_defined_packages)
         :produced
-      elsif runtime_required?(jar)
+      elsif runtime_required?(jar, jar_defined_packages)
         :required
       else
         :build_required        
@@ -93,19 +96,19 @@ module Gjp
     end
 
     # returns true if a jar is produced from source code in the project's directory
-    def source_defined?(jar)
-      jar_defined_packages(jar).all? { |package| @source_defined_packages.include?(package)  }
+    def source_defined?(jar, jar_defined_packages)
+      jar_defined_packages.all? { |package| @source_defined_packages.include?(package)  }
     end
 
     # returns true if a jar is required runtime, false if it is only needed
     # at compile time. Current implementation is heuristic (looks for "import" statements
     # in java code)
-    def runtime_required?(jar)
-      jar_defined_packages(jar).any? { |package| @runtime_required_packages.include?(package)  }
+    def runtime_required?(jar, jar_defined_packages)
+      jar_defined_packages.any? { |package| @runtime_required_packages.include?(package)  }
     end
 
     # returns packages defined in a jar file
-    def jar_defined_packages(jar)
+    def get_jar_defined_packages(jar)
       result = []
       begin
         Zip::ZipFile.foreach(jar) do |entry|
