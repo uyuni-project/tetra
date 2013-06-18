@@ -11,11 +11,16 @@ module Gjp
       Gjp.logger
     end
 
-    attr_reader :dir, :rows
+    attr_reader :rows, :runtime_required_packages, :source_defined_packages
 
     # builds a JarTable from a directory (paths relative to the current directory)
     def initialize(dir)
-      @dir = dir
+
+      jars = get_jars(dir)
+      sources = get_sources(dir)
+      statements = get_statements(sources)
+      @runtime_required_packages = get_runtime_required_packages(statements)
+      @source_defined_packages = get_source_defined_packages(statements)
 
       @rows = Hash[
         jars.map do |jar|
@@ -35,8 +40,68 @@ module Gjp
     end
 
     # jar files in the project's directory
-    def jars
-      Dir["#{@dir}/**/*.jar"]
+    def get_jars(dir)
+      Dir["#{dir}/**/*.jar"]
+    end
+
+    # java source files in the project's directory
+    def get_sources(dir)
+      Dir["#{dir}/**/*.java"]
+    end
+
+    # java statements in java source files
+    def get_statements(sources)
+      sources.map do |source|
+        File.readlines(source)
+          .map { |line| line.split(";")  }
+          .flatten
+          .map { |statement| statement.strip }
+      end.flatten
+    end
+
+    # heuristically determined package names that the sources require
+    def get_runtime_required_packages(statements)
+      get_statement_fragments_from(statements, /^import[ \t]+(?:static[ \t]+)?(.+)\..+?$/)
+    end
+
+    # heuristically determined package names that the sources define
+    def get_source_defined_packages(statements)
+      get_statement_fragments_from(statements, /^package[ \t]+(.+)$/)
+    end
+
+    # matches a regex against all source statements
+    def get_statement_fragments_from(statements, regex)
+      statements.map do |statement|
+        if statement =~ regex
+          $1
+        end
+      end.select {|package| package != nil}.flatten.sort.uniq
+    end
+
+
+    # returns :produced if the jar was produced from the project's sources, and
+    # :required or :build_required if it is needed at runtime or build time
+    # (heuristically)
+    def get_type(jar)
+      if source_defined?(jar)
+        :produced
+      elsif runtime_required?(jar)
+        :required
+      else
+        :build_required        
+      end
+    end
+
+    # returns true if a jar is produced from source code in the project's directory
+    def source_defined?(jar)
+      jar_defined_packages(jar).all? { |package| @source_defined_packages.include?(package)  }
+    end
+
+    # returns true if a jar is required runtime, false if it is only needed
+    # at compile time. Current implementation is heuristic (looks for "import" statements
+    # in java code)
+    def runtime_required?(jar)
+      jar_defined_packages(jar).any? { |package| @runtime_required_packages.include?(package)  }
     end
 
     # returns packages defined in a jar file
@@ -55,65 +120,6 @@ module Gjp
       end
 
       return result.sort.uniq
-    end
-
-    # returns :produced if the jar was produced from the project's sources, and
-    # :required or :build_required if it is needed at runtime or build time
-    # (heuristically)
-    def get_type(jar)
-      if source_defined?(jar)
-        :produced
-      elsif runtime_required?(jar)
-        :required
-      else
-        :build_required        
-      end
-    end
-
-    # returns true if a jar is produced from source code in the project's directory
-    def source_defined?(jar)
-      jar_defined_packages(jar).all? { |package| source_defined_packages.include?(package)  }
-    end
-
-    # returns true if a jar is required runtime, false if it is only needed
-    # at compile time. Current implementation is heuristic (looks for "import" statements
-    # in java code)
-    def runtime_required?(jar)
-      jar_defined_packages(jar).any? { |package| source_required_packages.include?(package)  }
-    end
-
-    # java source files in the project's directory
-    def sources
-      Dir["#{@dir}/**/*.java"]
-    end
-
-    # java statements in java source files
-    def statements
-      sources.map do |source|
-        File.readlines(source)
-          .map { |line| line.split(";")  }
-          .flatten
-          .map { |statement| statement.strip }
-      end.flatten
-    end
-
-    # heuristically determined package names that the sources require
-    def source_required_packages
-      statement_fragments_from(/^import[ \t]+(?:static[ \t]+)?(.+)\..+?$/)
-    end
-
-    # heuristically determined package names that the sources define
-    def source_defined_packages
-      statement_fragments_from(/^package[ \t]+(.+)$/)
-    end
-
-    # matches a regex against all source statements
-    def statement_fragments_from(regex)
-      statements.map do |statement|
-        if statement =~ regex
-          $1
-        end
-      end.select {|package| package != nil}.flatten.sort.uniq
     end
   end
 end

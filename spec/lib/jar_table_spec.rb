@@ -6,9 +6,9 @@ describe Gjp::JarTable do
   let(:dir) { File.join("spec", "data", "ant-super-simple-code") }
   let(:jar_table) { Gjp::JarTable.new(dir) }
 
-  describe "#jars" do
+  describe "#get_jars" do
     it "finds jar paths in a directory" do 
-      jar_table.jars.should include(
+      jar_table.get_jars(dir).should include(
         File.join(dir, "dist", "antsimple-20130618.jar"),
         File.join(dir, "lib", "junit-4.11.jar"),
         File.join(dir, "lib", "log4j-1.2.13.jar")
@@ -36,7 +36,7 @@ describe Gjp::JarTable do
 
   describe "#sources" do
     it "finds source paths in a directory" do 
-      jar_table.sources.should include(
+      jar_table.get_sources(dir).should include(
         File.join(dir, "src", "mypackage", "HW.java")
       )
     end
@@ -48,9 +48,9 @@ describe Gjp::JarTable do
     end
   end
 
-  describe "#source_required_packages" do
+  describe "#runtime_required_packages" do
     it "finds the package names required by this project's sources" do 
-      jar_table.source_required_packages.should include("org.apache.log4j")
+      jar_table.runtime_required_packages.should include("org.apache.log4j")
     end
   end
 
