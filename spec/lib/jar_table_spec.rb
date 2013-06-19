@@ -27,13 +27,6 @@ describe Gjp::JarTable do
     end
   end
 
-  describe "#runtime_required?" do
-    it "heuristically determines if a jar file is needed runtime" do 
-      jar_table.runtime_required?(File.join(dir, "lib", "junit-4.11.jar")).should be_false
-      jar_table.runtime_required?(File.join(dir, "lib", "log4j-1.2.13.jar")).should be_true
-    end
-  end
-
   describe "#sources" do
     it "finds source paths in a directory" do 
       jar_table.get_sources(dir).should include(

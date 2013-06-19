@@ -21,6 +21,8 @@ module Gjp
       statements = get_statements(sources)
       @runtime_required_packages = get_runtime_required_packages(statements)
       @source_defined_packages = get_source_defined_packages(statements)
+
+      log.debug "Runtime required packages are:\n#{@runtime_required_packages.join("\n")}"
       log.debug "Source defined packages are:\n#{@source_defined_packages.join("\n")}"
 
       @rows = Hash[
@@ -97,14 +99,28 @@ module Gjp
 
     # returns true if a jar is produced from source code in the project's directory
     def source_defined?(jar, jar_defined_packages)
-      jar_defined_packages.all? { |package| @source_defined_packages.include?(package)  }
+      log.debug "Determining if #{jar} is defined in the sources"
+      log.debug "#{jar} contains:\n#{jar_defined_packages.join("\n")}"
+
+      result = jar_defined_packages.all? { |package| @source_defined_packages.include?(package)  }
+
+      log.debug "result is:#{result}"
+
+      return result
     end
 
     # returns true if a jar is required runtime, false if it is only needed
     # at compile time. Current implementation is heuristic (looks for "import" statements
     # in java code)
     def runtime_required?(jar, jar_defined_packages)
-      jar_defined_packages.any? { |package| @runtime_required_packages.include?(package)  }
+      log.debug "Determining if #{jar} is required at runtime"
+      log.debug "#{jar} contains:\n#{jar_defined_packages.join("\n")}"
+
+      result = jar_defined_packages.any? { |package| @runtime_required_packages.include?(package)  }
+
+      log.debug "result is:#{result}"
+
+      return result
     end
 
     # returns packages defined in a jar file
@@ -117,9 +133,9 @@ module Gjp
           end
         end
       rescue Zip::ZipError
-        log.info "#{file} does not seem to be a valid jar archive, skipping"
+        log.info "#{jar} does not seem to be a valid jar archive, skipping"
       rescue TypeError
-        log.info "#{file} seems to be a valid jar archive but is corrupt, skipping"
+        log.info "#{jar} seems to be a valid jar archive but is corrupt, skipping"
       end
 
       return result.sort.uniq
