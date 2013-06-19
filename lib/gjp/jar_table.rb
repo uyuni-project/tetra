@@ -39,10 +39,21 @@ module Gjp
       "# i - jar is ignored\n" +
 
       (
-        @rows.map do |key, value|
-          "#{value.to_s[0]} #{key}"
-        end.sort
-      ).join("\n")
+        rows = @rows.map do |key, value|
+          pathname = Pathname.new(key)
+          [value.to_s[0], pathname.basename.to_s, pathname.dirname.to_s]
+        end
+
+        max_field_lengths = (0..2).map do |i|
+          rows.map { |row| row[i].length  }.max
+        end
+
+        rows.map do |row|
+          row.each_with_index.map do |element, i|
+           "%-#{max_field_lengths[i]+1}s" % element
+          end.join
+        end.sort.join("\n")
+      )
     end
 
     # jar files in the project's directory
