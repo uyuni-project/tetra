@@ -32,14 +32,17 @@ module Gjp
     end
 
     def to_s
-      "# Legend: "
-      "#b - jar is required for building the project"
-      "#r - jar is required runtime by the project"
-      "#p - jar is produced by the project"
-      "#i - jar is ignored"
-      @rows.map do |key, value|
-        "#{value.to_s[0]} #{key}"
-      end.sort
+      "# Key: \n" +
+      "# b - jar is required for building the project\n" +
+      "# r - jar is required runtime by the project\n" +
+      "# p - jar is produced by the project\n" +
+      "# i - jar is ignored\n" +
+
+      (
+        @rows.map do |key, value|
+          "#{value.to_s[0]} #{key}"
+        end.sort
+      ).join("\n")
     end
 
     # jar files in the project's directory
