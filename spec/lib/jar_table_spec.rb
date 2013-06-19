@@ -4,7 +4,7 @@ require 'spec_helper'
 
 describe Gjp::JarTable do
   let(:dir) { File.join("spec", "data", "ant-super-simple-code") }
-  let(:jar_table) { Gjp::JarTable.new(dir) }
+  let(:jar_table) { Gjp::JarTable.new(dir, true) }
 
   describe "#get_jars" do
     it "finds jar paths in a directory" do 

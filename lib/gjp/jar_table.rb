@@ -14,8 +14,7 @@ module Gjp
     attr_reader :rows, :runtime_required_packages, :source_defined_packages
 
     # builds a JarTable from a directory (paths relative to the current directory)
-    def initialize(dir)
-
+    def initialize(dir, include_all)
       jars = get_jars(dir)
       sources = get_sources(dir)
       statements = get_statements(sources)
@@ -27,7 +26,7 @@ module Gjp
 
       @rows = Hash[
         jars.map do |jar|
-          [jar, get_type(jar)]
+          [jar, get_type(jar, include_all)]
         end
       ]
     end
@@ -37,6 +36,7 @@ module Gjp
       "#b - jar is required for building the project"
       "#r - jar is required runtime by the project"
       "#p - jar is produced by the project"
+      "#i - jar is ignored"
       @rows.map do |key, value|
         "#{value.to_s[0]} #{key}"
       end.sort
@@ -85,15 +85,19 @@ module Gjp
     # returns :produced if the jar was produced from the project's sources, and
     # :required or :build_required if it is needed at runtime or build time
     # (heuristically)
-    def get_type(jar)
-      jar_defined_packages = get_jar_defined_packages(jar)
-
-      if source_defined?(jar, jar_defined_packages)
-        :produced
-      elsif runtime_required?(jar, jar_defined_packages)
-        :required
+    def get_type(jar, include_all)
+      if not include_all and (jar =~ /(test)|(sample)/)
+        :ignored
       else
-        :build_required        
+        jar_defined_packages = get_jar_defined_packages(jar)
+
+        if source_defined?(jar, jar_defined_packages)
+          :produced
+        elsif runtime_required?(jar, jar_defined_packages)
+          :required
+        else
+          :build_required
+        end
       end
     end
 

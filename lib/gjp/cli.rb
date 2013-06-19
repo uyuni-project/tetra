@@ -77,9 +77,10 @@ module Gjp
 
     subcommand "scaffold-jar-table", "Creates a heuristic version of a project's jar table" do
       parameter "[DIRECTORY]", "project directory", :default => "."
+      option ["--include-all"], :flag, "include tests and samples in produced jars", :default => false
 
       def execute
-        puts Gjp::JarTable.new(directory).to_s
+        puts Gjp::JarTable.new(directory, include_all?).to_s
       end    
     end
   end
