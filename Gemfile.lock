@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    gjp (0.5.0)
+    gjp (0.10.2)
       clamp
       json
       nokogiri
@@ -16,7 +16,9 @@ GEM
     diff-lcs (1.2.4)
     json (1.8.0)
     mime-types (1.23)
-    nokogiri (1.5.9)
+    mini_portile (0.5.1)
+    nokogiri (1.6.0)
+      mini_portile (~> 0.5.0)
     rake (10.0.4)
     rest-client (1.6.7)
       mime-types (>= 1.16)
