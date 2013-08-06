@@ -43,6 +43,14 @@ module Gjp
     end
 
     # Subcommands
+    subcommand "init", "Inits a gjp project in the current directory" do
+      def execute
+        Gjp::Project.new(".").init
+        puts "Project inited."
+        puts "Use \"gjp gather\" before adding files to have gjp track them."
+      end
+    end
+
     subcommand "get-pom", "Retrieves a pom corresponding to a filename" do
       parameter "NAME", "a jar file path, a project directory path or a non-existing filename in the `project-version` form"
       def execute
