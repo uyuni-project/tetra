@@ -27,9 +27,9 @@ describe Gjp::MavenWebsite do
 
   describe "#search_by_group_id_and_artifact_id" do
     it "uses search.maven.org to look for poms by group and artifact id" do
-      result = site.search_by_group_id_and_artifact_id("antlr", "antlrall")
+      results = site.search_by_group_id_and_artifact_id("antlr", "antlrall")
 
-      result.should include({"id"=>"antlr:antlrall:2.7.2", "g"=>"antlr", "a"=>"antlrall", "v"=>"2.7.2", "p"=>"jar", "timestamp"=>1182142732000, "ec"=>[".jar", ".pom"]}, {"id"=>"antlr:antlrall:2.7.4", "g"=>"antlr", "a"=>"antlrall", "v"=>"2.7.4", "p"=>"jar", "timestamp"=>1131488123000, "ec"=>[".jar", ".pom"]}, {"id"=>"antlr:antlrall:2.7.1", "g"=>"antlr", "a"=>"antlrall", "v"=>"2.7.1", "p"=>"jar", "timestamp"=>1131488123000, "ec"=>[".jar", ".pom"]})
+      results.any? { |result| result["id"] == "antlr:antlrall:2.7.2" }.should be_true
     end
   end
 
