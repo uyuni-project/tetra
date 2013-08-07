@@ -139,6 +139,8 @@ module Gjp
         end
       end
 
+      log.debug "committing with message: #{message}"
+
       `git add .`
       `git commit -m "#{message}"`
     end
