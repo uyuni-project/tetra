@@ -91,7 +91,8 @@ describe Gjp::Project do
   end
 
   describe ".finish" do
-    it "ends the current phase" do
+    it "ends the current gathering phase" do
+      @project.gather.should eq :done
 
       Dir.chdir(@project_path) do
         Dir.mkdir("src/a_b_c")
