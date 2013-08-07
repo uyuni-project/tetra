@@ -5,14 +5,13 @@ require 'spec_helper'
 describe Gjp::Project do
   before(:all) do
     @project_path = File.join("spec", "data", "test-project")
+    Dir.mkdir(@project_path)
   end
 
+  let(:project) { Gjp::Project.new(@project_path) }
+
   describe ".init" do
-
     it "inits a new project" do
-      Dir.mkdir(@project_path)
-
-      project = Gjp::Project.new(@project_path)
       project.init
 
       kit_path = File.join(@project_path, "kit")
@@ -23,7 +22,68 @@ describe Gjp::Project do
 
       Dir.chdir(@project_path) do
         `git tag`.strip.should eq("init")
-        `git log`.split("\n").length.should eq(5)
+        `git rev-list --all`.split("\n").length.should eq 1
+      end
+    end
+  end
+
+  describe ".set_status" do
+    it "stores a project's status flag" do
+      project.set_status(:gathering)
+      file_name = File.join(@project_path, ".gathering")
+      File.exists?(file_name).should be_true
+
+      project.clear_status(:gathering)
+      File.exists?(file_name).should be_false
+    end
+  end
+
+  describe ".get_status" do
+    it "gets a project's status flag" do
+      project.get_status(:gathering).should be_false
+
+      project.set_status(:gathering)
+      project.get_status(:gathering).should be_true
+    end
+  end
+
+  describe ".clear_status" do
+    it "clears a project's status flag" do
+      project.get_status(:gathering).should be_true
+
+      project.clear_status(:gathering)
+      project.get_status(:gathering).should be_false
+    end
+  end
+
+  describe ".commit_all" do
+    it "commits the project contents to git for later use" do
+
+      Dir.chdir(@project_path) do
+        `touch kit/test`
+      end
+
+      project.commit_all "test"
+
+      Dir.chdir(@project_path) do
+        `git rev-list --all`.split("\n").length.should eq(2)
+      end
+    end
+  end
+
+  describe ".gather" do
+    it "starts a gathering phase" do
+
+      Dir.chdir(@project_path) do
+        `touch src/test`
+      end
+
+      project.gather.should eq(:done)
+      project.get_status(:gathering).should be_true
+
+      Dir.chdir(@project_path) do
+        `git rev-list --all`.split("\n").length.should eq 3
+        `git diff-tree --no-commit-id --name-only -r HEAD`.split("\n").should include("src/test")
       end
     end
   end

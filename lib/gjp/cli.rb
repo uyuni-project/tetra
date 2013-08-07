@@ -51,6 +51,20 @@ module Gjp
       end
     end
 
+    subcommand "gather", "Start gathering sources and kit files" do
+      def execute
+        result = Gjp::Project.new(".").gather
+        if result == :done
+          puts "Now gathering."
+          puts "Any file added to kit/ will be added to the kit package."
+          puts "Any file added to src/<orgId_artifactId_version> will be added to the corresponding package."
+          puts "To finalize this gathering, use \"gjp finish\"."
+        else
+          puts "Cannot begin gathering while #{result}, use \"gjp finish\" first."
+        end
+      end
+    end
+
     subcommand "get-pom", "Retrieves a pom corresponding to a filename" do
       parameter "NAME", "a jar file path, a project directory path or a non-existing filename in the `project-version` form"
       def execute
