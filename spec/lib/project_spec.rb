@@ -110,5 +110,23 @@ describe Gjp::Project do
         File.readlines("kit/gjp_file_list").should include("test\n")
       end
     end
+
+  describe ".dry_run" do
+    it "starts a dry running phase" do
+
+      Dir.chdir(@project_path) do
+        `touch src/test`
+      end
+
+      @project.dry_run.should eq :done
+
+      Dir.chdir(@project_path) do
+        @project.get_status(:dry_running).should be_true
+        `git rev-list --all`.split("\n").length.should eq 2
+        `git diff-tree --no-commit-id --name-only -r HEAD`.split("\n").should include("src/test")
+      end
+    end
+  end
+
   end
 end

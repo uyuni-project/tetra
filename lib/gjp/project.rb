@@ -50,6 +50,24 @@ module Gjp
       :done
     end
 
+    # starts a dry running phase: files added to the kit will
+    # be added to packages, while sources will be reset at the
+    # end
+    def dry_run
+      Dir.chdir(@dir) do
+        if get_status(:gathering)
+          return :gathering
+        elsif get_status(:dry_running)
+          return :dry_running
+        end
+
+        set_status(:dry_running)
+        commit_all("gjp dry-run")
+      end
+
+      :done
+    end
+
     # ends any phase that was previously started, 
     # generating file lists
     def finish

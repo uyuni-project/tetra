@@ -66,6 +66,21 @@ module Gjp
       end
     end
 
+    subcommand "dry-run", "Starts a new dry-running phase, a build is attempted so that dependencies are added to the kit." do
+      def execute
+        result = Gjp::Project.new(".").dry_run
+        if result == :done
+          puts "Now dry-running, please start your build."
+          puts "Any file added to kit/, presumably downloaded dependencies, will be added to the kit package."
+          puts "The src/ directory and all files in it will be brought back to the current state when finished."
+          puts "Note that .gitignore files are honored!"
+          puts "To finalize this dry run, use \"gjp finish\"."
+        else
+          puts "Cannot begin a dry run while #{result}, use \"gjp finish\" first."
+        end
+      end
+    end
+
     subcommand "finish", "Finishes the current phase" do
       def execute
         result = Gjp::Project.new(".").finish        
