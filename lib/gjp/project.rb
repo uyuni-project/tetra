@@ -5,6 +5,10 @@ require 'find'
 module Gjp
   # encapsulates a Gjp project directory
   class Project
+    def log
+      Gjp.logger
+    end
+
     def initialize(dir)
       @dir = dir
     end
@@ -44,6 +48,42 @@ module Gjp
       end
 
       :done
+    end
+
+    # ends any phase that was previously started, 
+    # generating file lists
+    def finish
+      Dir.chdir(@dir) do
+        if get_status(:gathering)
+          commit_all("gjp finish (gathering)")
+
+          write_file_list("kit")
+          Dir.foreach("src") do |entry|
+            if File.directory?(File.join(Dir.getwd, "src", entry)) and entry =~ /[^_]+_[^_]+_[^_]+$/
+              write_file_list(File.join("src", entry))
+            end
+          end
+
+          commit_all("file lists updated")
+
+          clear_status(:gathering)
+
+          :gathering
+        end
+      end
+    end
+
+    def write_file_list(directory)
+      files = `git diff-tree --no-commit-id --name-only -r HEAD`.split("\n")
+      relevant_files = files.select { |file| file.start_with?(directory) }
+      relative_relevant_files = relevant_files.map { |file| file[directory.length + 1, file.length]  }
+      log.debug("writing file list for #{directory}: #{relative_relevant_files.to_s}")
+
+      File.open("#{directory}/gjp_file_list", "w") do |file_list|
+        relative_relevant_files.each do |file|
+          file_list.puts file
+        end
+      end
     end
 
     # adds the project's whole contents to git

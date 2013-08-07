@@ -90,6 +90,27 @@ describe Gjp::Project do
     end
   end
 
+  describe ".finish" do
+    it "ends the current phase" do
+
+      Dir.chdir(@project_path) do
+        Dir.mkdir("src/a_b_c")
+        `touch src/a_b_c/test`
+        `touch kit/test2`
+      end
+
+      project.finish.should eq :gathering
+      project.get_status(:gathering).should be_false
+
+      Dir.chdir(@project_path) do
+        `git rev-list --all`.split("\n").length.should eq 5
+        `git diff-tree --no-commit-id --name-only -r HEAD~`.split("\n").should include("src/a_b_c/test")
+        File.readlines("src/a_b_c/gjp_file_list").should include("test\n")
+        File.readlines("kit/gjp_file_list").should include("test2\n")
+      end
+    end
+  end
+
   after(:all) do
     FileUtils.rm_rf(@project_path)
   end

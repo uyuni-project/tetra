@@ -51,16 +51,29 @@ module Gjp
       end
     end
 
-    subcommand "gather", "Start gathering sources and kit files" do
+    subcommand "gather", "Starts a new gathering phase, in which sources and kit files are added to the project" do
       def execute
         result = Gjp::Project.new(".").gather
         if result == :done
           puts "Now gathering."
           puts "Any file added to kit/ will be added to the kit package."
           puts "Any file added to src/<orgId_artifactId_version> will be added to the corresponding package."
+          puts "Note that .gitignore files are honored!"
           puts "To finalize this gathering, use \"gjp finish\"."
         else
           puts "Cannot begin gathering while #{result}, use \"gjp finish\" first."
+        end
+      end
+    end
+
+    subcommand "finish", "Finishes the current phase" do
+      def execute
+        result = Gjp::Project.new(".").finish        
+        if result == :gathering
+          puts "Gathering finished."
+          puts "New files have been added to gjp_file_list files in respective directories."
+          puts "Feel free to edit them if needed."
+          puts "You can start a dry run build with \"gjp dry-run\" or add more files with \"gjp gather\"."
         end
       end
     end
