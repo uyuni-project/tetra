@@ -87,6 +87,17 @@ module Gjp
           clear_status(:gathering)
 
           :gathering
+        elsif get_status(:dry_running)
+          revert("src")
+          commit_all("gjp finish (dry-running)")
+
+          write_file_list("kit")
+
+          commit_all("file lists updated")
+
+          clear_status(:dry_running)
+
+          :dry_running
         end
       end
     end
@@ -130,6 +141,11 @@ module Gjp
 
       `git add .`
       `git commit -m "#{message}"`
+    end
+
+    def revert(dir)
+      `git checkout -f HEAD -- #{dir}`
+      `git clean -f -d #{dir}`
     end
 
     # gets a project status flag
