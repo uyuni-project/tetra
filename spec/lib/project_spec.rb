@@ -3,17 +3,20 @@
 require 'spec_helper'
 
 describe Gjp::Project do
-  before(:all) do
+  before(:each) do
     @project_path = File.join("spec", "data", "test-project")
     Dir.mkdir(@project_path)
+
+    @project = Gjp::Project.new(@project_path)
+    @project.init
   end
 
-  let(:project) { Gjp::Project.new(@project_path) }
+  after(:each) do
+    FileUtils.rm_rf(@project_path)
+  end
 
   describe ".init" do
     it "inits a new project" do
-      project.init
-
       kit_path = File.join(@project_path, "kit")
       Dir.exists?(kit_path).should be_true
 
@@ -30,22 +33,18 @@ describe Gjp::Project do
   describe ".set_status" do
     it "stores a project's status flag" do
       Dir.chdir(@project_path) do
-        project.set_status(:gathering)
+        @project.set_status(:gathering)
         File.exists?(".gathering").should be_true
-
-        project.clear_status(:gathering)
-        File.exists?(".gathering").should be_false
-      end
+     end
     end
   end
 
   describe ".get_status" do
     it "gets a project's status flag" do
       Dir.chdir(@project_path) do
-        project.get_status(:gathering).should be_false
-
-        project.set_status(:gathering)
-        project.get_status(:gathering).should be_true
+        @project.get_status(:gathering).should be_false
+        `touch .gathering`
+        @project.get_status(:gathering).should be_true
       end
     end
   end
@@ -53,10 +52,11 @@ describe Gjp::Project do
   describe ".clear_status" do
     it "clears a project's status flag" do
       Dir.chdir(@project_path) do
-        project.get_status(:gathering).should be_true
+        `touch .gathering`
+        @project.get_status(:gathering).should be_true
 
-        project.clear_status(:gathering)
-        project.get_status(:gathering).should be_false
+        @project.clear_status(:gathering)
+        @project.get_status(:gathering).should be_false
       end
     end
   end
@@ -66,9 +66,9 @@ describe Gjp::Project do
       Dir.chdir(@project_path) do
         `touch kit/test`
 
-         project.commit_all "test"
+         @project.commit_all "test"
 
-        `git rev-list --all`.split("\n").length.should eq(2)
+        `git rev-list --all`.split("\n").length.should eq 2
       end
     end
   end
@@ -80,11 +80,11 @@ describe Gjp::Project do
         `touch src/test`
       end
 
-      project.gather.should eq(:done)
+      @project.gather.should eq :done
 
       Dir.chdir(@project_path) do
-        project.get_status(:gathering).should be_true
-        `git rev-list --all`.split("\n").length.should eq 3
+        @project.get_status(:gathering).should be_true
+        `git rev-list --all`.split("\n").length.should eq 2
         `git diff-tree --no-commit-id --name-only -r HEAD`.split("\n").should include("src/test")
       end
     end
@@ -96,22 +96,19 @@ describe Gjp::Project do
       Dir.chdir(@project_path) do
         Dir.mkdir("src/a_b_c")
         `touch src/a_b_c/test`
-        `touch kit/test2`
+        `touch kit/test`
       end
 
-      project.finish.should eq :gathering
-      project.get_status(:gathering).should be_false
+      @project.gather.should eq :done
+      @project.finish.should eq :gathering
+      @project.get_status(:gathering).should be_false
 
       Dir.chdir(@project_path) do
-        `git rev-list --all`.split("\n").length.should eq 5
+        `git rev-list --all`.split("\n").length.should eq 3
         `git diff-tree --no-commit-id --name-only -r HEAD~`.split("\n").should include("src/a_b_c/test")
         File.readlines("src/a_b_c/gjp_file_list").should include("test\n")
-        File.readlines("kit/gjp_file_list").should include("test2\n")
+        File.readlines("kit/gjp_file_list").should include("test\n")
       end
     end
-  end
-
-  after(:all) do
-    FileUtils.rm_rf(@project_path)
   end
 end
