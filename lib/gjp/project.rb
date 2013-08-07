@@ -24,7 +24,7 @@ module Gjp
         end
 
         `git add .`
-        `git commit -m "gjp init #{Time.now}"`
+        `git commit -m "gjp init"`
         `git tag init`
       end
     end
@@ -55,7 +55,7 @@ module Gjp
         end
 
         `git add .`
-        `git commit -m "#{message} #{Time.now}"`
+        `git commit -m "#{message}"`
       end
     end
 
