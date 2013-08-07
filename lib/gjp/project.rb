@@ -74,13 +74,28 @@ module Gjp
     end
 
     def write_file_list(directory)
-      files = `git diff-tree --no-commit-id --name-only -r HEAD`.split("\n")
-      relevant_files = files.select { |file| file.start_with?(directory) }
-      relative_relevant_files = relevant_files.map { |file| file[directory.length + 1, file.length]  }
-      log.debug("writing file list for #{directory}: #{relative_relevant_files.to_s}")
+      list_path = "#{directory}/gjp_file_list"
 
-      File.open("#{directory}/gjp_file_list", "w") do |file_list|
-        relative_relevant_files.each do |file|
+      existing_files = if File.exists?(list_path)
+        File.readlines(list_path)
+      else
+        []
+      end
+
+      files = (
+        `git diff-tree --no-commit-id --name-only -r HEAD`.split("\n")
+        .select { |file| file.start_with?(directory) }
+        .map { |file|file[directory.length + 1, file.length]  }
+        .concat(existing_files)
+        .sort
+        .uniq
+      )
+
+      log.debug("writing file list for #{directory}: #{files.to_s}")
+
+        
+      File.open("#{directory}/gjp_file_list", "w+") do |file_list|
+        files.each do |file|
           file_list.puts file
         end
       end
