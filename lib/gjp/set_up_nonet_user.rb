@@ -5,7 +5,7 @@ module Gjp
   class LimitedNetworkUserSetUp
     
     # sets up a user named "nonet"
-    def self.set_up_limited_nertwork_user
+    def self.set_up_nonet_user
       user = Gjp::LimitedNetworkUser.new("nonet")
 
       user.set_up

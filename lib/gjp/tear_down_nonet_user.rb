@@ -5,7 +5,7 @@ module Gjp
   class LimitedNetworkUserTearDown
     
     # deletes a user named "nonet"
-    def self.tear_down_limited_nertwork_user
+    def self.tear_down_nonet_user
       user = Gjp::LimitedNetworkUser.new("nonet")
 
       user.tear_down

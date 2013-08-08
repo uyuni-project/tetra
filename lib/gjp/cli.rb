@@ -93,15 +93,15 @@ module Gjp
       end
     end
 
-    subcommand "set-up-limited-nertwork-user", "Sets up a \"nonet\" user that cannot access the network" do
+    subcommand "set-up-nonet-user", "Sets up a \"nonet\" user that cannot access the network" do
       def execute
-        puts Gjp::LimitedNetworkUserSetUp.set_up_limited_nertwork_user
+        puts Gjp::LimitedNetworkUserSetUp.set_up_nonet_user
       end
     end
 
-    subcommand "tear-down-limited-nertwork-user", "Deletes a user previously created by gjp" do
+    subcommand "tear-down-nonet-user", "Deletes a user previously created by gjp" do
       def execute
-        puts Gjp::LimitedNetworkUserTearDown.tear_down_limited_nertwork_user
+        puts Gjp::LimitedNetworkUserTearDown.tear_down_nonet_user
       end
     end
 
