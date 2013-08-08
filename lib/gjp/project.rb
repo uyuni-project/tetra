@@ -47,7 +47,7 @@ module Gjp
         end
 
         `git add .`
-        `git commit -m "gjp init"`
+        `git commit -m "Project initialized"`
         `git tag init`
       end
     end
@@ -63,7 +63,7 @@ module Gjp
         end
 
         set_status(:gathering)
-        commit_all("gjp gather")
+        commit_all("Gathering started")
       end
 
       :done
@@ -81,7 +81,7 @@ module Gjp
         end
 
         set_status(:dry_running)
-        commit_all("gjp dry-run")
+        commit_all("Dry-run started")
       end
 
       :done
