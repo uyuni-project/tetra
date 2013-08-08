@@ -93,6 +93,18 @@ module Gjp
       end
     end
 
+    subcommand "set-up-limited-nertwork-user", "Sets up a \"nonet\" user that cannot access the network" do
+      def execute
+        puts Gjp::LimitedNetworkUserSetUp.set_up_limited_nertwork_user
+      end
+    end
+
+    subcommand "tear-down-limited-nertwork-user", "Deletes a user previously created by gjp" do
+      def execute
+        puts Gjp::LimitedNetworkUserTearDown.tear_down_limited_nertwork_user
+      end
+    end
+
     subcommand "get-pom", "Retrieves a pom corresponding to a filename" do
       parameter "NAME", "a jar file path, a project directory path or a non-existing filename in the `project-version` form"
       def execute

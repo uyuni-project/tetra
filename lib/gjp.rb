@@ -9,9 +9,12 @@ require "gjp/project"
 require "gjp/version_matcher"
 require "gjp/maven_website"
 require "gjp/jar_table"
+require "gjp/limited_network_user"
 
 # subcommand implementation classes
 require "gjp/get_pom"
 require "gjp/get_parent_pom"
 require "gjp/get_source_address"
 require "gjp/get_source"
+require "gjp/set_up_limited_network_user"
+require "gjp/tear_down_limited_network_user"
