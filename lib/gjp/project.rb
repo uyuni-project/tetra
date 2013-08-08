@@ -92,40 +92,45 @@ module Gjp
     def finish
       Dir.chdir(@dir) do
         if get_status(:gathering)
-          commit_all("gjp finish (gathering)")
+          commit_all("Changes during gathering")
 
-          write_file_list("kit")
-          Dir.foreach("src") do |entry|
-            if File.directory?(File.join(Dir.getwd, "src", entry)) and entry =~ /[^_]+_[^_]+_[^_]+$/
-              write_file_list(File.join("src", entry))
-            end
-          end
-
-          commit_all("file lists updated")
+          update_changed_file_list("kit", "gjp_kit_file_list")
+          update_changed_src_file_list(:file_list)
+          commit_all("File list updates")
 
           clear_status(:gathering)
+          commit_all("Gathering finished")
 
           :gathering
         elsif get_status(:dry_running)
-          revert("src")
-          commit_all("gjp finish (dry-running)")
+          commit_all("Changes during dry-run")
 
-          write_file_list("kit")
+          update_changed_file_list("kit", "gjp_kit_file_list")
+          update_changed_src_file_list(:produced_file_list)
+          commit_all("File list updates")
 
-          commit_all("file lists updated")
+          revert("src", 2)
+          commit_all("Sources reverted as before dry-run")
 
           clear_status(:dry_running)
+          commit_all("Dry run finished")
 
           :dry_running
         end
       end
     end
 
-    def write_file_list(directory)
-      list_path = "#{directory}/gjp_file_list"
+    def update_changed_src_file_list(list_name)
+      Dir.foreach("src") do |entry|
+        if File.directory?(File.join(Dir.getwd, "src", entry)) and entry =~ /([^_\/]+_[^_]+_[^_]+)$/
+          update_changed_file_list(File.join("src", entry), "gjp_#{$1}_#{list_name.to_s}")
+        end
+      end
+    end
 
-      existing_files = if File.exists?(list_path)
-        File.readlines(list_path)
+    def update_changed_file_list(directory, list_file)
+      existing_files = if File.exists?(list_file)
+        File.readlines(list_file)
       else
         []
       end
@@ -142,7 +147,7 @@ module Gjp
       log.debug("writing file list for #{directory}: #{files.to_s}")
 
         
-      File.open("#{directory}/gjp_file_list", "w+") do |file_list|
+      File.open(list_file, "w+") do |file_list|
         files.each do |file|
           file_list.puts file
         end
@@ -160,12 +165,16 @@ module Gjp
 
       log.debug "committing with message: #{message}"
 
+      `git rm -r --cached .`
       `git add .`
       `git commit -m "#{message}"`
     end
 
-    def revert(dir)
-      `git checkout -f HEAD -- #{dir}`
+    # reverts dir contents as commit_count commits ago
+    def revert(dir, commit_count)
+      `git rm -rf --ignore-unmatch #{dir}`
+      `git checkout -f HEAD~#{commit_count} -- #{dir}`
+
       `git clean -f -d #{dir}`
     end
 

@@ -124,15 +124,14 @@ describe Gjp::Project do
       @project.get_status(:gathering).should be_false
 
       Dir.chdir(@project_path) do
-        `git rev-list --all`.split("\n").length.should eq 4
-        `git diff-tree --no-commit-id --name-only -r HEAD~`.split("\n").should include("src/a_b_c/test")
-        File.readlines("src/a_b_c/gjp_file_list").should include("test\n")
-        File.readlines("kit/gjp_file_list").should include("test\n")
+        `git rev-list --all`.split("\n").length.should eq 5
+        `git diff-tree --no-commit-id --name-only -r HEAD~2`.split("\n").should include("src/a_b_c/test")
+        File.readlines("gjp_a_b_c_file_list").should include("test\n")
+        File.readlines("gjp_kit_file_list").should include("test\n")
       end
     end
 
     it "ends the current dry-run phase" do
-
       @project.gather.should eq :done
 
       Dir.chdir(@project_path) do
@@ -154,13 +153,14 @@ describe Gjp::Project do
       @project.get_status(:dry_running).should be_false
 
       Dir.chdir(@project_path) do
-        `git rev-list --all`.split("\n").length.should eq 7
+        `git rev-list --all`.split("\n").length.should eq 10
         File.read("src/a_b_c/test").should eq "A\n"
-        File.readlines("src/a_b_c/gjp_file_list").should_not include("test2\n")
+        File.readlines("gjp_a_b_c_produced_file_list").should include("test2\n")
+        File.readlines("gjp_a_b_c_file_list").should_not include("test2\n")
 
-        `git diff-tree --no-commit-id --name-only -r HEAD~`.split("\n").should_not include("src/a_b_c/test2")
+        `git diff-tree --no-commit-id --name-only -r HEAD~2`.split("\n").should_not include("src/a_b_c/test2")
         File.exists?("src/a_b_c/test2").should be_false
-        File.readlines("kit/gjp_file_list").should include("test\n")
+        File.readlines("gjp_kit_file_list").should include("test\n")
       end
     end
   end
