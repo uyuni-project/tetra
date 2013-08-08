@@ -5,7 +5,7 @@ require "json"
 require "open-uri"
 
 module Gjp
-  # implements the get-source-address subcommand
+  # attempts to get java projects' scm addresses
   class SourceAddressGetter
     def self.log
       Gjp.logger

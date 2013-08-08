@@ -3,7 +3,7 @@
 require "rest_client"
 
 module Gjp
-  # implements the get-source subcommand
+  # attempts to get java projects' sources from scm
   class SourceGetter
     def self.log
       Gjp.logger

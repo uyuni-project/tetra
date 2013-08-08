@@ -6,7 +6,9 @@ require "gjp/version_matcher"
 require "gjp/maven_website"
 require "gjp/jar_table"
 require "gjp/limited_network_user"
+require "gjp/pom_getter"
+require "gjp/source_address_getter"
+require "gjp/source_getter"
+require "gjp/parent_pom_getter"
 
 require "gjp/cli"
-
-Dir[File.dirname(__FILE__) + '/gjp/subcommands/*.rb'].each { |file| require file }

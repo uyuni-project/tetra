@@ -9,7 +9,7 @@ require "pathname"
 require "gjp/version_matcher"
 
 module Gjp
-  # implements the get-pom subcommand
+  # attempts to get java projects' pom file
   class PomGetter
 
     def self.log

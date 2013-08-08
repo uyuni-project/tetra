@@ -3,7 +3,7 @@
 require "pathname"
 
 module Gjp
-  # implements the get-parent-pom subcommand
+  # attempts to get a pom's parent pom
   class ParentPomGetter
 
     def self.log

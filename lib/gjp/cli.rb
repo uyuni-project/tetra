@@ -95,13 +95,25 @@ module Gjp
 
     subcommand "set-up-nonet-user", "Sets up a \"nonet\" user that cannot access the network" do
       def execute
-        puts Gjp::LimitedNetworkUserSetUp.set_up_nonet_user
+        user = Gjp::LimitedNetworkUser.new("nonet")
+        user.set_up
+
+        "sudo #{user.get_path("useradd")} nonet\n" +
+        "sudo #{user.get_path("iptables")} -A OUTPUT -m owner --uid-owner nonet -j DROP\n" +
+        "User \"nonet\" set up, you can use \"sudo nonet\" to dry-run your build with no network access.\n" +
+        "Note that the above iptables rule will be cleared at next reboot, you can use your distribution " +
+        "tools to make it persistent or run \"gjp set-up-limited-nertwork-user\" again next time."
       end
     end
 
     subcommand "tear-down-nonet-user", "Deletes a user previously created by gjp" do
       def execute
-        puts Gjp::LimitedNetworkUserTearDown.tear_down_nonet_user
+        user = Gjp::LimitedNetworkUser.new("nonet")
+
+        user.tear_down
+
+        "sudo #{user.get_path("iptables")} -D OUTPUT -m owner --uid-owner nonet -j DROP\n" +
+        "sudo #{user.get_path("userdel")} nonet\n"
       end
     end
 
