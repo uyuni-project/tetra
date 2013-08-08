@@ -51,7 +51,7 @@ module Gjp
       end
     end
 
-    subcommand "gather", "Starts a new gathering phase, in which sources and kit files are added to the project" do
+    subcommand "gather", "Starts a gathering phase, add source and kit files to project" do
       def execute
         result = Gjp::Project.new(".").gather
         if result == :done
@@ -66,7 +66,7 @@ module Gjp
       end
     end
 
-    subcommand "dry-run", "Starts a new dry-running phase, a build is attempted so that dependencies are added to the kit." do
+    subcommand "dry-run", "Starts a dry-run phase, attempt build to add dependencies to kit." do
       def execute
         result = Gjp::Project.new(".").dry_run
         if result == :done
