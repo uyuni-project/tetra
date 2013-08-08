@@ -45,7 +45,7 @@ module Gjp
     # Subcommands
     subcommand "init", "Inits a gjp project in the current directory" do
       def execute
-        Gjp::Project.new(".").init
+        Gjp::Project.init(".")
         puts "Project inited."
         puts "Use \"gjp gather\" before adding files to have gjp track them."
       end

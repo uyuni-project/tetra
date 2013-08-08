@@ -7,15 +7,35 @@ describe Gjp::Project do
     @project_path = File.join("spec", "data", "test-project")
     Dir.mkdir(@project_path)
 
+    Gjp::Project.init(@project_path)
     @project = Gjp::Project.new(@project_path)
-    @project.init
   end
 
   after(:each) do
     FileUtils.rm_rf(@project_path)
   end
 
-  describe ".init" do
+  describe "#is_project"  do
+    it "checks if a directory is a gjp project or not" do
+      Gjp::Project.is_project(@project_path).should be_true    
+      Gjp::Project.is_project(File.join(@project_path, "..")).should be_false
+    end
+  end
+
+  describe "#find_project_dir"  do
+    it "recursively the parent project directory" do
+      expanded_path = File.expand_path(@project_path)
+      Gjp::Project.find_project_dir(expanded_path).should eq expanded_path
+      Gjp::Project.find_project_dir(File.expand_path("src", @project_path)).should eq expanded_path
+      Gjp::Project.find_project_dir(File.expand_path("kit", @project_path)).should eq expanded_path
+
+      expect {
+        Gjp::Project.find_project_dir(File.expand_path("..", @project_path)).should raise_error
+      }.to raise_error(ArgumentError)
+    end
+  end
+
+  describe "#init" do
     it "inits a new project" do
       kit_path = File.join(@project_path, "kit")
       Dir.exists?(kit_path).should be_true

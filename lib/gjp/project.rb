@@ -9,13 +9,32 @@ module Gjp
       Gjp.logger
     end
 
-    def initialize(dir)
-      @dir = dir
+    def initialize(dir)      
+      @dir = Gjp::Project.find_project_dir(File.expand_path(dir))
+    end
+
+    # finds the project directory up in the tree, like git does
+    def self.find_project_dir(starting_dir)
+      result = starting_dir
+      while is_project(result) == false and result != "/"
+        result = File.expand_path("..", result)
+      end
+
+      raise ArgumentError, "This is not a gjp project directory" if result == "/"
+
+      result
+    end
+
+    # returns true if the specified directory is a valid gjp project
+    def self.is_project(dir)
+      File.directory?(File.join(dir, "src")) and
+      File.directory?(File.join(dir, "kit")) and
+      File.directory?(File.join(dir, ".git"))
     end
 
     # inits a new project directory structure
-    def init
-      Dir.chdir(@dir) do
+    def self.init(dir)
+      Dir.chdir(dir) do
         `git init`
 
         Dir.mkdir("src")
