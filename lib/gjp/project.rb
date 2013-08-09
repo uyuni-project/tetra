@@ -55,7 +55,7 @@ module Gjp
     # starts a gathering phase, all files added to the project
     # will be added to packages (including kit)
     def gather
-      Dir.chdir(@dir) do
+      from_directory do
         if get_status(:gathering)
           return :gathering
         elsif get_status(:dry_running)
@@ -73,7 +73,7 @@ module Gjp
     # be added to packages, while sources will be reset at the
     # end
     def dry_run
-      Dir.chdir(@dir) do
+      from_directory do
         if get_status(:gathering)
           return :gathering
         elsif get_status(:dry_running)
@@ -90,7 +90,7 @@ module Gjp
     # ends any phase that was previously started, 
     # generating file lists
     def finish
-      Dir.chdir(@dir) do
+      from_directory do
         if get_status(:gathering)
           commit_all("Changes during gathering")
 
@@ -202,6 +202,13 @@ module Gjp
 
     def status_file_name(status)
       ".#{status.to_s}"
+    end
+
+    # runs a block from the project directory
+    def from_directory
+      Dir.chdir(@dir) do
+        yield
+      end
     end
   end
 end

@@ -43,7 +43,7 @@ describe Gjp::Project do
       src_path = File.join(@project_path, "src")
       Dir.exists?(src_path).should be_true
 
-      Dir.chdir(@project_path) do
+      @project.from_directory do
         `git tag`.strip.should eq("init")
         `git rev-list --all`.split("\n").length.should eq 1
       end
@@ -52,7 +52,7 @@ describe Gjp::Project do
 
   describe ".set_status" do
     it "stores a project's status flag" do
-      Dir.chdir(@project_path) do
+      @project.from_directory do
         @project.set_status(:gathering)
         File.exists?(".gathering").should be_true
      end
@@ -61,7 +61,7 @@ describe Gjp::Project do
 
   describe ".get_status" do
     it "gets a project's status flag" do
-      Dir.chdir(@project_path) do
+      @project.from_directory do
         @project.get_status(:gathering).should be_false
         `touch .gathering`
         @project.get_status(:gathering).should be_true
@@ -71,7 +71,7 @@ describe Gjp::Project do
 
   describe ".clear_status" do
     it "clears a project's status flag" do
-      Dir.chdir(@project_path) do
+      @project.from_directory do
         `touch .gathering`
         @project.get_status(:gathering).should be_true
 
@@ -83,7 +83,7 @@ describe Gjp::Project do
 
   describe ".commit_all" do
     it "commits the project contents to git for later use" do
-      Dir.chdir(@project_path) do
+      @project.from_directory do
         `touch kit/test`
 
          @project.commit_all "test"
@@ -96,13 +96,13 @@ describe Gjp::Project do
   describe ".gather" do
     it "starts a gathering phase" do
 
-      Dir.chdir(@project_path) do
+      @project.from_directory do
         `touch src/test`
       end
 
       @project.gather.should eq :done
 
-      Dir.chdir(@project_path) do
+      @project.from_directory do
         @project.get_status(:gathering).should be_true
         `git rev-list --all`.split("\n").length.should eq 2
         `git diff-tree --no-commit-id --name-only -r HEAD`.split("\n").should include("src/test")
@@ -114,7 +114,7 @@ describe Gjp::Project do
     it "ends the current gathering phase" do
       @project.gather.should eq :done
 
-      Dir.chdir(@project_path) do
+      @project.from_directory do
         Dir.mkdir("src/a_b_c")
         `touch src/a_b_c/test`
         `touch kit/test`
@@ -123,7 +123,7 @@ describe Gjp::Project do
       @project.finish.should eq :gathering
       @project.get_status(:gathering).should be_false
 
-      Dir.chdir(@project_path) do
+      @project.from_directory do
         `git rev-list --all`.split("\n").length.should eq 5
         `git diff-tree --no-commit-id --name-only -r HEAD~2`.split("\n").should include("src/a_b_c/test")
         File.readlines("gjp_a_b_c_file_list").should include("test\n")
@@ -134,7 +134,7 @@ describe Gjp::Project do
     it "ends the current dry-run phase" do
       @project.gather.should eq :done
 
-      Dir.chdir(@project_path) do
+      @project.from_directory do
         Dir.mkdir("src/a_b_c")
         `echo A > src/a_b_c/test`
       end
@@ -143,7 +143,7 @@ describe Gjp::Project do
 
       @project.dry_run.should eq :done
 
-      Dir.chdir(@project_path) do
+      @project.from_directory do
         `echo B > src/a_b_c/test`
         `touch src/a_b_c/test2`
         `touch kit/test`
@@ -152,7 +152,7 @@ describe Gjp::Project do
       @project.finish.should eq :dry_running
       @project.get_status(:dry_running).should be_false
 
-      Dir.chdir(@project_path) do
+      @project.from_directory do
         `git rev-list --all`.split("\n").length.should eq 10
         File.read("src/a_b_c/test").should eq "A\n"
         File.readlines("gjp_a_b_c_produced_file_list").should include("test2\n")
@@ -168,13 +168,13 @@ describe Gjp::Project do
   describe ".dry_run" do
     it "starts a dry running phase" do
 
-      Dir.chdir(@project_path) do
+      @project.from_directory do
         `touch src/test`
       end
 
       @project.dry_run.should eq :done
 
-      Dir.chdir(@project_path) do
+      @project.from_directory do
         @project.get_status(:dry_running).should be_true
         `git rev-list --all`.split("\n").length.should eq 2
         `git diff-tree --no-commit-id --name-only -r HEAD`.split("\n").should include("src/test")
