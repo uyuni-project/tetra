@@ -74,10 +74,19 @@ module Gjp
           puts "Any file added to kit/, presumably downloaded dependencies, will be added to the kit package."
           puts "The src/ directory and all files in it will be brought back to the current state when finished."
           puts "Note that .gitignore files are honored!"
+          puts "To run a Maven from the kit, use \"gjp mvn\"."
           puts "To finalize this dry run, use \"gjp finish\"."
         else
           puts "Cannot begin a dry run while #{result}, use \"gjp finish\" first."
         end
+      end
+    end
+
+    subcommand "mvn", "Runs Maven from the kit" do
+      parameter "OPTION ...", "mvn options", :attribute_name => :options
+      def execute
+        project = Gjp::Project.new(".")
+        Gjp::MavenRunner.new(project).mvn(options)
       end
     end
 
