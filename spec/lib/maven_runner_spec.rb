@@ -38,15 +38,18 @@ describe Gjp::MavenRunner do
 
   describe "#get_maven_commandline"  do
     it "returns commandline options for running maven" do
-      @maven_runner.get_maven_commandline.should eq "#{@maven_executable} -Dmaven.repo.local=kit/m2 -skit/m2/settings.xml"
+      kit_full_path = File.join(@project.full_path, "kit")
+      commandline = @maven_runner.get_maven_commandline(kit_full_path, @project.full_path)
+
+      commandline.should eq "./#{@maven_executable} -Dmaven.repo.local=`readlink -e ./kit/m2` -s`readlink -e ./kit/m2/settings.xml`"
     end
   end
 
   describe "#mvn"  do
     it "runs maven" do
-      @maven_runner.mvn(["extra-option"])
       @project.from_directory do
-        File.read("test_out").strip.should eq "#{@maven_runner.get_maven_commandline} extra-option"
+        @maven_runner.mvn(["extra-option"])
+        File.read("test_out").strip.should match /extra-option$/
       end
     end
   end

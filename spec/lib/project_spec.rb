@@ -35,6 +35,12 @@ describe Gjp::Project do
     end
   end
 
+  describe "full_path" do
+    it "returns the project's full path" do
+      @project.full_path.should eq File.expand_path(@project_path)
+    end
+  end
+
   describe "#init" do
     it "inits a new project" do
       kit_path = File.join(@project_path, "kit")

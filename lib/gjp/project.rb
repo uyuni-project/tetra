@@ -9,8 +9,10 @@ module Gjp
       Gjp.logger
     end
 
-    def initialize(dir)      
-      @dir = Gjp::Project.find_project_dir(File.expand_path(dir))
+    attr_accessor :full_path
+
+    def initialize(path)      
+      @full_path = Gjp::Project.find_project_dir(File.expand_path(path))
     end
 
     # finds the project directory up in the tree, like git does
@@ -206,7 +208,7 @@ module Gjp
 
     # runs a block from the project directory
     def from_directory
-      Dir.chdir(@dir) do
+      Dir.chdir(@full_path) do
         yield
       end
     end
