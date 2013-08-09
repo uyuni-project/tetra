@@ -36,7 +36,7 @@ module Gjp
     # runs mvn in a subprocess
     def mvn(options)
       @project.from_directory do
-        Process.wait(Process.spawn("#{get_maven_commandline} #{options}"))
+        Process.wait(Process.spawn("#{get_maven_commandline} #{options.join(' ')}"))
      end
     end
   end

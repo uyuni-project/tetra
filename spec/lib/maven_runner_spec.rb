@@ -44,7 +44,7 @@ describe Gjp::MavenRunner do
 
   describe "#mvn"  do
     it "runs maven" do
-      @maven_runner.mvn("extra-option")
+      @maven_runner.mvn(["extra-option"])
       @project.from_directory do
         File.read("test_out").strip.should eq "#{@maven_runner.get_maven_commandline} extra-option"
       end

@@ -83,12 +83,19 @@ module Gjp
     end
 
     subcommand "mvn", "Runs Maven from the kit" do
-      parameter "OPTION ...", "mvn options", :attribute_name => :options
+      parameter "[MAVEN OPTIONS] ...", "mvn options", :attribute_name => "dummy"
+
+      # override parsing in order to pipe everything to mvn
+      def parse(args)
+        @maven_options = args
+      end
+
       def execute
         project = Gjp::Project.new(".")
-        Gjp::MavenRunner.new(project).mvn(options)
+        Gjp::MavenRunner.new(project).mvn(@maven_options)
       end
     end
+
 
     subcommand "finish", "Finishes the current phase" do
       def execute
