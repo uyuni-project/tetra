@@ -1,5 +1,7 @@
 For each package you want to create, you should create a subdirectory here
-named after the package Maven name like: orgId_artifactId_version.
+named after the package Maven name "orgId:artifactId:version", eg.
+
+./commons-collections:commons-collections:3.2/
 
 In that directory, place all the source files "verbatim" (as checked out from
 the original source repository).

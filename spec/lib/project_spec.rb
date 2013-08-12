@@ -109,8 +109,8 @@ describe Gjp::Project do
       @project.gather.should be_true
 
       @project.from_directory do
-        Dir.mkdir("src/a_b_c")
-        `touch src/a_b_c/test`
+        Dir.mkdir("src/a:b:c")
+        `touch src/a\:b\:c/test`
         `touch kit/test`
       end
 
@@ -119,8 +119,8 @@ describe Gjp::Project do
 
       @project.from_directory do
         `git rev-list --all`.split("\n").length.should eq 5
-        `git diff-tree --no-commit-id --name-only -r HEAD~2`.split("\n").should include("src/a_b_c/test")
-        File.readlines(File.join("file_lists", "a_b_c_input")).should include("test\n")
+        `git diff-tree --no-commit-id --name-only -r HEAD~2`.split("\n").should include("src/a:b:c/test")
+        File.readlines(File.join("file_lists", "a:b:c_input")).should include("test\n")
         File.readlines(File.join("file_lists","kit")).should include("test\n")
       end
     end
@@ -129,8 +129,8 @@ describe Gjp::Project do
       @project.gather.should be_true
 
       @project.from_directory do
-        Dir.mkdir("src/a_b_c")
-        `echo A > src/a_b_c/test`
+        Dir.mkdir("src/a:b:c")
+        `echo A > src/a\:b\:c/test`
       end
 
       @project.finish.should eq :gathering
@@ -138,8 +138,8 @@ describe Gjp::Project do
       @project.dry_run.should be_true
 
       @project.from_directory do
-        `echo B > src/a_b_c/test`
-        `touch src/a_b_c/test2`
+        `echo B > src/a\:b\:c/test`
+        `touch src/a\:b\:c/test2`
         `touch kit/test`
       end
 
@@ -148,12 +148,12 @@ describe Gjp::Project do
 
       @project.from_directory do
         `git rev-list --all`.split("\n").length.should eq 10
-        File.read("src/a_b_c/test").should eq "A\n"
-        File.readlines(File.join("file_lists", "a_b_c_output")).should include("test2\n")
-        File.readlines(File.join("file_lists", "a_b_c_input")).should_not include("test2\n")
+        File.read("src/a:b:c/test").should eq "A\n"
+        File.readlines(File.join("file_lists", "a:b:c_output")).should include("test2\n")
+        File.readlines(File.join("file_lists", "a:b:c_input")).should_not include("test2\n")
 
-        `git diff-tree --no-commit-id --name-only -r HEAD~2`.split("\n").should_not include("src/a_b_c/test2")
-        File.exists?("src/a_b_c/test2").should be_false
+        `git diff-tree --no-commit-id --name-only -r HEAD~2`.split("\n").should_not include("src/a:b:c/test2")
+        File.exists?("src/a:b:c/test2").should be_false
         File.readlines(File.join("file_lists", "kit")).should include("test\n")
       end
     end
