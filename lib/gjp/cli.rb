@@ -2,16 +2,9 @@
 require "gjp/logger"
 require "clamp"
 
-# Initialize global logger for CLI
-Gjp.logger = ::Logger.new(STDERR)
-Gjp.logger.datetime_format = "%Y-%m-%d %H:%M "
-Gjp.logger.level = ::Logger::ERROR
-Gjp.logger.formatter = proc do |severity, datetime, progname, msg|
-  "#{severity.chars.first}: #{msg}\n"
-end
-
 module Gjp
   class MainCommand < Clamp::Command
+    include Logger
 
     # Common logging options
     option ["-v", "--verbose"], :flag, "verbose output"
@@ -32,13 +25,13 @@ module Gjp
 
     def configure_log_level(v, vv, vvv)
       if vvv
-        Gjp.logger.level = Logger::DEBUG
+        log.level = ::Logger::DEBUG
       elsif vv
-        Gjp.logger.level = Logger::INFO
+        log.level = ::Logger::INFO
       elsif v
-        Gjp.logger.level = Logger::WARN
+        log.level = ::Logger::WARN
       else
-        Gjp.logger.level = Logger::ERROR
+        log.level = ::Logger::ERROR
       end
     end
 
@@ -135,14 +128,14 @@ module Gjp
     subcommand "get-pom", "Retrieves a pom corresponding to a filename" do
       parameter "NAME", "a jar file path, a project directory path or a non-existing filename in the `project-version` form"
       def execute
-        puts Gjp::PomGetter.get_pom(name)
+        puts Gjp::PomGetter.new.get_pom(name)
       end
     end
 
     subcommand "get-parent-pom", "Retrieves a pom that is the parent of an existing pom" do
       parameter "POM", "a pom file path or URI"
       def execute
-        puts Gjp::ParentPomGetter.get_parent_pom(pom)
+        puts Gjp::ParentPomGetter.new.get_parent_pom(pom)
       end
     end
       
@@ -150,7 +143,7 @@ module Gjp
       parameter "POM", "a pom file path or URI"
 
       def execute
-        puts Gjp::SourceAddressGetter.get_source_address(pom)
+        puts Gjp::SourceAddressGetter.new.get_source_address(pom)
       end    
     end
     
@@ -160,7 +153,7 @@ module Gjp
       parameter "[DIRECTORY]", "directory in which to save the source code", :default => "."
 
       def execute
-        puts Gjp::SourceGetter.get_source(address, pom, directory)
+        puts Gjp::SourceGetter.new.get_source(address, pom, directory)
       end    
     end
 

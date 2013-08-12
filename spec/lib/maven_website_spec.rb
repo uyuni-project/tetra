@@ -3,7 +3,6 @@
 require 'spec_helper'
 
 describe Gjp::MavenWebsite do
-
   let(:site) { Gjp::MavenWebsite.new }
 
   describe "#search_by_sha1" do

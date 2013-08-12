@@ -5,13 +5,10 @@ require "pathname"
 module Gjp
   # attempts to get a pom's parent pom
   class ParentPomGetter
-
-    def self.log
-      Gjp.logger
-    end
+    include Logger
 
     # returns the pom's parent, if any
-    def self.get_parent_pom(filename)
+    def get_parent_pom(filename)
       begin
         pom = Pom.new(filename)
         site = MavenWebsite.new

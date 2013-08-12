@@ -1,10 +1,6 @@
 # encoding: UTF-8
 
 require "gjp"
-require "logger"
+require "gjp/logger"
 
-Gjp.logger = ::Logger.new(STDERR)
-Gjp.logger.level = ::Logger::DEBUG
-Gjp.logger.formatter = proc do |severity, datetime, progname, msg|
-  "#{severity.chars.first}: #{msg}\n"
-end
+Gjp::Logger.log.level = ::Logger::DEBUG

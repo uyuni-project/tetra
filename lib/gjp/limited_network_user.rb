@@ -6,9 +6,7 @@ module Gjp
   # encapsulates a Linux user that cannot access the Internet
   # assumes root access (sudo) and iptables are available
   class LimitedNetworkUser
-    def log
-      Gjp.logger
-    end
+    include Logger
 
     def initialize(name)
       @name = name

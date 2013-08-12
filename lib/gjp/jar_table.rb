@@ -7,9 +7,7 @@ module Gjp
   # assumes the project is in a directory with jar files
   # in its (possibly nested) subdirectories
   class JarTable
-    def log
-      Gjp.logger
-    end
+    include Logger
 
     attr_reader :rows, :runtime_required_packages, :source_defined_packages
 

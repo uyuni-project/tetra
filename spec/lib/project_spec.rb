@@ -56,7 +56,7 @@ describe Gjp::Project do
     end
   end
 
-  describe ".set_status" do
+  describe "#set_status" do
     it "stores a project's status flag" do
       @project.from_directory do
         @project.set_status :gathering
@@ -65,7 +65,7 @@ describe Gjp::Project do
     end
   end
 
-  describe ".get_status" do
+  describe "#get_status" do
     it "gets a project's status flag" do
       @project.from_directory do
         @project.get_status.should be_nil
@@ -75,7 +75,7 @@ describe Gjp::Project do
     end
   end
 
-  describe ".commit_all" do
+  describe "#commit_all" do
     it "commits the project contents to git for later use" do
       @project.from_directory do
         `touch kit/test`
@@ -87,7 +87,7 @@ describe Gjp::Project do
     end
   end
   
-  describe ".gather" do
+  describe "#gather" do
     it "starts a gathering phase" do
 
       @project.from_directory do
@@ -104,7 +104,7 @@ describe Gjp::Project do
     end
   end
 
-  describe ".finish" do
+  describe "#finish" do
     it "ends the current gathering phase" do
       @project.gather.should be_true
 
@@ -159,7 +159,7 @@ describe Gjp::Project do
     end
   end
 
-  describe ".dry_run" do
+  describe "#dry_run" do
     it "starts a dry running phase" do
 
       @project.from_directory do

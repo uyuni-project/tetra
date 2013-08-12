@@ -5,9 +5,7 @@ require 'find'
 module Gjp
   # encapsulates a Gjp project directory
   class Project
-    def log
-      Gjp.logger
-    end
+    include Logger
 
     # list of possible statuses
     @@statuses = [:gathering, :dry_running]

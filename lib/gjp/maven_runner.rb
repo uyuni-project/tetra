@@ -6,9 +6,7 @@ require 'pathname'
 module Gjp
   # runs Maven from a gjp kit with gjp-specific options
   class MavenRunner
-    def log
-      Gjp.logger
-    end
+    include Logger
 
     def initialize(project)      
       @project = project

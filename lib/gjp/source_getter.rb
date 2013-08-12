@@ -5,12 +5,10 @@ require "rest_client"
 module Gjp
   # attempts to get java projects' sources from scm
   class SourceGetter
-    def self.log
-      Gjp.logger
-    end
+    include Logger
 
     # downloads a project's source into a specified directory
-    def self.get_source(address, pomfile, directory)
+    def get_source(address, pomfile, directory)
       log.info("downloading: #{address} in #{directory}, pomfile: #{pomfile}")
       
       dummy, prefix, scm_address = address.split(/^([^:]+):(.*)$/)
@@ -20,7 +18,7 @@ module Gjp
     end
 
     # checks code out from an scm
-    def self.get_source_from_scm(prefix, scm_address, pomfile, directory)
+    def get_source_from_scm(prefix, scm_address, pomfile, directory)
       pom = Pom.new(pomfile)
       dir = File.join(directory, "#{pom.group_id}:#{pom.artifact_id}:#{pom.version}")
   		begin
@@ -37,7 +35,7 @@ module Gjp
     end
 
     # checks code out of git
-  	def self.get_source_from_git(scm_address, dir, version)
+  	def get_source_from_git(scm_address, dir, version)
   		`git clone #{scm_address} #{dir}`
   		
   		Dir.chdir(dir) do
@@ -53,7 +51,7 @@ module Gjp
   	end
 
     # checks code out of svn
-  	def self.get_source_from_svn(scm_address, dir, version)
+  	def get_source_from_svn(scm_address, dir, version)
   		`svn checkout #{scm_address} #{dir}`
   		
   		Dir.chdir(dir) do
@@ -69,16 +67,18 @@ module Gjp
   	end
 
   	# return the (heuristically) most similar tag to the specified version
-  	def self.get_best_tag(tags, version)
-  		versions_to_tags =Hash[
+  	def get_best_tag(tags, version)
+      version_matcher = VersionMatcher.new
+
+  		versions_to_tags = Hash[
   			*tags.map do |tag|
-  				[VersionMatcher.split_version(tag)[1], tag]
+  				[version_matcher.split_version(tag)[1], tag]
   			end.flatten
   		]
   			
   	  log.info("found the following versions and tags: #{versions_to_tags}")
 
-  		best_version = VersionMatcher.best_match(version, versions_to_tags.keys)
+  		best_version = version_matcher.best_match(version, versions_to_tags.keys)
   		versions_to_tags[best_version]
   	end
   end

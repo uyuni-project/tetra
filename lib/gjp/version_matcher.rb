@@ -5,15 +5,13 @@ require "text"
 module Gjp
   # heuristically matches version strings
   class VersionMatcher 
-    def self.log
-      Gjp.logger
-    end
+    include Logger
 
   	# heuristically splits a full name into an artifact name and version string
     # assumes that version strings begin with a numeric character and are separated
     # by a ., -, _, ~ or space
     # returns a [name, version] pair
-  	def self.split_version(full_name)	
+  	def split_version(full_name)	
       matches = full_name.match(/(.*?)(?:[\.\-\_ ~,]?([0-9].*))?$/)
       if matches != nil and matches.length > 1
         [matches[1], matches[2]]
@@ -29,7 +27,7 @@ module Gjp
     #  - "comparison" is a subtraction if the chunk is an integer, a string distance measure otherwise
     #  - score weighs differently on chunk index (first chunks are most important)
     #  - lowest score wins
-    def self.best_match(my_version, their_versions)
+    def best_match(my_version, their_versions)
       log.debug("version comparison: #{my_version} vs #{their_versions.join(', ')}")
     
       my_chunks = my_version.split /[\.\-\_ ~,]/
@@ -77,7 +75,7 @@ module Gjp
     # for integers, the score is the difference between their values
     # for strings, the score is the Levenshtein distance
     # in any case score is normalized between 0 (identical) and 99 (very different/uncomparable)
-    def self.chunk_distance(my_chunk, their_chunk)
+    def chunk_distance(my_chunk, their_chunk)
       if my_chunk == nil
         my_chunk = "0"
       end
