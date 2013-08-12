@@ -162,13 +162,6 @@ module Gjp
 
     # adds the project's whole contents to git
     def commit_all(message)
-      Find.find(".") do |path|
-        if path =~ /.gitignore$/
-          puts "Deleting #{path} to preserve all files..."
-          File.delete(path)
-        end
-      end
-
       log.debug "committing with message: #{message}"
 
       `git rm -r --cached .`
