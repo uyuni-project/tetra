@@ -9,6 +9,9 @@ module Gjp
       Gjp.logger
     end
 
+    # list of possible statuses
+    @@statuses = [:gathering, :dry_running]
+
     attr_accessor :full_path
 
     def initialize(path)      
@@ -58,9 +61,10 @@ module Gjp
     # will be added to packages (including kit)
     def gather
       from_directory do
-        if get_status(:gathering)
+        status = get_status
+        if status == :gathering
           return false
-        elsif get_status(:dry_running)
+        elsif status == :dry_running
           finish
         end
 
@@ -76,9 +80,10 @@ module Gjp
     # end
     def dry_run
       from_directory do
-        if get_status(:dry_running)
+        status = get_status
+        if status == :dry_running
           return false
-        elsif get_status(:gathering)
+        elsif status == :gathering
           finish
         end
 
@@ -93,7 +98,8 @@ module Gjp
     # generating file lists
     def finish
       from_directory do
-        if get_status(:gathering)
+        status = get_status
+        if status == :gathering
           commit_all("Changes during gathering")
 
           update_changed_file_list("kit", "gjp_kit_file_list")
@@ -104,7 +110,7 @@ module Gjp
           commit_all("Gathering finished")
 
           :gathering
-        elsif get_status(:dry_running)
+        elsif status = :dry_running
           commit_all("Changes during dry-run")
 
           update_changed_file_list("kit", "gjp_kit_file_list")
@@ -180,10 +186,16 @@ module Gjp
       `git clean -f -d #{dir}`
     end
 
-    # gets a project status flag
-    def get_status(status)
-      file_name = status_file_name(status)
-      File.exists?(file_name)
+    # returns a symbol with the current status
+    # flag
+    def get_status
+      @@statuses.each do |status|
+        if File.exists?(status_file_name(status))
+          return status
+        end
+      end
+
+      nil
     end
 
     # sets a project status flag

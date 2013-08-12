@@ -68,9 +68,9 @@ describe Gjp::Project do
   describe ".get_status" do
     it "gets a project's status flag" do
       @project.from_directory do
-        @project.get_status(:gathering).should be_false
+        @project.get_status.should be_nil
         `touch .gathering`
-        @project.get_status(:gathering).should be_true
+        @project.get_status.should eq :gathering
       end
     end
   end
@@ -79,10 +79,10 @@ describe Gjp::Project do
     it "clears a project's status flag" do
       @project.from_directory do
         `touch .gathering`
-        @project.get_status(:gathering).should be_true
+        @project.get_status.should eq :gathering
 
         @project.clear_status(:gathering)
-        @project.get_status(:gathering).should be_false
+        @project.get_status.should be_nil
       end
     end
   end
@@ -109,7 +109,7 @@ describe Gjp::Project do
       @project.gather.should be_true
 
       @project.from_directory do
-        @project.get_status(:gathering).should be_true
+        @project.get_status.should eq :gathering
         `git rev-list --all`.split("\n").length.should eq 2
         `git diff-tree --no-commit-id --name-only -r HEAD`.split("\n").should include("src/test")
       end
@@ -127,7 +127,7 @@ describe Gjp::Project do
       end
 
       @project.finish.should eq :gathering
-      @project.get_status(:gathering).should be_false
+      @project.get_status.should be_nil
 
       @project.from_directory do
         `git rev-list --all`.split("\n").length.should eq 5
@@ -156,7 +156,7 @@ describe Gjp::Project do
       end
 
       @project.finish.should eq :dry_running
-      @project.get_status(:dry_running).should be_false
+      @project.get_status.should be_nil
 
       @project.from_directory do
         `git rev-list --all`.split("\n").length.should eq 10
@@ -181,7 +181,7 @@ describe Gjp::Project do
       @project.dry_run.should be_true
 
       @project.from_directory do
-        @project.get_status(:dry_running).should be_true
+        @project.get_status.should eq :dry_running
         `git rev-list --all`.split("\n").length.should eq 2
         `git diff-tree --no-commit-id --name-only -r HEAD`.split("\n").should include("src/test")
       end
