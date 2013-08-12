@@ -38,25 +38,23 @@ module Gjp
     # inits a new project directory structure
     def self.init(dir)
       Dir.chdir(dir) do
-        `git init`
+        if Dir.exists?(".git") == false
+          `git init`
+        end
 
-        Dir.mkdir("src")
-        File.open(File.join("src", "README"), "w") do |file|
-          file.puts "Sources are to be placed in subdirectories named after Maven names: orgId_artifactId_version"
-        end
-        Dir.mkdir("kit")
-        File.open(File.join("kit", "README"), "w") do |file|
-          file.puts "Build tool binaries are to be placed here"
-        end
-        Dir.mkdir("file_lists")
-        File.open(File.join("kit", "README"), "w") do |file|
-          file.puts "gjp will generate file lists for all packages here. You can edit them manually if you wish."
-        end
+        copy_from_template "file_lists", "."
+        copy_from_template "src", "."
+        copy_from_template "kit", "."
 
         `git add .`
         `git commit -m "Project initialized"`
         `git tag init`
       end
+    end
+
+    # copies a file/dir from the template directory to the destination directory
+    def self.copy_from_template(template_file, destination_dir)
+      FileUtils.cp_r(File.join(File.dirname(__FILE__), "..", "template", template_file), destination_dir)
     end
 
     # starts a gathering phase, all files added to the project

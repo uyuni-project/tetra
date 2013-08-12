@@ -1,0 +1,9 @@
+Any files you put here will be copied as is in the "kit" package.
+
+You should add all dependencies and build tools here, so that they are
+available at build time.
+
+gjp will recognise Maven, Ant and other popular build tool binaries in here.
+
+Some generally useful configuration files are also placed here (eg.
+m2/settings.xml for Maven builds.

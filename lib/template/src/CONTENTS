@@ -1,0 +1,11 @@
+For each package you want to create, you should create a subdirectory here
+named after the package Maven name like: orgId_artifactId_version.
+
+In that directory, place all the source files "verbatim" (as checked out from
+the original source repository).
+
+You can create any other directory for your convenience here. In case of git-
+tracked projects, for example, you can clone the whole repository and copy the
+version you want to build in orgId_artifactId_version.
+
+Please note that .gitignore files are honored!
