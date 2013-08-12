@@ -90,6 +90,11 @@ module Gjp
       end
     end
 
+    subcommand "status", "Prints the current phase" do
+      def execute
+        puts "Now #{Gjp::Project.new(".").get_status.to_s}"
+      end
+    end
 
     subcommand "finish", "Finishes the current phase" do
       def execute
