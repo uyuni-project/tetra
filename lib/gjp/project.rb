@@ -59,16 +59,16 @@ module Gjp
     def gather
       from_directory do
         if get_status(:gathering)
-          return :gathering
+          return false
         elsif get_status(:dry_running)
-          return :dry_running
+          finish
         end
 
         set_status(:gathering)
         commit_all("Gathering started")
       end
 
-      :done
+      true
     end
 
     # starts a dry running phase: files added to the kit will
@@ -76,17 +76,17 @@ module Gjp
     # end
     def dry_run
       from_directory do
-        if get_status(:gathering)
-          return :gathering
-        elsif get_status(:dry_running)
-          return :dry_running
+        if get_status(:dry_running)
+          return false
+        elsif get_status(:gathering)
+          finish
         end
 
         set_status(:dry_running)
         commit_all("Dry-run started")
       end
 
-      :done
+      true
     end
 
     # ends any phase that was previously started, 

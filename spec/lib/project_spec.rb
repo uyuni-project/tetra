@@ -106,7 +106,7 @@ describe Gjp::Project do
         `touch src/test`
       end
 
-      @project.gather.should eq :done
+      @project.gather.should be_true
 
       @project.from_directory do
         @project.get_status(:gathering).should be_true
@@ -118,7 +118,7 @@ describe Gjp::Project do
 
   describe ".finish" do
     it "ends the current gathering phase" do
-      @project.gather.should eq :done
+      @project.gather.should be_true
 
       @project.from_directory do
         Dir.mkdir("src/a_b_c")
@@ -138,7 +138,7 @@ describe Gjp::Project do
     end
 
     it "ends the current dry-run phase" do
-      @project.gather.should eq :done
+      @project.gather.should be_true
 
       @project.from_directory do
         Dir.mkdir("src/a_b_c")
@@ -147,7 +147,7 @@ describe Gjp::Project do
 
       @project.finish.should eq :gathering
 
-      @project.dry_run.should eq :done
+      @project.dry_run.should be_true
 
       @project.from_directory do
         `echo B > src/a_b_c/test`
@@ -178,7 +178,7 @@ describe Gjp::Project do
         `touch src/test`
       end
 
-      @project.dry_run.should eq :done
+      @project.dry_run.should be_true
 
       @project.from_directory do
         @project.get_status(:dry_running).should be_true
