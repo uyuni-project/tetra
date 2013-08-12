@@ -48,7 +48,6 @@ module Gjp
 
         `git add .`
         `git commit -m "Project initialized"`
-        `git tag init`
   
         # automatically begin a gathering phase
         Project.new(".").gather
@@ -72,7 +71,7 @@ module Gjp
         end
 
         set_status :gathering
-        commit_all("Gathering started")
+        take_snapshot "Gathering started", :revertable
       end
 
       true
@@ -91,7 +90,7 @@ module Gjp
         end
 
         set_status :dry_running
-        commit_all("Dry-run started")
+        take_snapshot "Dry-run started", :revertable
       end
 
       true
@@ -103,28 +102,28 @@ module Gjp
       from_directory do
         status = get_status
         if status == :gathering
-          commit_all("Changes during gathering")
+          take_snapshot "Changes during gathering"
 
           update_changed_file_list("kit", "kit")
           update_changed_src_file_list(:input)
-          commit_all("File list updates")
+          take_snapshot "File list updates"
 
           set_status nil
-          commit_all("Gathering finished")
+          take_snapshot "Gathering finished", :revertable
 
           :gathering
         elsif status == :dry_running
-          commit_all("Changes during dry-run")
+          take_snapshot "Changes during dry-run"
 
           update_changed_file_list("kit", "kit")
           update_changed_src_file_list(:output)
-          commit_all("File list updates")
+          take_snapshot "File list updates"
 
           revert("src", 2)
-          commit_all("Sources reverted as before dry-run")
+          take_snapshot "Sources reverted as before dry-run"
 
           set_status nil
-          commit_all("Dry run finished")
+          take_snapshot "Dry run finished", :revertable
 
           :dry_running
         end
@@ -167,12 +166,27 @@ module Gjp
     end
 
     # adds the project's whole contents to git
-    def commit_all(message)
+    # if tag is given, commit is tagged
+    def take_snapshot(message, revertability = :not_revertable)
       log.debug "committing with message: #{message}"
 
       `git rm -r --cached .`
       `git add .`
       `git commit -m "#{message}"`
+
+      if revertability == :revertable
+        latest_count = if latest_snapshot_name =~ /^gjp_revertable_snapshot_([0-9]+)$/
+          $1
+        else
+          0
+        end
+        `git tag gjp_revertable_snapshot_#{$1.to_i + 1}`
+      end
+    end
+
+    # returns the last snapshot git tag name
+    def latest_snapshot_name
+      `git describe --abbrev=0 --tags --match=gjp_revertable_snapshot_*`.strip
     end
 
     # reverts dir contents as commit_count commits ago

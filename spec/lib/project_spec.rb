@@ -50,7 +50,7 @@ describe Gjp::Project do
       Dir.exists?(src_path).should be_true
 
       @project.from_directory do
-        `git tag`.strip.should eq("init")
+        @project.latest_snapshot_name.should eq "gjp_revertable_snapshot_1"
         `git rev-list --all`.split("\n").length.should eq 2
       end
 
@@ -77,14 +77,15 @@ describe Gjp::Project do
     end
   end
 
-  describe "#commit_all" do
+  describe "#take_snapshot" do
     it "commits the project contents to git for later use" do
       @project.from_directory do
         `touch kit/test`
 
-         @project.commit_all "test"
+         @project.take_snapshot "test", :revertable
 
         `git rev-list --all`.split("\n").length.should eq 3
+         @project.latest_snapshot_name.should eq "gjp_revertable_snapshot_2"
       end
     end
   end
