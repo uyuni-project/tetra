@@ -39,8 +39,11 @@ module Gjp
     subcommand "init", "Inits a gjp project in the current directory" do
       def execute
         Gjp::Project.init(".")
-        puts "Project inited."
-        puts "Use \"gjp gather\" before adding files to have gjp track them."
+        puts "Project inited, now gathering."
+        puts "Any file added to kit/ will be added to the kit package."
+        puts "Any file added to src/<orgId_artifactId_version> will be added to the corresponding package."
+        puts "Note that .gitignore files are honored!"
+        puts "When you are ready to test a dry-run build, use \"gjp dry-run\"."
       end
     end
 
@@ -51,7 +54,7 @@ module Gjp
           puts "Any file added to kit/ will be added to the kit package."
           puts "Any file added to src/<orgId_artifactId_version> will be added to the corresponding package."
           puts "Note that .gitignore files are honored!"
-          puts "To finalize this gathering, use \"gjp finish\"."
+          puts "When you are ready to test a dry-run build, use \"gjp dry-run\"."
         end
       end
     end
@@ -64,6 +67,7 @@ module Gjp
           puts "The src/ directory and all files in it will be brought back to the current state when finished."
           puts "Note that .gitignore files are honored!"
           puts "To run a Maven from the kit, use \"gjp mvn\"."
+          puts "To add or remove files, use \"gjp gather\"."
           puts "To finalize this dry run, use \"gjp finish\"."
         end
       end

@@ -51,8 +51,10 @@ describe Gjp::Project do
 
       @project.from_directory do
         `git tag`.strip.should eq("init")
-        `git rev-list --all`.split("\n").length.should eq 1
+        `git rev-list --all`.split("\n").length.should eq 2
       end
+
+      @project.get_status.should eq :gathering
     end
   end
 
@@ -68,9 +70,9 @@ describe Gjp::Project do
   describe "#get_status" do
     it "gets a project's status flag" do
       @project.from_directory do
-        @project.get_status.should be_nil
-        `touch .gathering`
         @project.get_status.should eq :gathering
+        @project.set_status nil
+        @project.get_status.should be_nil
       end
     end
   end
@@ -82,13 +84,14 @@ describe Gjp::Project do
 
          @project.commit_all "test"
 
-        `git rev-list --all`.split("\n").length.should eq 2
+        `git rev-list --all`.split("\n").length.should eq 3
       end
     end
   end
   
   describe "#gather" do
     it "starts a gathering phase" do
+      @project.finish.should eq :gathering
 
       @project.from_directory do
         `touch src/test`
@@ -98,7 +101,7 @@ describe Gjp::Project do
 
       @project.from_directory do
         @project.get_status.should eq :gathering
-        `git rev-list --all`.split("\n").length.should eq 2
+        `git rev-list --all`.split("\n").length.should eq 5
         `git diff-tree --no-commit-id --name-only -r HEAD`.split("\n").should include("src/test")
       end
     end
@@ -106,8 +109,6 @@ describe Gjp::Project do
 
   describe "#finish" do
     it "ends the current gathering phase" do
-      @project.gather.should be_true
-
       @project.from_directory do
         Dir.mkdir("src/a:b:c")
         `touch src/a\:b\:c/test`
@@ -126,8 +127,6 @@ describe Gjp::Project do
     end
 
     it "ends the current dry-run phase" do
-      @project.gather.should be_true
-
       @project.from_directory do
         Dir.mkdir("src/a:b:c")
         `echo A > src/a\:b\:c/test`
@@ -161,6 +160,7 @@ describe Gjp::Project do
 
   describe "#dry_run" do
     it "starts a dry running phase" do
+      @project.finish.should eq :gathering
 
       @project.from_directory do
         `touch src/test`
@@ -170,7 +170,7 @@ describe Gjp::Project do
 
       @project.from_directory do
         @project.get_status.should eq :dry_running
-        `git rev-list --all`.split("\n").length.should eq 2
+        `git rev-list --all`.split("\n").length.should eq 5
         `git diff-tree --no-commit-id --name-only -r HEAD`.split("\n").should include("src/test")
       end
     end

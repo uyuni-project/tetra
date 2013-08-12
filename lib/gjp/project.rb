@@ -49,6 +49,9 @@ module Gjp
         `git add .`
         `git commit -m "Project initialized"`
         `git tag init`
+  
+        # automatically begin a gathering phase
+        Project.new(".").gather
       end
     end
 
@@ -183,9 +186,11 @@ module Gjp
     # returns a symbol with the current status
     # flag
     def get_status
-      @@statuses.each do |status|
-        if File.exists?(status_file_name(status))
-          return status
+      from_directory do
+        @@statuses.each do |status|
+          if File.exists?(status_file_name(status))
+            return status
+          end
         end
       end
 
@@ -195,14 +200,16 @@ module Gjp
     # sets a project status flag. if status = nil,
     # clears all status flags
     def set_status(status)
-      @@statuses.each do |a_status|
-        file_name = status_file_name(a_status)
-        if File.exists?(file_name)
-          File.delete(file_name)
-        end
+      from_directory do
+        @@statuses.each do |a_status|
+          file_name = status_file_name(a_status)
+          if File.exists?(file_name)
+            File.delete(file_name)
+          end
 
-        if a_status == status
-          FileUtils.touch(file_name)
+          if a_status == status
+            FileUtils.touch(file_name)
+          end
         end
       end
     end
