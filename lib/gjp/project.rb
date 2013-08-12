@@ -68,7 +68,7 @@ module Gjp
           finish
         end
 
-        set_status(:gathering)
+        set_status :gathering
         commit_all("Gathering started")
       end
 
@@ -87,7 +87,7 @@ module Gjp
           finish
         end
 
-        set_status(:dry_running)
+        set_status :dry_running
         commit_all("Dry-run started")
       end
 
@@ -106,11 +106,11 @@ module Gjp
           update_changed_src_file_list(:file_list)
           commit_all("File list updates")
 
-          clear_status(:gathering)
+          set_status nil
           commit_all("Gathering finished")
 
           :gathering
-        elsif status = :dry_running
+        elsif status == :dry_running
           commit_all("Changes during dry-run")
 
           update_changed_file_list("kit", "gjp_kit_file_list")
@@ -120,7 +120,7 @@ module Gjp
           revert("src", 2)
           commit_all("Sources reverted as before dry-run")
 
-          clear_status(:dry_running)
+          set_status nil
           commit_all("Dry run finished")
 
           :dry_running
@@ -198,22 +198,22 @@ module Gjp
       nil
     end
 
-    # sets a project status flag
+    # sets a project status flag. if status = nil,
+    # clears all status flags
     def set_status(status)
-      file_name = status_file_name(status)
-      if File.exists?(file_name) == false
-        FileUtils.touch(file_name)
+      @@statuses.each do |a_status|
+        file_name = status_file_name(a_status)
+        if File.exists?(file_name)
+          File.delete(file_name)
+        end
+
+        if a_status == status
+          FileUtils.touch(file_name)
+        end
       end
     end
 
-    # sets a project status flag
-    def clear_status(status)
-      file_name = status_file_name(status)
-      if File.exists?(file_name)
-        File.delete(file_name)
-      end
-    end
-
+    # returns a file name that represents a status
     def status_file_name(status)
       ".#{status.to_s}"
     end

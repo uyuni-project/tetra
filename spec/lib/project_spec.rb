@@ -59,7 +59,7 @@ describe Gjp::Project do
   describe ".set_status" do
     it "stores a project's status flag" do
       @project.from_directory do
-        @project.set_status(:gathering)
+        @project.set_status :gathering
         File.exists?(".gathering").should be_true
      end
     end
@@ -71,18 +71,6 @@ describe Gjp::Project do
         @project.get_status.should be_nil
         `touch .gathering`
         @project.get_status.should eq :gathering
-      end
-    end
-  end
-
-  describe ".clear_status" do
-    it "clears a project's status flag" do
-      @project.from_directory do
-        `touch .gathering`
-        @project.get_status.should eq :gathering
-
-        @project.clear_status(:gathering)
-        @project.get_status.should be_nil
       end
     end
   end
