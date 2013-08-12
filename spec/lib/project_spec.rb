@@ -120,8 +120,8 @@ describe Gjp::Project do
       @project.from_directory do
         `git rev-list --all`.split("\n").length.should eq 5
         `git diff-tree --no-commit-id --name-only -r HEAD~2`.split("\n").should include("src/a_b_c/test")
-        File.readlines("gjp_a_b_c_file_list").should include("test\n")
-        File.readlines("gjp_kit_file_list").should include("test\n")
+        File.readlines(File.join("file_lists", "a_b_c_input")).should include("test\n")
+        File.readlines(File.join("file_lists","kit")).should include("test\n")
       end
     end
 
@@ -149,12 +149,12 @@ describe Gjp::Project do
       @project.from_directory do
         `git rev-list --all`.split("\n").length.should eq 10
         File.read("src/a_b_c/test").should eq "A\n"
-        File.readlines("gjp_a_b_c_produced_file_list").should include("test2\n")
-        File.readlines("gjp_a_b_c_file_list").should_not include("test2\n")
+        File.readlines(File.join("file_lists", "a_b_c_output")).should include("test2\n")
+        File.readlines(File.join("file_lists", "a_b_c_input")).should_not include("test2\n")
 
         `git diff-tree --no-commit-id --name-only -r HEAD~2`.split("\n").should_not include("src/a_b_c/test2")
         File.exists?("src/a_b_c/test2").should be_false
-        File.readlines("gjp_kit_file_list").should include("test\n")
+        File.readlines(File.join("file_lists", "kit")).should include("test\n")
       end
     end
   end

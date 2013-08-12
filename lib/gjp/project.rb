@@ -48,6 +48,10 @@ module Gjp
         File.open(File.join("kit", "README"), "w") do |file|
           file.puts "Build tool binaries are to be placed here"
         end
+        Dir.mkdir("file_lists")
+        File.open(File.join("kit", "README"), "w") do |file|
+          file.puts "gjp will generate file lists for all packages here. You can edit them manually if you wish."
+        end
 
         `git add .`
         `git commit -m "Project initialized"`
@@ -100,8 +104,8 @@ module Gjp
         if status == :gathering
           commit_all("Changes during gathering")
 
-          update_changed_file_list("kit", "gjp_kit_file_list")
-          update_changed_src_file_list(:file_list)
+          update_changed_file_list("kit", "kit")
+          update_changed_src_file_list(:input)
           commit_all("File list updates")
 
           set_status nil
@@ -111,8 +115,8 @@ module Gjp
         elsif status == :dry_running
           commit_all("Changes during dry-run")
 
-          update_changed_file_list("kit", "gjp_kit_file_list")
-          update_changed_src_file_list(:produced_file_list)
+          update_changed_file_list("kit", "kit")
+          update_changed_src_file_list(:output)
           commit_all("File list updates")
 
           revert("src", 2)
@@ -129,32 +133,33 @@ module Gjp
     def update_changed_src_file_list(list_name)
       Dir.foreach("src") do |entry|
         if File.directory?(File.join(Dir.getwd, "src", entry)) and entry =~ /([^_\/]+_[^_]+_[^_]+)$/
-          update_changed_file_list(File.join("src", entry), "gjp_#{$1}_#{list_name.to_s}")
+          update_changed_file_list(File.join("src", entry), "#{$1}_#{list_name.to_s}")
         end
       end
     end
 
-    def update_changed_file_list(directory, list_file)
-      existing_files = if File.exists?(list_file)
+    def update_changed_file_list(directory, file_name)
+      list_file = File.join("file_lists", file_name)
+      tracked_files = if File.exists?(list_file)
         File.readlines(list_file)
       else
         []
       end
 
-      files = (
+      new_tracked_files = (
         `git diff-tree --no-commit-id --name-only -r HEAD`.split("\n")
         .select { |file| file.start_with?(directory) }
         .map { |file|file[directory.length + 1, file.length]  }
-        .concat(existing_files)
+        .concat(tracked_files)
         .sort
         .uniq
       )
 
-      log.debug("writing file list for #{directory}: #{files.to_s}")
+      log.debug("writing file list for #{directory}: #{new_tracked_files.to_s}")
 
         
       File.open(list_file, "w+") do |file_list|
-        files.each do |file|
+        new_tracked_files.each do |file|
           file_list.puts file
         end
       end
