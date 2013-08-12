@@ -119,7 +119,7 @@ module Gjp
           update_changed_src_file_list(:output)
           take_snapshot "File list updates"
 
-          revert("src", 2)
+          revert("src")
           take_snapshot "Sources reverted as before dry-run"
 
           set_status nil
@@ -190,9 +190,9 @@ module Gjp
     end
 
     # reverts dir contents as commit_count commits ago
-    def revert(dir, commit_count)
+    def revert(dir)
       `git rm -rf --ignore-unmatch #{dir}`
-      `git checkout -f HEAD~#{commit_count} -- #{dir}`
+      `git checkout -f #{latest_snapshot_name} -- #{dir}`
 
       `git clean -f -d #{dir}`
     end
