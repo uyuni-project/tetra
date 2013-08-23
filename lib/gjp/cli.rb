@@ -82,8 +82,12 @@ module Gjp
       end
 
       def execute
-        project = Gjp::Project.new(".")
-        Gjp::MavenRunner.new(project).mvn(@maven_options)
+        begin
+          project = Gjp::Project.new(".")
+          Gjp::MavenRunner.new(project).mvn(@maven_options)
+        rescue Gjp::MavenNotFoundException
+          puts "mvn executable not found in kit/ or any of its subdirectories, gather it"
+        end
       end
     end
 

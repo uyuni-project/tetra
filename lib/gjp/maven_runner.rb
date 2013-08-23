@@ -23,6 +23,7 @@ module Gjp
         end
       end
 
+      log.debug("Maven executable not found")
       nil
     end
 
@@ -31,11 +32,13 @@ module Gjp
       prefix = path_from running_full_path, kit_full_path
       maven_executable = find_maven_executable
 
-      mvn_path = File.join(prefix, maven_executable)
-      repo_path = File.join(prefix, "kit", "m2")
-      config_path = File.join(prefix, "kit", "m2", "settings.xml")
+      if maven_executable != nil
+        mvn_path = File.join(prefix, maven_executable)
+        repo_path = File.join(prefix, "kit", "m2")
+        config_path = File.join(prefix, "kit", "m2", "settings.xml")
 
-      "#{mvn_path} -Dmaven.repo.local=`readlink -e #{repo_path}` -s`readlink -e #{config_path}`"
+        "#{mvn_path} -Dmaven.repo.local=`readlink -e #{repo_path}` -s`readlink -e #{config_path}`"
+      end
     end
 
     # returns a path from origin to destination, provided they are both absolute
@@ -47,7 +50,14 @@ module Gjp
     def mvn(options)
       kit_full_path = File.join(@project.full_path, "kit")
       running_full_path = File.expand_path(".")
-      Process.wait(Process.spawn("#{get_maven_commandline(kit_full_path, running_full_path)} #{options.join(' ')}"))
+      maven_commandline = get_maven_commandline(kit_full_path, running_full_path)
+      if maven_commandline == nil
+        raise MavenNotFoundException
+      end
+      Process.wait(Process.spawn("#{maven_commandline} #{options.join(' ')}"))
     end
+  end
+
+  class MavenNotFoundException < Exception
   end
 end
