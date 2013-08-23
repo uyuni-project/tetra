@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    gjp (0.10.2)
+    gjp (0.11.2)
       clamp
       json
       nokogiri
