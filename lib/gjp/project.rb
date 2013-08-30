@@ -42,9 +42,11 @@ module Gjp
           `git init`
         end
 
-        copy_from_template "file_lists", "."
-        copy_from_template "src", "."
-        copy_from_template "kit", "."
+        template_manager = Gjp::TemplateManager.new
+        template_manager.copy "file_lists", "."
+        template_manager.copy "kit", "."
+        template_manager.copy "specs", "."
+        template_manager.copy "src", "."
 
         `git add .`
         `git commit -m "Project initialized"`
@@ -52,11 +54,6 @@ module Gjp
         # automatically begin a gathering phase
         Project.new(".").gather
       end
-    end
-
-    # copies a file/dir from the template directory to the destination directory
-    def self.copy_from_template(template_file, destination_dir)
-      FileUtils.cp_r(File.join(File.dirname(__FILE__), "..", "template", template_file), destination_dir)
     end
 
     # starts a gathering phase, all files added to the project

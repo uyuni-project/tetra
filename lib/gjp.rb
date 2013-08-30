@@ -1,5 +1,6 @@
 require "gjp/version"
 require "gjp/logger"
+require "gjp/template_manager"
 require "gjp/project"
 require "gjp/pom"
 require "gjp/version_matcher"
