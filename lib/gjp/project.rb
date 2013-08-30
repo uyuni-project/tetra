@@ -167,32 +167,32 @@ module Gjp
 
     # adds the project's whole contents to git
     # if tag is given, commit is tagged
-    def take_snapshot(message, revertability = :not_revertable)
+    def take_snapshot(message, tag = nil)
       log.debug "committing with message: #{message}"
 
       `git rm -r --cached .`
       `git add .`
       `git commit -m "#{message}"`
 
-      if revertability == :revertable
-        latest_count = if latest_snapshot_name =~ /^gjp_revertable_snapshot_([0-9]+)$/
+      if tag != nil
+        latest_count = if latest_tag(tag) =~ /^gjp_.*_([0-9]+)$/
           $1
         else
           0
         end
-        `git tag gjp_revertable_snapshot_#{$1.to_i + 1}`
+        `git tag gjp_#{tag}_#{latest_count.to_i + 1}`
       end
     end
 
-    # returns the last revertable snapshot git tag name
-    def latest_snapshot_name
-      `git describe --abbrev=0 --tags --match=gjp_revertable_snapshot_*`.strip
+    # returns the last tag given in a gjp snapshot
+    def latest_tag(tag)
+      `git describe --abbrev=0 --tags --match=gjp_#{tag}_*`.strip
     end
 
     # reverts path contents as per latest revertable snapshot
     def revert(path)
       `git rm -rf --ignore-unmatch #{path}`
-      `git checkout -f #{latest_snapshot_name} -- #{path}`
+      `git checkout -f #{latest_tag(:revertable)} -- #{path}`
 
       `git clean -f -d #{path}`
     end

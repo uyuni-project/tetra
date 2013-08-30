@@ -50,7 +50,7 @@ describe Gjp::Project do
       Dir.exists?(src_path).should be_true
 
       @project.from_directory do
-        @project.latest_snapshot_name.should eq "gjp_revertable_snapshot_1"
+        @project.latest_tag(:revertable).should eq "gjp_revertable_1"
         `git rev-list --all`.split("\n").length.should eq 2
       end
 
@@ -85,7 +85,7 @@ describe Gjp::Project do
          @project.take_snapshot "test", :revertable
 
         `git rev-list --all`.split("\n").length.should eq 3
-         @project.latest_snapshot_name.should eq "gjp_revertable_snapshot_2"
+         @project.latest_tag(:revertable).should eq "gjp_revertable_2"
       end
     end
   end
