@@ -109,6 +109,17 @@ module Gjp
       end
     end
 
+    subcommand "scaffold-kit-spec", "Scaffolds or refreshes a spec file for the kit package" do
+      def execute
+        project = Gjp::Project.new(".")
+        success = Gjp::Scaffolder.new(project).scaffold_kit_spec        
+        if not success
+          puts "You must be gathering before scaffolding."
+          puts "Use \"gjp gather\" to start a new gathering."
+        end
+      end
+    end
+
     subcommand "set-up-nonet-user", "Sets up a \"nonet\" user that cannot access the network" do
       def execute
         user = Gjp::LimitedNetworkUser.new("nonet")

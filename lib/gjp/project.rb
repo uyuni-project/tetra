@@ -239,5 +239,19 @@ module Gjp
         yield
       end
     end
+
+    # helpers for ERB
+
+    def name
+      File.basename(@full_path)
+    end
+
+    def version
+      `git rev-parse --short #{latest_tag(:dry_run_finished)}`.strip
+    end
+
+    def get_binding
+      binding
+    end
   end
 end

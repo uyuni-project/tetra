@@ -1,0 +1,3 @@
+gjp will generate spec files for all packages here.
+
+You can edit them manually, if you wish, and also let gjp regenerate them later. If you do that, gjp will use three-way merge if possible (prompting in case any conflict arise).

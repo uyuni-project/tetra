@@ -24,6 +24,7 @@ Currently available tools:
 * `gjp finish` marks the end of a phase;
 * `gjp dry-run` starts a new dry-run phase, where you attempt to build your package. Any change to src/ will be reverted after you call `gjp finish`;
 * `gjp mvn` locates and runs Maven from any directory in kit/, using options to force repository in kit/m2 and settings in kit/m2/settings.xml;
+* `gjp scaffold-kit-spec` creates or refreshes a spec file for the kit package;
 * `gjp set-up-nonet-user` sets up a user named `nonet` without Internet access using `iptables`, needs superuser privileges. You can then use it for networkless dry-runs;
 * `gjp tear-down-nonet-user` removes a user previously created by gjp;
 * `gjp scaffold-jar-table DIRECTORY` looks for jars in the project's DIRECTORY and classifies them as build-time dependencies (b), run-time dependencies (r) or products (p);
