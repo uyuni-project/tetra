@@ -68,7 +68,7 @@ module Gjp
         end
 
         set_status :gathering
-        take_snapshot "Gathering started", :revertable
+        take_snapshot "Gathering started", :gathering_started
       end
 
       true
@@ -87,7 +87,7 @@ module Gjp
         end
 
         set_status :dry_running
-        take_snapshot "Dry-run started", :revertable
+        take_snapshot "Dry-run started", :dry_run_started
       end
 
       true
@@ -101,41 +101,45 @@ module Gjp
         if status == :gathering
           take_snapshot "Changes during gathering"
 
-          update_changed_file_list("kit", "kit")
-          update_changed_src_file_list(:input)
+          update_changed_file_list "kit", "kit", :gathering_started
+          update_changed_src_file_list :input, :gathering_started
           take_snapshot "File list updates"
 
           set_status nil
-          take_snapshot "Gathering finished", :revertable
+          take_snapshot "Gathering finished", :gathering_finished
 
           :gathering
         elsif status == :dry_running
           take_snapshot "Changes during dry-run"
 
-          update_changed_file_list("kit", "kit")
-          update_changed_src_file_list(:output)
+          update_changed_file_list "kit", "kit", :dry_run_started
+          update_changed_src_file_list :output, :dry_run_started
           take_snapshot "File list updates"
 
-          revert("src")
+          revert "src", :dry_run_started
           take_snapshot "Sources reverted as before dry-run"
 
           set_status nil
-          take_snapshot "Dry run finished", :revertable
+          take_snapshot "Dry run finished", :dry_run_finished
 
           :dry_running
         end
       end
     end
 
-    def update_changed_src_file_list(list_name)
+    # updates one of the files that tracks changes in src/ directories form a certain tag
+    # list_name is the name of the list of files to update, there will be one for each
+    # package in src/
+    def update_changed_src_file_list(list_name, tag)
       Dir.foreach("src") do |entry|
         if File.directory?(File.join(Dir.getwd, "src", entry)) and entry =~ /([^:\/]+:[^:]+:[^:]+)$/
-          update_changed_file_list(File.join("src", entry), "#{$1}_#{list_name.to_s}")
+          update_changed_file_list(File.join("src", entry), "#{$1}_#{list_name.to_s}", tag)
         end
       end
     end
 
-    def update_changed_file_list(directory, file_name)
+    # updates file_name with the file names changed in directory since tag
+    def update_changed_file_list(directory, file_name, tag)
       list_file = File.join("file_lists", file_name)
       tracked_files = if File.exists?(list_file)
         File.readlines(list_file)
@@ -144,7 +148,7 @@ module Gjp
       end
 
       new_tracked_files = (
-        `git diff-tree --no-commit-id --name-only -r HEAD`.split("\n")
+        `git diff-tree --no-commit-id --name-only -r #{latest_tag(tag)} HEAD`.split("\n")
         .select { |file| file.start_with?(directory) }
         .map { |file|file[directory.length + 1, file.length]  }
         .concat(tracked_files)
@@ -154,7 +158,6 @@ module Gjp
 
       log.debug("writing file list for #{directory}: #{new_tracked_files.to_s}")
 
-        
       File.open(list_file, "w+") do |file_list|
         new_tracked_files.each do |file|
           file_list.puts file
@@ -186,10 +189,10 @@ module Gjp
       `git describe --abbrev=0 --tags --match=gjp_#{tag}_*`.strip
     end
 
-    # reverts path contents as per latest revertable snapshot
-    def revert(path)
+    # reverts path contents as per latest tag
+    def revert(path, tag)
       `git rm -rf --ignore-unmatch #{path}`
-      `git checkout -f #{latest_tag(:revertable)} -- #{path}`
+      `git checkout -f #{latest_tag(tag)} -- #{path}`
 
       `git clean -f -d #{path}`
     end
