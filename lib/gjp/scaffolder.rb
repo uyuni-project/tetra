@@ -5,10 +5,8 @@ module Gjp
   class Scaffolder
     include Logger
 
-    def initialize(project)      
+    def initialize(project)
       @project = project
-      @project.dry_run
-      @project.gather
     end
 
     def scaffold_kit_spec
