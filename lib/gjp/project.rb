@@ -43,6 +43,7 @@ module Gjp
         end
 
         template_manager = Gjp::TemplateManager.new
+        template_manager.copy "archives", "."
         template_manager.copy "file_lists", "."
         template_manager.copy "kit", "."
         template_manager.copy "specs", "."
@@ -233,9 +234,9 @@ module Gjp
       ".#{status.to_s}"
     end
 
-    # runs a block from the project directory
-    def from_directory
-      Dir.chdir(@full_path) do
+    # runs a block from the project directory or a subdirectory
+    def from_directory(subdirectory = "")
+      Dir.chdir(File.join(@full_path, subdirectory)) do
         yield
       end
     end

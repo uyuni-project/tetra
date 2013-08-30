@@ -13,5 +13,6 @@ require "gjp/source_getter"
 require "gjp/parent_pom_getter"
 require "gjp/maven_runner"
 require "gjp/scaffolder"
+require "gjp/archiver"
 
 require "gjp/cli"
