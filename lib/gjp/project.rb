@@ -184,17 +184,17 @@ module Gjp
       end
     end
 
-    # returns the last snapshot git tag name
+    # returns the last revertable snapshot git tag name
     def latest_snapshot_name
       `git describe --abbrev=0 --tags --match=gjp_revertable_snapshot_*`.strip
     end
 
-    # reverts dir contents as commit_count commits ago
-    def revert(dir)
-      `git rm -rf --ignore-unmatch #{dir}`
-      `git checkout -f #{latest_snapshot_name} -- #{dir}`
+    # reverts path contents as per latest revertable snapshot
+    def revert(path)
+      `git rm -rf --ignore-unmatch #{path}`
+      `git checkout -f #{latest_snapshot_name} -- #{path}`
 
-      `git clean -f -d #{dir}`
+      `git clean -f -d #{path}`
     end
 
     # returns a symbol with the current status
