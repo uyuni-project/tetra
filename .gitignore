@@ -15,6 +15,7 @@ tmp
 # SPEC generated files
 spec/data/nailgun/com.martiansoftware\:nailgun-all\:0.9.1
 spec/data/struts-apps/org.apache.struts\:struts2-apps\:
+spec/data/test-project
 
 # YARD artifacts
 .yardoc
