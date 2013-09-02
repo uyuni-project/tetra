@@ -14,7 +14,7 @@ module Gjp
     def archive_kit
       list_file = File.join(@project.full_path, "file_lists/kit")
       if not File.exist? list_file
-        return false
+        return nil
       end
       destination_file = File.join(@project.full_path, "archives/#{@project.name}-kit.tar.xz")
 
@@ -22,7 +22,7 @@ module Gjp
         archive list_file, destination_file
       end
       
-      true
+      destination_file
     end
 
     # generates an archive for a project's source package based on
@@ -30,7 +30,7 @@ module Gjp
     def archive_src(name)
       list_file = File.join(@project.full_path, "file_lists/#{name}_input")
       if not File.exist? list_file
-        return false
+        return nil
       end
       destination_file = File.join(@project.full_path, "archives/#{@project.name}-#{name}.tar.xz")
 
@@ -38,7 +38,7 @@ module Gjp
         archive list_file, destination_file
       end
 
-      true
+      destination_file
     end
 
     # compresses files specified in the list file to the destination file

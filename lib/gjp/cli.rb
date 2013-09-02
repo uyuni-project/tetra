@@ -109,22 +109,21 @@ module Gjp
       end
     end
 
-    subcommand "scaffold-kit-spec", "Scaffolds or refreshes a spec file for the kit package" do
+    subcommand "generate-kit-spec", "Scaffolds or refreshes a spec file for the kit package" do
       def execute
         project = Gjp::Project.new(".")
-        success = Gjp::Scaffolder.new(project).scaffold_kit_spec        
-        if not success
-          puts "You must be gathering before scaffolding."
-          puts "Use \"gjp gather\" to start a new gathering."
-        end
+        result_path = Gjp::Scaffolder.new(project).scaffold_kit_spec
+        puts "#{result_path} generated"
       end
     end
 
     subcommand "generate-kit-archive", "Archives contents of the kit package in a tarball" do
       def execute
         project = Gjp::Project.new(".")
-        success = Gjp::Archiver.new(project).archive_kit
-        if not success
+        result_path = Gjp::Archiver.new(project).archive_kit
+        if result_path != nil
+          puts "#{result_path} generated"
+        else
           "The file_list/kit file was not found. Ensure you already added content to kit/ " +
           "during a gathering and/or dry-running phase, and ensure you ended that phase " +
           "with \"gjp finish\"."
@@ -136,8 +135,10 @@ module Gjp
       parameter "NAME", "name of a package in src/"
       def execute
         project = Gjp::Project.new(".")
-        success = Gjp::Archiver.new(project).archive_src name
-        if not success
+        result_path = Gjp::Archiver.new(project).archive_src name
+        if result_path != nil
+          puts "#{result_path} generated"
+        else
           "The file_list/#{name}_input file was not found. Ensure you already added content to " +
           "src/#{name} during a gathering phase, and ensure you ended that phase with \"gjp finish\"."
         end

@@ -10,10 +10,6 @@ module Gjp
     end
 
     def scaffold_kit_spec
-      if @project.get_status != :gathering
-        return false
-      end
-
       @project.from_directory do
         spec_path = File.join("specs", "#{@project.name}-kit.spec")
 
@@ -35,7 +31,7 @@ module Gjp
 
         @project.take_snapshot "Kit spec scaffolded", :scaffold_kit_spec
 
-        true
+        spec_path
       end
     end
   end
