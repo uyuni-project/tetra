@@ -40,30 +40,30 @@ module Gjp
       def execute
         Gjp::Project.init(".")
         puts "Project inited, now gathering."
-        puts "Any file added to kit/ will be added to the kit package."
-        puts "Any file added to src/<orgId_artifactId_version> will be added to the corresponding package."
-        puts "Note that .gitignore files are honored!"
-        puts "When you are ready to test a dry-run build, use \"gjp dry-run\"."
+        explain_gathering
       end
     end
 
-    subcommand "gather", "Starts a gathering phase, add source and kit files to project" do
+    subcommand "gather", "Starts a gathering phase, to add source and kit files" do
       def execute
         if Gjp::Project.new(".").gather
           puts "Now gathering."
-          puts "Any file added to kit/ will be added to the kit package."
-          puts "Any file added to src/<orgId_artifactId_version> will be added to the corresponding package."
-          puts "Note that .gitignore files are honored!"
-          puts "When you are ready to test a dry-run build, use \"gjp dry-run\"."
+          explain_gathering
         end
       end
     end
 
-    subcommand "dry-run", "Starts a dry-run phase, attempt build to add dependencies to kit." do
+    def explain_gathering
+      puts "Any file added to kit/ will be added to the kit package."
+      puts "Any file added to src/<name> will be added to the corresponding package."
+      puts "When you are ready to test a build, use \"gjp dry-run\"."
+    end
+
+    subcommand "dry-run", "Starts a dry-run phase, to attempt a build" do
       def execute
         if Gjp::Project.new(".").dry_run
           puts "Now dry-running, please start your build."
-          puts "Any file added to kit/, presumably downloaded dependencies, will be added to the kit package."
+          puts "Any file added to kit/, presumably downloaded dependencies, will be added to the kit."
           puts "The src/ directory and all files in it will be brought back to the current state when finished."
           puts "Note that .gitignore files are honored!"
           puts "To run a Maven from the kit, use \"gjp mvn\"."
@@ -73,7 +73,7 @@ module Gjp
       end
     end
 
-    subcommand "mvn", "Runs Maven from the kit" do
+    subcommand "mvn", "Locates and runs Maven from any directory in kit/" do
       parameter "[MAVEN OPTIONS] ...", "mvn options", :attribute_name => "dummy"
 
       # override parsing in order to pipe everything to mvn
@@ -97,7 +97,7 @@ module Gjp
       end
     end
 
-    subcommand "finish", "Finishes the current phase" do
+    subcommand "finish", "Ends the current phase" do
       def execute
         result = Gjp::Project.new(".").finish        
         if result == :gathering
@@ -109,7 +109,7 @@ module Gjp
       end
     end
 
-    subcommand "generate-kit-spec", "Scaffolds or refreshes a spec file for the kit package" do
+    subcommand "generate-kit-spec", "Scaffolds or refreshes a spec file for the kit" do
       def execute
         project = Gjp::Project.new(".")
         result_path = Gjp::Scaffolder.new(project).scaffold_kit_spec
@@ -117,7 +117,7 @@ module Gjp
       end
     end
 
-    subcommand "generate-kit-archive", "Archives contents of the kit package in a tarball" do
+    subcommand "generate-kit-archive", "Archives contents of kit in archives/" do
       def execute
         project = Gjp::Project.new(".")
         result_path = Gjp::Archiver.new(project).archive_kit
@@ -131,8 +131,8 @@ module Gjp
       end
     end
 
-    subcommand "generate-src-archive", "Archives contents of one src package in a tarball" do
-      parameter "NAME", "name of a package in src/"
+    subcommand "generate-src-archive", "Archives contents of a package in archives/" do
+      parameter "NAME", "name of a package, that is, an src/ subdirectory name"
       def execute
         project = Gjp::Project.new(".")
         result_path = Gjp::Archiver.new(project).archive_src name

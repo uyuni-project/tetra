@@ -77,7 +77,7 @@ module Gjp
 
     # starts a dry running phase: files added to the kit will
     # be added to packages, while sources will be reset at the
-    # end
+    # current state when finished
     def dry_run
       from_directory do
         status = get_status
@@ -130,7 +130,7 @@ module Gjp
 
     # updates one of the files that tracks changes in src/ directories form a certain tag
     # list_name is the name of the list of files to update, there will be one for each
-    # package in src/
+    # package (subdirectory) in src/
     def update_changed_src_file_list(list_name, tag)
       Dir.foreach("src") do |entry|
         if File.directory?(File.join(Dir.getwd, "src", entry)) and entry =~ /([^:\/]+:[^:]+:[^:]+)$/

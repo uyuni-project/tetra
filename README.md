@@ -16,17 +16,18 @@ Easiest install is via RubyGems:
 
 Main workflow subcommands:
 * `gjp init` inits a new gjp project in the current directory, generating minimal directories and files;
-* `gjp gather` starts a new gathering phase, to add files to the packages you want to create. You should place source files in src/<orgId:artifactId:version>, and binary dependency files in kit/;
-* `gjp dry-run` starts a new dry-run phase, where you attempt to build your package. Any change to src/ will be reverted after you call `gjp finish`
+* `gjp gather` starts a gathering phase, to add source and kit files. You should place source files in src/<package name> and binary dependency files in kit/;
+* `gjp dry-run` starts a dry-run phase, to attempt a build. Any change to src/ will be reverted after you call `gjp finish`;
+* `gjp mvn` during a dry run, locates and runs Maven from any directory in kit/, using options to force repository in kit/m2 and settings in kit/m2/settings.xml;
+* `gjp status` prints the current phase;
 * `gjp finish` ends the current phase;
-* `gjp mvn` locates and runs Maven from any directory in kit/, using options to force repository in kit/m2 and settings in kit/m2/settings.xml. Use during dry runs;
-superuser privileges;
-* `gjp generate-kit-spec` creates or refreshes a spec file for the kit package. Use when you are finished gathering and dry-running;
-* `gjp generate-kit-archive` creates or refreshes an archive file for the kit package. Use when you are finished gathering and dry-running;
-* `gjp generate-source-archive NAME` creates or refreshes an archive file for source package NAME. Use when you are finished gathering and dry-running;
+* `gjp generate-kit-spec` creates or refreshes a spec file for the kit. Use after `gjp finish`;
+* `gjp generate-kit-archive` creates or refreshes an archive file for the kit. Use after `gjp finish`;
+* `gjp generate-source-archive NAME` creates or refreshes an archive file for package in src/<NAME>. Use after `gjp finish`;
 
 Optional workflow subcommands:
 * `gjp set-up-nonet-user` sets up a user named `nonet` without Internet access you can use for networkless dry runs. Requires `iptables` and 
+superuser privileges;
 * `gjp tear-down-nonet-user` removes a user previously created by gjp;
 
 Other available tools:
