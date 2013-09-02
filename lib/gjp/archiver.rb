@@ -27,7 +27,7 @@ module Gjp
 
     # generates an archive for a project's source package based on
     # its file list
-    def archive_src(name)
+    def archive_package(name)
       list_file = File.join(@project.full_path, "file_lists/#{name}_input")
       if not File.exist? list_file
         return nil

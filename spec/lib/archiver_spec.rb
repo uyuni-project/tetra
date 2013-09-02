@@ -43,7 +43,7 @@ describe Gjp::Archiver do
     end
   end
 
-  describe "#archive_src" do
+  describe "#archive_package" do
     it "archives a source package files" do
       @project.from_directory do
         Dir.mkdir(File.join("src", "a:b:c"))
@@ -51,7 +51,7 @@ describe Gjp::Archiver do
       end
       @project.finish
 
-      archiver.archive_src "a:b:c"
+      archiver.archive_package "a:b:c"
       @project.from_directory do
         `tar -Jtf archives/test-project-a:b:c.tar.xz`.split.should include("src_test")
       end

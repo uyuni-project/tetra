@@ -24,9 +24,9 @@ describe Gjp::Scaffolder do
     FileUtils.rm_rf(@project_path)
   end
 
-  describe "#scaffold_kit_spec" do
+  describe "#generate_kit_spec" do
     it "scaffolds the first version" do
-      @scaffolder.scaffold_kit_spec.should be_true
+      @scaffolder.generate_kit_spec.should be_true
 
       @project.from_directory do
         spec_lines = File.readlines(File.join("specs", "test-project-kit.spec"))
@@ -36,7 +36,7 @@ describe Gjp::Scaffolder do
       end
     end
     it "scaffolds a second version" do
-      @scaffolder.scaffold_kit_spec.should be_true
+      @scaffolder.generate_kit_spec.should be_true
       @project.dry_run
       Dir.chdir(@project_path) do
         test_file = File.join("kit", "test")
@@ -48,7 +48,7 @@ describe Gjp::Scaffolder do
       end
       @project.gather
 
-      @scaffolder.scaffold_kit_spec.should be_true
+      @scaffolder.generate_kit_spec.should be_true
 
       @project.from_directory do
         spec_lines = File.readlines(File.join("specs", "test-project-kit.spec"))
@@ -59,7 +59,7 @@ describe Gjp::Scaffolder do
       end
     end
     it "scaffolds a conflicting version" do
-      @scaffolder.scaffold_kit_spec.should be_true
+      @scaffolder.generate_kit_spec.should be_true
       @project.dry_run
       Dir.chdir(@project_path) do
         test_file = File.join("kit", "test")
@@ -76,7 +76,7 @@ describe Gjp::Scaffolder do
       end
       @project.gather
 
-      @scaffolder.scaffold_kit_spec.should be_true
+      @scaffolder.generate_kit_spec.should be_true
 
       @project.from_directory do
         spec_lines = File.readlines(File.join("specs", "test-project-kit.spec"))
@@ -86,9 +86,40 @@ describe Gjp::Scaffolder do
         spec_lines.should_not include("Version:        #{`git rev-parse --short #{@project.latest_tag(:dry_run_finished)}`}")
       end
     end
-    it "returns error if the phase is incorrect" do
-      @project.dry_run
-      @scaffolder.scaffold_kit_spec.should be_false
+  end
+
+  describe "#generate_package_spec" do
+    it "scaffolds the first version" do
+
+      @project.from_directory do
+        Dir.mkdir File.join("src", "test")
+        [1..5].each do |i|
+          `touch src/test/test#{i}.java`
+        end
+        @project.dry_run
+
+        [1..5].each do |i|
+          `touch src/test/test#{i}.class`
+        end
+
+        [1..5].each do |i|
+          `touch src/test/test#{i}.jar`
+        end
+
+        @project.finish
+      end
+
+      @scaffolder.generate_package_spec "test", File.join("spec", "data", "nailgun", "pom.xml")
+
+      @project.from_directory do
+        spec_lines = File.readlines(File.join("specs", "test-project.spec"))
+        spec_lines.should include("Name:           test\n")
+        spec_lines.should include("License:        The Apache Software License, Version 2.0\n")
+        spec_lines.should include("Summary:        Nailgun is a client, protocol, and server for running Java...\n")
+        spec_lines.should include("Url:            http://martiansoftware.com/nailgun\n")
+        spec_lines.should include("BuildRequires:  #{@project.name}-kit\n")
+        spec_lines.should include("Provides:       mvn(com.martiansoftware:nailgun-all) == 0.9.1\n")
+      end
     end
   end
 end

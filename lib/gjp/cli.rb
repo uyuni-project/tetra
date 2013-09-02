@@ -112,7 +112,7 @@ module Gjp
     subcommand "generate-kit-spec", "Scaffolds or refreshes a spec file for the kit" do
       def execute
         project = Gjp::Project.new(".")
-        result_path = Gjp::Scaffolder.new(project).scaffold_kit_spec
+        result_path = Gjp::Scaffolder.new(project).generate_kit_spec
         puts "#{result_path} generated"
       end
     end
@@ -131,15 +131,30 @@ module Gjp
       end
     end
 
-    subcommand "generate-src-archive", "Archives contents of a package in archives/" do
+    subcommand "generate-package-spec", "Scaffolds or refreshes a spec file for a package" do
       parameter "NAME", "name of a package, that is, an src/ subdirectory name"
+      parameter "POM", "a pom file path or URI"
       def execute
         project = Gjp::Project.new(".")
-        result_path = Gjp::Archiver.new(project).archive_src name
+        result_path = Gjp::Scaffolder.new(project).generate_package_spec name, pom
         if result_path != nil
           puts "#{result_path} generated"
         else
-          "The file_list/#{name}_input file was not found. Ensure you already added content to " +
+          "The file_list/#{name}_output file was not found. Ensure you have already run a" +
+          "dry run and ensure you ended that phase with \"gjp finish\"."
+        end
+      end
+    end
+
+    subcommand "generate-package-archive", "Archives contents of a package in archives/" do
+      parameter "NAME", "name of a package, that is, an src/ subdirectory name"
+      def execute
+        project = Gjp::Project.new(".")
+        result_path = Gjp::Archiver.new(project).archive_package name
+        if result_path != nil
+          puts "#{result_path} generated"
+        else
+          "The file_list/#{name}_input file was not found. Ensure you have already added content to " +
           "src/#{name} during a gathering phase, and ensure you ended that phase with \"gjp finish\"."
         end
       end

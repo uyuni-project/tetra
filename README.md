@@ -23,7 +23,8 @@ Main workflow subcommands:
 * `gjp finish` ends the current phase;
 * `gjp generate-kit-spec` creates or refreshes a spec file for the kit. Use after `gjp finish`;
 * `gjp generate-kit-archive` creates or refreshes an archive file for the kit. Use after `gjp finish`;
-* `gjp generate-source-archive NAME` creates or refreshes an archive file for package in src/<NAME>. Use after `gjp finish`;
+* `gjp generate-package-spec NAME POM` creates or refreshes a spec file for the package in src/<NAME>. Use after `gjp finish`;
+* `gjp generate-package-archive NAME` creates or refreshes an archive file for package in src/<NAME>. Use after `gjp finish`;
 
 Optional workflow subcommands:
 * `gjp set-up-nonet-user` sets up a user named `nonet` without Internet access you can use for networkless dry runs. Requires `iptables` and 
