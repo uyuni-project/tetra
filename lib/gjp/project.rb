@@ -133,8 +133,8 @@ module Gjp
     # package (subdirectory) in src/
     def update_changed_src_file_list(list_name, tag)
       Dir.foreach("src") do |entry|
-        if File.directory?(File.join(Dir.getwd, "src", entry)) and entry =~ /([^:\/]+:[^:]+:[^:]+)$/
-          update_changed_file_list(File.join("src", entry), "#{$1}_#{list_name.to_s}", tag)
+        if File.directory?(File.join(Dir.getwd, "src", entry))
+          update_changed_file_list(File.join("src", entry), "#{entry}_#{list_name.to_s}", tag)
         end
       end
     end
