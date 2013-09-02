@@ -19,11 +19,13 @@ Name:           <%= name %>-kit
 Version:        <%= version %>
 Release:        1
 License:        Apache-2.0
-Summary:        Build-time dependencies for %{name}
+Summary:        Build-time dependencies for gjp project <%= name %>
 Url:            https://github.com/SilvioMoioli/gjp
-Group:          Develompent/Libraries/Java
+Group:          Development/Libraries/Java
 Source0:        %{name}.tar.xz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
+BuildRequires:  java-devel
+BuildArch:      noarch
 Provides:       gjp(kit)
 # no two kits should ever be installed at any given time
 Conflicts:      otherproviders(gjp(kit))
@@ -35,7 +37,7 @@ not be used except for rebuilding those packages and it should never
 be installed on end users' systems.
 
 %prep
-%setup -q
+%setup -q -c
 
 %build
 # nothing to do, gjp kits are precompiled by design
@@ -46,6 +48,7 @@ cp -a * %{buildroot}%{_datadir}/gjp/%{name}/
 
 %files
 %defattr(-,root,root)
+%{_datadir}/gjp
 %{_datadir}/gjp/%{name}/
 
 %changelog
