@@ -42,18 +42,18 @@ module Gjp
           `git init`
         end
 
+        Dir.mkdir "src"
+        Dir.mkdir "kit"
+
+        # automatically begin a gathering phase
+        Project.new(".").gather
+
         template_manager = Gjp::TemplateManager.new
         template_manager.copy "archives", "."
         template_manager.copy "file_lists", "."
         template_manager.copy "kit", "."
         template_manager.copy "specs", "."
         template_manager.copy "src", "."
-
-        `git add .`
-        `git commit -m "Project initialized"`
-  
-        # automatically begin a gathering phase
-        Project.new(".").gather
       end
     end
 

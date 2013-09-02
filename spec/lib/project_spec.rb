@@ -51,7 +51,7 @@ describe Gjp::Project do
 
       @project.from_directory do
         @project.latest_tag(:gathering_started).should eq "gjp_gathering_started_1"
-        `git rev-list --all`.split("\n").length.should eq 2
+        `git rev-list --all`.split("\n").length.should eq 1
       end
 
       @project.get_status.should eq :gathering
@@ -84,7 +84,7 @@ describe Gjp::Project do
 
          @project.take_snapshot "test", :revertable
 
-        `git rev-list --all`.split("\n").length.should eq 3
+        `git rev-list --all`.split("\n").length.should eq 2
          @project.latest_tag(:revertable).should eq "gjp_revertable_1"
       end
     end
@@ -120,7 +120,7 @@ describe Gjp::Project do
       @project.get_status.should be_nil
 
       @project.from_directory do
-        `git rev-list --all`.split("\n").length.should eq 5
+        `git rev-list --all`.split("\n").length.should eq 4
         `git diff-tree --no-commit-id --name-only -r HEAD~2`.split("\n").should include("src/a:b:c/test")
         File.readlines(File.join("file_lists", "a:b:c_input")).should include("test\n")
         File.readlines(File.join("file_lists","kit")).should include("test\n")
@@ -147,7 +147,7 @@ describe Gjp::Project do
       @project.get_status.should be_nil
 
       @project.from_directory do
-        `git rev-list --all`.split("\n").length.should eq 10
+        `git rev-list --all`.split("\n").length.should eq 9
         File.read("src/a:b:c/test").should eq "A\n"
         File.readlines(File.join("file_lists", "a:b:c_output")).should include("test2\n")
         File.readlines(File.join("file_lists", "a:b:c_input")).should_not include("test2\n")
