@@ -22,7 +22,7 @@ module Gjp
         archive list_file, destination_file
       end
       
-      destination_file
+      Pathname.new(destination_file).relative_path_from Pathname.new(@project.full_path)
     end
 
     # generates an archive for a project's source package based on
@@ -38,7 +38,7 @@ module Gjp
         archive list_file, destination_file
       end
 
-      destination_file
+      Pathname.new(destination_file).relative_path_from Pathname.new(@project.full_path)
     end
 
     # compresses files specified in the list file to the destination file
