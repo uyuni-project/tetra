@@ -187,7 +187,7 @@ module Gjp
 
     # returns the last tag given in a gjp snapshot
     def latest_tag(tag)
-      `git describe --abbrev=0 --tags --match=gjp_#{tag}_*`.strip
+      `git describe --abbrev=0 --tags --match=gjp_#{tag}_* --always`.strip
     end
 
     # reverts path contents as per latest tag
