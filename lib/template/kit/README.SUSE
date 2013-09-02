@@ -1,0 +1,4 @@
+Contents of this package are automatically packaged by the gjp program in order
+to build other Java packages from source. They are not needed after rpm files
+are created, so this package should only be used by the Build Service and
+should never be installed on end users' systems.
