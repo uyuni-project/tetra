@@ -54,7 +54,11 @@ module Gjp
       if maven_commandline == nil
         raise MavenNotFoundException
       end
-      Process.wait(Process.spawn("#{maven_commandline} #{options.join(' ')}"))
+
+      full_commandline = "#{maven_commandline} #{options.join(' ')}"
+      log.debug full_commandline
+
+      Process.wait(Process.spawn(full_commandline))
     end
   end
 
