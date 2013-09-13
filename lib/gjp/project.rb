@@ -171,7 +171,7 @@ module Gjp
     def take_snapshot(message, tag = nil)
       log.debug "committing with message: #{message}"
 
-      `git rm -r --cached .`
+      `git rm -r --cached --ignore-unmatch .`
       `git add .`
       `git commit -m "#{message}"`
 
