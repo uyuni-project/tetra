@@ -143,7 +143,7 @@ module Gjp
     def update_changed_file_list(directory, file_name, tag)
       list_file = File.join("file_lists", file_name)
       tracked_files = if File.exists?(list_file)
-        File.readlines(list_file)
+        File.readlines(list_file).map { |line| line.strip }
       else
         []
       end
@@ -151,10 +151,10 @@ module Gjp
       new_tracked_files = (
         `git diff-tree --no-commit-id --name-only -r #{latest_tag(tag)} HEAD`.split("\n")
         .select { |file| file.start_with?(directory) }
-        .map { |file|file[directory.length + 1, file.length]  }
+        .map { |file|file[directory.length + 1, file.length] }
         .concat(tracked_files)
-        .sort
         .uniq
+        .sort
       )
 
       log.debug("writing file list for #{directory}: #{new_tracked_files.to_s}")
