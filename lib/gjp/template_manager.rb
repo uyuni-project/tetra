@@ -18,7 +18,7 @@ module Gjp
     end
 
     def generate(template_name, object_binding, destination_path)
-      erb = ERB.new File.read(File.join(template_path, template_name))
+      erb = ERB.new File.read(File.join(template_path, template_name)), nil, "<>"
       File.open(destination_path, "w") { |io| io.write erb.result(object_binding) }
     end
   end

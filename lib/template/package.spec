@@ -28,7 +28,7 @@ BuildRequires:  <%= project_name %>-kit
 BuildArch:      noarch
 Provides:       mvn(<%= group_id %>:<%= artifact_id %>) == <%= version %>
 <% runtime_dependency_ids.each do |dependency_id| %>
-  Requires:       mvn(<%= dependency_id[0] %>:<%= dependency_id[1] %>) <% if dependency_id[3] != nil %>==<%= dependency_id[3] %><% end %>
+Requires:       mvn(<%= dependency_id[0] %>:<%= dependency_id[1] %>) <% if dependency_id[3] != nil %>==<%= dependency_id[3] %><% end %>
 <% end %>
 
 %description
@@ -42,13 +42,13 @@ Provides:       mvn(<%= group_id %>:<%= artifact_id %>) == <%= version %>
 
 %install
 <% outputs.each do |output| %>
-  cp -a <%= output %> %{buildroot}%{_javadir}/<%= output %>
+cp -a <%= output %> %{buildroot}%{_javadir}/<%= File.basename(output) %>
 <% end %>
 
 %files
 %defattr(-,root,root)
 <% outputs.each do |output| %>
-  cp -a <%= output %> %{buildroot}%{_javadir}/<%= output %>
+cp -a <%= output %> %{buildroot}%{_javadir}/<%= File.basename(output) %>
 <% end %>
 
 %changelog

@@ -92,33 +92,34 @@ describe Gjp::Scaffolder do
     it "scaffolds the first version" do
 
       @project.from_directory do
-        Dir.mkdir File.join("src", "test")
-        [1..5].each do |i|
+        FileUtils.mkdir_p File.join("src", "test", "out")
+        (1..5).each do |i|
           `touch src/test/test#{i}.java`
         end
         @project.dry_run
 
-        [1..5].each do |i|
+        (1..5).each do |i|
           `touch src/test/test#{i}.class`
         end
 
-        [1..5].each do |i|
-          `touch src/test/test#{i}.jar`
+        (1..5).each do |i|
+          `touch src/test/out/test#{i}.jar`
         end
 
         @project.finish
       end
 
-      @scaffolder.generate_package_spec "test", File.join("spec", "data", "nailgun", "pom.xml")
+      @scaffolder.generate_package_spec "test", File.join("spec", "data", "nailgun", "pom.xml"), "*.jar"
 
       @project.from_directory do
-        spec_lines = File.readlines(File.join("specs", "test-project.spec"))
+        spec_lines = File.readlines(File.join("specs", "test.spec"))
         spec_lines.should include("Name:           test\n")
         spec_lines.should include("License:        The Apache Software License, Version 2.0\n")
         spec_lines.should include("Summary:        Nailgun is a client, protocol, and server for running Java...\n")
         spec_lines.should include("Url:            http://martiansoftware.com/nailgun\n")
         spec_lines.should include("BuildRequires:  #{@project.name}-kit\n")
         spec_lines.should include("Provides:       mvn(com.martiansoftware:nailgun-all) == 0.9.1\n")
+        spec_lines.should include("cp -a out/test3.jar %{buildroot}%{_javadir}/test3.jar\n")
       end
     end
   end

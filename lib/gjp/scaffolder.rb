@@ -15,7 +15,7 @@ module Gjp
       spec_path
     end
 
-    def generate_package_spec(name, pom)
+    def generate_package_spec(name, pom, filter)
       spec_path = File.join("specs", "#{name}.spec")
 
       list_file = File.join(@project.full_path, "file_lists/#{name}_output")
@@ -23,7 +23,7 @@ module Gjp
         return nil
       end
 
-      adapter = Gjp::PackageSpecAdapter.new(@project, name, Gjp::Pom.new(pom))
+      adapter = Gjp::PackageSpecAdapter.new(@project, name, Gjp::Pom.new(pom), filter)
 
       generate_merging "package.spec", adapter.get_binding, spec_path, "scaffold_#{name}_spec"
 

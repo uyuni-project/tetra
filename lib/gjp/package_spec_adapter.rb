@@ -17,7 +17,7 @@ module Gjp
     attr_reader :description
     attr_reader :outputs
 
-    def initialize(project, package_name, pom)
+    def initialize(project, package_name, pom, filter)
       @name = package_name
       @version = pom.version
       @license = pom.license_name
@@ -32,7 +32,11 @@ module Gjp
       @description = clean_description
 
       output_list = File.join(project.full_path, "file_lists", "#{@name}_output")
-      @outputs = File.open(output_list).readlines.map { |line| line.strip }
+      @outputs = File.open(output_list).readlines.map do |line|
+        line.strip
+      end.select do |line|
+        File.fnmatch? filter, File.basename(line.strip)
+      end
     end
 
     def get_binding

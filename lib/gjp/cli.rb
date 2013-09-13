@@ -132,11 +132,12 @@ module Gjp
     end
 
     subcommand "generate-package-spec", "Scaffolds or refreshes a spec file for a package" do
+      option ["-f", "--filter"], "FILTER", "filter files to be installed by this spec", :default => "*.jar"
       parameter "NAME", "name of a package, that is, an src/ subdirectory name"
       parameter "POM", "a pom file path or URI"
       def execute
         project = Gjp::Project.new(".")
-        result_path = Gjp::Scaffolder.new(project).generate_package_spec name, pom
+        result_path = Gjp::Scaffolder.new(project).generate_package_spec name, pom, filter
         if result_path != nil
           puts "#{result_path} generated"
         else
