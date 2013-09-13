@@ -32,7 +32,7 @@ module Gjp
       if not File.exist? list_file
         return nil
       end
-      destination_file = File.join(@project.full_path, "archives/#{@project.name}-#{name}.tar.xz")
+      destination_file = File.join(@project.full_path, "archives/#{name}.tar.xz")
 
       @project.from_directory File.join("src", name) do
         archive list_file, destination_file

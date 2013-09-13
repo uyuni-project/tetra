@@ -16,7 +16,7 @@ module Gjp
     end
 
     def generate_package_spec(name, pom)
-      spec_path = File.join("specs", "#{@project.name}.spec")
+      spec_path = File.join("specs", "#{name}.spec")
 
       list_file = File.join(@project.full_path, "file_lists/#{name}_output")
       if not File.exist? list_file

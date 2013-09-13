@@ -44,7 +44,7 @@ describe Gjp::Archiver do
   end
 
   describe "#archive_package" do
-    it "archives a source package files" do
+    it "archives a package files" do
       @project.from_directory do
         Dir.mkdir(File.join("src", "a:b:c"))
         File.open(File.join("src", "a:b:c", "src_test"), "w") { |io| io.puts "test content" }
@@ -53,7 +53,7 @@ describe Gjp::Archiver do
 
       archiver.archive_package "a:b:c"
       @project.from_directory do
-        `tar -Jtf archives/test-project-a:b:c.tar.xz`.split.should include("src_test")
+        `tar -Jtf archives/a:b:c.tar.xz`.split.should include("src_test")
       end
     end
   end
