@@ -38,6 +38,7 @@ Requires:       mvn(<%= dependency_id[0] %>:<%= dependency_id[1] %>) <% if depen
 %setup -q -c
 
 %build
+ln -sf %{buildroot}%{_datadir}/gjp/%{project_name}/ kit
 ./build.sh
 
 %install
