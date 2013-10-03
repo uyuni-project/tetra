@@ -115,7 +115,7 @@ describe Gjp::Scaffolder do
         spec_lines = File.readlines(File.join("specs", "test.spec"))
         spec_lines.should include("Name:           test\n")
         spec_lines.should include("License:        The Apache Software License, Version 2.0\n")
-        spec_lines.should include("Summary:        Nailgun is a client, protocol, and server for running Java...\n")
+        spec_lines.should include("Summary:        Nailgun is a client, protocol, and server for running Java\n")
         spec_lines.should include("Url:            http://martiansoftware.com/nailgun\n")
         spec_lines.should include("BuildRequires:  #{@project.name}-kit\n")
         spec_lines.should include("Provides:       mvn(com.martiansoftware:nailgun-all) == 0.9.1\n")

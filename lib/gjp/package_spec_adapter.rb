@@ -25,8 +25,8 @@ module Gjp
       else
         "Apache-2.0"
       end
-      clean_description = pom.description.gsub(/[\s]+/, ' ').strip
-      @summary = clean_description[0..60].gsub(/\s\w+$/, '...')
+      clean_description = cleanup_description(pom.description)
+      @summary = clean_description
       @url = pom.url
       @project_name = project.name
       @group_id = pom.group_id
@@ -45,6 +45,15 @@ module Gjp
 
     def get_binding
       binding
+    end
+
+    def cleanup_description(raw)
+      raw
+        .gsub(/[\s]+/, " ")
+        .strip
+        .slice(0..59)
+        .sub(/\s\w+$/, "")
+        .sub(/\.+$/, "")
     end
   end
 end
