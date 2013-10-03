@@ -25,7 +25,6 @@ Group:          Development/Libraries/Java
 Source0:        %{name}.tar.xz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 BuildArch:      noarch
-Requires:       java-devel
 Provides:       gjp(kit)
 # no two kits should ever be installed at any given time
 Conflicts:      otherproviders(gjp(kit))
