@@ -24,6 +24,7 @@ Url:            <%= url %>
 Group:          Development/Libraries/Java
 Source0:        %{name}.tar.xz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
+BuildRequires:  coreutils
 BuildRequires:  <%= project_name %>-kit
 BuildArch:      noarch
 Provides:       mvn(<%= group_id %>:<%= artifact_id %>) == <%= version %>
@@ -35,11 +36,12 @@ Requires:       mvn(<%= dependency_id[0] %>:<%= dependency_id[1] %>) <% if depen
 <%= description %>
 
 %prep
-%setup -q -c
+%setup -q -c -n src/<%= name %>
+cd ../../
+ln -sf %{_datadir}/gjp/<%= project_name %>-kit kit
 
 %build
-ln -sf %{buildroot}%{_datadir}/gjp/%{project_name}/ kit
-./build.sh
+sh src/<%= name %>/build.sh
 
 %install
 <% outputs.each do |output| %>
