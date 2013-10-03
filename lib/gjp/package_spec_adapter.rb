@@ -25,15 +25,14 @@ module Gjp
       else
         "Apache-2.0"
       end
-      clean_description = cleanup_description(pom.description)
-      @summary = clean_description
+      @summary = cleanup_description(pom.description, 60)
       @url = pom.url
       @project_name = project.name
       @group_id = pom.group_id
       @artifact_id = pom.artifact_id
       @version = pom.version
       @runtime_dependency_ids = pom.runtime_dependency_ids
-      @description = clean_description
+      @description = cleanup_description(pom.description, 1500)
 
       output_list = File.join(project.full_path, "file_lists", "#{@name}_output")
       @outputs = File.open(output_list).readlines.map do |line|
@@ -47,11 +46,11 @@ module Gjp
       binding
     end
 
-    def cleanup_description(raw)
+    def cleanup_description(raw, max_length)
       raw
         .gsub(/[\s]+/, " ")
         .strip
-        .slice(0..59)
+        .slice(0..max_length -1)
         .sub(/\s\w+$/, "")
         .sub(/\.+$/, "")
     end
