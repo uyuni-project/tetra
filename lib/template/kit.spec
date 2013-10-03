@@ -49,7 +49,6 @@ cp -a * %{buildroot}%{_datadir}/gjp/%{name}/
 %files
 %defattr(-,root,root)
 %doc ../README.SUSE
-%{_datadir}/gjp
-%{_datadir}/gjp/%{name}/
+%{_datadir}/gjp/
 
 %changelog
