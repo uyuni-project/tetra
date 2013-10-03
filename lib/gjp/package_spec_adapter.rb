@@ -20,7 +20,11 @@ module Gjp
     def initialize(project, package_name, pom, filter)
       @name = package_name
       @version = pom.version
-      @license = pom.license_name
+      @license = if pom.license_name != ""
+        pom.license_name
+      else
+        "Apache-2.0"
+      end
       clean_description = pom.description.gsub(/[\s]+/, ' ').strip
       @summary = clean_description[0..60].gsub(/\s\w+$/, '...')
       @url = pom.url
