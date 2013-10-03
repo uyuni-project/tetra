@@ -59,6 +59,7 @@ module Gjp
       log.debug full_commandline
 
       Process.wait(Process.spawn(full_commandline))
+      full_commandline
     end
   end
 
