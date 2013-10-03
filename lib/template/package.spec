@@ -37,13 +37,14 @@ Requires:       mvn(<%= dependency_id[0] %>:<%= dependency_id[1] %>) <% if depen
 
 %prep
 %setup -q -c -n src/<%= name %>
-cd ../../
-ln -sf %{_datadir}/gjp/<%= project_name %>-kit kit
+ln -sf %{_datadir}/gjp/<%= project_name %>-kit ../../kit
 
 %build
+cd ../../
 sh src/<%= name %>/build.sh
 
 %install
+mkdir -p %{buildroot}%{_javadir}
 <% outputs.each do |output| %>
 cp -a <%= output %> %{buildroot}%{_javadir}/<%= File.basename(output) %>
 <% end %>
@@ -51,7 +52,7 @@ cp -a <%= output %> %{buildroot}%{_javadir}/<%= File.basename(output) %>
 %files
 %defattr(-,root,root)
 <% outputs.each do |output| %>
-cp -a <%= output %> %{buildroot}%{_javadir}/<%= File.basename(output) %>
+%{_javadir}/<%= File.basename(output) %>
 <% end %>
 
 %changelog
