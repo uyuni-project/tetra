@@ -24,6 +24,7 @@ Url:            <%= url %>
 Group:          Development/Libraries/Java
 Source0:        %{name}.tar.xz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
+BuildRequires:  xz
 BuildRequires:  java-devel
 BuildRequires:  <%= project_name %>-kit
 BuildArch:      noarch
