@@ -10,6 +10,7 @@ Gem::Specification.new do |s|
   s.homepage = "https://github.com/SilvioMoioli/gjp"
   s.summary = "Green Java Packager's Tools"
   s.description = "A suite of tools to ease Java packaging in SUSE systems"
+  s.license = "MIT"
 
   s.rubyforge_project = "gjp"
 
