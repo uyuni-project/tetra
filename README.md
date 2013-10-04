@@ -112,12 +112,11 @@ Add the following lines:
     cd src/commons-collections/commons-collections-3.2.1-src/
     ../../../kit/apache-maven-3.1.0/bin/mvn -Dmaven.repo.local=`readlink -e ../../../kit/m2` -s`readlink -e ../../../kit/m2/settings.xml` package
 
+Note that `build.sh` gets called from the `gjp` project root, hence the `cd` line, and the Maven line was taken directly from `gjp mvn` output above and pasted verbatim.
 Now complete the gathering:
 
     gjp finish
     cd ../../..
-
-Note that `build.sh` gets called from the `gjp` project root, hence the `cd` line, and the Maven line was taken directly from `gjp mvn` output above and pasted verbatim.
 
 The following command will generate the kit spec:
 
