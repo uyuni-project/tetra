@@ -66,7 +66,7 @@ Ceate a new `gjp` project, in this example named "galaxy":
     cd galaxy
     gjp init
 
-`gjp init` automatically starts a new gathering phase in which you can add sources and kit files. It also generated a folder structure and assumes you respect it, in particular, you should place all your projects' source files in `src`. Every `src` subfolder will become a separate package named after the folder itself, so use the following commands to create a `commons-collections` folders and populate it:
+`gjp init` automatically starts a new gathering phase in which you can add sources and kit files. It also generated a folder structure and assumes you respect it, in particular, you should place all your projects' source files in `src/`. Every `src/` subfolder will become a separate package named after the folder itself, so use the following commands to create a `commons-collections` folders and populate it:
 
     cd src
     mkdir commons-collections
@@ -75,7 +75,7 @@ Ceate a new `gjp` project, in this example named "galaxy":
     unzip commons-collections-3.2.1-src.zip
     rm commons-collections-3.2.1-src.zip
 
-Now let's move to the kit (which, unsurprisingly, should be placed in the `kit` folder). commons-collections needs Maven 3 to build, so we should simply unzip a copy in `kit`:
+Now let's move to the kit (which, unsurprisingly, should be placed in the `kit/` directory). commons-collections needs Maven 3 to build, so we should simply unzip a copy in `kit/`:
 
     cd ../../kit
     wget http://apache.fastbull.org/maven/maven-3/3.1.0/binaries/apache-maven-3.1.0-bin.zip
@@ -87,14 +87,14 @@ This is actually everything needed to do a first dry-run build.
 
 #### First dry-run phase
 
-Let's call `gjp dry-run` to let `gjp` know we are building and then call Maven. Note that `gjp mvn` is used instead of plain `mvn`: `gjp` will take care of locating the Maven installation we have in the `kit` and ensure it will store all downloaded files there.
+Let's call `gjp dry-run` to let `gjp` know we are building and then call Maven. Note that `gjp mvn` is used instead of plain `mvn`: `gjp` will take care of locating the Maven installation in `kit/` and ensure it will store all downloaded files there.
 
     gjp dry-run
     cd src/commons-collections/commons-collections-3.2.1-src/
     gjp mvn package
     gjp finish
 
-Success! At this point `gjp` took note of all needed files, and restored `src` as it was before the build. This should be sufficient to be able to repeat the build on a machine with no Internet access, but what if we wanted to be 100% sure of that?
+Success! At this point `gjp` took note of all needed files, and restored `src/` as it was before the build. This should be sufficient to be able to repeat the build on a machine with no Internet access, but what if we wanted to be 100% sure of that?
 
 #### Second, networkless, dry-run phase
 
@@ -139,7 +139,7 @@ The following command will generate the kit spec:
     gjp generate-kit-spec
     less specs/galaxy-kit.spec
 
-Nothing fancy here, the spec simply copies `kit` contents in a special directory to be available for later compilation of packages.
+Nothing fancy here, the spec simply copies `kit/` contents in a special directory to be available for later compilation of packages.
 You can also edit the spec file manually if you want. When you later regenerate it, `gjp` will automatically try to reconcile changes with a [three-way merge](http://en.wikipedia.org/wiki/Three-way_merge#Three-way_merge).
 
 You can also generate the corresponding .tar.xz file with:

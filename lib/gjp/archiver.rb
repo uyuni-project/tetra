@@ -9,8 +9,7 @@ module Gjp
       @project = project
     end
 
-    # generates an archive for the project's kit package based on
-    # its file list
+    # generates an archive for the s kit package based on ts file list
     def archive_kit
       list_file = File.join(@project.full_path, "file_lists/kit")
       if not File.exist? list_file
@@ -25,8 +24,7 @@ module Gjp
       Pathname.new(destination_file).relative_path_from Pathname.new(@project.full_path)
     end
 
-    # generates an archive for a project's source package based on
-    # its file list
+    # generates an archive for a project's package based on its file list
     def archive_package(name)
       list_file = File.join(@project.full_path, "file_lists/#{name}_input")
       if not File.exist? list_file

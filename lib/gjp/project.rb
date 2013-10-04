@@ -75,9 +75,9 @@ module Gjp
       true
     end
 
-    # starts a dry running phase: files added to the kit will
-    # be added to packages, while sources will be reset at the
-    # current state when finished
+    # starts a dry running phase: files added to kit/ will be added
+    # to the kit package, src/ will be reset at the current state
+    # when finished
     def dry_run
       from_directory do
         status = get_status
