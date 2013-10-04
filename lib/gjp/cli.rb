@@ -218,14 +218,5 @@ module Gjp
         puts Gjp::SourceGetter.new.get_source(address, pom, directory)
       end    
     end
-
-    subcommand "scaffold-jar-table", "Creates a heuristic version of a project's jar table" do
-      parameter "[DIRECTORY]", "project directory", :default => "."
-      option ["--include-all"], :flag, "include tests and samples in produced jars", :default => false
-
-      def execute
-        puts Gjp::JarTable.new(directory, include_all?).to_s
-      end    
-    end
   end
 end
