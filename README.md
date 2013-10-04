@@ -75,7 +75,7 @@ Ceate a new `gjp` project, in this example named "galaxy":
     unzip commons-collections-3.2.1-src.zip
     rm commons-collections-3.2.1-src.zip
 
-Now let's move to the kit (which, unsurprisingly, should be placed in the `kit` folder). commons-lang needs Maven 3 to build, so we should simply unzip a copy in `kit`:
+Now let's move to the kit (which, unsurprisingly, should be placed in the `kit` folder). commons-collections needs Maven 3 to build, so we should simply unzip a copy in `kit`:
 
     cd ../../kit
     wget http://apache.fastbull.org/maven/maven-3/3.1.0/binaries/apache-maven-3.1.0-bin.zip
@@ -211,7 +211,7 @@ The Fedora community is experimenting with another set of tools, [XMvn](http://m
 
 Building software from a binary blob is unusual for Linux distros, and it surely has some drawbacks. It is anyway believed that benefits outweigh them, in fact using prebuilt software:
 
-* drastically reduces packaging efforts. A very basic and relatively simple package like [commons-lang](http://commons.apache.org/proper/commons-lang/) needs about [150 jars](https://build.opensuse.org/package/show/home:SilvioMoioli/galaxy-kit) just to be compiled and tested. Those should be packaged, roughly, one-by-one!
+* drastically reduces packaging efforts. A very basic and relatively simple package like [commons-collections](http://commons.apache.org/proper/commons-collections/) needs about [150 jars](https://build.opensuse.org/package/show/home:SilvioMoioli/galaxy-kit) just to be compiled and tested. Those should be packaged, roughly, one-by-one!
 * is just the way all Java developers out there build, test and use their software — this is how they expect it to work. Any different approach is necessarily error-prone and could result in unexpected bugs;
 * does not affect the ability of providing patches to Java projects, as only build time requirements are in the kit. In virtually all cases patching a piece of software does not require to patch its build toolchain;
 * does not affect the ability of complying to software licenses like the GPL. In fact those licenses only require to redistribute a project's source code - not the whole toolchain needed to build it. [Sources can be added](#kit-sources) for GPL'd parts of the kit, if any.
