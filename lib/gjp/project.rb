@@ -176,18 +176,26 @@ module Gjp
       `git commit -m "#{message}"`
 
       if tag != nil
-        latest_count = if latest_tag(tag) =~ /^gjp_.*_([0-9]+)$/
-          $1
-        else
-          0
-        end
-        `git tag gjp_#{tag}_#{latest_count.to_i + 1}`
+        `git tag gjp_#{tag}_#{latest_tag_count(tag) + 1}`
       end
     end
 
-    # returns the last tag given in a gjp snapshot
-    def latest_tag(tag)
-      `git describe --abbrev=0 --tags --match=gjp_#{tag}_* --always`.strip
+    # returns the last tag of its type corresponding to a
+    # gjp snapshot
+    def latest_tag(tag_type)
+      "gjp_#{tag_type}_#{latest_tag_count(tag_type)}"
+    end
+
+    # returns the last tag count of its type corresponding
+    # to a gjp snapshot
+    def latest_tag_count(tag_type)
+      `git tag`.split.map do |tag|
+        if tag =~ /^gjp_#{tag_type}_([0-9]+)$/
+          $1.to_i
+        else
+          0
+        end
+       end.max or 0
     end
 
     # reverts path contents as per latest tag
