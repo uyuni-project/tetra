@@ -71,7 +71,7 @@ describe Gjp::Project do
          @project.take_snapshot "test", :revertable
 
         `git rev-list --all`.split("\n").length.should eq 2
-         @project.latest_tag(:revertable).should eq "gjp_revertable_1"
+         @project.latest_tag(:revertable).should eq "revertable_1"
       end
     end
   end

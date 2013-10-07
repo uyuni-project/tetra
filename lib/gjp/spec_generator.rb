@@ -7,6 +7,7 @@ module Gjp
 
     def initialize(project)
       @project = project
+      @git = Gjp::Git.new
     end
 
     def generate_kit_spec
@@ -32,29 +33,25 @@ module Gjp
 
     # generates a file in result_path from template together with binding.
     # if a file already exists at that position, 3-way merge it with the
-    # version with the latest tag specified. Takes a snapshot in the end
-    # for future merges
-    def generate_merging(template, binding, result_path, tag)
+    # common ancestor. Takes a snapshot in the end for future merges
+    def generate_merging(template, binding, result_path, tag_prefix)
       @project.from_directory do
         TemplateManager.new.generate template, binding, "#{result_path}.new_version"
 
-        already_generated = @project.latest_tag(tag) != ""
+        already_generated = @project.latest_tag(tag_prefix) != ""
         already_existing = File.exist? result_path
 
         if already_generated and already_existing
           # 3-way merge
-          `git show #{@project.latest_tag(tag)}:#{result_path} > #{result_path}.old_version`
-          `git merge-file --ours #{result_path} #{result_path}.old_version #{result_path}.new_version`
+          @git.merge_with_tag("#{result_path}", "#{result_path}.new_version", @project.latest_tag(tag_prefix))
           File.delete "#{result_path}.new_version"
-          File.delete "#{result_path}.old_version"
         else
           # just replace
           File.rename "#{result_path}.new_version", result_path
         end
 
-        @project.take_snapshot "Spec generated", tag
+        @project.take_snapshot("Spec generated", tag_prefix)
       end
     end
-
   end
 end

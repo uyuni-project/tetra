@@ -11,6 +11,7 @@ module Gjp
 
     def initialize(path)      
       @full_path = Gjp::Project.find_project_dir(File.expand_path(path))
+      @git = Gjp::Git.new
     end
 
     # finds the project directory up in the tree, like git does
@@ -35,9 +36,7 @@ module Gjp
     # inits a new project directory structure
     def self.init(dir)
       Dir.chdir(dir) do
-        if Dir.exists?(".git") == false
-          `git init`
-        end
+        Gjp::Git.init
 
         Dir.mkdir "src"
         Dir.mkdir "kit"
@@ -86,7 +85,7 @@ module Gjp
           update_output_file_lists
           take_snapshot "File list updates"
 
-          revert "src", :dry_run_started
+          @git.revert_whole_directory("src", latest_tag(:dry_run_started))
           take_snapshot "Sources reverted as before dry-run"
 
           take_snapshot "Dry run finished", :dry_run_finished
@@ -112,12 +111,12 @@ module Gjp
           end
 
           new_tracked_files = (
-            `git diff-tree --no-commit-id --name-only -r #{latest_tag(:dry_run_started)} HEAD`.split("\n")
-            .select { |file| file.start_with?(directory) }
-            .map { |file|file[directory.length + 1, file.length] }
-            .concat(tracked_files)
-            .uniq
-            .sort
+            @git.changed_files_since(latest_tag(:dry_run_started))
+              .select { |file| file.start_with?(directory) }
+              .map { |file|file[directory.length + 1, file.length] }
+              .concat(tracked_files)
+              .uniq
+              .sort
           )
 
           log.debug("writing file list for #{directory}: #{new_tracked_files.to_s}")
@@ -131,49 +130,27 @@ module Gjp
       end
     end
 
-    # adds the project's whole contents to git
-    # if tag is given, commit is tagged
-    def take_snapshot(message, tag = nil)
-      log.debug "committing with message: #{message}"
-
-      `git rm -r --cached --ignore-unmatch .`
-      `git add .`
-      `git commit -m "#{message}"`
-
-      if tag != nil
-        `git tag gjp_#{tag}_#{latest_tag_count(tag) + 1}`
+    # takes a revertable snapshot of this project
+    def take_snapshot(message, prefix = nil)
+      tag = if prefix
+        "#{prefix}_#{latest_tag_count(prefix) + 1}"
+      else
+        nil
       end
+
+      @git.commit_whole_directory(message, tag)
     end
 
     # returns the last tag of its type corresponding to a
     # gjp snapshot
     def latest_tag(tag_type)
-      "gjp_#{tag_type}_#{latest_tag_count(tag_type)}"
+      "#{tag_type}_#{latest_tag_count(tag_type)}"
     end
 
     # returns the last tag count of its type corresponding
     # to a gjp snapshot
     def latest_tag_count(tag_type)
-      `git tag`.split.map do |tag|
-        if tag =~ /^gjp_#{tag_type}_([0-9]+)$/
-          $1.to_i
-        else
-          0
-        end
-       end.max or 0
-    end
-
-    # reverts path contents as per latest tag
-    def revert(path, tag)
-      `git rm -rf --ignore-unmatch #{path}`
-      `git checkout -f #{latest_tag(tag)} -- #{path}`
-
-      `git clean -f -d #{path}`
-    end
-
-    # returns a file name that represents a status
-    def status_file_name(status)
-      ".#{status.to_s}"
+      @git.get_tag_maximum_suffix(tag_type)
     end
 
     # runs a block from the project directory or a subdirectory
@@ -190,7 +167,7 @@ module Gjp
     end
 
     def version
-      `git rev-parse --short #{latest_tag(:dry_run_finished)}`.strip
+      latest_tag_count(:dry_run_finished)
     end
 
     def get_binding

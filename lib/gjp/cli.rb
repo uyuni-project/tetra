@@ -221,6 +221,8 @@ module Gjp
         $stderr.puts e
       rescue NotGjpDirectoryException
         $stderr.puts "This is not a gjp project directory, see gjp init"
+      rescue GitAlreadyInitedException
+        $stderr.puts "This directory is already a gjp project"
       rescue Gjp::MavenNotFoundException
         $stderr.puts "mvn executable not found in kit/ or any of its subdirectories"
       end
