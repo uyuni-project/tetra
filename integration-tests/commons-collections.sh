@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# A crude integration test that builds commons-lang
+# A crude integration test that builds commons-collections
 
 mkdir galaxy
 cd galaxy
