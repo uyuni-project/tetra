@@ -51,21 +51,14 @@ describe Gjp::Project do
     end
   end
 
-  describe "#set_status" do
-    it "stores a project's status flag" do
+  describe "#is_dry_running" do
+    it "checks if a project is dry running" do
       @project.from_directory do
-        @project.set_status :dry_running
-        File.exists?(".dry_running").should be_true
-     end
-    end
-  end
-
-  describe "#get_status" do
-    it "gets a project's status flag" do
-      @project.from_directory do
-        @project.get_status.should be_nil
-        @project.set_status :dry_running
-        @project.get_status.should eq :dry_running
+        @project.is_dry_running.should be_false
+        @project.dry_run
+        @project.is_dry_running.should be_true
+        @project.finish
+        @project.is_dry_running.should be_false
       end
     end
   end
@@ -100,14 +93,14 @@ describe Gjp::Project do
       end
 
       @project.finish.should be_true
-      @project.get_status.should be_nil
+      @project.is_dry_running.should be_false
 
       @project.from_directory do
-        `git rev-list --all`.split("\n").length.should eq 6
+        `git rev-list --all`.split("\n").length.should eq 5
         File.read("src/abc/test").should eq "A\n"
         File.readlines(File.join("file_lists", "abc_output")).should include("test2\n")
 
-        `git diff-tree --no-commit-id --name-only -r HEAD~2`.split("\n").should_not include("src/abc/test2")
+        `git diff-tree --no-commit-id --name-only -r HEAD~`.split("\n").should_not include("src/abc/test2")
         File.exists?("src/abc/test2").should be_false
       end
     end
@@ -124,7 +117,7 @@ describe Gjp::Project do
       @project.dry_run.should be_true
 
       @project.from_directory do
-        @project.get_status.should eq :dry_running
+        @project.is_dry_running.should be_true
         `git rev-list --all`.split("\n").length.should eq 2
         `git diff-tree --no-commit-id --name-only -r HEAD`.split("\n").should include("src/test")
       end

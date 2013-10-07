@@ -7,9 +7,6 @@ module Gjp
   class Project
     include Logger
 
-    # list of possible statuses
-    @@statuses = [:dry_running]
-
     attr_accessor :full_path
 
     def initialize(path)      
@@ -64,24 +61,26 @@ module Gjp
     # when finished
     def dry_run
       from_directory do
-        status = get_status
-        if status == :dry_running
+        if is_dry_running
           return false
         end
 
-        set_status :dry_running
         take_snapshot "Dry-run started", :dry_run_started
       end
 
       true
     end
 
+    # returns true iff we are currently dry-running
+    def is_dry_running
+      latest_tag_count(:dry_run_started) > latest_tag_count(:dry_run_finished)
+    end
+
     # ends any phase that was previously started, 
     # generating file lists
     def finish
       from_directory do
-        status = get_status
-        if status == :dry_running
+        if is_dry_running
           take_snapshot "Changes during dry-run"
 
           update_output_file_lists
@@ -90,7 +89,6 @@ module Gjp
           revert "src", :dry_run_started
           take_snapshot "Sources reverted as before dry-run"
 
-          set_status nil
           take_snapshot "Dry run finished", :dry_run_finished
 
           return true
@@ -171,37 +169,6 @@ module Gjp
       `git checkout -f #{latest_tag(tag)} -- #{path}`
 
       `git clean -f -d #{path}`
-    end
-
-    # returns a symbol with the current status
-    # flag
-    def get_status
-      from_directory do
-        @@statuses.each do |status|
-          if File.exists?(status_file_name(status))
-            return status
-          end
-        end
-      end
-
-      nil
-    end
-
-    # sets a project status flag. if status = nil,
-    # clears all status flags
-    def set_status(status)
-      from_directory do
-        @@statuses.each do |a_status|
-          file_name = status_file_name(a_status)
-          if File.exists?(file_name)
-            File.delete(file_name)
-          end
-
-          if a_status == status
-            FileUtils.touch(file_name)
-          end
-        end
-      end
     end
 
     # returns a file name that represents a status
