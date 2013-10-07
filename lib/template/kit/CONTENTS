@@ -1,9 +1,8 @@
-Any files you put here will be copied as is in the "kit" package.
+This directory contains all binary files needed to build a gjp project's
+packages.
 
-You should add all dependencies and build tools here, so that they are
-available at build time.
-
-gjp will recognise Maven, Ant and other popular build tool binaries in here.
+These files should only be used during build and should not be installed
+on users' systems.
 
 Some generally useful configuration files are also placed here (eg.
-m2/settings.xml for Maven builds.
+m2/settings.xml for Maven builds).

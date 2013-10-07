@@ -44,12 +44,10 @@ be installed on end users' systems.
 
 %install
 install -d -m 0755 %{buildroot}%{_datadir}/gjp/%{name}/
-mv README.SUSE ../
 cp -a * %{buildroot}%{_datadir}/gjp/%{name}/
 
 %files
 %defattr(-,root,root)
-%doc ../README.SUSE
 %{_datadir}/gjp/
 
 %changelog
