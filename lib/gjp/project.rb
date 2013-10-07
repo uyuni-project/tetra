@@ -20,7 +20,7 @@ module Gjp
         result = File.expand_path("..", result)
       end
 
-      raise ArgumentError, "This is not a gjp project directory" if result == "/"
+      raise NotGjpDirectoryException if result == "/"
 
       result
     end
@@ -196,5 +196,8 @@ module Gjp
     def get_binding
       binding
     end
+  end
+
+  class NotGjpDirectoryException < Exception
   end
 end

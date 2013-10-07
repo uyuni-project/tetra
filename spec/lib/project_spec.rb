@@ -31,7 +31,7 @@ describe Gjp::Project do
 
       expect {
         Gjp::Project.find_project_dir(File.expand_path("..", @project_path)).should raise_error
-      }.to raise_error(ArgumentError)
+      }.to raise_error(Gjp::NotGjpDirectoryException)
     end
   end
 

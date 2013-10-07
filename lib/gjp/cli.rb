@@ -38,23 +38,27 @@ module Gjp
     # Subcommands
     subcommand "init", "Inits a gjp project in the current directory" do
       def execute
-        Gjp::Project.init(".")
-        puts "Project inited."
-        puts "Any file added to kit/ will be added to the kit package."
-        puts "Any file added to src/<name> will be added to the corresponding package."
-        puts "When you are ready to test a build, use \"gjp dry-run\"."
+        checking_exceptions do
+          Gjp::Project.init(".")
+          puts "Project inited."
+          puts "Any file added to kit/ will be added to the kit package."
+          puts "Any file added to src/<name> will be added to the corresponding package."
+          puts "When you are ready to test a build, use \"gjp dry-run\"."
+        end
       end
     end
 
     subcommand "dry-run", "Starts a dry-run build" do
       def execute
-        if Gjp::Project.new(".").dry_run
-          puts "Now dry-running, please start your build."
-          puts "Any file added to kit/, presumably downloaded dependencies, will be added to the kit."
-          puts "The src/ directory and all files in it will be brought back to the current state when finished."
-          puts "Note that .gitignore files are honored!"
-          puts "To run Maven from the kit, use \"gjp mvn\"."
-          puts "To end this dry run, use \"gjp finish\"."
+        checking_exceptions do
+          if Gjp::Project.new(".").dry_run
+            puts "Now dry-running, please start your build."
+            puts "Any file added to kit/, presumably downloaded dependencies, will be added to the kit."
+            puts "The src/ directory and all files in it will be brought back to the current state when finished."
+            puts "Note that .gitignore files are honored!"
+            puts "To run Maven from the kit, use \"gjp mvn\"."
+            puts "To end this dry run, use \"gjp finish\"."
+          end
         end
       end
     end
@@ -68,40 +72,44 @@ module Gjp
       end
 
       def execute
-        begin
+        checking_exceptions do
           project = Gjp::Project.new(".")
           result = Gjp::MavenRunner.new(project).mvn(@maven_options)
           puts "Real commandline was:"
           puts "#{result}"
-        rescue Gjp::MavenNotFoundException
-          puts "mvn executable not found in kit/ or any of its subdirectories"
         end
       end
     end
 
     subcommand "finish", "Ends the current dry-run" do
       def execute
-        if Gjp::Project.new(".").finish
-          puts "Dry-run finished."
-        else
-          puts "No dry-run is in progress."
+        checking_exceptions do
+          if Gjp::Project.new(".").finish
+            puts "Dry-run finished."
+          else
+            puts "No dry-run is in progress."
+          end
         end
       end
     end
 
     subcommand "generate-kit-spec", "Creates or refreshes a spec file for the kit" do
       def execute
-        project = Gjp::Project.new(".")
-        result_path = Gjp::SpecGenerator.new(project).generate_kit_spec
-        puts "#{result_path} generated"
+        checking_exceptions do
+          project = Gjp::Project.new(".")
+          result_path = Gjp::SpecGenerator.new(project).generate_kit_spec
+          puts "#{result_path} generated"
+        end
       end
     end
 
     subcommand "generate-kit-archive", "Archives contents of kit in archives/" do
       def execute
-        project = Gjp::Project.new(".")
-        result_path = Gjp::Archiver.new(project).archive_kit
-        puts "#{result_path} generated"
+        checking_exceptions do
+          project = Gjp::Project.new(".")
+          result_path = Gjp::Archiver.new(project).archive_kit
+          puts "#{result_path} generated"
+        end
       end
     end
 
@@ -110,13 +118,15 @@ module Gjp
       parameter "NAME", "name of a package, that is, an src/ subdirectory name"
       parameter "POM", "a pom file path or URI"
       def execute
-        project = Gjp::Project.new(".")
-        result_path = Gjp::SpecGenerator.new(project).generate_package_spec name, pom, filter
-        if result_path != nil
-          puts "#{result_path} generated"
-        else
-          "The file_list/#{name}_output file was not found. Ensure you have already run a" +
-          "dry run and ensure you ended that phase with \"gjp finish\"."
+        checking_exceptions do
+          project = Gjp::Project.new(".")
+          result_path = Gjp::SpecGenerator.new(project).generate_package_spec name, pom, filter
+          if result_path != nil
+            puts "#{result_path} generated"
+          else
+            $stderr.puts "file_list/#{name}_output not found. Ensure you have already run a" +
+            "\"gjp dry run\" and \"gjp finish\"."
+          end
         end
       end
     end
@@ -124,47 +134,57 @@ module Gjp
     subcommand "generate-package-archive", "Archives contents of a package in archives/" do
       parameter "NAME", "name of a package, that is, an src/ subdirectory name"
       def execute
-        project = Gjp::Project.new(".")
-        result_path = Gjp::Archiver.new(project).archive_package name
-        puts "#{result_path} generated"
+        checking_exceptions do
+          project = Gjp::Project.new(".")
+          result_path = Gjp::Archiver.new(project).archive_package name
+          puts "#{result_path} generated"
+        end
       end
     end
 
     subcommand "set-up-nonet-user", "Sets up a \"nonet\" user that cannot access the network" do
       def execute
-        user = Gjp::LimitedNetworkUser.new("nonet")
-        user.set_up
+        checking_exceptions do
+          user = Gjp::LimitedNetworkUser.new("nonet")
+          user.set_up
 
-        "sudo #{user.get_path("useradd")} nonet\n" +
-        "sudo #{user.get_path("iptables")} -A OUTPUT -m owner --uid-owner nonet -j DROP\n" +
-        "User \"nonet\" set up, you can use \"sudo nonet\" to dry-run your build with no network access.\n" +
-        "Note that the above iptables rule will be cleared at next reboot, you can use your distribution " +
-        "tools to make it persistent or run \"gjp set-up-limited-nertwork-user\" again next time."
+          "sudo #{user.get_path("useradd")} nonet\n" +
+          "sudo #{user.get_path("iptables")} -A OUTPUT -m owner --uid-owner nonet -j DROP\n" +
+          "User \"nonet\" set up, you can use \"sudo nonet\" to dry-run your build with no network access.\n" +
+          "Note that the above iptables rule will be cleared at next reboot, you can use your distribution " +
+          "tools to make it persistent or run \"gjp set-up-limited-nertwork-user\" again next time."
+        end
       end
     end
 
     subcommand "tear-down-nonet-user", "Deletes a user previously created by gjp" do
       def execute
-        user = Gjp::LimitedNetworkUser.new("nonet")
+        checking_exceptions do
+          user = Gjp::LimitedNetworkUser.new("nonet")
 
-        user.tear_down
+          user.tear_down
 
-        "sudo #{user.get_path("iptables")} -D OUTPUT -m owner --uid-owner nonet -j DROP\n" +
-        "sudo #{user.get_path("userdel")} nonet\n"
+          "sudo #{user.get_path("iptables")} -D OUTPUT -m owner --uid-owner nonet -j DROP\n" +
+          "sudo #{user.get_path("userdel")} nonet\n"
+        end
       end
     end
 
     subcommand "get-pom", "Retrieves a pom corresponding to a filename" do
       parameter "NAME", "a jar file path, a project directory path or a non-existing filename in the `project-version` form"
       def execute
-        puts Gjp::PomGetter.new.get_pom(name)
+          checking_exceptions do
+          puts Gjp::PomGetter.new.get_pom(name)
+        end
       end
     end
 
     subcommand "get-parent-pom", "Retrieves a pom that is the parent of an existing pom" do
       parameter "POM", "a pom file path or URI"
       def execute
-        puts Gjp::ParentPomGetter.new.get_parent_pom(pom)
+          checking_exceptions do
+          puts Gjp::ParentPomGetter.new.get_parent_pom(pom)
+        end
       end
     end
       
@@ -172,8 +192,10 @@ module Gjp
       parameter "POM", "a pom file path or URI"
 
       def execute
-        puts Gjp::SourceAddressGetter.new.get_source_address(pom)
-      end    
+        checking_exceptions do
+          puts Gjp::SourceAddressGetter.new.get_source_address(pom)
+        end
+      end
     end
     
     subcommand "get-source", "Retrieves a project's source code directory" do
@@ -182,8 +204,27 @@ module Gjp
       parameter "[DIRECTORY]", "directory in which to save the source code", :default => "."
 
       def execute
-        puts Gjp::SourceGetter.new.get_source(address, pom, directory)
+        checking_exceptions do
+          puts Gjp::SourceGetter.new.get_source(address, pom, directory)
+        end    
       end    
+    end
+
+    # handles most fatal exceptions
+    def checking_exceptions
+      begin
+        yield
+      rescue Errno::EACCES => e
+        $stderr.puts e
+      rescue Errno::ENOENT => e
+        $stderr.puts e
+      rescue Errno::EEXIST => e
+        $stderr.puts e
+      rescue NotGjpDirectoryException
+        $stderr.puts "This is not a gjp project directory, see gjp init"
+      rescue Gjp::MavenNotFoundException
+        $stderr.puts "mvn executable not found in kit/ or any of its subdirectories"
+      end
     end
   end
 end
