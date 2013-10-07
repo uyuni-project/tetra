@@ -55,7 +55,6 @@ module Gjp
             puts "Now dry-running, please start your build."
             puts "Any file added to kit/, presumably downloaded dependencies, will be added to the kit."
             puts "The src/ directory and all files in it will be brought back to the current state when finished."
-            puts "Note that .gitignore files are honored!"
             puts "To run Maven from the kit, use \"gjp mvn\"."
             puts "To end this dry run, use \"gjp finish\"."
           end
