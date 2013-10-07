@@ -49,11 +49,6 @@ describe Gjp::Project do
       src_path = File.join(@project_path, "src")
       Dir.exists?(src_path).should be_true
 
-      @project.from_directory do
-        @project.latest_tag(:gathering_started).should eq "gjp_gathering_started_1"
-        `git rev-list --all`.split("\n").length.should eq 1
-      end
-
       @project.get_status.should eq :gathering
     end
   end
@@ -94,34 +89,18 @@ describe Gjp::Project do
     it "starts a gathering phase" do
       @project.finish.should eq :gathering
 
-      @project.from_directory do
-        `touch src/test`
-      end
-
       @project.gather.should be_true
 
       @project.from_directory do
         @project.get_status.should eq :gathering
-        `git rev-list --all`.split("\n").length.should eq 4
-        `git diff-tree --no-commit-id --name-only -r HEAD`.split("\n").should include("src/test")
       end
     end
   end
 
   describe "#finish" do
     it "ends the current gathering phase" do
-      @project.from_directory do
-        Dir.mkdir("src/abc")
-        `touch src/abc/test`
-      end
-
       @project.finish.should eq :gathering
       @project.get_status.should be_nil
-
-      @project.from_directory do
-        `git rev-list --all`.split("\n").length.should eq 3
-        `git diff-tree --no-commit-id --name-only -r HEAD~`.split("\n").should include("src/abc/test")
-      end
     end
 
     it "ends the current dry-run phase" do
@@ -143,7 +122,7 @@ describe Gjp::Project do
       @project.get_status.should be_nil
 
       @project.from_directory do
-        `git rev-list --all`.split("\n").length.should eq 8
+        `git rev-list --all`.split("\n").length.should eq 6
         File.read("src/abc/test").should eq "A\n"
         File.readlines(File.join("file_lists", "abc_output")).should include("test2\n")
 
@@ -165,7 +144,7 @@ describe Gjp::Project do
 
       @project.from_directory do
         @project.get_status.should eq :dry_running
-        `git rev-list --all`.split("\n").length.should eq 4
+        `git rev-list --all`.split("\n").length.should eq 2
         `git diff-tree --no-commit-id --name-only -r HEAD`.split("\n").should include("src/test")
       end
     end

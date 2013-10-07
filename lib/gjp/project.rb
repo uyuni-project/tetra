@@ -46,7 +46,8 @@ module Gjp
         Dir.mkdir "kit"
 
         # automatically begin a gathering phase
-        Project.new(".").gather
+        project = Project.new(".")
+        project.gather
 
         template_manager = Gjp::TemplateManager.new
         template_manager.copy "archives", "."
@@ -54,6 +55,8 @@ module Gjp
         template_manager.copy "kit", "."
         template_manager.copy "specs", "."
         template_manager.copy "src", "."
+
+        project.take_snapshot "Template files added", :init
       end
     end
 
@@ -69,7 +72,6 @@ module Gjp
         end
 
         set_status :gathering
-        take_snapshot "Gathering started", :gathering_started
       end
 
       true
@@ -100,11 +102,7 @@ module Gjp
       from_directory do
         status = get_status
         if status == :gathering
-          take_snapshot "Changes during gathering"
-
           set_status nil
-          take_snapshot "Gathering finished", :gathering_finished
-
           :gathering
         elsif status == :dry_running
           take_snapshot "Changes during dry-run"
