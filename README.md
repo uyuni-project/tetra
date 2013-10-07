@@ -94,7 +94,9 @@ Let's call `gjp dry-run` to let `gjp` know we are building and then call Maven. 
     gjp mvn package
     gjp finish
 
-Success! At this point `gjp` took note of all needed files, and restored `src/` as it was before the build. This should be sufficient to be able to repeat the build on a machine with no Internet access, but what if we wanted to be 100% sure of that?
+Success! At this point `gjp` took note of all needed files, and restored `src/` as it was before the build. Also note that build output files have been listed in `file_lists/commons-collections_output` and will be used later to compile the `%install` and `%files` sections of the project spec (by default only jar files are included).
+
+This should be sufficient to be able to repeat the build on a machine with no Internet access, but what if we wanted to be 100% sure of that?
 
 #### Second, networkless, dry-run phase
 
@@ -154,10 +156,7 @@ You can then generate the project spec and archive files provided you have a pom
     gjp generate-package-archive commons-collections
     less specs/commons-collections.spec
 
-commons-collection BuldRequires galaxy-kit, its archive contains only source files and it will install any produced .jar file in `/usr/lib/java`. The archive is generated from `file_lists/commons-collections_input`, which lists source files. Output files are in `file_lists/commons-collections_output` and are used to compile the `%install` and `%files` sections of the project spec (by default only jar files are included, see `gjp generate-package-spec --help`).
-
-    less file_lists/commons-collections_input
-    less file_lists/commons-collections_output
+commons-collection BuldRequires galaxy-kit, its archive contains only source files and it will install any produced .jar file in `/usr/lib/java`.
 
 Packages are ready to be submitted to an OBS project. As OBS integration is not yet implemented, refer to OBS documentation to do that.
 

@@ -102,7 +102,7 @@ describe Gjp::Project do
 
       @project.from_directory do
         @project.get_status.should eq :gathering
-        `git rev-list --all`.split("\n").length.should eq 5
+        `git rev-list --all`.split("\n").length.should eq 4
         `git diff-tree --no-commit-id --name-only -r HEAD`.split("\n").should include("src/test")
       end
     end
@@ -113,17 +113,14 @@ describe Gjp::Project do
       @project.from_directory do
         Dir.mkdir("src/abc")
         `touch src/abc/test`
-        `touch kit/test`
       end
 
       @project.finish.should eq :gathering
       @project.get_status.should be_nil
 
       @project.from_directory do
-        `git rev-list --all`.split("\n").length.should eq 4
-        `git diff-tree --no-commit-id --name-only -r HEAD~2`.split("\n").should include("src/abc/test")
-        File.readlines(File.join("file_lists", "abc_input")).should include("test\n")
-        File.readlines(File.join("file_lists","kit")).should include("test\n")
+        `git rev-list --all`.split("\n").length.should eq 3
+        `git diff-tree --no-commit-id --name-only -r HEAD~`.split("\n").should include("src/abc/test")
       end
     end
 
@@ -140,21 +137,18 @@ describe Gjp::Project do
       @project.from_directory do
         `echo B > src/abc/test`
         `touch src/abc/test2`
-        `touch kit/test`
       end
 
       @project.finish.should eq :dry_running
       @project.get_status.should be_nil
 
       @project.from_directory do
-        `git rev-list --all`.split("\n").length.should eq 9
+        `git rev-list --all`.split("\n").length.should eq 8
         File.read("src/abc/test").should eq "A\n"
         File.readlines(File.join("file_lists", "abc_output")).should include("test2\n")
-        File.readlines(File.join("file_lists", "abc_input")).should_not include("test2\n")
 
         `git diff-tree --no-commit-id --name-only -r HEAD~2`.split("\n").should_not include("src/abc/test2")
         File.exists?("src/abc/test2").should be_false
-        File.readlines(File.join("file_lists", "kit")).should include("test\n")
       end
     end
   end
@@ -171,7 +165,7 @@ describe Gjp::Project do
 
       @project.from_directory do
         @project.get_status.should eq :dry_running
-        `git rev-list --all`.split("\n").length.should eq 5
+        `git rev-list --all`.split("\n").length.should eq 4
         `git diff-tree --no-commit-id --name-only -r HEAD`.split("\n").should include("src/test")
       end
     end

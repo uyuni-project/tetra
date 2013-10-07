@@ -104,8 +104,6 @@ module Gjp
         result = Gjp::Project.new(".").finish        
         if result == :gathering
           puts "Gathering finished."
-          puts "New files have been added to gjp_file_list files in respective directories."
-          puts "Feel free to edit them if needed."
           puts "You can start a dry run build with \"gjp dry-run\" or add more files with \"gjp gather\"."
         end
       end
@@ -123,13 +121,7 @@ module Gjp
       def execute
         project = Gjp::Project.new(".")
         result_path = Gjp::Archiver.new(project).archive_kit
-        if result_path != nil
-          puts "#{result_path} generated"
-        else
-          "The file_list/kit file was not found. Ensure you already added content to kit/ " +
-          "during a gathering and/or dry-running phase, and ensure you ended that phase " +
-          "with \"gjp finish\"."
-        end
+        puts "#{result_path} generated"
       end
     end
 
@@ -154,12 +146,7 @@ module Gjp
       def execute
         project = Gjp::Project.new(".")
         result_path = Gjp::Archiver.new(project).archive_package name
-        if result_path != nil
-          puts "#{result_path} generated"
-        else
-          "The file_list/#{name}_input file was not found. Ensure you have already added content to " +
-          "src/#{name} during a gathering phase, and ensure you ended that phase with \"gjp finish\"."
-        end
+        puts "#{result_path} generated"
       end
     end
 

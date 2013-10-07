@@ -9,39 +9,29 @@ module Gjp
       @project = project
     end
 
-    # generates an archive for the s kit package based on ts file list
+    # generates an archive for the kit package
     def archive_kit
-      list_file = File.join(@project.full_path, "file_lists/kit")
-      if not File.exist? list_file
-        return nil
-      end
       destination_file = File.join(@project.full_path, "archives/#{@project.name}-kit.tar.xz")
 
-      @project.from_directory "kit" do
-        archive list_file, destination_file
-      end
+      archive("kit", destination_file)
       
       Pathname.new(destination_file).relative_path_from Pathname.new(@project.full_path)
     end
 
     # generates an archive for a project's package based on its file list
     def archive_package(name)
-      list_file = File.join(@project.full_path, "file_lists/#{name}_input")
-      if not File.exist? list_file
-        return nil
-      end
       destination_file = File.join(@project.full_path, "archives/#{name}.tar.xz")
 
-      @project.from_directory File.join("src", name) do
-        archive list_file, destination_file
-      end
+      archive(File.join("src", name), destination_file)
 
       Pathname.new(destination_file).relative_path_from Pathname.new(@project.full_path)
     end
 
-    # compresses files specified in the list file to the destination file
-    def archive(list_file, destination_file)
-      `tar --files-from=#{list_file} -cJf #{destination_file}`
+    # archives a folder's contents to the destination file
+    def archive(folder, destination_file)
+      @project.from_directory folder do
+        `tar -cJf #{destination_file} *`
+      end
     end
   end
 end

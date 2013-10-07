@@ -102,10 +102,6 @@ module Gjp
         if status == :gathering
           take_snapshot "Changes during gathering"
 
-          update_changed_file_list "kit", "kit", :gathering_started
-          update_changed_src_file_list :input, :gathering_started
-          take_snapshot "File list updates"
-
           set_status nil
           take_snapshot "Gathering finished", :gathering_finished
 
@@ -113,8 +109,7 @@ module Gjp
         elsif status == :dry_running
           take_snapshot "Changes during dry-run"
 
-          update_changed_file_list "kit", "kit", :dry_run_started
-          update_changed_src_file_list :output, :dry_run_started
+          update_output_file_lists
           take_snapshot "File list updates"
 
           revert "src", :dry_run_started
@@ -128,40 +123,36 @@ module Gjp
       end
     end
 
-    # updates one of the files that tracks changes in src/ directories form a certain tag
-    # list_name is the name of the list of files to update, there will be one for each
-    # package (subdirectory) in src/
-    def update_changed_src_file_list(list_name, tag)
+    # updates files that contain lists of the output files produced by
+    # the build of each package
+    def update_output_file_lists
       Dir.foreach("src") do |entry|
         if File.directory?(File.join(Dir.getwd, "src", entry)) and entry != "." and entry != ".."
-          update_changed_file_list(File.join("src", entry), "#{entry}_#{list_name.to_s}", tag)
-        end
-      end
-    end
+          directory = File.join("src", entry)
+          file_name = "#{entry}_output"
+          list_file = File.join("file_lists", file_name)
+          tracked_files = if File.exists?(list_file)
+            File.readlines(list_file).map { |line| line.strip }
+          else
+            []
+          end
 
-    # updates file_name with the file names changed in directory since tag
-    def update_changed_file_list(directory, file_name, tag)
-      list_file = File.join("file_lists", file_name)
-      tracked_files = if File.exists?(list_file)
-        File.readlines(list_file).map { |line| line.strip }
-      else
-        []
-      end
+          new_tracked_files = (
+            `git diff-tree --no-commit-id --name-only -r #{latest_tag(:dry_run_started)} HEAD`.split("\n")
+            .select { |file| file.start_with?(directory) }
+            .map { |file|file[directory.length + 1, file.length] }
+            .concat(tracked_files)
+            .uniq
+            .sort
+          )
 
-      new_tracked_files = (
-        `git diff-tree --no-commit-id --name-only -r #{latest_tag(tag)} HEAD`.split("\n")
-        .select { |file| file.start_with?(directory) }
-        .map { |file|file[directory.length + 1, file.length] }
-        .concat(tracked_files)
-        .uniq
-        .sort
-      )
+          log.debug("writing file list for #{directory}: #{new_tracked_files.to_s}")
 
-      log.debug("writing file list for #{directory}: #{new_tracked_files.to_s}")
-
-      File.open(list_file, "w+") do |file_list|
-        new_tracked_files.each do |file|
-          file_list.puts file
+          File.open(list_file, "w+") do |file_list|
+            new_tracked_files.each do |file|
+              file_list.puts file
+            end
+          end
         end
       end
     end
