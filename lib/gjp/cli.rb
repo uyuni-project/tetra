@@ -39,36 +39,22 @@ module Gjp
     subcommand "init", "Inits a gjp project in the current directory" do
       def execute
         Gjp::Project.init(".")
-        puts "Project inited, now gathering."
-        explain_gathering
+        puts "Project inited."
+        puts "Any file added to kit/ will be added to the kit package."
+        puts "Any file added to src/<name> will be added to the corresponding package."
+        puts "When you are ready to test a build, use \"gjp dry-run\"."
       end
     end
 
-    subcommand "gather", "Starts a gathering phase, to add source and kit files" do
-      def execute
-        if Gjp::Project.new(".").gather
-          puts "Now gathering."
-          explain_gathering
-        end
-      end
-    end
-
-    def explain_gathering
-      puts "Any file added to kit/ will be added to the kit package."
-      puts "Any file added to src/<name> will be added to the corresponding package."
-      puts "When you are ready to test a build, use \"gjp dry-run\"."
-    end
-
-    subcommand "dry-run", "Starts a dry-run phase, to attempt a build" do
+    subcommand "dry-run", "Starts a dry-run build" do
       def execute
         if Gjp::Project.new(".").dry_run
           puts "Now dry-running, please start your build."
           puts "Any file added to kit/, presumably downloaded dependencies, will be added to the kit."
           puts "The src/ directory and all files in it will be brought back to the current state when finished."
           puts "Note that .gitignore files are honored!"
-          puts "To run a Maven from the kit, use \"gjp mvn\"."
-          puts "To add or remove files, use \"gjp gather\"."
-          puts "To finalize this dry run, use \"gjp finish\"."
+          puts "To run Maven from the kit, use \"gjp mvn\"."
+          puts "To end this dry run, use \"gjp finish\"."
         end
       end
     end
@@ -88,23 +74,17 @@ module Gjp
           puts "Real commandline was:"
           puts "#{result}"
         rescue Gjp::MavenNotFoundException
-          puts "mvn executable not found in kit/ or any of its subdirectories, gather it"
+          puts "mvn executable not found in kit/ or any of its subdirectories"
         end
       end
     end
 
-    subcommand "status", "Prints the current phase" do
+    subcommand "finish", "Ends the current dry-run" do
       def execute
-        puts "Now #{Gjp::Project.new(".").get_status.to_s}"
-      end
-    end
-
-    subcommand "finish", "Ends the current phase" do
-      def execute
-        result = Gjp::Project.new(".").finish        
-        if result == :gathering
-          puts "Gathering finished."
-          puts "You can start a dry run build with \"gjp dry-run\" or add more files with \"gjp gather\"."
+        if Gjp::Project.new(".").finish
+          puts "Dry-run finished."
+        else
+          puts "No dry-run is in progress."
         end
       end
     end

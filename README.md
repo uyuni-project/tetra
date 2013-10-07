@@ -36,11 +36,11 @@ Building a package with `gjp` is quite unusual — this is a [deliberate choice]
 The basic process is:
 
 * a `gjp` project is created;
-* sources are added to the project, `gjp` keeps track of them;
-* any other file that is needed for the build, except the JDK, is added in binary form (jars, the Maven executable, its plugins,  etc.). Again, `gjp` keeps track of what you add, noting that those were binary build dependencies and not sources;
-* a build is attempted. After the build is successful, `gjp` tracks which files were produced and restores sources in their original state, making it a "repeatable dry-run build". `gjp` also retains any files that were automatically downloaded by Maven or other similar tools during the dry-run as binary build dependencies;
-* `gjp` produces spec files for two packages: one for the project itself and one for all of its binary build dependencies, called a **kit**;
-* kit and project packages can be submitted to [OBS](http://en.opensuse.org/openSUSE:Build_Service). Project package will rebuild cleanly because it needs no Internet access - all files were already downloaded during the dry-run above and are included in the kit.
+* package sources are added in `src/<package name>`;
+* any other file that is needed for the build, except the JDK, is added in binary form (jars, the Maven executable, plugins,  etc.) in `kit/`. In `gjp` a **kit** is a set of binary files that satisfies all build dependencies in a `gjp` project;
+* a build is attempted and during the build, `gjp` keeps track of file changes. When it finishes, `gjp` restores `src/` in its original state, making it a "repeatable dry-run build". `gjp` will retain any files that were automatically downloaded by Maven or other similar tools in `kit/`, along with other binary build dependencies, and create a list of files produced by the build for later spec generation;
+* `gjp` produces spec files for two packages: one for the project itself and one for the kit needed to build it;
+* kit and project packages can be submitted to [OBS](http://en.opensuse.org/openSUSE:Build_Service). Project package will rebuild cleanly because it needs no Internet access - all files were already downloaded during the dry-run phase above and are included in the kit.
 
 Note that:
 
@@ -50,15 +50,9 @@ Note that:
 * a `gjp` project can be used to build a number of packages that share one binary kit. This can help if the kit becomes big in size;
 * `gjp` will take advantage of Maven's pom files to generate its specs if they are available. This allows to precompile most spec fields automatically.
 
-In `gjp`, the build process can be in one of the following phases at any given moment:
-
-* **gathering**: in this phase you add sources and kit files. New projects start in this phase, you can always enter it later with `gjp gather`;
-* **dry-running**: in this phase you attempt a build. Any change in the sources will be reverted after it ends, while files added to the kit will be retained. You can enter this phase with `gjp dry-run`;
-* **finishing**: in this phase `gjp` generates specs and archive files. You can enter it running `gjp finish`;
-
 ### Sample project (commons-io)
 
-#### Initialization and first gathering phase
+#### Initialization and project setup
 
 Ceate a new `gjp` project, in this example named "galaxy":
 
@@ -66,7 +60,7 @@ Ceate a new `gjp` project, in this example named "galaxy":
     cd galaxy
     gjp init
 
-`gjp init` automatically starts a new gathering phase in which you can add sources and kit files. It also generated a folder structure and assumes you respect it, in particular, you should place all your projects' source files in `src/`. Every `src/` subfolder will become a separate package named after the folder itself, so use the following commands to create a `commons-collections` folders and populate it:
+`gjp init` generates a folder structure and assumes you respect it, in particular, you should place all your projects' source files in `src/`. Every `src/` subfolder will become a separate package named after the folder itself, so use the following commands to create a `commons-collections` folders and populate it:
 
     cd src
     mkdir commons-collections
@@ -85,20 +79,23 @@ Now let's move to the kit (which, unsurprisingly, should be placed in the `kit/`
 
 This is actually everything needed to do a first dry-run build.
 
-#### First dry-run phase
+#### First dry-run build
 
 Let's call `gjp dry-run` to let `gjp` know we are building and then call Maven. Note that `gjp mvn` is used instead of plain `mvn`: `gjp` will take care of locating the Maven installation in `kit/` and ensure it will store all downloaded files there.
 
     gjp dry-run
     cd src/commons-collections/commons-collections-3.2.1-src/
     gjp mvn package
+
+Success! Now we have to tell gjp to return in normal mode:
+
     gjp finish
 
-Success! At this point `gjp` took note of all needed files, and restored `src/` as it was before the build. Also note that build output files have been listed in `file_lists/commons-collections_output` and will be used later to compile the `%install` and `%files` sections of the project spec (by default only jar files are included).
+At this point `gjp` restored `src/` as it was before the build and listed outputs in `file_lists/commons-collections_output`. Those will be used later to compile the `%install` and `%files` sections of the project spec.
 
 This should be sufficient to be able to repeat the build on a machine with no Internet access, but what if we wanted to be 100% sure of that?
 
-#### Second, networkless, dry-run phase
+#### Second, networkless, dry-run build
 
 `gjp` has a subcommand to setup a `nonet` user without Internet access, courtesy of `iptables`. You can simply retry the build using that user to see if it works. Note that the following commands will alter group permissions to allow both your current user and `nonet` to work on the same files. 
 
@@ -110,17 +107,18 @@ This should be sufficient to be able to repeat the build on a machine with no In
     gjp mvn package
     chmod -R g+rw .
     exit
+    gjp finish
 
 The above is obviously not mandatory, but it can be useful for debugging purposes.
 
-#### Second gathering phase: adding a build.sh file
+#### Adding a build.sh file
 
 One last thing before generating packages is to setup a build script. By default `gjp` will generate a spec file which assumes a `build.sh` script in the source folder of your project that contains all commands needed to build the package itself. At the moment, this needs to be done manually, but it will hopefully be automated in a future release.
 
-Let's start a new gathering phase and add that:
+Let's just create it:
 
-    gjp gather
-    vi ../build.sh
+    cd ../../..
+    vi src/commons-collections/build.sh
 
 Add the following lines:
 
@@ -129,10 +127,6 @@ Add the following lines:
     ../../../kit/apache-maven-3.1.0/bin/mvn -Dmaven.repo.local=`readlink -e ../../../kit/m2` -s`readlink -e ../../../kit/m2/settings.xml` package
 
 Note that `build.sh` gets called from the `gjp` project root, hence the `cd` line, and the Maven line was taken directly from `gjp mvn` output above and pasted verbatim.
-Now complete the gathering:
-
-    gjp finish
-    cd ../../..
 
 #### Generating archives and spec files
 
@@ -182,8 +176,6 @@ More comprehensive support is planned in future releases.
 You are advised to use [Maven Central](http://search.maven.org/) to search for sources and other information about projects.
 
 ### Troubleshooting
-
-To know in which phase you are in, use `gjp status`.
 
 `gjp` internally uses `git` to keep track of files, any gjp project is actually also a `git` repo. Feel free to navigate it, you can commit, push and pull freely as long as the `gjp` tags are preserved. You can also delete commits and tags, effectively rewiding gjp history (just make sure to delete all tags pointing to a certain commit when you discard it).
 

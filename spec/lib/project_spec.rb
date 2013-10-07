@@ -48,16 +48,14 @@ describe Gjp::Project do
 
       src_path = File.join(@project_path, "src")
       Dir.exists?(src_path).should be_true
-
-      @project.get_status.should eq :gathering
     end
   end
 
   describe "#set_status" do
     it "stores a project's status flag" do
       @project.from_directory do
-        @project.set_status :gathering
-        File.exists?(".gathering").should be_true
+        @project.set_status :dry_running
+        File.exists?(".dry_running").should be_true
      end
     end
   end
@@ -65,9 +63,9 @@ describe Gjp::Project do
   describe "#get_status" do
     it "gets a project's status flag" do
       @project.from_directory do
-        @project.get_status.should eq :gathering
-        @project.set_status nil
         @project.get_status.should be_nil
+        @project.set_status :dry_running
+        @project.get_status.should eq :dry_running
       end
     end
   end
@@ -85,31 +83,14 @@ describe Gjp::Project do
     end
   end
   
-  describe "#gather" do
-    it "starts a gathering phase" do
-      @project.finish.should eq :gathering
-
-      @project.gather.should be_true
-
-      @project.from_directory do
-        @project.get_status.should eq :gathering
-      end
-    end
-  end
-
   describe "#finish" do
-    it "ends the current gathering phase" do
-      @project.finish.should eq :gathering
-      @project.get_status.should be_nil
-    end
-
     it "ends the current dry-run phase" do
       @project.from_directory do
         Dir.mkdir("src/abc")
         `echo A > src/abc/test`
       end
 
-      @project.finish.should eq :gathering
+      @project.finish.should be_false
 
       @project.dry_run.should be_true
 
@@ -118,7 +99,7 @@ describe Gjp::Project do
         `touch src/abc/test2`
       end
 
-      @project.finish.should eq :dry_running
+      @project.finish.should be_true
       @project.get_status.should be_nil
 
       @project.from_directory do
@@ -134,7 +115,7 @@ describe Gjp::Project do
 
   describe "#dry_run" do
     it "starts a dry running phase" do
-      @project.finish.should eq :gathering
+      @project.finish.should be_false
 
       @project.from_directory do
         `touch src/test`

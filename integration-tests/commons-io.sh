@@ -22,15 +22,14 @@ cd ..
 gjp dry-run
 cd src/commons-collections/commons-collections-3.2.1-src/
 gjp mvn package
+gjp finish
 
-gjp gather
-cat >../build.sh << "EOF"
+cd ../../..
+cat >src/commons-collections/build.sh << "EOF"
 #!/bin/sh
 cd src/commons-collections/commons-collections-3.2.1-src/
 ../../../kit/apache-maven-3.1.0/bin/mvn -Dmaven.repo.local=`readlink -e ../../../kit/m2` -s`readlink -e ../../../kit/m2/settings.xml` package
 EOF
-gjp finish
-cd ../../..
 
 gjp generate-kit-spec
 gjp generate-kit-archive

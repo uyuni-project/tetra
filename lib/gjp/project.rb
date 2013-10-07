@@ -8,7 +8,7 @@ module Gjp
     include Logger
 
     # list of possible statuses
-    @@statuses = [:gathering, :dry_running]
+    @@statuses = [:dry_running]
 
     attr_accessor :full_path
 
@@ -45,9 +45,8 @@ module Gjp
         Dir.mkdir "src"
         Dir.mkdir "kit"
 
-        # automatically begin a gathering phase
+        # populate the project with templates and take a snapshot
         project = Project.new(".")
-        project.gather
 
         template_manager = Gjp::TemplateManager.new
         template_manager.copy "archives", "."
@@ -60,23 +59,6 @@ module Gjp
       end
     end
 
-    # starts a gathering phase, all files added to the project
-    # will be added to packages (including kit)
-    def gather
-      from_directory do
-        status = get_status
-        if status == :gathering
-          return false
-        elsif status == :dry_running
-          finish
-        end
-
-        set_status :gathering
-      end
-
-      true
-    end
-
     # starts a dry running phase: files added to kit/ will be added
     # to the kit package, src/ will be reset at the current state
     # when finished
@@ -85,8 +67,6 @@ module Gjp
         status = get_status
         if status == :dry_running
           return false
-        elsif status == :gathering
-          finish
         end
 
         set_status :dry_running
@@ -101,10 +81,7 @@ module Gjp
     def finish
       from_directory do
         status = get_status
-        if status == :gathering
-          set_status nil
-          :gathering
-        elsif status == :dry_running
+        if status == :dry_running
           take_snapshot "Changes during dry-run"
 
           update_output_file_lists
@@ -116,9 +93,10 @@ module Gjp
           set_status nil
           take_snapshot "Dry run finished", :dry_run_finished
 
-          :dry_running
+          return true
         end
       end
+      false
     end
 
     # updates files that contain lists of the output files produced by

@@ -59,7 +59,6 @@ describe Gjp::MavenRunner do
   end
 
   def mock_maven_executable
-    @project.gather
     Dir.chdir(@project_path) do
       @bin_dir = File.join("kit", "mvn", "bin")
       FileUtils.mkdir_p(@bin_dir)
@@ -67,7 +66,5 @@ describe Gjp::MavenRunner do
       File.open(@maven_executable, "w") { |io| io.puts "echo $0 $*>test_out" }
       File.chmod(0777, @maven_executable)
     end
-
-    @project.finish
   end
 end

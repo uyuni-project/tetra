@@ -15,7 +15,6 @@ describe Gjp::Scaffolder do
       test_file = File.join("kit", "test")
       File.open(test_file, "w") { |io| io.puts "kit content test file" }
     end
-    @project.gather
 
     @scaffolder = Gjp::Scaffolder.new(@project)
   end
@@ -26,6 +25,9 @@ describe Gjp::Scaffolder do
 
   describe "#generate_kit_spec" do
     it "scaffolds the first version" do
+      @project.dry_run
+      @project.finish
+
       @scaffolder.generate_kit_spec.should be_true
 
       @project.from_directory do
@@ -46,7 +48,7 @@ describe Gjp::Scaffolder do
           io.write("nonconflicting line")
         end
       end
-      @project.gather
+      @project.finish
 
       @scaffolder.generate_kit_spec.should be_true
 
@@ -74,7 +76,6 @@ describe Gjp::Scaffolder do
           io.write(spec_contents)
         end
       end
-      @project.gather
 
       @scaffolder.generate_kit_spec.should be_true
 
