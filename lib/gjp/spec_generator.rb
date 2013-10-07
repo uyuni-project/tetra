@@ -2,7 +2,7 @@
 
 module Gjp
   # creates and updates spec files
-  class Scaffolder
+  class SpecGenerator
     include Logger
 
     def initialize(project)
@@ -25,7 +25,7 @@ module Gjp
 
       adapter = Gjp::PackageSpecAdapter.new(@project, name, Gjp::Pom.new(pom), filter)
 
-      generate_merging "package.spec", adapter.get_binding, spec_path, "scaffold_#{name}_spec"
+      generate_merging "package.spec", adapter.get_binding, spec_path, "generate_#{name}_spec"
 
       spec_path
     end
@@ -36,23 +36,23 @@ module Gjp
     # for future merges
     def generate_merging(template, binding, result_path, tag)
       @project.from_directory do
-        TemplateManager.new.generate template, binding, "#{result_path}.new_scaffold"
+        TemplateManager.new.generate template, binding, "#{result_path}.new_version"
 
-        already_scaffolded = @project.latest_tag(tag) != ""
+        already_generated = @project.latest_tag(tag) != ""
         already_existing = File.exist? result_path
 
-        if already_scaffolded and already_existing
+        if already_generated and already_existing
           # 3-way merge
-          `git show #{@project.latest_tag(tag)}:#{result_path} > #{result_path}.old_scaffold`
-          `git merge-file --ours #{result_path} #{result_path}.old_scaffold #{result_path}.new_scaffold`
-          File.delete "#{result_path}.new_scaffold"
-          File.delete "#{result_path}.old_scaffold"
+          `git show #{@project.latest_tag(tag)}:#{result_path} > #{result_path}.old_version`
+          `git merge-file --ours #{result_path} #{result_path}.old_version #{result_path}.new_version`
+          File.delete "#{result_path}.new_version"
+          File.delete "#{result_path}.old_version"
         else
           # just replace
-          File.rename "#{result_path}.new_scaffold", result_path
+          File.rename "#{result_path}.new_version", result_path
         end
 
-        @project.take_snapshot "Kit spec scaffolded", tag
+        @project.take_snapshot "Spec generated", tag
       end
     end
 

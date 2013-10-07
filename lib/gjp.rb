@@ -12,7 +12,7 @@ require "gjp/source_getter"
 require "gjp/parent_pom_getter"
 require "gjp/maven_runner"
 require "gjp/package_spec_adapter"
-require "gjp/scaffolder"
+require "gjp/spec_generator"
 require "gjp/archiver"
 
 require "gjp/cli"

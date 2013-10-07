@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe Gjp::Scaffolder do
+describe Gjp::SpecGenerator do
   before(:each) do
     @project_path = File.join("spec", "data", "test-project")
     Dir.mkdir(@project_path)
@@ -16,7 +16,7 @@ describe Gjp::Scaffolder do
       File.open(test_file, "w") { |io| io.puts "kit content test file" }
     end
 
-    @scaffolder = Gjp::Scaffolder.new(@project)
+    @spec_generator = Gjp::SpecGenerator.new(@project)
   end
 
   after(:each) do
@@ -24,11 +24,11 @@ describe Gjp::Scaffolder do
   end
 
   describe "#generate_kit_spec" do
-    it "scaffolds the first version" do
+    it "generates the first version" do
       @project.dry_run
       @project.finish
 
-      @scaffolder.generate_kit_spec.should be_true
+      @spec_generator.generate_kit_spec.should be_true
 
       @project.from_directory do
         spec_lines = File.readlines(File.join("specs", "test-project-kit.spec"))
@@ -37,8 +37,8 @@ describe Gjp::Scaffolder do
         spec_lines.should include("Source0:        %{name}.tar.xz\n")
       end
     end
-    it "scaffolds a second version" do
-      @scaffolder.generate_kit_spec.should be_true
+    it "generates a second version" do
+      @spec_generator.generate_kit_spec.should be_true
       @project.dry_run
       Dir.chdir(@project_path) do
         test_file = File.join("kit", "test")
@@ -50,7 +50,7 @@ describe Gjp::Scaffolder do
       end
       @project.finish
 
-      @scaffolder.generate_kit_spec.should be_true
+      @spec_generator.generate_kit_spec.should be_true
 
       @project.from_directory do
         spec_lines = File.readlines(File.join("specs", "test-project-kit.spec"))
@@ -60,8 +60,8 @@ describe Gjp::Scaffolder do
         spec_lines.should include("nonconflicting line\n")
       end
     end
-    it "scaffolds a conflicting version" do
-      @scaffolder.generate_kit_spec.should be_true
+    it "generates a conflicting version" do
+      @spec_generator.generate_kit_spec.should be_true
       @project.dry_run
       Dir.chdir(@project_path) do
         test_file = File.join("kit", "test")
@@ -77,7 +77,7 @@ describe Gjp::Scaffolder do
         end
       end
 
-      @scaffolder.generate_kit_spec.should be_true
+      @spec_generator.generate_kit_spec.should be_true
 
       @project.from_directory do
         spec_lines = File.readlines(File.join("specs", "test-project-kit.spec"))
@@ -90,7 +90,7 @@ describe Gjp::Scaffolder do
   end
 
   describe "#generate_package_spec" do
-    it "scaffolds the first version" do
+    it "generates the first version" do
 
       @project.from_directory do
         FileUtils.mkdir_p File.join("src", "test", "out")
@@ -110,7 +110,7 @@ describe Gjp::Scaffolder do
         @project.finish
       end
 
-      @scaffolder.generate_package_spec "test", File.join("spec", "data", "nailgun", "pom.xml"), "*.jar"
+      @spec_generator.generate_package_spec "test", File.join("spec", "data", "nailgun", "pom.xml"), "*.jar"
 
       @project.from_directory do
         spec_lines = File.readlines(File.join("specs", "test.spec"))
