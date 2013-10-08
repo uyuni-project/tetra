@@ -97,40 +97,15 @@ Note that, if the build was unsusccesful, the following command can be used to c
 
     gjp finish --failed
 
-This should be sufficient to be able to repeat the build on a machine with no Internet access, but what if we wanted to be 100% sure of that?
+#### Generating a build script
 
-#### Second, networkless, dry-run build
+`gjp` expects that all commands needed to build a package are put in a `build.sh` script in `src/<package name>`. If you are a Bash user you are lucky - `gjp` can do this for you by looking at your command history! Just type:
 
-`gjp` has a subcommand to setup a `nonet` user without Internet access, courtesy of `iptables`. You can simply retry the build using that user to see if it works. Note that the following commands will alter group permissions to allow both your current user and `nonet` to work on the same files. 
+    gjp generate-build-script commons-collections
 
-    gjp set-up-nonet-user
-    chmod -R g+rw ../../..
-    gjp dry-run
-    su nonet
-    ping www.google.com #this should fail!
-    gjp mvn package
-    chmod -R g+rw .
-    exit
-    gjp finish
+Note that `gjp` will substitute the `gjp mvn` calls with equivalent lines that are actually runnable on a build host without `gjp` itself.
 
-The above is obviously not mandatory, but it can be useful for debugging purposes.
-
-#### Adding a build.sh file
-
-One last thing before generating packages is to setup a build script. By default `gjp` will generate a spec file which assumes a `build.sh` script in the source folder of your project that contains all commands needed to build the package itself. At the moment, this needs to be done manually, but it will hopefully be automated in a future release.
-
-Let's just create it:
-
-    cd ../../..
-    vi src/commons-collections/build.sh
-
-Add the following lines:
-
-    #!/bin/sh
-    cd src/commons-collections/commons-collections-3.2.1-src/
-    ../../../kit/apache-maven-3.1.0/bin/mvn -Dmaven.repo.local=`readlink -e ../../../kit/m2` -s`readlink -e ../../../kit/m2/settings.xml` package
-
-Note that `build.sh` gets called from the `gjp` project root, hence the `cd` line, and the Maven line was taken directly from `gjp mvn` output above and pasted verbatim.
+Of course this script can also be manually modified, and it must be in more difficult cases. You don't even have to be afraid of regenerating it later. `gjp` will run a three-way merge and warn if conflicts arise!
 
 #### Generating archives and spec files
 
@@ -158,7 +133,23 @@ commons-collection BuldRequires galaxy-kit, its archive contains only source fil
 
 Packages are ready to be submitted to an OBS project. As OBS integration is not yet implemented, refer to OBS documentation to do that.
 
-#### Kit sources
+#### Optional: running networkless dry-run builds
+
+`gjp` has a subcommand to setup a `nonet` user without Internet access, courtesy of `iptables`. You can simply retry the build using that user to see if it works. Note that the following commands will alter group permissions to allow both your current user and `nonet` to work on the same files.
+
+    gjp set-up-nonet-user
+    chmod -R g+rw ../../..
+    gjp dry-run
+    su nonet
+    ping www.google.com #this should fail!
+    gjp mvn package
+    chmod -R g+rw .
+    exit
+    gjp finish
+
+The above is not mandatory, but it can be useful for debugging purposes.
+
+#### Optional: kit sources
 
 If kit sources are needed for license compliance, some extra work is needed. Fortunately, finding jar source files and adding them to the kit is much easier than packaging its contents in proper RPMs!
 

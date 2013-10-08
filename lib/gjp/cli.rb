@@ -97,6 +97,21 @@ module Gjp
       end
     end
 
+    subcommand "generate-build-script", "Creates or refreshes a build.sh file" do
+      parameter "NAME", "name of a package, that is, an src/ subdirectory name"
+      def execute
+        checking_exceptions do
+          project = Gjp::Project.new(".")
+          history_file = File.join(Dir.home, ".bash_history")
+          result_path, conflict_count = Gjp::BuildScriptGenerator.new(project, history_file).generate_build_script(name)
+          puts "#{result_path} generated"
+          if conflict_count > 0
+            puts "Warning: #{conflict_count} unresolved conflicts"
+          end
+        end
+      end
+    end
+
     subcommand "generate-kit-spec", "Creates or refreshes a spec file for the kit" do
       def execute
         checking_exceptions do
