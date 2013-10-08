@@ -26,6 +26,7 @@ Source0:        %{name}.tar.xz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 BuildArch:      noarch
 BuildRequires:  xz
+BuildRequires:  fdupes
 Provides:       gjp(kit)
 # no two kits should ever be installed at any given time
 Conflicts:      otherproviders(gjp(kit))
@@ -45,6 +46,7 @@ be installed on end users' systems.
 %install
 install -d -m 0755 %{buildroot}%{_datadir}/gjp/%{name}/
 cp -a * %{buildroot}%{_datadir}/gjp/%{name}/
+%fdupes -s %{buildroot}%{_datadir}/gjp/%{name}/
 
 %files
 %defattr(-,root,root)
