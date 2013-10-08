@@ -41,8 +41,7 @@ module Gjp
         checking_exceptions do
           Gjp::Project.init(".")
           puts "Project inited."
-          puts "Any file added to kit/ will be added to the kit package."
-          puts "Any file added to src/<name> will be added to the corresponding package."
+          puts "Add sources to src/<package name>, binary dependencies to kit/."
           puts "When you are ready to test a build, use \"gjp dry-run\"."
         end
       end
@@ -53,10 +52,9 @@ module Gjp
         checking_exceptions do
           if Gjp::Project.new(".").dry_run
             puts "Now dry-running, please start your build."
-            puts "Any file added to kit/, presumably downloaded dependencies, will be added to the kit."
-            puts "The src/ directory and all files in it will be brought back to the current state when finished."
-            puts "To run Maven from the kit, use \"gjp mvn\"."
-            puts "To end this dry run, use \"gjp finish\"."
+            puts "To run a Maven installation from the kit, use \"gjp mvn\"."
+            puts "If the build succeedes end this dry run with \"gjp finish\"."
+            puts "If the build does not succeed use \"gjp finish --failed\" to restore files."
           end
         end
       end
