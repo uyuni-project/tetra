@@ -59,14 +59,11 @@ module Gjp
     # to the kit package, src/ will be reset at the current state
     # when finished
     def dry_run
-      from_directory do
-        if is_dry_running
-          return false
-        end
-
-        take_snapshot "Dry-run started", :dry_run_started
+      if is_dry_running
+        return false
       end
 
+      take_snapshot "Dry-run started", :dry_run_started
       true
     end
 
@@ -79,24 +76,22 @@ module Gjp
     # if failed is true, reverts the whole directory
     # if failed is false, reverts sources and updates output file lists
     def finish(failed)
-      from_directory do
-        if is_dry_running
-          if failed
-            @git.revert_whole_directory(".", latest_tag(:dry_run_started))
-            @git.delete_tag(latest_tag(:dry_run_started))
-          else
-            take_snapshot "Changes during dry-run"
+      if is_dry_running
+        if failed
+          @git.revert_whole_directory(".", latest_tag(:dry_run_started))
+          @git.delete_tag(latest_tag(:dry_run_started))
+        else
+          take_snapshot "Changes during dry-run"
 
-            update_output_file_lists
-            take_snapshot "File list updates"
+          update_output_file_lists
+          take_snapshot "File list updates"
 
-            @git.revert_whole_directory("src", latest_tag(:dry_run_started))
-            take_snapshot "Sources reverted as before dry-run"
+          @git.revert_whole_directory("src", latest_tag(:dry_run_started))
+          take_snapshot "Sources reverted as before dry-run"
 
-            take_snapshot "Dry run finished", :dry_run_finished
-          end
-          return true
+          take_snapshot "Dry run finished", :dry_run_finished
         end
+        return true
       end
       false
     end
@@ -104,31 +99,33 @@ module Gjp
     # updates files that contain lists of the output files produced by
     # the build of each package
     def update_output_file_lists
-      Dir.foreach("src") do |entry|
-        if File.directory?(File.join(Dir.getwd, "src", entry)) and entry != "." and entry != ".."
-          directory = File.join("src", entry)
-          file_name = "#{entry}_output"
-          list_file = File.join("file_lists", file_name)
-          tracked_files = if File.exists?(list_file)
-            File.readlines(list_file).map { |line| line.strip }
-          else
-            []
-          end
+      from_directory do
+        Dir.foreach("src") do |entry|
+          if File.directory?(File.join(Dir.getwd, "src", entry)) and entry != "." and entry != ".."
+            directory = File.join("src", entry)
+            file_name = "#{entry}_output"
+            list_file = File.join("file_lists", file_name)
+            tracked_files = if File.exists?(list_file)
+              File.readlines(list_file).map { |line| line.strip }
+            else
+              []
+            end
 
-          new_tracked_files = (
-            @git.changed_files_since(latest_tag(:dry_run_started))
-              .select { |file| file.start_with?(directory) }
-              .map { |file|file[directory.length + 1, file.length] }
-              .concat(tracked_files)
-              .uniq
-              .sort
-          )
+            new_tracked_files = (
+              @git.changed_files_since(latest_tag(:dry_run_started))
+                .select { |file| file.start_with?(directory) }
+                .map { |file|file[directory.length + 1, file.length] }
+                .concat(tracked_files)
+                .uniq
+                .sort
+            )
 
-          log.debug("writing file list for #{directory}: #{new_tracked_files.to_s}")
+            log.debug("writing file list for #{directory}: #{new_tracked_files.to_s}")
 
-          File.open(list_file, "w+") do |file_list|
-            new_tracked_files.each do |file|
-              file_list.puts file
+            File.open(list_file, "w+") do |file_list|
+              new_tracked_files.each do |file|
+                file_list.puts file
+              end
             end
           end
         end
@@ -146,16 +143,14 @@ module Gjp
       @git.commit_whole_directory(message, tag)
     end
 
-    # returns the last tag of its type corresponding to a
-    # gjp snapshot
-    def latest_tag(tag_type)
-      "#{tag_type}_#{latest_tag_count(tag_type)}"
+    # returns the tag with maximum count for a given tag prefix
+    def latest_tag(prefix)
+      "#{prefix}_#{latest_tag_count(prefix)}"
     end
 
-    # returns the last tag count of its type corresponding
-    # to a gjp snapshot
-    def latest_tag_count(tag_type)
-      @git.get_tag_maximum_suffix(tag_type)
+    # returns the maximum tag count for a given tag prefix
+    def latest_tag_count(prefix)
+      @git.get_tag_maximum_suffix(prefix)
     end
 
     # runs a block from the project directory or a subdirectory
