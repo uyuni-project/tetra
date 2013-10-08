@@ -120,7 +120,7 @@ describe Gjp::SpecGenerator do
         spec_lines.should include("License:        The Apache Software License, Version 2.0\n")
         spec_lines.should include("Summary:        Nailgun is a client, protocol, and server for running Java\n")
         spec_lines.should include("Url:            http://martiansoftware.com/nailgun\n")
-        spec_lines.should include("BuildRequires:  #{@project.name}-kit == 2\n")
+        spec_lines.should include("BuildRequires:  #{@project.name}-kit >= 2\n")
         spec_lines.should include("Provides:       mvn(com.martiansoftware:nailgun-all) == 0.9.1\n")
         spec_lines.should include("cp -a out/test3.jar %{buildroot}%{_javadir}/test3.jar\n")
       end
