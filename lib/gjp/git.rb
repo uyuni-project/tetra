@@ -1,7 +1,8 @@
 # encoding: UTF-8
 
 module Gjp
-  # encapsulates git, all methods refer to the current directory
+  # facade to git, currently implemented with calls to the git command
+  # prefixes all tags with "gjp_"
   class Git
     include Logger
 
