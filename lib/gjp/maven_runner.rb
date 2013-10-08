@@ -41,6 +41,18 @@ module Gjp
       end
     end
 
+    # returns a command line for running Maven from the current directory
+    def get_maven_commandline_from_current_directory
+      kit_full_path = File.join(@project.full_path, "kit")
+      running_full_path = File.expand_path(".")
+      maven_commandline = get_maven_commandline(kit_full_path, running_full_path)
+      if maven_commandline == nil
+        raise MavenNotFoundException
+      else
+        maven_commandline
+      end
+    end
+
     # returns a path from origin to destination, provided they are both absolute
     def path_from(origin, destination)
       (Pathname.new(destination).relative_path_from Pathname.new(origin)).split.first
@@ -48,14 +60,7 @@ module Gjp
 
     # runs mvn in a subprocess
     def mvn(options)
-      kit_full_path = File.join(@project.full_path, "kit")
-      running_full_path = File.expand_path(".")
-      maven_commandline = get_maven_commandline(kit_full_path, running_full_path)
-      if maven_commandline == nil
-        raise MavenNotFoundException
-      end
-
-      full_commandline = "#{maven_commandline} #{options.join(' ')}"
+      full_commandline = "#{get_maven_commandline_from_current_directory} #{options.join(' ')}"
       log.debug full_commandline
 
       Process.wait(Process.spawn(full_commandline))
