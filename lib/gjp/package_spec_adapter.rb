@@ -10,6 +10,7 @@ module Gjp
     attr_reader :summary
     attr_reader :url
     attr_reader :project_name
+    attr_reader :project_version
     attr_reader :group_id
     attr_reader :artifact_id
     attr_reader :version
@@ -28,6 +29,7 @@ module Gjp
       @summary = cleanup_description(pom.description, 60)
       @url = pom.url
       @project_name = project.name
+      @project_version = project.version
       @group_id = pom.group_id
       @artifact_id = pom.artifact_id
       @version = pom.version

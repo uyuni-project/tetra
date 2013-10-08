@@ -26,7 +26,7 @@ Source0:        %{name}.tar.xz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 BuildRequires:  xz
 BuildRequires:  java-devel
-BuildRequires:  <%= project_name %>-kit
+BuildRequires:  <%= project_name %>-kit == <%= project_version %>
 BuildArch:      noarch
 Provides:       mvn(<%= group_id %>:<%= artifact_id %>) == <%= version %>
 <% runtime_dependency_ids.each do |dependency_id| %>
