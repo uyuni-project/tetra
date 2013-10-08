@@ -27,9 +27,9 @@ module Gjp
       nil
     end
 
-    # returns a command line for running Maven
-    def get_maven_commandline(kit_full_path, running_full_path)
-      prefix = path_from running_full_path, kit_full_path
+    # returns a command line for running Maven from the specified
+    # prefix
+    def get_maven_commandline(prefix)
       maven_executable = find_maven_executable
 
       if maven_executable != nil
@@ -37,30 +37,15 @@ module Gjp
         repo_path = File.join(prefix, "kit", "m2")
         config_path = File.join(prefix, "kit", "m2", "settings.xml")
 
-        "#{mvn_path} -Dmaven.repo.local=`readlink -e #{repo_path}` -s`readlink -e #{config_path}`"
-      end
-    end
-
-    # returns a command line for running Maven from the current directory
-    def get_maven_commandline_from_current_directory
-      kit_full_path = File.join(@project.full_path, "kit")
-      running_full_path = File.expand_path(".")
-      maven_commandline = get_maven_commandline(kit_full_path, running_full_path)
-      if maven_commandline == nil
-        raise MavenNotFoundException
+        "#{mvn_path} -Dmaven.repo.local=#{repo_path} -s#{config_path}"
       else
-        maven_commandline
+        raise MavenNotFoundException
       end
-    end
-
-    # returns a path from origin to destination, provided they are both absolute
-    def path_from(origin, destination)
-      (Pathname.new(destination).relative_path_from Pathname.new(origin)).split.first
     end
 
     # runs mvn in a subprocess
     def mvn(options)
-      full_commandline = "#{get_maven_commandline_from_current_directory} #{options.join(' ')}"
+      full_commandline = "#{get_maven_commandline(@project.full_path)} #{options.join(' ')}"
       log.debug full_commandline
 
       Process.wait(Process.spawn(full_commandline))

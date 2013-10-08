@@ -30,16 +30,14 @@ describe Gjp::MavenRunner do
   describe "#get_maven_commandline"  do
     it "returns commandline options for running maven" do
       mock_maven_executable
-      kit_full_path = File.join(@project.full_path, "kit")
-      commandline = @maven_runner.get_maven_commandline(kit_full_path, @project.full_path)
 
-      commandline.should eq "./#{@maven_executable} -Dmaven.repo.local=`readlink -e ./kit/m2` -s`readlink -e ./kit/m2/settings.xml`"
+      @project.from_directory do
+        commandline = @maven_runner.get_maven_commandline(".")
+        commandline.should eq "./#{@maven_executable} -Dmaven.repo.local=./kit/m2 -s./kit/m2/settings.xml"
+      end
     end
     it "doesn't return commandline options if Maven is not available" do
-      kit_full_path = File.join(@project.full_path, "kit")
-      commandline = @maven_runner.get_maven_commandline(kit_full_path, @project.full_path)
-
-      commandline.should be_nil
+      expect { @maven_runner.get_maven_commandline(".") }.to raise_error(Gjp::MavenNotFoundException)
     end
   end
 
@@ -53,7 +51,7 @@ describe Gjp::MavenRunner do
     end
     it "doesn't run Maven if it is not available" do
       @project.from_directory do
-        expect { @maven_runner.mvn []}.to raise_error(Gjp::MavenNotFoundException)
+        expect { @maven_runner.mvn([]) }.to raise_error(Gjp::MavenNotFoundException)
       end
     end
   end
