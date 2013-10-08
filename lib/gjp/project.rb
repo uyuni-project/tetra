@@ -139,6 +139,36 @@ module Gjp
       @git.commit_whole_directory(message, tag)
     end
 
+    # replaces content in path with new_content, takes a snapshot using
+    # snapshot_message and tag_prefix and 3-way merges new and old content
+    # with a previous snapshotted file same path tag_prefix, if it exists.
+    # returns the number of conflicts
+    def merge_new_content(new_content, path, snapshot_message, tag_prefix)
+      from_directory do
+        already_existing = File.exist? path
+        previous_tag = latest_tag(tag_prefix)
+
+        if already_existing
+          File.rename path, "#{path}.gjp_user_edited"
+        end
+
+        File.open(path, "w") { |io| io.write(new_content) }
+        take_snapshot(snapshot_message, tag_prefix)
+
+        if already_existing
+          if previous_tag == ""
+            previous_tag = latest_tag(tag_prefix)
+          end
+
+          # 3-way merge
+          conflict_count = @git.merge_with_tag("#{path}", "#{path}.gjp_user_edited", previous_tag)
+          File.delete "#{path}.gjp_user_edited"
+          return conflict_count
+        end
+        return 0
+      end
+    end
+
     # returns the tag with maximum count for a given tag prefix
     def latest_tag(prefix)
       "#{prefix}_#{latest_tag_count(prefix)}"

@@ -7,7 +7,6 @@ module Gjp
 
     def initialize(project)
       @project = project
-      @git = Gjp::Git.new(@project.full_path)
     end
 
     def generate_kit_spec
@@ -30,33 +29,10 @@ module Gjp
       [spec_path, conflict_count]
     end
 
-    # generates a file in result_path from template together with binding.
-    # if a file already exists at that position, 3-way merge it with the
-    # common ancestor. Takes a snapshot in the end for future merges
-    def generate_merging(template, binding, result_path, tag_prefix)
-      @project.from_directory do
-        already_existing = File.exist? result_path
-        previous_tag = @project.latest_tag(tag_prefix)
-
-        if already_existing
-          File.rename result_path, "#{result_path}.gjp_user_edited"
-        end
-
-        TemplateManager.new.generate template, binding, result_path
-        @project.take_snapshot("Spec generated", tag_prefix)
-
-        if already_existing
-          if previous_tag == ""
-            previous_tag = @project.latest_tag(tag_prefix)
-          end
-
-          # 3-way merge
-          conflict_count = @git.merge_with_tag("#{result_path}", "#{result_path}.gjp_user_edited", previous_tag)
-          File.delete "#{result_path}.gjp_user_edited"
-          return conflict_count
-        end
-        return 0
-      end
+    # generates a spec file from a template and 3-way merges it
+    def generate_merging(template, binding, path, tag_prefix)
+      new_content = TemplateManager.new.generate(template, binding)
+      @project.merge_new_content(new_content, path, "Spec generated", tag_prefix)      
     end
   end
 end
