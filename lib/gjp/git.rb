@@ -73,11 +73,14 @@ module Gjp
 
     # 3-way merges the git file at path with the one in new_path
     # assuming they have a common ancestor at the specified tag
+    # returns the conflict count
     def merge_with_tag(path, new_path, tag)
       Dir.chdir(@directory) do
         `git show gjp_#{tag}:#{path} > #{path}.old_version`
-        `git merge-file --ours #{path} #{path}.old_version #{new_path}`
+        `git merge-file #{path} #{path}.old_version #{new_path} -L "newly generated" -L "previously generated" -L "user edited"`
+        conflict_count = $?.exitstatus
         File.delete "#{path}.old_version"
+        return conflict_count
       end
     end
 

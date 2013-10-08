@@ -82,8 +82,11 @@ describe Gjp::SpecGenerator do
         spec_lines = File.readlines(File.join("specs", "test-project-kit.spec"))
         spec_lines.should include("Name:           test-project-kit\n")
         spec_lines.should include("Source0:        %{name}.tar.xz\n")
+        spec_lines.should include("<<<<<<< newly generated\n")
+        spec_lines.should include("Version:        2\n")
+        spec_lines.should include("=======\n")
         spec_lines.should include("CONFLICTING!\n")
-        spec_lines.should_not include("Version:        2\n")
+        spec_lines.should include(">>>>>>> user edited\n")
       end
     end
   end

@@ -101,8 +101,11 @@ module Gjp
       def execute
         checking_exceptions do
           project = Gjp::Project.new(".")
-          result_path = Gjp::SpecGenerator.new(project).generate_kit_spec
+          result_path, conflict_count = Gjp::SpecGenerator.new(project).generate_kit_spec
           puts "#{result_path} generated"
+          if conflict_count > 0
+            puts "Warning: #{conflict_count} unresolved conflicts"
+          end
         end
       end
     end
@@ -124,9 +127,12 @@ module Gjp
       def execute
         checking_exceptions do
           project = Gjp::Project.new(".")
-          result_path = Gjp::SpecGenerator.new(project).generate_package_spec name, pom, filter
+          result_path, conflict_count = Gjp::SpecGenerator.new(project).generate_package_spec name, pom, filter
           if result_path != nil
             puts "#{result_path} generated"
+            if conflict_count > 0
+              puts "Warning: #{conflict_count} unresolved conflicts"
+            end
           else
             $stderr.puts "file_list/#{name}_output not found. Ensure you have already run a" +
             "\"gjp dry run\" and \"gjp finish\"."
