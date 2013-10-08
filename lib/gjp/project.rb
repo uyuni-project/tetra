@@ -83,6 +83,7 @@ module Gjp
         if is_dry_running
           if failed
             @git.revert_whole_directory(".", latest_tag(:dry_run_started))
+            @git.delete_tag(latest_tag(:dry_run_started))
           else
             take_snapshot "Changes during dry-run"
 

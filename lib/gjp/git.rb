@@ -79,6 +79,13 @@ module Gjp
         File.delete "#{path}.old_version"
       end
     end
+
+    # deletes a tag
+    def delete_tag(tag)
+      Dir.chdir(@directory) do
+        `git tag -d gjp_#{tag}`
+      end
+    end
   end
 
   class GitAlreadyInitedException < Exception
