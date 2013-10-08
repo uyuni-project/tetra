@@ -93,6 +93,10 @@ Success! Now we have to tell gjp to return in normal mode:
 
 At this point `gjp` restored `src/` as it was before the build and listed outputs in `file_lists/commons-collections_output`. Those will be used later to compile the `%install` and `%files` sections of the project spec.
 
+Note that, if the build was unsusccesful, the following command can be used to cancel it and return to pre-dry running state:
+
+    gjp finish --failed
+
 This should be sufficient to be able to repeat the build on a machine with no Internet access, but what if we wanted to be 100% sure of that?
 
 #### Second, networkless, dry-run build

@@ -75,21 +75,25 @@ module Gjp
       latest_tag_count(:dry_run_started) > latest_tag_count(:dry_run_finished)
     end
 
-    # ends any phase that was previously started, 
-    # generating file lists
-    def finish
+    # ends a dry-run.
+    # if failed is true, reverts the whole directory
+    # if failed is false, reverts sources and updates output file lists
+    def finish(failed)
       from_directory do
         if is_dry_running
-          take_snapshot "Changes during dry-run"
+          if failed
+            @git.revert_whole_directory(".", latest_tag(:dry_run_started))
+          else
+            take_snapshot "Changes during dry-run"
 
-          update_output_file_lists
-          take_snapshot "File list updates"
+            update_output_file_lists
+            take_snapshot "File list updates"
 
-          @git.revert_whole_directory("src", latest_tag(:dry_run_started))
-          take_snapshot "Sources reverted as before dry-run"
+            @git.revert_whole_directory("src", latest_tag(:dry_run_started))
+            take_snapshot "Sources reverted as before dry-run"
 
-          take_snapshot "Dry run finished", :dry_run_finished
-
+            take_snapshot "Dry run finished", :dry_run_finished
+          end
           return true
         end
       end

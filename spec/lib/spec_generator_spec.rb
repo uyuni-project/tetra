@@ -15,7 +15,7 @@ describe Gjp::SpecGenerator do
       test_file = File.join("kit", "test")
       File.open(test_file, "w") { |io| io.puts "kit content test file" }
     end
-    @project.finish
+    @project.finish(false)
 
     @spec_generator = Gjp::SpecGenerator.new(@project)
   end
@@ -46,7 +46,7 @@ describe Gjp::SpecGenerator do
           io.write("nonconflicting line")
         end
       end
-      @project.finish
+      @project.finish(false)
 
       @spec_generator.generate_kit_spec.should be_true
 
@@ -74,7 +74,7 @@ describe Gjp::SpecGenerator do
           io.write(spec_contents)
         end
       end
-      @project.finish
+      @project.finish(false)
 
       @spec_generator.generate_kit_spec.should be_true
 
@@ -106,7 +106,7 @@ describe Gjp::SpecGenerator do
           `touch src/test/out/test#{i}.jar`
         end
 
-        @project.finish
+        @project.finish(false)
       end
 
       @spec_generator.generate_package_spec "test", File.join("spec", "data", "nailgun", "pom.xml"), "*.jar"

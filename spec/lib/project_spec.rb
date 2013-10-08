@@ -57,7 +57,7 @@ describe Gjp::Project do
         @project.is_dry_running.should be_false
         @project.dry_run
         @project.is_dry_running.should be_true
-        @project.finish
+        @project.finish(false)
         @project.is_dry_running.should be_false
       end
     end
@@ -77,13 +77,14 @@ describe Gjp::Project do
   end
   
   describe "#finish" do
-    it "ends the current dry-run phase" do
+    it "ends the current dry-run phase after a successful build" do
       @project.from_directory do
         Dir.mkdir("src/abc")
         `echo A > src/abc/test`
       end
 
-      @project.finish.should be_false
+      @project.finish(true).should be_false
+      @project.finish(false).should be_false
 
       @project.dry_run.should be_true
 
@@ -92,7 +93,7 @@ describe Gjp::Project do
         `touch src/abc/test2`
       end
 
-      @project.finish.should be_true
+      @project.finish(false).should be_true
       @project.is_dry_running.should be_false
 
       @project.from_directory do
@@ -104,11 +105,44 @@ describe Gjp::Project do
         File.exists?("src/abc/test2").should be_false
       end
     end
+    it "ends the current dry-run phase after a failed build" do
+      @project.from_directory do
+        Dir.mkdir("src/abc")
+        `echo A > src/abc/test`
+        `echo A > kit/test`
+      end
+
+      @project.finish(true).should be_false
+      @project.finish(false).should be_false
+
+      @project.dry_run.should be_true
+
+      @project.from_directory do
+        `echo B > src/abc/test`
+        `touch src/abc/test2`
+        `echo B > kit/test`
+        `touch kit/test2`
+      end
+
+      @project.finish(true).should be_true
+      @project.is_dry_running.should be_false
+
+      @project.from_directory do
+        `git rev-list --all`.split("\n").length.should eq 2
+        File.read("src/abc/test").should eq "A\n"
+        File.exists?("src/abc/test2").should be_false
+
+        File.read("kit/test").should eq "A\n"
+        File.exists?("kit/test2").should be_false
+
+        File.exists?(File.join("file_lists", "abc_output")).should be_false
+      end
+    end
   end
 
   describe "#dry_run" do
     it "starts a dry running phase" do
-      @project.finish.should be_false
+      @project.finish(false).should be_false
 
       @project.from_directory do
         `touch src/test`

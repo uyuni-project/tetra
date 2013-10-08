@@ -33,7 +33,7 @@ describe Gjp::Archiver do
       @project.from_directory do
         File.open(File.join("kit","kit_test"), "w") { |io| io.puts "test content" }
       end
-      @project.finish
+      @project.finish(false)
 
       archiver.archive_kit
       @project.from_directory do
@@ -48,7 +48,7 @@ describe Gjp::Archiver do
         Dir.mkdir(File.join("src", "package-name"))
         File.open(File.join("src", "package-name", "src_test"), "w") { |io| io.puts "test content" }
       end
-      @project.finish
+      @project.finish(false)
 
       archiver.archive_package "package-name"
       @project.from_directory do

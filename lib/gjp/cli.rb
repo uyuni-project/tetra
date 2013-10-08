@@ -81,10 +81,15 @@ module Gjp
     end
 
     subcommand "finish", "Ends the current dry-run" do
+      option ["-f", "--failed"], :flag, "build failed, restore files as before dry-run"
       def execute
         checking_exceptions do
-          if Gjp::Project.new(".").finish
-            puts "Dry-run finished."
+          if Gjp::Project.new(".").finish(failed?)
+            if failed?
+              puts "Project reverted as before dry-run."
+            else
+              puts "Dry-run finished."
+            end
           else
             puts "No dry-run is in progress."
           end
