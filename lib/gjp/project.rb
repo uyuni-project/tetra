@@ -11,7 +11,7 @@ module Gjp
 
     def initialize(path)      
       @full_path = Gjp::Project.find_project_dir(File.expand_path(path))
-      @git = Gjp::Git.new
+      @git = Gjp::Git.new(@full_path)
     end
 
     # finds the project directory up in the tree, like git does
@@ -36,7 +36,7 @@ module Gjp
     # inits a new project directory structure
     def self.init(dir)
       Dir.chdir(dir) do
-        Gjp::Git.init
+        Gjp::Git.new(".").init
 
         Dir.mkdir "src"
         Dir.mkdir "kit"

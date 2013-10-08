@@ -7,7 +7,7 @@ module Gjp
 
     def initialize(project)
       @project = project
-      @git = Gjp::Git.new
+      @git = Gjp::Git.new(@project.full_path)
     end
 
     def generate_kit_spec
