@@ -100,34 +100,29 @@ module Gjp
     # updates files that contain lists of the output files produced by
     # the build of each package
     def update_output_file_lists
-      from_directory do
-        Dir.foreach("src") do |entry|
-          if File.directory?(File.join(Dir.getwd, "src", entry)) and entry != "." and entry != ".."
-            directory = File.join("src", entry)
-            file_name = "#{entry}_output"
-            list_file = File.join("file_lists", file_name)
-            tracked_files = if File.exists?(list_file)
-              File.readlines(list_file).map { |line| line.strip }
-            else
-              []
-            end
+      each_package_directory do |directory|
+        file_name = "#{Pathname.new(directory).basename}_output"
+        list_file = File.join("file_lists", file_name)
+        tracked_files = if File.exists?(list_file)
+          File.readlines(list_file).map { |line| line.strip }
+        else
+          []
+        end
 
-            new_tracked_files = (
-              @git.changed_files_since(latest_tag(:dry_run_started))
-                .select { |file| file.start_with?(directory) }
-                .map { |file|file[directory.length + 1, file.length] }
-                .concat(tracked_files)
-                .uniq
-                .sort
-            )
+        new_tracked_files = (
+          @git.changed_files_since(latest_tag(:dry_run_started))
+            .select { |file| file.start_with?(directory) }
+            .map { |file|file[directory.length + 1, file.length] }
+            .concat(tracked_files)
+            .uniq
+            .sort
+        )
 
-            log.debug("writing file list for #{directory}: #{new_tracked_files.to_s}")
+        log.debug("writing file list for #{directory}: #{new_tracked_files.to_s}")
 
-            File.open(list_file, "w+") do |file_list|
-              new_tracked_files.each do |file|
-                file_list.puts file
-              end
-            end
+        File.open(list_file, "w+") do |file_list|
+          new_tracked_files.each do |file|
+            file_list.puts file
           end
         end
       end
@@ -160,6 +155,19 @@ module Gjp
         yield
       end
     end
+
+    # runs a block for each package directory in src/
+    def each_package_directory
+      from_directory do
+        Dir.foreach("src") do |entry|
+          if File.directory?(File.join(Dir.getwd, "src", entry)) and entry != "." and entry != ".."
+            directory = File.join("src", entry)
+            yield directory
+          end
+        end
+      end
+    end
+
 
     # helpers for ERB
 
