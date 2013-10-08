@@ -23,6 +23,7 @@ Source0:        %{name}.tar.xz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 BuildArch:      noarch
 BuildRequires:  xz
+BuildRequires:  fdupes
 Provides:       tetra-kit
 Conflicts:      otherproviders(tetra-kit)
 
@@ -42,6 +43,7 @@ thus it should never be installed on end users' systems.
 export NO_BRP_CHECK_BYTECODE_VERSION=true
 install -d -m 0755 %{buildroot}%{_datadir}/tetra/
 cp -a * %{buildroot}%{_datadir}/tetra/
+%fdupes -s %{buildroot}%{_datadir}/tetra/
 
 %files
 %defattr(-,root,root)
