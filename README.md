@@ -50,7 +50,7 @@ Note that:
 * a `gjp` project can be used to build a number of packages that share one binary kit. This can help if the kit becomes big in size;
 * `gjp` will take advantage of Maven's pom files to generate its specs if they are available. This allows to precompile most spec fields automatically.
 
-### Sample project (commons-io)
+### Sample project (commons-collections)
 
 #### Initialization and project setup
 
