@@ -10,18 +10,17 @@ module Gjp
     end
 
     def generate_kit_spec
-      spec_path = File.join("specs", "#{@project.name}-kit.spec")
+      destination_dir = File.join(@project.full_path, "output", "#{@project.name}-kit")
+      FileUtils.mkdir_p(destination_dir)
+      spec_path = File.join(destination_dir, "#{@project.name}-kit.spec")
       conflict_count = generate_merging("kit.spec", @project.get_binding, spec_path, :generate_kit_spec)
       [spec_path, conflict_count]
     end
 
     def generate_package_spec(name, pom, filter)
-      spec_path = File.join("specs", "#{name}.spec")
-
-      list_file = File.join(@project.full_path, "file_lists/#{name}_output")
-      if not File.exist? list_file
-        return nil
-      end
+      destination_dir = File.join(@project.full_path, "output", name)
+      FileUtils.mkdir_p(destination_dir)
+      spec_path = File.join(destination_dir, "#{name}.spec")
 
       adapter = Gjp::PackageSpecAdapter.new(@project, name, Gjp::Pom.new(pom), filter)
 

@@ -29,7 +29,7 @@ describe Gjp::SpecGenerator do
       @spec_generator.generate_kit_spec.should be_true
 
       @project.from_directory do
-        spec_lines = File.readlines(File.join("specs", "test-project-kit.spec"))
+        spec_lines = File.readlines(File.join("output", "test-project-kit", "test-project-kit.spec"))
         spec_lines.should include("Name:           test-project-kit\n")
         spec_lines.should include("Version:        1\n")
         spec_lines.should include("Source0:        %{name}.tar.xz\n")
@@ -42,7 +42,7 @@ describe Gjp::SpecGenerator do
         test_file = File.join("kit", "test")
         File.open(test_file, "w") { |io| io.puts "changed kit content test file" }
 
-        File.open(File.join("specs", "test-project-kit.spec"), "a") do |io|
+        File.open(File.join("output", "test-project-kit", "test-project-kit.spec"), "a") do |io|
           io.write("nonconflicting line")
         end
       end
@@ -51,7 +51,7 @@ describe Gjp::SpecGenerator do
       @spec_generator.generate_kit_spec.should be_true
 
       @project.from_directory do
-        spec_lines = File.readlines(File.join("specs", "test-project-kit.spec"))
+        spec_lines = File.readlines(File.join("output", "test-project-kit", "test-project-kit.spec"))
         spec_lines.should include("Name:           test-project-kit\n")
         spec_lines.should include("Version:        2\n")
         spec_lines.should include("Source0:        %{name}.tar.xz\n")
@@ -65,7 +65,7 @@ describe Gjp::SpecGenerator do
         test_file = File.join("kit", "test")
         File.open(test_file, "w") { |io| io.puts "changed kit content test file" }
 
-        spec_path = File.join("specs", "test-project-kit.spec")
+        spec_path = File.join("output", "test-project-kit", "test-project-kit.spec")
         spec_contents = File.read spec_path
 
         spec_contents.gsub! /^Version:.*$/, "CONFLICTING!"
@@ -79,7 +79,7 @@ describe Gjp::SpecGenerator do
       @spec_generator.generate_kit_spec.should be_true
 
       @project.from_directory do
-        spec_lines = File.readlines(File.join("specs", "test-project-kit.spec"))
+        spec_lines = File.readlines(File.join("output", "test-project-kit", "test-project-kit.spec"))
         spec_lines.should include("Name:           test-project-kit\n")
         spec_lines.should include("Source0:        %{name}.tar.xz\n")
         spec_lines.should include("<<<<<<< newly generated\n")
@@ -115,7 +115,7 @@ describe Gjp::SpecGenerator do
       @spec_generator.generate_package_spec "test", File.join("spec", "data", "nailgun", "pom.xml"), "*.jar"
 
       @project.from_directory do
-        spec_lines = File.readlines(File.join("specs", "test.spec"))
+        spec_lines = File.readlines(File.join("output", "test", "test.spec"))
         spec_lines.should include("Name:           test\n")
         spec_lines.should include("License:        The Apache Software License, Version 2.0\n")
         spec_lines.should include("Summary:        Nailgun is a client, protocol, and server for running Java\n")

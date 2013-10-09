@@ -38,19 +38,16 @@ module Gjp
       Dir.chdir(dir) do
         Gjp::Git.new(".").init
 
-        Dir.mkdir "src"
-        Dir.mkdir "kit"
+        FileUtils.mkdir_p "src"
+        FileUtils.mkdir_p "kit"
 
         # populate the project with templates and take a snapshot
         project = Project.new(".")
 
         template_manager = Gjp::TemplateManager.new
-        template_manager.copy "archives", "."
-        template_manager.copy "file_lists", "."
+        template_manager.copy "output", "."
         template_manager.copy "kit", "."
-        template_manager.copy "specs", "."
         template_manager.copy "src", "."
-        template_manager.copy ".gitignore", ".gitignore"
 
         project.take_snapshot "Template files added", :init
       end
@@ -86,7 +83,7 @@ module Gjp
         else
           take_snapshot "Changes during dry-run"
 
-          update_output_file_lists
+          update_produced_file_lists
           take_snapshot "File list updates"
 
           @git.revert_whole_directory("src", latest_tag(:dry_run_started))
@@ -101,18 +98,19 @@ module Gjp
 
     # updates files that contain lists of the output files produced by
     # the build of each package
-    def update_output_file_lists
-      each_package_directory do |directory|
+    def update_produced_file_lists
+      each_package_directory do |name, path|
         files = (
           @git.changed_files_since(latest_tag(:dry_run_started))
-            .select { |file| file.start_with?(directory) }
-            .map { |file|file[directory.length + 1, file.length] }
+            .select { |file| file.start_with?(path) }
+            .map { |file|file[path.length + 1, file.length] }
             .sort
         )
 
-        log.debug("writing file list for #{directory}: #{files.to_s}")
+        log.debug("writing file list for #{path}: #{files.to_s}")
 
-        list_path = File.join("file_lists", "#{Pathname.new(directory).basename}_output")
+        FileUtils.mkdir_p(File.join("output", name))
+        list_path = File.join("output", name, "produced_file_list")
         File.open(list_path, "w+") do |file_list|
           files.each do |file|
             file_list.puts file
@@ -185,7 +183,7 @@ module Gjp
         Dir.foreach("src") do |entry|
           if File.directory?(File.join(Dir.getwd, "src", entry)) and entry != "." and entry != ".."
             directory = File.join("src", entry)
-            yield directory
+            yield entry, directory
           end
         end
       end

@@ -93,7 +93,7 @@ module Gjp
       end
     end
 
-    subcommand "generate-build-script", "Creates or refreshes a build.sh file" do
+    subcommand "generate-build-script", "Create or refresh a build.sh file" do
       parameter "NAME", "name of a package, that is, an src/ subdirectory name"
       def execute
         checking_exceptions do
@@ -108,7 +108,7 @@ module Gjp
       end
     end
 
-    subcommand "generate-kit-spec", "Creates or refreshes a spec file for the kit" do
+    subcommand "generate-kit-spec", "Create or refresh a spec file for the kit" do
       def execute
         checking_exceptions do
           project = Gjp::Project.new(".")
@@ -121,7 +121,7 @@ module Gjp
       end
     end
 
-    subcommand "generate-kit-archive", "Archives contents of kit in archives/" do
+    subcommand "generate-kit-archive", "Create or refresh the kit tarball" do
       def execute
         checking_exceptions do
           project = Gjp::Project.new(".")
@@ -131,7 +131,7 @@ module Gjp
       end
     end
 
-    subcommand "generate-package-spec", "Creates or refreshes a spec file for a package" do
+    subcommand "generate-package-spec", "Create or refresh a spec file for a package" do
       option ["-f", "--filter"], "FILTER", "filter files to be installed by this spec", :default => "*.jar"
       parameter "NAME", "name of a package, that is, an src/ subdirectory name"
       parameter "POM", "a pom file path or URI"
@@ -139,20 +139,15 @@ module Gjp
         checking_exceptions do
           project = Gjp::Project.new(".")
           result_path, conflict_count = Gjp::SpecGenerator.new(project).generate_package_spec name, pom, filter
-          if result_path != nil
-            puts "#{result_path} generated"
-            if conflict_count > 0
-              puts "Warning: #{conflict_count} unresolved conflicts"
-            end
-          else
-            $stderr.puts "file_list/#{name}_output not found. Ensure you have already run a" +
-            "\"gjp dry run\" and \"gjp finish\"."
+          puts "#{result_path} generated"
+          if conflict_count > 0
+            puts "Warning: #{conflict_count} unresolved conflicts"
           end
         end
       end
     end
 
-    subcommand "generate-package-archive", "Archives contents of a package in archives/" do
+    subcommand "generate-package-archive", "Create or refresh a package tarball" do
       parameter "NAME", "name of a package, that is, an src/ subdirectory name"
       def execute
         checking_exceptions do

@@ -37,7 +37,7 @@ describe Gjp::Archiver do
 
       archiver.archive_kit
       @project.from_directory do
-        `tar -Jtf archives/test-project-kit.tar.xz`.split.should include("kit_test")
+        `tar -Jtf output/test-project-kit/test-project-kit.tar.xz`.split.should include("kit_test")
       end
     end
   end
@@ -52,7 +52,7 @@ describe Gjp::Archiver do
 
       archiver.archive_package "package-name"
       @project.from_directory do
-        `tar -Jtf archives/package-name.tar.xz`.split.should include("src_test")
+        `tar -Jtf output/package-name/package-name.tar.xz`.split.should include("src_test")
       end
     end
   end

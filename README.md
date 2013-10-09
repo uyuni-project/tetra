@@ -91,7 +91,7 @@ Success! Now we have to tell gjp to return in normal mode:
 
     gjp finish
 
-At this point `gjp` restored `src/` as it was before the build and listed outputs in `file_lists/commons-collections_output`. Those will be used later to compile the `%install` and `%files` sections of the project spec.
+At this point `gjp` restored `src/` as it was before the build and listed outputs in `output/commons-collections/produced_file_list`. It will be used later to compile the `%install` and `%files` sections of the project spec.
 
 Note that, if the build was unsusccesful, the following command can be used to cancel it and return to pre-dry running state:
 
@@ -112,22 +112,21 @@ Of course this script can also be manually modified, and it must be in more diff
 The following command will generate the kit spec:
 
     gjp generate-kit-spec
-    less specs/galaxy-kit.spec
+    less output/galaxy-kit/galaxy-kit.spec
 
 Nothing fancy here, the spec simply copies `kit/` contents in a special directory to be available for later compilation of packages.
 You can also edit the spec file manually if you want. When you later regenerate it, `gjp` will automatically try to reconcile changes with a [three-way merge](http://en.wikipedia.org/wiki/Three-way_merge#Three-way_merge).
 
-You can also generate the corresponding .tar.xz file with:
+You can also generate the corresponding .tar.xz file in `output/galaxy-kit/` with:
 
     gjp generate-kit-archive
 
-The contents of this file were tracked by `gjp` during gathering and dry-run phases, and are listed in `file_lists/kit`. You can also edit it if you want.
 
 You can then generate the project spec and archive files provided you have a pom file (more formats will be supported in future). In this case:
 
     gjp generate-package-spec commons-collections src/commons-collections/commons-collections-3.2.1-src/pom.xml
     gjp generate-package-archive commons-collections
-    less specs/commons-collections.spec
+    less output/commons-collections/commons-collections.spec
 
 commons-collection BuldRequires galaxy-kit, its archive contains only source files and it will install any produced .jar file in `/usr/lib/java`.
 

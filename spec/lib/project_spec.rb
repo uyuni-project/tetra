@@ -99,7 +99,7 @@ describe Gjp::Project do
       @project.from_directory do
         `git rev-list --all`.split("\n").length.should eq 5
         File.read("src/abc/test").should eq "A\n"
-        File.readlines(File.join("file_lists", "abc_output")).should include("test2\n")
+        File.readlines(File.join("output", "abc", "produced_file_list")).should include("test2\n")
 
         `git diff-tree --no-commit-id --name-only -r HEAD~`.split("\n").should_not include("src/abc/test2")
         File.exists?("src/abc/test2").should be_false
@@ -135,7 +135,7 @@ describe Gjp::Project do
         File.read("kit/test").should eq "A\n"
         File.exists?("kit/test2").should be_false
 
-        File.exists?(File.join("file_lists", "abc_output")).should be_false
+        File.exists?(File.join("output", "abc", "produced_file_list")).should be_false
       end
     end
   end

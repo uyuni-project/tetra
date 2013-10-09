@@ -11,7 +11,9 @@ module Gjp
 
     # generates an archive for the kit package
     def archive_kit
-      destination_file = File.join(@project.full_path, "archives/#{@project.name}-kit.tar.xz")
+      destination_dir = File.join(@project.full_path, "output", "#{@project.name}-kit")
+      FileUtils.mkdir_p(destination_dir)
+      destination_file = File.join(destination_dir, "#{@project.name}-kit.tar.xz")
 
       archive("kit", destination_file)
       
@@ -20,7 +22,9 @@ module Gjp
 
     # generates an archive for a project's package based on its file list
     def archive_package(name)
-      destination_file = File.join(@project.full_path, "archives/#{name}.tar.xz")
+      destination_dir = File.join(@project.full_path, "output", name)
+      FileUtils.mkdir_p(destination_dir)
+      destination_file = File.join(destination_dir, "#{name}.tar.xz")
 
       archive(File.join("src", name), destination_file)
 
