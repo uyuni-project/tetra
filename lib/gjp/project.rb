@@ -101,27 +101,18 @@ module Gjp
     # the build of each package
     def update_output_file_lists
       each_package_directory do |directory|
-        file_name = "#{Pathname.new(directory).basename}_output"
-        list_file = File.join("file_lists", file_name)
-        tracked_files = if File.exists?(list_file)
-          File.readlines(list_file).map { |line| line.strip }
-        else
-          []
-        end
-
-        new_tracked_files = (
+        files = (
           @git.changed_files_since(latest_tag(:dry_run_started))
             .select { |file| file.start_with?(directory) }
             .map { |file|file[directory.length + 1, file.length] }
-            .concat(tracked_files)
-            .uniq
             .sort
         )
 
-        log.debug("writing file list for #{directory}: #{new_tracked_files.to_s}")
+        log.debug("writing file list for #{directory}: #{files.to_s}")
 
-        File.open(list_file, "w+") do |file_list|
-          new_tracked_files.each do |file|
+        list_path = File.join("file_lists", "#{Pathname.new(directory).basename}_output")
+        File.open(list_path, "w+") do |file_list|
+          files.each do |file|
             file_list.puts file
           end
         end
