@@ -100,18 +100,27 @@ module Gjp
     # the build of each package
     def update_produced_file_lists
       each_package_directory do |name, path|
+        FileUtils.mkdir_p(File.join("output", name))
+
+        list_file = File.join("output", name, "produced_file_list")
+        tracked_files = if File.exists?(list_file)
+          File.readlines(list_file).map { |line| line.strip }
+        else
+          []
+        end
+
         files = (
           @git.changed_files_since(latest_tag(:dry_run_started))
             .select { |file| file.start_with?(path) }
             .map { |file|file[path.length + 1, file.length] }
+            .concat(tracked_files)
+            .uniq
             .sort
         )
 
         log.debug("writing file list for #{path}: #{files.to_s}")
 
-        FileUtils.mkdir_p(File.join("output", name))
-        list_path = File.join("output", name, "produced_file_list")
-        File.open(list_path, "w+") do |file_list|
+        File.open(list_file, "w+") do |file_list|
           files.each do |file|
             file_list.puts file
           end
