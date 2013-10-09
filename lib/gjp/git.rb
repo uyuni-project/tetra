@@ -34,7 +34,7 @@ module Gjp
     # adds all files in the current directory and removes
     # all files not in the current directory.
     # if tag is given, commit is also tagged
-    def commit_whole_directory(message, tag = nil)
+    def commit_whole_directory(message, tag = nil, tag_message = nil)
       Dir.chdir(@directory) do
         log.debug "committing with message: #{message}"
 
@@ -43,7 +43,11 @@ module Gjp
         `git commit -m "#{message}"`
 
         if tag != nil
-          `git tag gjp_#{tag}`
+          if tag_message != nil
+            `git tag gjp_#{tag} -m "#{tag_message}"`
+          else
+            `git tag gjp_#{tag}`
+          end
         end
       end
     end
@@ -89,6 +93,11 @@ module Gjp
       Dir.chdir(@directory) do
         `git tag -d gjp_#{tag}`
       end
+    end
+
+    # returns the tag message
+    def get_message(tag)
+      `git cat-file tag gjp_#{tag}`.split.last
     end
   end
 

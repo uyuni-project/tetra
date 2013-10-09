@@ -148,12 +148,15 @@ describe Gjp::Project do
         `touch src/test`
       end
 
-      @project.dry_run.should be_true
+      @project.from_directory("src") do
+        @project.dry_run.should be_true
+      end
 
       @project.from_directory do
         @project.is_dry_running.should be_true
         `git rev-list --all`.split("\n").length.should eq 2
         `git diff-tree --no-commit-id --name-only -r HEAD`.split("\n").should include("src/test")
+        `git cat-file tag gjp_dry_run_started_1 | tail -1`.should include("src")
       end
     end
   end

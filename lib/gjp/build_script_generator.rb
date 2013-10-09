@@ -22,10 +22,12 @@ module Gjp
             .take_while { |e| e.match(/gjp +finish/) == nil }
             .select { |e| e.match(/^#/) == nil }
 
-        script_lines =
-          ["#!/bin/bash"] +
-          ["PROJECT_PREFIX=`readlink -e .`"] +
-          relevant_lines.map do |line|
+        script_lines = [
+          "#!/bin/bash",
+          "PROJECT_PREFIX=`readlink -e .`",
+          "cd #{@project.latest_dry_run_directory}"
+        ] +
+        relevant_lines.map do |line|
           if line =~ /gjp +mvn/
             line.gsub(/gjp +mvn/, "#{@maven_runner.get_maven_commandline("$PROJECT_PREFIX")}")
           else

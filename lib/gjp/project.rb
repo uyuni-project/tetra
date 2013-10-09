@@ -64,7 +64,9 @@ module Gjp
         return false
       end
 
-      take_snapshot "Dry-run started", :dry_run_started
+      current_directory = Pathname.new(Dir.pwd).relative_path_from Pathname.new(@full_path)
+
+      take_snapshot("Dry-run started", :dry_run_started, current_directory)
       true
     end
 
@@ -120,14 +122,14 @@ module Gjp
     end
 
     # takes a revertable snapshot of this project
-    def take_snapshot(message, prefix = nil)
-      tag = if prefix
-        "#{prefix}_#{latest_tag_count(prefix) + 1}"
+    def take_snapshot(message, tag_prefix = nil, tag_message = nil)
+      tag = if tag_prefix
+        "#{tag_prefix}_#{latest_tag_count(tag_prefix) + 1}"
       else
         nil
       end
 
-      @git.commit_whole_directory(message, tag)
+      @git.commit_whole_directory(message, tag, tag_message)
     end
 
     # replaces content in path with new_content, takes a snapshot using
@@ -187,6 +189,11 @@ module Gjp
           end
         end
       end
+    end
+
+    # returns the latest dry run start directory
+    def latest_dry_run_directory
+      @git.get_message(latest_tag(:dry_run_started))
     end
 
 
