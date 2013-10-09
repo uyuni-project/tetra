@@ -71,9 +71,7 @@ module Gjp
       def execute
         checking_exceptions do
           project = Gjp::Project.new(".")
-          result = Gjp::MavenRunner.new(project).mvn(@maven_options)
-          puts "Real commandline was:"
-          puts "#{result}"
+          Gjp::MavenRunner.new(project).mvn(@maven_options)
         end
       end
     end
