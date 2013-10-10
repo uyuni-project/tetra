@@ -145,19 +145,24 @@ module Gjp
     # returns the number of conflicts
     def merge_new_content(new_content, path, snapshot_message, tag_prefix)
       from_directory do
+        log.debug "merging new content to #{path} with prefix #{tag_prefix}"
         already_existing = File.exist? path
         previous_tag = latest_tag(tag_prefix)
 
         if already_existing
+          log.debug "moving #{path} to #{path}.gjp_user_edited"
           File.rename path, "#{path}.gjp_user_edited"
         end
 
         File.open(path, "w") { |io| io.write(new_content) }
+        log.debug "taking snapshot with new content: #{snapshot_message}"
         take_snapshot(snapshot_message, tag_prefix)
 
         if already_existing
           if previous_tag == ""
             previous_tag = latest_tag(tag_prefix)
+            log.debug "there was no tag with prefix #{tag_prefix} before snapshot"
+            log.debug "defaulting to #{previous_tag} after snapshot"
           end
 
           # 3-way merge

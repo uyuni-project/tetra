@@ -80,7 +80,9 @@ module Gjp
     # returns the conflict count
     def merge_with_tag(path, new_path, tag)
       Dir.chdir(@directory) do
+        log.debug "calling git show gjp_#{tag}:#{path} > #{path}.old_version, output follows"
         `git show gjp_#{tag}:#{path} > #{path}.old_version`
+        log.debug "calling git merge-file #{path} #{path}.old_version #{new_path}, output follows"
         `git merge-file #{path} #{path}.old_version #{new_path} -L "newly generated" -L "previously generated" -L "user edited"`
         conflict_count = $?.exitstatus
         File.delete "#{path}.old_version"
