@@ -10,22 +10,26 @@ module Gjp
     end
 
     def generate_kit_spec
-      destination_dir = File.join(@project.full_path, "output", "#{@project.name}-kit")
-      FileUtils.mkdir_p(destination_dir)
-      spec_path = File.join(destination_dir, "#{@project.name}-kit.spec")
-      conflict_count = generate_merging("kit.spec", @project.get_binding, spec_path, :generate_kit_spec)
-      [spec_path, conflict_count]
+      @project.from_directory do
+        destination_dir = File.join("output", "#{@project.name}-kit")
+        FileUtils.mkdir_p(destination_dir)
+        spec_path = File.join(destination_dir, "#{@project.name}-kit.spec")
+        conflict_count = generate_merging("kit.spec", @project.get_binding, spec_path, :generate_kit_spec)
+        [spec_path, conflict_count]
+      end
     end
 
     def generate_package_spec(name, pom, filter)
-      destination_dir = File.join(@project.full_path, "output", name)
-      FileUtils.mkdir_p(destination_dir)
-      spec_path = File.join(destination_dir, "#{name}.spec")
+      @project.from_directory do
+        destination_dir = File.join("output", name)
+        FileUtils.mkdir_p(destination_dir)
+        spec_path = File.join(destination_dir, "#{name}.spec")
 
-      adapter = Gjp::PackageSpecAdapter.new(@project, name, Gjp::Pom.new(pom), filter)
+        adapter = Gjp::PackageSpecAdapter.new(@project, name, Gjp::Pom.new(pom), filter)
 
-      conflict_count = generate_merging("package.spec", adapter.get_binding, spec_path, "generate_#{name}_spec")
-      [spec_path, conflict_count]
+        conflict_count = generate_merging("package.spec", adapter.get_binding, spec_path, "generate_#{name}_spec")
+        [spec_path, conflict_count]
+      end
     end
 
     # generates a spec file from a template and 3-way merges it
