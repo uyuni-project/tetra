@@ -216,6 +216,29 @@ module Gjp
     def latest_dry_run_directory
       @git.get_message(latest_tag(:dry_run_started))
     end
+
+
+    # moves any .jar from src/ to kit/ and links it back
+    def purge_jars      
+      from_directory do
+        result = []
+        Find.find("src") do |file|
+          if file =~ /.jar$/ and not File.symlink?(file)
+            new_location = File.join("kit", "jars", Pathname.new(file).split[1])
+            FileUtils.mv(file, new_location)
+
+            link_target = Pathname.new(new_location)
+              .relative_path_from(Pathname.new(file).split.first)
+              .to_s
+
+            File.symlink(link_target, file)
+            result << [file, new_location]
+          end
+        end
+
+        result
+      end
+    end
   end
 
   class NotGjpDirectoryException < Exception

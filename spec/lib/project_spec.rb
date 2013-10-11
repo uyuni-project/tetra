@@ -158,6 +158,23 @@ describe Gjp::Project do
         `git diff-tree --no-commit-id --name-only -r HEAD`.split("\n").should include("src/test")
         `git cat-file tag gjp_dry_run_started_1 | tail -1`.should include("src")
       end
+    end    
+  end
+
+  describe "#purge_jars" do
+    it "moves jars in kit/jars" do
+      @project.from_directory do
+        `echo "jarring" > src/test.jar`
+      end
+      @project.finish(false).should be_false
+
+      @project.purge_jars
+
+      @project.from_directory do
+        File.symlink?(File.join("src", "test.jar")).should be_true
+        File.readlink(File.join("src", "test.jar")).should eq "../kit/jars/test.jar"
+        File.readlines(File.join("kit", "jars", "test.jar")).should include("jarring\n")
+      end
     end
   end
 end

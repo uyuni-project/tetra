@@ -109,6 +109,14 @@ module Gjp
       end
     end
 
+    subcommand "purge-jars", "Locates jars in src/ and moves them to kit/" do
+      def execute
+        Gjp::Project.new(".").purge_jars.each do |original, final|
+          puts "Replaced #{original} with symlink pointing to to #{final}"
+        end
+      end
+    end
+
     subcommand "generate-build-script", "Create or refresh a build.sh file" do
       parameter "NAME", "name of a package, that is, an src/ subdirectory name"
       def execute
