@@ -28,7 +28,7 @@ module Gjp
 
       @project.take_snapshot "Kit archive generated", :archive_kit
       
-      Pathname.new(destination_file).relative_path_from Pathname.new(Dir.pwd)
+      destination_file
     end
 
     # generates an archive for a project's package based on its file list

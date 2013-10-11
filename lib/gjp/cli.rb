@@ -100,7 +100,7 @@ module Gjp
           project = Gjp::Project.new(".")
           history_file = File.join(Dir.home, ".bash_history")
           result_path, conflict_count = Gjp::BuildScriptGenerator.new(project, history_file).generate_build_script(name)
-          puts "#{result_path} generated"
+          puts "#{format_path(result_path, project)} generated"
           if conflict_count > 0
             puts "Warning: #{conflict_count} unresolved conflicts"
           end
@@ -113,7 +113,7 @@ module Gjp
         checking_exceptions do
           project = Gjp::Project.new(".")
           result_path, conflict_count = Gjp::SpecGenerator.new(project).generate_kit_spec
-          puts "#{result_path} generated"
+          puts "#{format_path(result_path, project)} generated"
           if conflict_count > 0
             puts "Warning: #{conflict_count} unresolved conflicts"
           end
@@ -127,7 +127,7 @@ module Gjp
         checking_exceptions do
           project = Gjp::Project.new(".")
           result_path = Gjp::Archiver.new(project).archive_kit(incremental?)
-          puts "#{result_path} generated"
+          puts "#{format_path(result_path, project)} generated"
         end
       end
     end
@@ -140,7 +140,7 @@ module Gjp
         checking_exceptions do
           project = Gjp::Project.new(".")
           result_path, conflict_count = Gjp::SpecGenerator.new(project).generate_package_spec name, pom, filter
-          puts "#{result_path} generated"
+          puts "#{format_path(result_path, project)} generated"
           if conflict_count > 0
             puts "Warning: #{conflict_count} unresolved conflicts"
           end
@@ -154,7 +154,7 @@ module Gjp
         checking_exceptions do
           project = Gjp::Project.new(".")
           result_path = Gjp::Archiver.new(project).archive_package name
-          puts "#{result_path} generated"
+          puts "#{format_path(result_path, project)} generated"
         end
       end
     end
@@ -225,6 +225,16 @@ module Gjp
           puts Gjp::SourceGetter.new.get_source(address, pom, directory)
         end    
       end    
+    end
+
+    # generates a version of path relative to the current directory
+    def format_path(path, project)
+      full_path = if Pathname.new(path).relative?
+        File.join(project.full_path, path)
+      else
+        path
+      end
+      Pathname.new(full_path).relative_path_from(Pathname.new(Dir.pwd))
     end
 
     # handles most fatal exceptions
