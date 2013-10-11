@@ -65,13 +65,29 @@ module Gjp
 
       # override parsing in order to pipe everything to mvn
       def parse(args)
-        @maven_options = args
+        @options = args
       end
 
       def execute
         checking_exceptions do
           project = Gjp::Project.new(".")
-          Gjp::MavenRunner.new(project).mvn(@maven_options)
+          Gjp::KitRunner.new(project).mvn(@options)
+        end
+      end
+    end
+
+    subcommand "ant", "Locates and runs Ant from any directory in kit/" do
+      parameter "[ANT OPTIONS] ...", "ant options", :attribute_name => "dummy"
+
+      # override parsing in order to pipe everything to mvn
+      def parse(args)
+        @options = args
+      end
+
+      def execute
+        checking_exceptions do
+          project = Gjp::Project.new(".")
+          Gjp::KitRunner.new(project).ant(@options)
         end
       end
     end
@@ -251,8 +267,8 @@ module Gjp
         $stderr.puts "This is not a gjp project directory, see gjp init"
       rescue GitAlreadyInitedException
         $stderr.puts "This directory is already a gjp project"
-      rescue Gjp::MavenNotFoundException
-        $stderr.puts "mvn executable not found in kit/ or any of its subdirectories"
+      rescue Gjp::ExecutableNotFoundException
+        $stderr.puts "Executable not found in kit/ or any of its subdirectories"
       end
     end
   end

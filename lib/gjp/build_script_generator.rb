@@ -7,7 +7,7 @@ module Gjp
 
     def initialize(project, history_path)
       @project = project
-      @maven_runner = Gjp::MavenRunner.new(project)
+      @kit_runner = Gjp::KitRunner.new(project)
       @history_path = history_path
     end
     
@@ -29,7 +29,7 @@ module Gjp
         ] +
         relevant_lines.map do |line|
           if line =~ /gjp +mvn/
-            line.gsub(/gjp +mvn/, "#{@maven_runner.get_maven_commandline("$PROJECT_PREFIX")}")
+            line.gsub(/gjp +mvn/, "#{@kit_runner.get_maven_commandline("$PROJECT_PREFIX")}")
           else
             line
           end
