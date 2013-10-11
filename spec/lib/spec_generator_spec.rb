@@ -32,7 +32,7 @@ describe Gjp::SpecGenerator do
         spec_lines = File.readlines(File.join("output", "test-project-kit", "test-project-kit.spec"))
         spec_lines.should include("Name:           test-project-kit\n")
         spec_lines.should include("Version:        1\n")
-        spec_lines.should include("Source0:        %{name}.tar.xz\n")
+        spec_lines.should include("Source0:        test-project-kit.tar.xz\n")
       end
     end
     it "generates a second version" do
@@ -54,7 +54,7 @@ describe Gjp::SpecGenerator do
         spec_lines = File.readlines(File.join("output", "test-project-kit", "test-project-kit.spec"))
         spec_lines.should include("Name:           test-project-kit\n")
         spec_lines.should include("Version:        2\n")
-        spec_lines.should include("Source0:        %{name}.tar.xz\n")
+        spec_lines.should include("Source0:        test-project-kit.tar.xz\n")
         spec_lines.should include("nonconflicting line\n")
       end
     end
@@ -81,7 +81,7 @@ describe Gjp::SpecGenerator do
       @project.from_directory do
         spec_lines = File.readlines(File.join("output", "test-project-kit", "test-project-kit.spec"))
         spec_lines.should include("Name:           test-project-kit\n")
-        spec_lines.should include("Source0:        %{name}.tar.xz\n")
+        spec_lines.should include("Source0:        test-project-kit.tar.xz\n")
         spec_lines.should include("<<<<<<< newly generated\n")
         spec_lines.should include("Version:        2\n")
         spec_lines.should include("=======\n")
@@ -109,10 +109,12 @@ describe Gjp::SpecGenerator do
           `touch src/test/out/test#{i}.jar`
         end
 
+
         @project.finish(false)
       end
 
-      @spec_generator.generate_package_spec "test", File.join("spec", "data", "nailgun", "pom.xml"), "*.jar"
+      FileUtils.copy(File.join("spec", "data", "nailgun", "pom.xml"), @project_path)
+      @spec_generator.generate_package_spec "test", "pom.xml", "*.jar"
 
       @project.from_directory do
         spec_lines = File.readlines(File.join("output", "test", "test.spec"))

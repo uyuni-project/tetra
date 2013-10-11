@@ -8,10 +8,19 @@ module Gjp
     include Logger
 
     attr_accessor :full_path
+    attr_accessor :git
 
     def initialize(path)      
       @full_path = Gjp::Project.find_project_dir(File.expand_path(path))
       @git = Gjp::Git.new(@full_path)
+    end
+
+    def name
+      File.basename(@full_path)
+    end
+
+    def version
+      latest_tag_count(:dry_run_finished)
     end
 
     # finds the project directory up in the tree, like git does
@@ -206,21 +215,6 @@ module Gjp
     # returns the latest dry run start directory
     def latest_dry_run_directory
       @git.get_message(latest_tag(:dry_run_started))
-    end
-
-
-    # helpers for ERB
-
-    def name
-      File.basename(@full_path)
-    end
-
-    def version
-      latest_tag_count(:dry_run_finished)
-    end
-
-    def get_binding
-      binding
     end
   end
 

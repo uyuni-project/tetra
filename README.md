@@ -109,26 +109,26 @@ Of course this script can also be manually modified, and it must be in more diff
 
 #### Generating archives and spec files
 
-The following command will generate the kit spec:
-
-    gjp generate-kit-spec
-    less output/galaxy-kit/galaxy-kit.spec
-
-Nothing fancy here, the spec simply copies `kit/` contents in a special directory to be available for later compilation of packages.
-You can also edit the spec file manually if you want. When you later regenerate it, `gjp` will automatically try to reconcile changes with a [three-way merge](http://en.wikipedia.org/wiki/Three-way_merge#Three-way_merge).
-
-You can also generate the corresponding .tar.xz file in `output/galaxy-kit/` with:
+The following command will generate the kit archive in `output/galaxy-kit/`:
 
     gjp generate-kit-archive
 
+Note that, in later runs, you can also use the `--incremental` option to create an additional "diff" tar.xz file instead of rebuilding it from scratch.
+
+The following command will generate the kit spec:
+
+    gjp generate-kit-spec
+
+You can inspect the generated "galaxy-kit.spec" file, but in general you should not need to edit it.
 
 You can then generate the project spec and archive files provided you have a pom file (more formats will be supported in future). In this case:
 
-    gjp generate-package-spec commons-collections src/commons-collections/commons-collections-3.2.1-src/pom.xml
     gjp generate-package-archive commons-collections
+    gjp generate-package-spec commons-collections src/commons-collections/commons-collections-3.2.1-src/pom.xml
     less output/commons-collections/commons-collections.spec
 
 commons-collection BuldRequires galaxy-kit, its archive contains only source files and it will install any produced .jar file in `/usr/lib/java`.
+You can also edit the specs file manually if you want. When you later regenerate it, `gjp` will automatically try to reconcile changes with a [three-way merge](http://en.wikipedia.org/wiki/Three-way_merge#Three-way_merge).
 
 Packages are ready to be submitted to an OBS project. As OBS integration is not yet implemented, refer to OBS documentation to do that.
 

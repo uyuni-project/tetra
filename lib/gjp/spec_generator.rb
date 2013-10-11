@@ -14,7 +14,10 @@ module Gjp
         destination_dir = File.join("output", "#{@project.name}-kit")
         FileUtils.mkdir_p(destination_dir)
         spec_path = File.join(destination_dir, "#{@project.name}-kit.spec")
-        conflict_count = generate_merging("kit.spec", @project.get_binding, spec_path, :generate_kit_spec)
+
+        adapter = Gjp::KitSpecAdapter.new(@project)
+
+        conflict_count = generate_merging("kit.spec", adapter.get_binding, spec_path, :generate_kit_spec)
         [spec_path, conflict_count]
       end
     end

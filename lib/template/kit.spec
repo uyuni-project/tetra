@@ -22,7 +22,9 @@ License:        Apache-2.0
 Summary:        Build-time dependencies for gjp project <%= name %>
 Url:            https://github.com/SilvioMoioli/gjp
 Group:          Development/Libraries/Java
-Source0:        %{name}.tar.xz
+<% archives.each_with_index do |archive, i| %>
+Source<%= i %>:        <%= archive %>
+<% end %>
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 BuildArch:      noarch
 BuildRequires:  xz
@@ -38,7 +40,13 @@ not be used except for rebuilding those packages and it should never
 be installed on end users' systems.
 
 %prep
-%setup -q -c
+<% (0..(archives.length-1)).each do |i| %>
+<% if i > 0 %>
+%setup -q -c -T -D -b <%= i %>
+<% else %>
+%setup -q -c -T -b <%= i %>
+<% end %>
+<% end %>
 
 %build
 # nothing to do, gjp kits are precompiled by design
