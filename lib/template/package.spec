@@ -29,6 +29,7 @@ BuildRequires:  java-devel
 BuildRequires:  <%= project_name %>-kit >= <%= project_version %>
 BuildArch:      noarch
 Provides:       mvn(<%= group_id %>:<%= artifact_id %>) == <%= version %>
+Requires:       java
 <% runtime_dependency_ids.each do |dependency_id| %>
 Requires:       mvn(<%= dependency_id[0] %>:<%= dependency_id[1] %>) <% if dependency_id[3] != nil %>==<%= dependency_id[3] %><% end %>
 <% end %>
