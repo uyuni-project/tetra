@@ -132,6 +132,14 @@ You can also edit the specs file manually if you want. When you later regenerate
 
 Packages are ready to be submitted to an OBS project. As OBS integration is not yet implemented, refer to OBS documentation to do that.
 
+#### Ant packages
+
+Building Ant packages is not really different from Maven ones, as `gjp ant` will operate exactly like `gjp mvn`.
+
+Sometimes you will have jar files distributed along with the source archive that will end up in `src/`: you don't want that, just run `gjp purge-jars` to have them moved to the kit. The command will generate a symlink back to the original, so builds will not fail.
+
+Once built, you are advised to grab an "informational" pom.xml (via `gjp get-pom` or Maven Central) in order to generate its spec.
+
 #### Optional: running networkless dry-run builds
 
 `gjp` has a subcommand to setup a `nonet` user without Internet access, courtesy of `iptables`. You can simply retry the build using that user to see if it works. Note that the following commands will alter group permissions to allow both your current user and `nonet` to work on the same files.
