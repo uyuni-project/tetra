@@ -38,7 +38,7 @@ The basic process is:
 * a `gjp` project is created;
 * package sources are added in `src/<package name>`;
 * any other file that is needed for the build, except the JDK, is added in binary form (jars, the Maven executable, plugins,  etc.) in `kit/`. In `gjp` a **kit** is a set of binary files that satisfies all build dependencies in a `gjp` project;
-* a build is attempted and during the build, `gjp` keeps track of file changes. When it finishes, `gjp` restores `src/` in its original state, making it a "repeatable dry-run build". `gjp` will retain any files that were automatically downloaded by Maven or other similar tools in `kit/`, along with other binary build dependencies, and create a list of files produced by the build for later spec generation;
+* a build is attempted and during the build, `gjp` keeps track of file changes. When it finishes, `gjp` restores `src/` in its original state, making it a "repeatable dry-run build". `gjp` will retain any files that were automatically downloaded by Maven or other similar tools in `kit/`, along with other binary build dependencies, and note any produced file for later spec generation;
 * `gjp` produces spec files for two packages: one for the project itself and one for the kit needed to build it;
 * kit and project packages can be submitted to [OBS](http://en.opensuse.org/openSUSE:Build_Service). Project package will rebuild cleanly because it needs no Internet access - all files were already downloaded during the dry-run phase above and are included in the kit.
 
@@ -91,7 +91,7 @@ Success! Now we have to tell gjp to return in normal mode:
 
     gjp finish
 
-At this point `gjp` restored `src/` as it was before the build and listed outputs in `output/commons-collections/produced_file_list`. It will be used later to compile the `%install` and `%files` sections of the project spec.
+At this point `gjp` restored `src/` as it was before the build while taking note of any produced file, so that later it will be able to output `%install` and `%files` sections of the project spec file automatically.
 
 Note that, if the build was unsusccesful, the following command can be used to cancel it and return to pre-dry running state:
 

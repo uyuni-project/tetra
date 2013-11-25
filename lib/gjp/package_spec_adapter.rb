@@ -36,15 +36,8 @@ module Gjp
       @runtime_dependency_ids = pom.runtime_dependency_ids
       @description = cleanup_description(pom.description, 1500)
 
-      produced_file_list = File.join(project.full_path, "output", @name, "produced_file_list")
-      @outputs = if File.exist?(produced_file_list)
-        File.open(produced_file_list).readlines.map do |line|
-          line.strip
-        end.select do |line|
-          File.fnmatch? filter, File.basename(line.strip)
-        end
-      else
-        []
+      @outputs = project.get_produced_files(package_name).select do |file|
+        File.fnmatch? filter, File.basename(file)
       end
     end
 

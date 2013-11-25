@@ -26,8 +26,20 @@ module Gjp
     # returns a list of filenames that changed in the repo
     # since the specified tag
     def changed_files_since(tag)
+      changed_files_between(tag, nil, ".")
+    end
+
+    # returns a list of filenames that changed in the repo
+    # between specified tags, in a certain directory
+    def changed_files_between(start_tag, end_tag, directory)
       Dir.chdir(@directory) do
-        `git diff-tree --no-commit-id --name-only -r gjp_#{tag} HEAD`.split("\n")
+        prefixed_start_tag = "gjp_#{start_tag}"
+        prefixed_end_tag = if end_tag
+          "gjp_#{end_tag}"
+        else
+          "HEAD"
+        end
+        `git diff-tree --no-commit-id --name-only -r #{prefixed_start_tag} #{prefixed_end_tag} -- #{directory}`.split("\n")
       end
     end
 

@@ -97,11 +97,10 @@ describe Gjp::Project do
       @project.is_dry_running.should be_false
 
       @project.from_directory do
-        `git rev-list --all`.split("\n").length.should eq 5
+        `git rev-list --all`.split("\n").length.should eq 4
         File.read("src/abc/test").should eq "A\n"
-        File.readlines(File.join("output", "abc", "produced_file_list")).should include("test2\n")
 
-        `git diff-tree --no-commit-id --name-only -r HEAD~`.split("\n").should_not include("src/abc/test2")
+        `git diff-tree --no-commit-id --name-only -r HEAD~`.split("\n").should include("src/abc/test2")
         File.exists?("src/abc/test2").should be_false
       end
     end
@@ -134,8 +133,6 @@ describe Gjp::Project do
 
         File.read("kit/test").should eq "A\n"
         File.exists?("kit/test2").should be_false
-
-        File.exists?(File.join("output", "abc", "produced_file_list")).should be_false
       end
     end
   end
@@ -159,6 +156,35 @@ describe Gjp::Project do
         `git cat-file tag gjp_dry_run_started_1 | tail -1`.should include("src")
       end
     end    
+  end
+
+  describe "#get_produced_files" do
+    it "gets a list of produced files" do
+      @project.from_directory do
+        Dir.mkdir("src/abc")
+        `echo A > src/abc/added_outside_dry_run`
+      end
+
+      @project.dry_run.should be_true
+      @project.from_directory do
+        `echo A > src/abc/added_in_first_dry_run`
+        `echo A > src/added_outside_directory`
+      end
+      @project.finish(false).should be_true
+
+      @project.dry_run.should be_true
+      @project.from_directory do
+        `echo A > src/abc/added_in_second_dry_run`
+      end
+      @project.finish(false).should be_true
+
+      list = @project.get_produced_files("abc")
+      list.should include("added_in_first_dry_run")
+      list.should include("added_in_second_dry_run")
+
+      list.should_not include("added_outside_dry_run")
+      list.should_not include("added_outside_directory")
+    end
   end
 
   describe "#purge_jars" do

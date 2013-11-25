@@ -90,51 +90,15 @@ module Gjp
           @git.revert_whole_directory(".", latest_tag(:dry_run_started))
           @git.delete_tag(latest_tag(:dry_run_started))
         else
-          take_snapshot "Changes during dry-run"
-
-          update_produced_file_lists
-          take_snapshot "File list updates"
+          take_snapshot "Changes during dry-run", :dry_run_changed
 
           @git.revert_whole_directory("src", latest_tag(:dry_run_started))
-          take_snapshot "Sources reverted as before dry-run"
 
           take_snapshot "Dry run finished", :dry_run_finished
         end
         return true
       end
       false
-    end
-
-    # updates files that contain lists of the output files produced by
-    # the build of each package
-    def update_produced_file_lists
-      each_package_directory do |name, path|
-        FileUtils.mkdir_p(File.join("output", name))
-
-        list_file = File.join("output", name, "produced_file_list")
-        tracked_files = if File.exists?(list_file)
-          File.readlines(list_file).map { |line| line.strip }
-        else
-          []
-        end
-
-        files = (
-          @git.changed_files_since(latest_tag(:dry_run_started))
-            .select { |file| file.start_with?(path) }
-            .map { |file|file[path.length + 1, file.length] }
-            .concat(tracked_files)
-            .uniq
-            .sort
-        )
-
-        log.debug("writing file list for #{path}: #{files.to_s}")
-
-        File.open(list_file, "w+") do |file_list|
-          files.each do |file|
-            file_list.puts file
-          end
-        end
-      end
     end
 
     # takes a revertable snapshot of this project
@@ -200,23 +164,28 @@ module Gjp
       end
     end
 
-    # runs a block for each package directory in src/
-    def each_package_directory
-      from_directory do
-        Dir.foreach("src") do |entry|
-          if File.directory?(File.join(Dir.getwd, "src", entry)) and entry != "." and entry != ".."
-            directory = File.join("src", entry)
-            yield entry, directory
-          end
-        end
-      end
-    end
-
     # returns the latest dry run start directory
     def latest_dry_run_directory
       @git.get_message(latest_tag(:dry_run_started))
     end
 
+    # returns a list of files produced during dry-runs in a certain package
+    def get_produced_files(package)
+      dry_run_count = latest_tag_count(:dry_run_changed)
+      log.debug "Getting produced files from #{dry_run_count} dry runs"
+      if dry_run_count >= 1
+        package_dir = File.join("src", package)
+        (1..dry_run_count).map do |i|
+          @git.changed_files_between("dry_run_started_#{i}", "dry_run_changed_#{i}", package_dir)
+        end
+          .flatten
+          .uniq
+          .sort
+          .map { |file| Pathname.new(file).relative_path_from(Pathname.new(package_dir)).to_s }
+      else
+        []
+      end
+    end
 
     # moves any .jar from src/ to kit/ and links it back
     def purge_jars      
