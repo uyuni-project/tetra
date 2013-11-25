@@ -99,9 +99,9 @@ Note that, if the build was unsusccesful, the following command can be used to c
 
 #### Generating a build script
 
-`gjp` expects that all commands needed to build a package are put in a `build.sh` script in `src/<package name>`. If you are a Bash user you are lucky - `gjp` can do this for you by looking at your command history! Just type:
+`gjp` expects that all commands needed to build a package are in a `build.sh` script in `src/<package name>`. If you are a Bash user you are lucky - `gjp` can create one for you by looking at your command history! Just type:
 
-    gjp generate-build-script commons-collections
+    gjp generate-package-script commons-collections
 
 Note that `gjp` will substitute the `gjp mvn` calls with equivalent lines that are actually runnable on a build host without `gjp` itself.
 

@@ -117,7 +117,7 @@ module Gjp
       end
     end
 
-    subcommand "generate-build-script", "Create or refresh a build.sh file" do
+    subcommand "generate-package-script", "Create or refresh a build.sh file for a package" do
       parameter "NAME", "name of a package, that is, an src/ subdirectory name"
       def execute
         checking_exceptions do
