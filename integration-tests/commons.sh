@@ -15,9 +15,9 @@ unzip commons-collections-3.2.1-src.zip
 rm commons-collections-3.2.1-src.zip
 
 cd ../../kit
-wget http://apache.fastbull.org/maven/maven-3/3.1.0/binaries/apache-maven-3.1.0-bin.zip
-unzip apache-maven-3.1.0-bin.zip
-rm apache-maven-3.1.0-bin.zip
+wget http://apache.fastbull.org/maven/maven-3/3.1.1/binaries/apache-maven-3.1.1-bin.zip
+unzip apache-maven-*.zip
+rm apache-maven-*.zip
 cd ..
 
 gjp dry-run
