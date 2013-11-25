@@ -109,29 +109,6 @@ module Gjp
       end
     end
 
-    subcommand "purge-jars", "Locates jars in src/ and moves them to kit/" do
-      def execute
-        Gjp::Project.new(".").purge_jars.each do |original, final|
-          puts "Replaced #{original} with symlink pointing to to #{final}"
-        end
-      end
-    end
-
-    subcommand "generate-package-script", "Create or refresh a build.sh file for a package" do
-      parameter "NAME", "name of a package, that is, an src/ subdirectory name"
-      def execute
-        checking_exceptions do
-          project = Gjp::Project.new(".")
-          history_file = File.join(Dir.home, ".bash_history")
-          result_path, conflict_count = Gjp::BuildScriptGenerator.new(project, history_file).generate_build_script(name)
-          puts "#{format_path(result_path, project)} generated"
-          if conflict_count > 0
-            puts "Warning: #{conflict_count} unresolved conflicts"
-          end
-        end
-      end
-    end
-
     subcommand "generate-kit-spec", "Create or refresh a spec file for the kit" do
       def execute
         checking_exceptions do
@@ -152,6 +129,21 @@ module Gjp
           project = Gjp::Project.new(".")
           result_path = Gjp::Archiver.new(project).archive_kit(incremental?)
           puts "#{format_path(result_path, project)} generated"
+        end
+      end
+    end
+
+    subcommand "generate-package-script", "Create or refresh a build.sh file for a package" do
+      parameter "NAME", "name of a package, that is, an src/ subdirectory name"
+      def execute
+        checking_exceptions do
+          project = Gjp::Project.new(".")
+          history_file = File.join(Dir.home, ".bash_history")
+          result_path, conflict_count = Gjp::BuildScriptGenerator.new(project, history_file).generate_build_script(name)
+          puts "#{format_path(result_path, project)} generated"
+          if conflict_count > 0
+            puts "Warning: #{conflict_count} unresolved conflicts"
+          end
         end
       end
     end
@@ -179,6 +171,14 @@ module Gjp
           project = Gjp::Project.new(".")
           result_path = Gjp::Archiver.new(project).archive_package name
           puts "#{format_path(result_path, project)} generated"
+        end
+      end
+    end
+
+    subcommand "purge-jars", "Locates jars in src/ and moves them to kit/" do
+      def execute
+        Gjp::Project.new(".").purge_jars.each do |original, final|
+          puts "Replaced #{original} with symlink pointing to to #{final}"
         end
       end
     end
