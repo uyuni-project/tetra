@@ -139,7 +139,7 @@ module Gjp
         checking_exceptions do
           project = Gjp::Project.new(".")
           history_file = File.join(Dir.home, ".bash_history")
-          result_path, conflict_count = Gjp::BuildScriptGenerator.new(project, history_file).generate_build_script(name)
+          result_path, conflict_count = Gjp::ScriptGenerator.new(project, history_file).generate_build_script(name)
           puts "#{format_path(result_path, project)} generated"
           if conflict_count > 0
             puts "Warning: #{conflict_count} unresolved conflicts"

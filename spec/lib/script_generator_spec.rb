@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe Gjp::BuildScriptGenerator do
+describe Gjp::ScriptGenerator do
   before(:each) do
     @project_path = File.join("spec", "data", "test-project")
     Dir.mkdir(@project_path)
@@ -22,7 +22,7 @@ describe Gjp::BuildScriptGenerator do
 
       FileUtils.mkdir_p(File.join("src", "test-package"))
 
-      @generator = Gjp::BuildScriptGenerator.new(@project, "history")
+      @generator = Gjp::ScriptGenerator.new(@project, "history")
     end
 
     mock_maven_executable
