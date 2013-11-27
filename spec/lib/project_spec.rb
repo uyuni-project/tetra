@@ -35,6 +35,53 @@ describe Gjp::Project do
     end
   end
 
+  describe ".get_package_name"  do
+    it "raises an error with a directory outside a gjp project" do
+      expect {
+        @project.get_package_name("/")
+      }.to raise_error(Gjp::NoPackageDirectoryException)
+    end
+
+    it "raises an error with a gjp project directory" do
+      expect {
+        @project.get_package_name(@project_path)
+      }.to raise_error(Gjp::NoPackageDirectoryException)
+    end
+
+    it "raises an error with a gjp kit directory" do
+      expect {
+        @project.get_package_name(File.join(@project_path, "kit"))
+      }.to raise_error(Gjp::NoPackageDirectoryException)
+    end
+
+    it "raises an error with a gjp src directory" do
+      expect {
+        @project.get_package_name(File.join(@project_path, "src"))
+      }.to raise_error(Gjp::NoPackageDirectoryException)
+    end
+
+    it "raises an error with a nonexisting package directory" do
+      expect {
+        @project.get_package_name(File.join(@project_path, "src", "test_package"))
+      }.to raise_error(Gjp::NoPackageDirectoryException)
+    end
+
+    it "returns the package on an existing package directory" do
+      FileUtils.mkdir_p(File.join(@project_path, "src", "test_package"))
+      @project.get_package_name(File.join(@project_path, "src", "test_package")).should eq "test_package"
+    end
+
+    it "returns the package on an existing package subdirectory" do
+      FileUtils.mkdir_p(File.join(@project_path, "src", "test_package", "subdir1"))
+      @project.get_package_name(File.join(@project_path, "src", "test_package", "subdir1")).should eq "test_package"
+    end
+
+    it "returns the package on an existing package subsubdirectory" do
+      FileUtils.mkdir_p(File.join(@project_path, "src", "test_package", "subdir1", "subdir2"))
+      @project.get_package_name(File.join(@project_path, "src", "test_package", "subdir1", "subdir2")).should eq "test_package"
+    end
+  end
+
   describe "full_path" do
     it "returns the project's full path" do
       @project.full_path.should eq File.expand_path(@project_path)

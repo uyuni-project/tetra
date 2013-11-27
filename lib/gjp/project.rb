@@ -42,6 +42,23 @@ module Gjp
       File.directory?(File.join(dir, ".git"))
     end
 
+    # returns the package name corresponding to the specified dir, if any
+    # raises NoPackageDirectoryException if dir is not a (sub)directory of a package
+    def get_package_name(dir)
+      begin
+        dir_path = Pathname.new(File.expand_path(dir)).relative_path_from(Pathname.new(@full_path))
+        components = dir_path.to_s.split(File::SEPARATOR)
+
+        if components.count >= 2 and components.first == "src" and Dir.exist?(File.join(@full_path, components[0], components[1]))
+          components[1]
+        else
+          raise NoPackageDirectoryException
+        end
+      rescue ArgumentError, NotGjpDirectoryException
+        raise NoPackageDirectoryException
+      end
+    end
+
     # inits a new project directory structure
     def self.init(dir)
       Dir.chdir(dir) do
@@ -211,5 +228,7 @@ module Gjp
   end
 
   class NotGjpDirectoryException < Exception
+  end
+  class NoPackageDirectoryException < Exception
   end
 end

@@ -114,7 +114,7 @@ describe Gjp::SpecGenerator do
       end
 
       FileUtils.copy(File.join("spec", "data", "nailgun", "pom.xml"), @project_path)
-      @spec_generator.generate_package_spec "test", "pom.xml", "*.jar"
+      @spec_generator.generate_package_spec "test", File.join(@project_path, "pom.xml"), "*.jar"
 
       @project.from_directory do
         spec_lines = File.readlines(File.join("output", "test", "test.spec"))

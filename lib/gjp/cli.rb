@@ -134,12 +134,13 @@ module Gjp
     end
 
     subcommand "generate-package-script", "Create or refresh a build.sh file for a package" do
-      parameter "NAME", "name of a package, that is, an src/ subdirectory name"
+      parameter "[DIRECTORY]", "path to a package directory (src/<package name>)", :default => "."
       def execute
         checking_exceptions do
           project = Gjp::Project.new(".")
+          package_name = project.get_package_name(directory)
           history_file = File.join(Dir.home, ".bash_history")
-          result_path, conflict_count = Gjp::ScriptGenerator.new(project, history_file).generate_build_script(name)
+          result_path, conflict_count = Gjp::ScriptGenerator.new(project, history_file).generate_build_script(package_name)
           puts "#{format_path(result_path, project)} generated"
           if conflict_count > 0
             puts "Warning: #{conflict_count} unresolved conflicts"
@@ -150,12 +151,13 @@ module Gjp
 
     subcommand "generate-package-spec", "Create or refresh a spec file for a package" do
       option ["-f", "--filter"], "FILTER", "filter files to be installed by this spec", :default => "*.jar"
-      parameter "NAME", "name of a package, that is, an src/ subdirectory name"
+      parameter "[DIRECTORY]", "path to a package directory (src/<package name>)", :default => "."
       parameter "POM", "a pom file path or URI"
       def execute
         checking_exceptions do
           project = Gjp::Project.new(".")
-          result_path, conflict_count = Gjp::SpecGenerator.new(project).generate_package_spec name, pom, filter
+          package_name = project.get_package_name(directory)
+          result_path, conflict_count = Gjp::SpecGenerator.new(project).generate_package_spec package_name, pom, filter
           puts "#{format_path(result_path, project)} generated"
           if conflict_count > 0
             puts "Warning: #{conflict_count} unresolved conflicts"
@@ -165,11 +167,12 @@ module Gjp
     end
 
     subcommand "generate-package-archive", "Create or refresh a package tarball" do
-      parameter "NAME", "name of a package, that is, an src/ subdirectory name"
+      parameter "[DIRECTORY]", "path to a package directory (src/<package name>)", :default => "."
       def execute
         checking_exceptions do
           project = Gjp::Project.new(".")
-          result_path = Gjp::Archiver.new(project).archive_package name
+          package_name = project.get_package_name(directory)
+          result_path = Gjp::Archiver.new(project).archive_package package_name
           puts "#{format_path(result_path, project)} generated"
         end
       end
@@ -277,6 +280,8 @@ module Gjp
         $stderr.puts "This directory is already a gjp project"
       rescue Gjp::ExecutableNotFoundException
         $stderr.puts "Executable not found in kit/ or any of its subdirectories"
+      rescue NoPackageDirectoryException
+        $stderr.puts "Directory is not a package directory"
       end
     end
   end

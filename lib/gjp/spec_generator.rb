@@ -22,13 +22,14 @@ module Gjp
       end
     end
 
-    def generate_package_spec(name, pom, filter)
+    def generate_package_spec(name, pom_path, filter)
+      pom = Gjp::Pom.new(pom_path)
       @project.from_directory do
         destination_dir = File.join("output", name)
         FileUtils.mkdir_p(destination_dir)
         spec_path = File.join(destination_dir, "#{name}.spec")
 
-        adapter = Gjp::PackageSpecAdapter.new(@project, name, Gjp::Pom.new(pom), filter)
+        adapter = Gjp::PackageSpecAdapter.new(@project, name, pom, filter)
 
         conflict_count = generate_merging("package.spec", adapter.get_binding, spec_path, "generate_#{name}_spec")
         [spec_path, conflict_count]

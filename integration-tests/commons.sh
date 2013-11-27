@@ -23,15 +23,15 @@ cd ..
 gjp dry-run
 cd src/commons-collections/commons-collections-3.2.1-src/
 gjp mvn package -DskipTests
-cd ../../..
 gjp finish
 
 gjp generate-kit-archive
 gjp generate-kit-spec
 
-gjp generate-package-archive commons-collections
-gjp generate-package-spec commons-collections src/commons-collections/commons-collections-3.2.1-src/pom.xml
-
+gjp generate-package-script
+gjp generate-package-archive
+gjp generate-package-spec . pom.xml
+cd ../../..
 
 cd src
 mkdir commons-fileupload
@@ -43,14 +43,15 @@ rm commons-fileupload-1.3-src.zip
 gjp dry-run
 cd commons-fileupload-1.3-src/
 gjp mvn package -DskipTests
-cd ../../..
 gjp finish
 
 gjp generate-kit-archive -i
 gjp generate-kit-spec
 
-gjp generate-package-archive commons-fileupload
-gjp generate-package-spec commons-fileupload src/commons-fileupload/commons-fileupload-1.3-src/pom.xml
+gjp generate-package-script
+gjp generate-package-archive
+gjp generate-package-spec . pom.xml
+cd ../../..
 
 
 echo "**************** All Done ****************"

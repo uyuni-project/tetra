@@ -101,7 +101,8 @@ Note that, if the build was unsusccesful, the following command can be used to c
 
 `gjp` expects that all commands needed to build a package are in a `build.sh` script in `src/<package name>`. If you are a Bash user you are lucky - `gjp` can create one for you by looking at your command history! Just type:
 
-    gjp generate-package-script commons-collections
+    cd commons-collections
+    gjp generate-package-script
 
 Note that `gjp` will substitute the `gjp mvn` calls with equivalent lines that are actually runnable on a build host without `gjp` itself.
 
@@ -123,8 +124,9 @@ You can inspect the generated "galaxy-kit.spec" file, but in general you should 
 
 You can then generate the project spec and archive files provided you have a pom file (more formats will be supported in future). In this case:
 
-    gjp generate-package-archive commons-collections
-    gjp generate-package-spec commons-collections src/commons-collections/commons-collections-3.2.1-src/pom.xml
+    cd commons-collections
+    gjp generate-package-archive
+    gjp generate-package-spec . ./commons-collections-3.2.1-src/pom.xml
     less output/commons-collections/commons-collections.spec
 
 commons-collection BuldRequires galaxy-kit, its archive contains only source files and it will install any produced .jar file in `/usr/lib/java`.
