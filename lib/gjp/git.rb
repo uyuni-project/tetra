@@ -18,7 +18,7 @@ module Gjp
         if Dir.exists?(".git") == false
           `git init`
         else
-          raise GitAlreadyInitedException
+          raise GitAlreadyInitedError
         end
       end
     end
@@ -123,6 +123,6 @@ module Gjp
     end
   end
 
-  class GitAlreadyInitedException < Exception
+  class GitAlreadyInitedError < StandardError
   end
 end

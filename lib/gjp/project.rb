@@ -30,7 +30,7 @@ module Gjp
         result = File.expand_path("..", result)
       end
 
-      raise NotGjpDirectoryException if result == "/"
+      raise NoProjectDirectoryError.new(starting_dir) if result == "/"
 
       result
     end
@@ -43,7 +43,7 @@ module Gjp
     end
 
     # returns the package name corresponding to the specified dir, if any
-    # raises NoPackageDirectoryException if dir is not a (sub)directory of a package
+    # raises NoPackageDirectoryError if dir is not a (sub)directory of a package
     def get_package_name(dir)
       begin
         dir_path = Pathname.new(File.expand_path(dir)).relative_path_from(Pathname.new(@full_path))
@@ -52,10 +52,10 @@ module Gjp
         if components.count >= 2 and components.first == "src" and Dir.exist?(File.join(@full_path, components[0], components[1]))
           components[1]
         else
-          raise NoPackageDirectoryException
+          raise NoPackageDirectoryError
         end
-      rescue ArgumentError, NotGjpDirectoryException
-        raise NoPackageDirectoryException
+      rescue ArgumentError, NoProjectDirectoryError
+        raise NoPackageDirectoryError.new(dir)
       end
     end
 
@@ -227,8 +227,18 @@ module Gjp
     end
   end
 
-  class NotGjpDirectoryException < Exception
+  class NoProjectDirectoryError < StandardError
+    attr_reader :directory
+
+    def initialize(directory)
+      @directory = directory
+    end
   end
-  class NoPackageDirectoryException < Exception
+  class NoPackageDirectoryError < StandardError
+    attr_reader :directory
+
+    def initialize(directory)
+      @directory = directory
+    end
   end
 end

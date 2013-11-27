@@ -37,7 +37,7 @@ describe Gjp::KitRunner do
       end
     end
     it "doesn't return commandline options if Maven is not available" do
-      expect { @kit_runner.get_maven_commandline(".") }.to raise_error(Gjp::ExecutableNotFoundException)
+      expect { @kit_runner.get_maven_commandline(".") }.to raise_error(Gjp::ExecutableNotFoundError)
     end
   end
 
@@ -51,7 +51,7 @@ describe Gjp::KitRunner do
     end
     it "doesn't run Maven if it is not available" do
       @project.from_directory do
-        expect { @kit_runner.mvn([]) }.to raise_error(Gjp::ExecutableNotFoundException)
+        expect { @kit_runner.mvn([]) }.to raise_error(Gjp::ExecutableNotFoundError)
       end
     end
   end
@@ -67,7 +67,7 @@ describe Gjp::KitRunner do
       end
     end
     it "doesn't return commandline options if Ant is not available" do
-      expect { @kit_runner.get_ant_commandline(".") }.to raise_error(Gjp::ExecutableNotFoundException)
+      expect { @kit_runner.get_ant_commandline(".") }.to raise_error(Gjp::ExecutableNotFoundError)
     end
   end
 
@@ -81,7 +81,7 @@ describe Gjp::KitRunner do
     end
     it "doesn't run Ant if it is not available" do
       @project.from_directory do
-        expect { @kit_runner.ant([]) }.to raise_error(Gjp::ExecutableNotFoundException)
+        expect { @kit_runner.ant([]) }.to raise_error(Gjp::ExecutableNotFoundError)
       end
     end
   end

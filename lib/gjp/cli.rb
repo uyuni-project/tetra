@@ -274,14 +274,14 @@ module Gjp
         $stderr.puts e
       rescue Errno::EEXIST => e
         $stderr.puts e
-      rescue NotGjpDirectoryException
-        $stderr.puts "This is not a gjp project directory, see gjp init"
-      rescue GitAlreadyInitedException
+      rescue NoProjectDirectoryError => e
+        $stderr.puts "#{e.directory} not a gjp project directory, see gjp init"
+      rescue NoPackageDirectoryException => e
+        $stderr.puts "#{e.directory} is not a gjp package directory, see README"
+      rescue GitAlreadyInitedError => e
         $stderr.puts "This directory is already a gjp project"
-      rescue ExecutableNotFoundException => e
+      rescue ExecutableNotFoundError => e
         $stderr.puts "Executable #{e.executable} not found in kit/ or any of its subdirectories"
-      rescue NoPackageDirectoryException
-        $stderr.puts "Directory is not a package directory"
       end
     end
   end
