@@ -80,10 +80,18 @@ module Gjp
     # reverts path contents as per specified tag
     def revert_whole_directory(path, tag)
       Dir.chdir(@directory) do
-        `git rm -rf --ignore-unmatch #{path}`
+        # reverts added and modified files, both in index and working tree
         `git checkout -f gjp_#{tag} -- #{path}`
 
-        `git clean -f -d #{path}`
+        # compute the list of deleted files
+        files_in_tag = `git ls-tree --name-only -r gjp_#{tag} -- #{path}`.split("\n")
+        files_in_head = `git ls-tree --name-only -r HEAD -- #{path}`.split("\n")
+        files_added_after_head = `git ls-files -o -- #{path}`.split("\n")
+        files_to_delete = files_in_head - files_in_tag + files_added_after_head
+
+        files_to_delete.each do |file|
+          File.delete(file)
+        end
       end
     end
 
