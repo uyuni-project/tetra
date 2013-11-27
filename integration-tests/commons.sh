@@ -27,10 +27,9 @@ gjp finish
 
 gjp generate-kit-archive
 gjp generate-kit-spec
-
 gjp generate-package-script
 gjp generate-package-archive
-gjp generate-package-spec . pom.xml
+gjp generate-package-spec
 cd ../../..
 
 cd src
@@ -47,10 +46,9 @@ gjp finish
 
 gjp generate-kit-archive -i
 gjp generate-kit-spec
-
 gjp generate-package-script
 gjp generate-package-archive
-gjp generate-package-spec . pom.xml
+gjp generate-package-spec
 cd ../../..
 
 
