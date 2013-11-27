@@ -278,8 +278,8 @@ module Gjp
         $stderr.puts "This is not a gjp project directory, see gjp init"
       rescue GitAlreadyInitedException
         $stderr.puts "This directory is already a gjp project"
-      rescue Gjp::ExecutableNotFoundException
-        $stderr.puts "Executable not found in kit/ or any of its subdirectories"
+      rescue ExecutableNotFoundException => e
+        $stderr.puts "Executable #{e.executable} not found in kit/ or any of its subdirectories"
       rescue NoPackageDirectoryException
         $stderr.puts "Directory is not a package directory"
       end

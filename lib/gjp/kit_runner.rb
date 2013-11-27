@@ -50,7 +50,7 @@ module Gjp
 
         "#{mvn_path} -Dmaven.repo.local=#{repo_path} -s#{config_path}"
       else
-        raise ExecutableNotFoundException
+        raise ExecutableNotFoundException.new("mvn")
       end
     end
 
@@ -69,11 +69,16 @@ module Gjp
 
         "#{ant_path}"
       else
-        raise ExecutableNotFoundException
+        raise ExecutableNotFoundException.new("ant")
       end
     end
   end
 
   class ExecutableNotFoundException < Exception
+    attr_reader :executable
+
+    def initialize(executable)
+      @executable = executable
+    end
   end
 end
