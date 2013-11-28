@@ -109,16 +109,6 @@ module Gjp
       end
     end
 
-    subcommand "generate-kit-spec", "Create or refresh a spec file for the kit" do
-      def execute
-        checking_exceptions do
-          project = Gjp::Project.new(".")
-          result_path, conflict_count = Gjp::SpecGenerator.new(project).generate_kit_spec
-          print_generation_result(project, result_path, conflict_count)
-        end
-      end
-    end
-
     subcommand "generate-kit-archive", "Create or refresh the kit tarball" do
       option ["-i", "--incremental"], :flag, "create an archive with only the difference from the previous one"
       def execute
@@ -126,6 +116,16 @@ module Gjp
           project = Gjp::Project.new(".")
           result_path = Gjp::Archiver.new(project).archive_kit(incremental?)
           print_generation_result(project, result_path)
+        end
+      end
+    end
+
+    subcommand "generate-kit-spec", "Create or refresh a spec file for the kit" do
+      def execute
+        checking_exceptions do
+          project = Gjp::Project.new(".")
+          result_path, conflict_count = Gjp::SpecGenerator.new(project).generate_kit_spec
+          print_generation_result(project, result_path, conflict_count)
         end
       end
     end
@@ -143,6 +143,18 @@ module Gjp
       end
     end
 
+    subcommand "generate-package-archive", "Create or refresh a package tarball" do
+      parameter "[DIRECTORY]", "path to a package directory (src/<package name>)", :default => "."
+      def execute
+        checking_exceptions do
+          project = Gjp::Project.new(".")
+          package_name = project.get_package_name(directory)
+          result_path = Gjp::Archiver.new(project).archive_package package_name
+          print_generation_result(project, result_path)
+        end
+      end
+    end
+
     subcommand "generate-package-spec", "Create or refresh a spec file for a package" do
       option ["-f", "--filter"], "FILTER", "filter files to be installed by this spec", :default => "*.jar"
       parameter "[DIRECTORY]", "path to a package directory (src/<package name>)", :default => "."
@@ -153,18 +165,6 @@ module Gjp
           package_name = project.get_package_name(directory)
           result_path, conflict_count = Gjp::SpecGenerator.new(project).generate_package_spec package_name, pom, filter
           print_generation_result(project, result_path, conflict_count)
-        end
-      end
-    end
-
-    subcommand "generate-package-archive", "Create or refresh a package tarball" do
-      parameter "[DIRECTORY]", "path to a package directory (src/<package name>)", :default => "."
-      def execute
-        checking_exceptions do
-          project = Gjp::Project.new(".")
-          package_name = project.get_package_name(directory)
-          result_path = Gjp::Archiver.new(project).archive_package package_name
-          print_generation_result(project, result_path)
         end
       end
     end
