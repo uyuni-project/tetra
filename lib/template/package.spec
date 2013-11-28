@@ -23,6 +23,7 @@ Summary:        <%= summary %>
 Url:            <%= url %>
 Group:          Development/Libraries/Java
 Source0:        %{name}.tar.xz
+Source1:        build.sh
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 BuildRequires:  xz
 BuildRequires:  java-devel
@@ -41,6 +42,7 @@ Requires:       mvn(<%= dependency_id[0] %>:<%= dependency_id[1] %>) <% if depen
 
 %prep
 %setup -q -c -n src/<%= name %>
+cp -f %{SOURCE1} .
 ln -sf %{_datadir}/gjp/<%= project_name %>-kit ../../kit
 
 %build

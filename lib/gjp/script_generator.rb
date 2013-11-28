@@ -37,8 +37,15 @@ module Gjp
 
         new_content = script_lines.join("\n") + "\n"
 
-        result_path = File.join("src", name, "build.sh")
+        script_name = "build.sh"
+        result_path = File.join("src", name, script_name)
         conflict_count = @project.merge_new_content(new_content, result_path, "Build script generated", "generate_#{name}_build_script")
+
+        destination_dir = File.join("output", name)
+        FileUtils.mkdir_p(destination_dir)
+        destination_script_path =  File.join(destination_dir, script_name)        
+        FileUtils.symlink(File.expand_path(result_path), destination_script_path, :force => true)
+
         [result_path, conflict_count]
       end
     end
