@@ -110,11 +110,11 @@ module Gjp
     end
 
     subcommand "generate-kit-archive", "Create or refresh the kit tarball" do
-      option ["-i", "--incremental"], :flag, "create an archive with only the difference from the previous one", :default => true
+      option ["-f", "--full"], :flag, "create a full archive (not incremental)"
       def execute
         checking_exceptions do
           project = Gjp::Project.new(".")
-          result_path = Gjp::Archiver.new(project).archive_kit(incremental?)
+          result_path = Gjp::Archiver.new(project).archive_kit(full?)
           print_generation_result(project, result_path)
         end
       end
@@ -171,7 +171,7 @@ module Gjp
 
     subcommand "generate-all", "Create or refresh specs, archives, scripts for a package and the kit" do
       option ["-f", "--filter"], "FILTER", "filter files to be installed by this package spec", :default => "*.jar"
-      option ["-i", "--incremental"], :flag, "create a kit archive with only the difference from the previous one", :default => true
+      option ["-f", "--full"], :flag, "create a full archive (not incremental)"
       parameter "[DIRECTORY]", "path to a package directory (src/<package name>)", :default => "."
       parameter "[POM]", "a package pom file path", :default => "pom.xml"
       def execute
@@ -179,7 +179,7 @@ module Gjp
           project = Gjp::Project.new(".")
           package_name = project.get_package_name(directory)
 
-          result_path = Gjp::Archiver.new(project).archive_kit(incremental?)
+          result_path = Gjp::Archiver.new(project).archive_kit(full?)
           print_generation_result(project, result_path)
 
           result_path, conflict_count = Gjp::SpecGenerator.new(project).generate_kit_spec

@@ -113,7 +113,7 @@ The following command will generate the kit archive in `output/galaxy-kit/`:
 
     gjp generate-kit-archive
 
-Note that, in later runs, you can also use the `--incremental` option to create an additional "diff" tar.xz file instead of rebuilding it from scratch.
+Note that, in later runs, only an additional "diff" tar.xz file will be created to ease uploads. You can use the `--full` option to regenerate a single complete archive.
 
 The following command will generate the kit spec:
 

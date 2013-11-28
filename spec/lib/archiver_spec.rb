@@ -60,7 +60,7 @@ describe Gjp::Archiver do
       end
       @project.finish(false)
 
-      archiver.archive_kit(false)
+      archiver.archive_kit(true)
       @project.from_directory do
         `tar -Jtf output/test-project-kit/test-project-kit.tar.xz`.split.should include("kit_test")
       end
@@ -71,7 +71,7 @@ describe Gjp::Archiver do
       end
       @project.finish(false)
 
-      archiver.archive_kit(true)
+      archiver.archive_kit(false)
       @project.from_directory do
         `tar -Jtf output/test-project-kit/test-project-kit.tar.xz`.split.should include("kit_test")
       end
@@ -80,7 +80,7 @@ describe Gjp::Archiver do
         File.open(File.join("kit","kit_test2"), "w") { |io| io.puts "test content" }
       end
 
-      archiver.archive_kit(true)
+      archiver.archive_kit(false)
       @project.from_directory do
         files = `tar -Jtf output/test-project-kit/test-project-kit_0001.tar.xz`.split
         files.should include("kit_test2")
