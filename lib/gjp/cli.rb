@@ -306,7 +306,7 @@ module Gjp
         $stderr.puts e
       rescue NoProjectDirectoryError => e
         $stderr.puts "#{e.directory} not a gjp project directory, see gjp init"
-      rescue NoPackageDirectoryException => e
+      rescue NoPackageDirectoryError => e
         $stderr.puts "#{e.directory} is not a gjp package directory, see README"
       rescue GitAlreadyInitedError => e
         $stderr.puts "This directory is already a gjp project"
