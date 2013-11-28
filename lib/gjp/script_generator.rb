@@ -30,6 +30,8 @@ module Gjp
         relevant_lines.map do |line|
           if line =~ /gjp +mvn/
             line.gsub(/gjp +mvn/, "#{@kit_runner.get_maven_commandline("$PROJECT_PREFIX")}")
+          elsif line =~ /gjp +ant/
+            line.gsub(/gjp +ant/, "#{@kit_runner.get_ant_commandline("$PROJECT_PREFIX")}")
           else
             line
           end
