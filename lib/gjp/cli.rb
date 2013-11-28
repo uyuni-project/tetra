@@ -71,7 +71,9 @@ module Gjp
       def execute
         checking_exceptions do
           project = Gjp::Project.new(".")
-          Gjp::KitRunner.new(project).mvn(@options)
+          ensure_dry_running(true, project) do
+            Gjp::KitRunner.new(project).mvn(@options)
+          end
         end
       end
     end
@@ -87,7 +89,9 @@ module Gjp
       def execute
         checking_exceptions do
           project = Gjp::Project.new(".")
-          Gjp::KitRunner.new(project).ant(@options)
+          ensure_dry_running(true, project) do
+            Gjp::KitRunner.new(project).ant(@options)
+          end
         end
       end
     end
@@ -114,8 +118,10 @@ module Gjp
       def execute
         checking_exceptions do
           project = Gjp::Project.new(".")
-          result_path = Gjp::Archiver.new(project).archive_kit(full?)
-          print_generation_result(project, result_path)
+          ensure_dry_running(false, project) do
+            result_path = Gjp::Archiver.new(project).archive_kit(full?)
+            print_generation_result(project, result_path)
+          end
         end
       end
     end
@@ -124,8 +130,10 @@ module Gjp
       def execute
         checking_exceptions do
           project = Gjp::Project.new(".")
-          result_path, conflict_count = Gjp::SpecGenerator.new(project).generate_kit_spec
-          print_generation_result(project, result_path, conflict_count)
+          ensure_dry_running(false, project) do
+            result_path, conflict_count = Gjp::SpecGenerator.new(project).generate_kit_spec
+            print_generation_result(project, result_path, conflict_count)
+          end
         end
       end
     end
@@ -135,10 +143,12 @@ module Gjp
       def execute
         checking_exceptions do
           project = Gjp::Project.new(".")
-          package_name = project.get_package_name(directory)
-          history_file = File.join(Dir.home, ".bash_history")
-          result_path, conflict_count = Gjp::ScriptGenerator.new(project, history_file).generate_build_script(package_name)
-          print_generation_result(project, result_path, conflict_count)
+          ensure_dry_running(false, project) do
+            package_name = project.get_package_name(directory)
+            history_file = File.join(Dir.home, ".bash_history")
+            result_path, conflict_count = Gjp::ScriptGenerator.new(project, history_file).generate_build_script(package_name)
+            print_generation_result(project, result_path, conflict_count)
+          end
         end
       end
     end
@@ -148,9 +158,11 @@ module Gjp
       def execute
         checking_exceptions do
           project = Gjp::Project.new(".")
-          package_name = project.get_package_name(directory)
-          result_path = Gjp::Archiver.new(project).archive_package package_name
-          print_generation_result(project, result_path)
+          ensure_dry_running(false, project) do
+            package_name = project.get_package_name(directory)
+            result_path = Gjp::Archiver.new(project).archive_package package_name
+            print_generation_result(project, result_path)
+          end
         end
       end
     end
@@ -162,9 +174,11 @@ module Gjp
       def execute
         checking_exceptions do
           project = Gjp::Project.new(".")
-          package_name = project.get_package_name(directory)
-          result_path, conflict_count = Gjp::SpecGenerator.new(project).generate_package_spec package_name, pom, filter
-          print_generation_result(project, result_path, conflict_count)
+          ensure_dry_running(false, project) do
+            package_name = project.get_package_name(directory)
+            result_path, conflict_count = Gjp::SpecGenerator.new(project).generate_package_spec package_name, pom, filter
+            print_generation_result(project, result_path, conflict_count)
+          end
         end
       end
     end
@@ -177,31 +191,37 @@ module Gjp
       def execute
         checking_exceptions do
           project = Gjp::Project.new(".")
-          package_name = project.get_package_name(directory)
+          ensure_dry_running(false, project) do
+            package_name = project.get_package_name(directory)
 
-          result_path = Gjp::Archiver.new(project).archive_kit(full?)
-          print_generation_result(project, result_path)
+            result_path = Gjp::Archiver.new(project).archive_kit(full?)
+            print_generation_result(project, result_path)
 
-          result_path, conflict_count = Gjp::SpecGenerator.new(project).generate_kit_spec
-          print_generation_result(project, result_path, conflict_count)
+            result_path, conflict_count = Gjp::SpecGenerator.new(project).generate_kit_spec
+            print_generation_result(project, result_path, conflict_count)
 
-          history_file = File.join(Dir.home, ".bash_history")
-          result_path, conflict_count = Gjp::ScriptGenerator.new(project, history_file).generate_build_script(package_name)
-          print_generation_result(project, result_path, conflict_count)
+            history_file = File.join(Dir.home, ".bash_history")
+            result_path, conflict_count = Gjp::ScriptGenerator.new(project, history_file).generate_build_script(package_name)
+            print_generation_result(project, result_path, conflict_count)
 
-          result_path = Gjp::Archiver.new(project).archive_package package_name
-          print_generation_result(project, result_path)
+            result_path = Gjp::Archiver.new(project).archive_package package_name
+            print_generation_result(project, result_path)
 
-          result_path, conflict_count = Gjp::SpecGenerator.new(project).generate_package_spec package_name, pom, filter
-          print_generation_result(project, result_path, conflict_count)
+            result_path, conflict_count = Gjp::SpecGenerator.new(project).generate_package_spec package_name, pom, filter
+            print_generation_result(project, result_path, conflict_count)
+          end
         end
       end
     end
 
     subcommand "purge-jars", "Locates jars in src/ and moves them to kit/" do
       def execute
-        Gjp::Project.new(".").purge_jars.each do |original, final|
-          puts "Replaced #{original} with symlink pointing to to #{final}"
+        project = Gjp::Project.new(".")
+
+        ensure_dry_running(false, project) do
+          project.purge_jars.each do |original, final|
+            puts "Replaced #{original} with symlink pointing to to #{final}"
+          end
         end
       end
     end
@@ -275,6 +295,18 @@ module Gjp
     end
 
     private
+
+    def ensure_dry_running(state, project)
+      if project.is_dry_running == state
+        yield
+      else
+        if state == true
+          puts "Please start a dry-run first, use \"gjp dry-run\""
+        else
+          puts "Please finish or abort this dry-run first, use \"gjp finish\" or \"gjp finish --abort\""
+        end
+      end
+    end
 
     # outputs output of a file generation
     def print_generation_result(project, result_path, conflict_count = 0)
