@@ -54,7 +54,7 @@ module Gjp
             puts "Now dry-running, please start your build."
             puts "To run a Maven installation from the kit, use \"gjp mvn\"."
             puts "If the build succeedes end this dry run with \"gjp finish\"."
-            puts "If the build does not succeed use \"gjp finish --failed\" to restore files."
+            puts "If the build does not succeed use \"gjp finish --abort\" to restore files."
           end
         end
       end
@@ -93,11 +93,11 @@ module Gjp
     end
 
     subcommand "finish", "Ends the current dry-run" do
-      option ["-f", "--failed"], :flag, "build failed, restore files as before dry-run"
+      option ["-f", "--abort"], :flag, "build abort, restore files as before dry-run"
       def execute
         checking_exceptions do
-          if Gjp::Project.new(".").finish(failed?)
-            if failed?
+          if Gjp::Project.new(".").finish(abort?)
+            if abort?
               puts "Project reverted as before dry-run."
             else
               puts "Dry-run finished."

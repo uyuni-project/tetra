@@ -100,11 +100,11 @@ module Gjp
     end
 
     # ends a dry-run.
-    # if failed is true, reverts the whole directory
-    # if failed is false, reverts sources and updates output file lists
-    def finish(failed)
+    # if abort is true, reverts the whole directory
+    # if abort is false, reverts sources and updates output file lists
+    def finish(abort)
       if is_dry_running
-        if failed
+        if abort
           @git.revert_whole_directory(".", latest_tag(:dry_run_started))
           @git.delete_tag(latest_tag(:dry_run_started))
         else

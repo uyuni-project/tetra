@@ -95,7 +95,7 @@ At this point `gjp` restored `src/` as it was before the build while taking note
 
 Note that, if the build was unsusccesful, the following command can be used to cancel it and return to pre-dry running state:
 
-    gjp finish --failed
+    gjp finish --abort
 
 #### Generating a build script
 
