@@ -110,7 +110,7 @@ module Gjp
     end
 
     subcommand "generate-kit-archive", "Create or refresh the kit tarball" do
-      option ["-i", "--incremental"], :flag, "create an archive with only the difference from the previous one"
+      option ["-i", "--incremental"], :flag, "create an archive with only the difference from the previous one", :default => true
       def execute
         checking_exceptions do
           project = Gjp::Project.new(".")
