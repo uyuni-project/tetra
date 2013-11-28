@@ -74,6 +74,7 @@ module Gjp
         template_manager.copy "output", "."
         template_manager.copy "kit", "."
         template_manager.copy "src", "."
+        template_manager.copy "gitignore", ".gitignore"
 
         project.take_snapshot "Template files added", :init
       end

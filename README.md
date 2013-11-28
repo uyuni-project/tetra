@@ -125,12 +125,12 @@ You can then generate the project spec and archive files provided you have a pom
 
     gjp generate-package-archive
     gjp generate-package-spec
-    less output/commons-collections/commons-collections.spec
+    less ../commons-collections.spec
 
 commons-collection BuldRequires galaxy-kit, its archive contains only source files and it will install any produced .jar file in `/usr/lib/java`.
 You can also edit the specs file manually if you want. When you later regenerate it, `gjp` will automatically try to reconcile changes with a [three-way merge](http://en.wikipedia.org/wiki/Three-way_merge#Three-way_merge).
 
-Packages are ready to be submitted to an OBS project. As OBS integration is not yet implemented, refer to OBS documentation to do that.
+OBS users: note that the output/ directory created by gjp can be submitted or used as OBS project. Feel free to replace it with a symlink pointing at your home OBS project, or use symlinks from your OBS project to its contents.
 
 #### Ant packages
 
@@ -179,7 +179,7 @@ You are advised to use [Maven Central](http://search.maven.org/) to search for s
 
 ### Troubleshooting
 
-`gjp` internally uses `git` to keep track of files, any gjp project is actually also a `git` repo. Feel free to navigate it, you can commit, push and pull freely as long as the `gjp` tags are preserved. You can also delete commits and tags, effectively rewiding gjp history (just make sure to delete all tags pointing to a certain commit when you discard it).
+`gjp` internally uses `git` to keep track of files, any gjp project is actually also a `git` repo. Feel free to navigate it, you can commit, push and pull freely as long as the `gjp` tags are preserved. You can also delete commits and tags, effectively rewinding gjp history (just make sure to delete all tags pointing to a certain commit when you discard it).
 
 ## Motivation
 
