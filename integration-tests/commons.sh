@@ -25,11 +25,7 @@ cd src/commons-collections/commons-collections-3.2.1-src/
 gjp mvn package -DskipTests
 gjp finish
 
-gjp generate-kit-archive
-gjp generate-kit-spec
-gjp generate-package-script
-gjp generate-package-archive
-gjp generate-package-spec
+gjp generate-all
 cd ../../..
 
 cd src

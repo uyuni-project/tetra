@@ -132,6 +132,20 @@ You can also edit the specs file manually if you want. When you later regenerate
 
 OBS users: note that the output/ directory created by gjp can be submitted or used as OBS project. Feel free to replace it with a symlink pointing at your home OBS project, or use symlinks from your OBS project to its contents.
 
+#### Quicker workflow
+
+`gjp` also has a `generate-all` subcommand that will generate everything in one step. Thus, for Maven-based projects, the minimal workflow is:
+
+    cd src
+    mkdir <package_name>
+    cd <package_name>
+    wget <sources>
+    ...
+    gjp dry-run
+    gjp mvn package
+    gjp finish
+    gjp generate-all
+
 #### Ant packages
 
 Building Ant packages is not really different from Maven ones, as `gjp ant` will operate exactly like `gjp mvn`.

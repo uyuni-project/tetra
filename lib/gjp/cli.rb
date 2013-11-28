@@ -114,10 +114,7 @@ module Gjp
         checking_exceptions do
           project = Gjp::Project.new(".")
           result_path, conflict_count = Gjp::SpecGenerator.new(project).generate_kit_spec
-          puts "#{format_path(result_path, project)} generated"
-          if conflict_count > 0
-            puts "Warning: #{conflict_count} unresolved conflicts"
-          end
+          print_generation_result(project, result_path, conflict_count)
         end
       end
     end
@@ -128,7 +125,7 @@ module Gjp
         checking_exceptions do
           project = Gjp::Project.new(".")
           result_path = Gjp::Archiver.new(project).archive_kit(incremental?)
-          puts "#{format_path(result_path, project)} generated"
+          print_generation_result(project, result_path)
         end
       end
     end
@@ -141,10 +138,7 @@ module Gjp
           package_name = project.get_package_name(directory)
           history_file = File.join(Dir.home, ".bash_history")
           result_path, conflict_count = Gjp::ScriptGenerator.new(project, history_file).generate_build_script(package_name)
-          puts "#{format_path(result_path, project)} generated"
-          if conflict_count > 0
-            puts "Warning: #{conflict_count} unresolved conflicts"
-          end
+          print_generation_result(project, result_path, conflict_count)
         end
       end
     end
@@ -158,10 +152,7 @@ module Gjp
           project = Gjp::Project.new(".")
           package_name = project.get_package_name(directory)
           result_path, conflict_count = Gjp::SpecGenerator.new(project).generate_package_spec package_name, pom, filter
-          puts "#{format_path(result_path, project)} generated"
-          if conflict_count > 0
-            puts "Warning: #{conflict_count} unresolved conflicts"
-          end
+          print_generation_result(project, result_path, conflict_count)
         end
       end
     end
@@ -173,7 +164,36 @@ module Gjp
           project = Gjp::Project.new(".")
           package_name = project.get_package_name(directory)
           result_path = Gjp::Archiver.new(project).archive_package package_name
-          puts "#{format_path(result_path, project)} generated"
+          print_generation_result(project, result_path)
+        end
+      end
+    end
+
+    subcommand "generate-all", "Create or refresh specs, archives, scripts for a package and the kit" do
+      option ["-f", "--filter"], "FILTER", "filter files to be installed by this package spec", :default => "*.jar"
+      option ["-i", "--incremental"], :flag, "create a kit archive with only the difference from the previous one", :default => true
+      parameter "[DIRECTORY]", "path to a package directory (src/<package name>)", :default => "."
+      parameter "[POM]", "a package pom file path", :default => "pom.xml"
+      def execute
+        checking_exceptions do
+          project = Gjp::Project.new(".")
+          package_name = project.get_package_name(directory)
+
+          result_path = Gjp::Archiver.new(project).archive_kit(incremental?)
+          print_generation_result(project, result_path)
+
+          result_path, conflict_count = Gjp::SpecGenerator.new(project).generate_kit_spec
+          print_generation_result(project, result_path, conflict_count)
+
+          history_file = File.join(Dir.home, ".bash_history")
+          result_path, conflict_count = Gjp::ScriptGenerator.new(project, history_file).generate_build_script(package_name)
+          print_generation_result(project, result_path, conflict_count)
+
+          result_path = Gjp::Archiver.new(project).archive_package package_name
+          print_generation_result(project, result_path)
+
+          result_path, conflict_count = Gjp::SpecGenerator.new(project).generate_package_spec package_name, pom, filter
+          print_generation_result(project, result_path, conflict_count)
         end
       end
     end
@@ -252,6 +272,16 @@ module Gjp
           puts Gjp::SourceGetter.new.get_source(address, pom, directory)
         end    
       end    
+    end
+
+    private
+
+    # outputs output of a file generation
+    def print_generation_result(project, result_path, conflict_count = 0)
+      puts "#{format_path(result_path, project)} generated"
+      if conflict_count > 0
+        puts "Warning: #{conflict_count} unresolved conflicts"
+      end
     end
 
     # generates a version of path relative to the current directory
