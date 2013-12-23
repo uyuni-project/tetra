@@ -191,9 +191,14 @@ More comprehensive support is planned in future releases.
 
 You are advised to use [Maven Central](http://search.maven.org/) to search for sources and other information about projects.
 
-### Troubleshooting
+### Gotchas
 
-`gjp` internally uses `git` to keep track of files, any gjp project is actually also a `git` repo. Feel free to navigate it, you can commit, push and pull freely as long as the `gjp` tags are preserved. You can also delete commits and tags, effectively rewinding gjp history (just make sure to delete all tags pointing to a certain commit when you discard it).
+* `gjp` internally uses `git` to keep track of files, any gjp project is actually also a `git` repo. Feel free to navigate it, you can commit, push and pull as long as the `gjp` tags are preserved. You can also delete commits and tags, effectively rewinding gjp history (just make sure to delete all tags pointing to a certain commit when you discard it);
+* if your sources come from a Git repo, be sure to remove any `.git`/`.gitignore` files, otherwise `gjp` might get confused;
+* if OBS complains that jars in your kit or package are compiled for a JDK version higher than 1.5, add the following line after `%install` to squelch the error:
+
+    export NO_BRP_CHECK_BYTECODE_VERSION=true
+
 
 ## Motivation
 
