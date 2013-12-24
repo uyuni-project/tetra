@@ -19,8 +19,8 @@ describe Gjp::KitRunner do
 
   describe "#find_executable"  do
     it "finds an executable in kit" do
-      mock_executable("mvn")
-      @kit_runner.find_executable("mvn").should eq @executable
+      executable_path = mock_executable("mvn", @project_path)
+      @kit_runner.find_executable("mvn").should eq executable_path
     end
     it "doesn't find a Maven executable in kit" do
       @kit_runner.find_executable("mvn").should be_nil
@@ -29,11 +29,11 @@ describe Gjp::KitRunner do
 
   describe "#get_maven_commandline"  do
     it "returns commandline options for running maven" do
-      mock_executable("mvn")
+      executable_path = mock_executable("mvn", @project_path)
 
       @project.from_directory do
         commandline = @kit_runner.get_maven_commandline(".")
-        commandline.should eq "./#{@executable} -Dmaven.repo.local=./kit/m2 -s./kit/m2/settings.xml"
+        commandline.should eq "./#{executable_path} -Dmaven.repo.local=./kit/m2 -s./kit/m2/settings.xml"
       end
     end
     it "doesn't return commandline options if Maven is not available" do
@@ -43,7 +43,7 @@ describe Gjp::KitRunner do
 
   describe "#mvn"  do
     it "runs maven" do
-      mock_executable("mvn")
+      mock_executable("mvn", @project_path)
       @project.from_directory do
         @kit_runner.mvn(["extra-option"])
         File.read("test_out").strip.should match /extra-option$/
@@ -59,11 +59,11 @@ describe Gjp::KitRunner do
 
   describe "#get_ant_commandline"  do
     it "returns commandline options for running Ant" do
-      mock_executable("ant")
+      executable_path = mock_executable("ant", @project_path)
 
       @project.from_directory do
         commandline = @kit_runner.get_ant_commandline(".")
-        commandline.should eq "./#{@executable}"
+        commandline.should eq "./#{executable_path}"
       end
     end
     it "doesn't return commandline options if Ant is not available" do
@@ -73,7 +73,7 @@ describe Gjp::KitRunner do
 
   describe "#ant"  do
     it "runs Ant" do
-      mock_executable("ant")
+      mock_executable("ant", @project_path)
       @project.from_directory do
         @kit_runner.ant(["extra-option"])
         File.read("test_out").strip.should match /extra-option$/
@@ -83,16 +83,6 @@ describe Gjp::KitRunner do
       @project.from_directory do
         expect { @kit_runner.ant([]) }.to raise_error(Gjp::ExecutableNotFoundError)
       end
-    end
-  end
-
-  def mock_executable(executable)
-    Dir.chdir(@project_path) do
-      @bin_dir = File.join("kit", executable, "bin")
-      FileUtils.mkdir_p(@bin_dir)
-      @executable = File.join(@bin_dir, executable)
-      File.open(@executable, "w") { |io| io.puts "echo $0 $*>test_out" }
-      File.chmod(0777, @executable)
     end
   end
 end
