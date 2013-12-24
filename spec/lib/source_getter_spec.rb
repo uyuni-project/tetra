@@ -4,19 +4,16 @@ require "spec_helper"
 require "fileutils"
 
 describe Gjp::SourceGetter do
+  include Gjp::Mockers
   let(:source_getter) { Gjp::SourceGetter.new }
 
   describe "#get_maven_source_jars" do
     before(:each) do
-      @project_path = File.join("spec", "data", "test-project")
-      Dir.mkdir(@project_path)
-
-      Gjp::Project.init(@project_path)
-      @project = Gjp::Project.new(@project_path)
+      create_mock_project
     end
 
     it "gets sources for jars in the Maven repo through Maven itself" do
-      mock_executable("mvn", @project_path)
+      create_mock_executable("mvn")
 
       @project.from_directory(File.join("kit", "m2")) do
         jar_dir_path = File.join("net", "test", "artifact", "1.0")
@@ -33,7 +30,7 @@ describe Gjp::SourceGetter do
     end
 
     after(:each) do
-      FileUtils.rm_rf(@project_path)
+      delete_mock_project
     end
   end
 

@@ -73,7 +73,7 @@ module Gjp
         checking_exceptions do
           project = Gjp::Project.new(".")
           ensure_dry_running(true, project) do
-            Gjp::KitRunner.new(project).mvn(@options)
+            Gjp::MavenRunner.new(project).mvn(@options)
           end
         end
       end
@@ -91,7 +91,7 @@ module Gjp
         checking_exceptions do
           project = Gjp::Project.new(".")
           ensure_dry_running(true, project) do
-            Gjp::KitRunner.new(project).ant(@options)
+            Gjp::AntRunner.new(project).ant(@options)
           end
         end
       end

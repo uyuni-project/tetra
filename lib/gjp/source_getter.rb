@@ -10,7 +10,7 @@ module Gjp
     # looks for jars in maven's local repo and downloads corresponding
     # source jars
     def get_maven_source_jars(project)
-      kit_runner = Gjp::KitRunner.new(project)
+      maven_runner = Gjp::MavenRunner.new(project)
 
       project.from_directory do
         paths = Find.find(".").reject {|path| artifact_from_path(path) == nil}.sort
@@ -18,7 +18,7 @@ module Gjp
         succeded_paths = paths.select.with_index do |path, i|
           artifact = artifact_from_path(path)
           log.info("attempting source download for #{path} (#{artifact})")
-          status = kit_runner.mvn(["dependency:get", "-Dartifact=#{artifact}", "-Dtransitive=false"])
+          status = maven_runner.mvn(["dependency:get", "-Dartifact=#{artifact}", "-Dtransitive=false"])
           status.exitstatus == 0
         end
 
