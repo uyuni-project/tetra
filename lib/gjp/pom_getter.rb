@@ -28,9 +28,9 @@ module Gjp
           end
         end
       rescue Zip::ZipError
-        log.info "#{file} does not seem to be a valid jar archive, skipping"
+        log.warn("#{file} does not seem to be a valid jar archive, skipping")
       rescue TypeError
-        log.info "#{file} seems to be a valid jar archive but is corrupt, skipping"
+        log.warn("#{file} seems to be a valid jar archive but is corrupt, skipping")
       end
       return nil
     end
@@ -51,7 +51,7 @@ module Gjp
         end
         return nil
       rescue RestClient::ResourceNotFound
-        $stderr.puts "Got an error while looking for #{file}'s SHA1 in search.maven.org" 
+        log.error("Got an error while looking for #{file}'s SHA1 in search.maven.org")
       end
     end
 
@@ -77,7 +77,7 @@ module Gjp
           return site.download_pom(group_id, artifact_id, version)
         end
       rescue RestClient::ResourceNotFound
-        $stderr.puts "Got an error while looking for #{filename} in search.maven.org" 
+        log.error("Got an error while looking for #{filename}'s SHA1 in search.maven.org")
       end
     end
   end
