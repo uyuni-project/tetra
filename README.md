@@ -6,7 +6,7 @@ The project objective is to strongly reduce manual packaging efforts by enabling
 
 ## Status
 
-`gjp` is a research project currently in alpha state. Basic concepts seem to be viable, packages are currently being built with the new approach to identify problem areas but not all basic features have been coded yet. If you are a packager you can try to use it (any feedback would be **very** welcome!), but be warned that anything can still change at this point.
+`gjp` is a research project currently in beta state. All basic features have been coded, non-essential ones are being planned, packages are currently being built. If you are a packager you can try to use it, any feedback would be **very** welcome!
 
 At the moment `gjp` is tested on openSUSE and can only output RPMs for the openSUSE and SLES distributions. Fedora, RHEL and other distros could be supported in the future.
 
@@ -50,7 +50,7 @@ Note that:
 * a `gjp` project can be used to build a number of packages that share one binary kit. This can help if the kit becomes big in size;
 * `gjp` will take advantage of Maven's pom files to generate its specs if they are available. This allows to precompile most spec fields automatically.
 
-### Sample project (commons-collections)
+### A sample Maven project (commons-collections)
 
 #### Initialization and project setup
 
@@ -146,7 +146,24 @@ OBS users: note that the output/ directory created by gjp can be submitted or us
     gjp finish
     gjp generate-all
 
-#### Ant packages
+#### Kit sources
+
+If you want to redistribute your RPMs, chances are that you need source files for kit contents.
+
+If you use Maven, most sources for binary jars in your kit can be automatically downloaded:
+
+    gjp get-maven-source-jars
+
+For non-Maven jars, or Maven jars that have no available sources, some extra manual work is needed. At the moment `gjp` can help you with the following utility subcommands:
+
+* `gjp get-pom NAME` will attempt to find a pom. `NAME` can be a jar file on your disk, a project directory, or simply a `name-version` string. `gjp` will get the pom either from the package itself or through search.maven.org using heuristic searching;
+* `gjp get-parent-pom POM` will attempt to download a pom's parent from search.maven.org, where `POM` is a filename or URI;
+* `gjp get-source-address POM` will attempt to find the SCM Internet address of a pom.xml from the file itself or through api.github.com. `POM` can either be a filename or a URI;
+* `gjp get-source POM ADDRESS` downloads the source of a pom.xml's project from its SCM at ADDRESS;
+
+More comprehensive support is planned in future releases.
+
+#### Optional: Ant packages
 
 Building Ant packages is not really different from Maven ones, as `gjp ant` will operate exactly like `gjp mvn`.
 
@@ -170,26 +187,6 @@ Once built, you are advised to grab an "informational" pom.xml (via `gjp get-pom
 
 The above is not mandatory, but it can be useful for debugging purposes.
 
-#### Optional: kit sources
-
-If kit sources are needed for license compliance, some extra work is needed. Fortunately, finding jar source files and adding them to the kit is much easier than packaging its contents in proper RPMs!
-
-If the project you are packaging uses Maven, you can ask Maven itself to find source jars for dependencies. Running the following command will add them to the kit:
-
-    gjp mvn dependency:sources
-
-Unfortunately this will not take care of Maven itself, Maven's plugins and their dependencies so some extra work might be needed.
-
-At the moment `gjp`'s supprort to kit source retrieval is limited to the following subcommands:
-
-* `gjp get-pom NAME` will attempt to find a pom. `NAME` can be a jar file on your disk, a project directory, or simply a `name-version` string. `gjp` will get the pom either from the package itself or through search.maven.org using heuristic searching;
-* `gjp get-parent-pom POM` will attempt to download a pom's parent from search.maven.org, where `POM` is a filename or URI;
-* `gjp get-source-address POM` will attempt to find the SCM Internet address of a pom.xml from the file itself or through api.github.com. `POM` can either be a filename or a URI;
-* `gjp get-source POM ADDRESS` downloads the source of a pom.xml's project from its SCM at ADDRESS;
-
-More comprehensive support is planned in future releases.
-
-You are advised to use [Maven Central](http://search.maven.org/) to search for sources and other information about projects.
 
 ### Gotchas
 
