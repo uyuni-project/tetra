@@ -5,9 +5,16 @@ module Gjp
   class MavenRunner < KitRunner
     include Logger
 
-    # runs mvn in a subprocess
+    # runs Maven in a subprocess
     def mvn(options)
       run_executable "#{get_maven_commandline(@project.full_path)} #{options.join(' ')}"
+    end
+
+    # runs Maven to attempt getting a source jar
+    # returns true if successful
+    def get_source_jar(group_id, artifact_id, version)
+      status = mvn(["dependency:get", "-Dartifact=#{group_id}:#{artifact_id}:#{version}:jar:sources", "-Dtransitive=false"])
+      status.exitstatus == 0
     end
 
     # returns a command line for running Maven from the specified

@@ -16,10 +16,9 @@ module Gjp
         paths = Find.find(".").reject {|path| artifact_from_path(path) == nil}.sort
 
         succeded_paths = paths.select.with_index do |path, i|
-          artifact = artifact_from_path(path)
-          log.info("attempting source download for #{path} (#{artifact})")
-          status = maven_runner.mvn(["dependency:get", "-Dartifact=#{artifact}", "-Dtransitive=false"])
-          status.exitstatus == 0
+          group_id, artifact_id, version = artifact_from_path(path)
+          log.info("attempting source download for #{path} (#{group_id}:#{artifact_id}:#{version})")
+          maven_runner.get_source_jar(group_id, artifact_id, version)
         end
 
         [succeded_paths, (paths - succeded_paths)]
@@ -107,7 +106,7 @@ module Gjp
     def artifact_from_path(path)
       match = path.match(/\.\/kit\/m2\/(.+)\/(.+)\/(.+)\/\2-\3.*\.jar$/)
       if match != nil
-        "#{match[1].gsub("/", ".")}:#{match[2]}:#{match[3]}:jar:sources"
+        [match[1].gsub("/", "."), match[2], match[3]]
       end
     end
   end
