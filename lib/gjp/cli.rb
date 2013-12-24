@@ -282,7 +282,7 @@ module Gjp
     end
 
     subcommand "get-pom", "Retrieves a pom corresponding to a filename" do
-      parameter "NAME", "a jar file path, a project directory path or a non-existing filename in the `project-version` form"
+      parameter "NAME", "a jar file name or a `name-version` string (heuristic)"
       def execute
           checking_exceptions do
           puts Gjp::PomGetter.new.get_pom(name)

@@ -6,12 +6,6 @@ describe Gjp::PomGetter do
   let(:pom_getter) { Gjp::PomGetter.new }
 
   describe "#get_pom" do
-    it "gets the pom from a directory" do
-      dir_path = File.join("spec", "data", "commons-logging")
-      pom_path = File.join(dir_path, "pom.xml")
-      pom_getter.get_pom(dir_path).should eq(File.read(pom_path))
-    end
-    
     it "gets the pom from a jar" do
       dir_path = File.join("spec", "data", "commons-logging")
       pom_path = File.join(dir_path, "pom.xml")

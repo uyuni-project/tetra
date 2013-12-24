@@ -156,7 +156,7 @@ If you use Maven, most sources for binary jars in your kit can be automatically 
 
 For non-Maven jars, or Maven jars that have no available sources, some extra manual work is needed. At the moment `gjp` can help you with the following utility subcommands:
 
-* `gjp get-pom NAME` will attempt to find a pom. `NAME` can be a jar file on your disk, a project directory, or simply a `name-version` string. `gjp` will get the pom either from the package itself or through search.maven.org using heuristic searching;
+* `gjp get-pom NAME` will attempt to find a pom. `NAME` can be a jar file name or a `name-version` string. `gjp` will get the pom either from the package itself or through search.maven.org using heuristic searching;
 * `gjp get-parent-pom POM` will attempt to download a pom's parent from search.maven.org, where `POM` is a filename or URI;
 * `gjp get-source-address POM` will attempt to find the SCM Internet address of a pom.xml from the file itself or through api.github.com. `POM` can either be a filename or a URI;
 * `gjp get-source POM ADDRESS` downloads the source of a pom.xml's project from its SCM at ADDRESS;

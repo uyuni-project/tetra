@@ -15,20 +15,9 @@ module Gjp
 
     # returns the pom corresponding to a filename
     def get_pom(filename)
-      (get_pom_from_dir(filename) or get_pom_from_jar(filename) or get_pom_from_sha1(filename) or get_pom_from_heuristic(filename))
+      (get_pom_from_jar(filename) or get_pom_from_sha1(filename) or get_pom_from_heuristic(filename))
     end
 
-    # returns the pom in a project directory
-    def get_pom_from_dir(dir)
-      if File.directory?(dir)
-        pom_path = File.join(dir, "pom.xml")
-        if File.file?(pom_path)
-          log.info("pom.xml found in #{dir}/pom.xml")
-          return File.read(pom_path)
-        end
-      end
-    end
-    
     # returns a pom embedded in a jar file
     def get_pom_from_jar(file)
       begin
