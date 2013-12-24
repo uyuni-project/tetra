@@ -216,11 +216,18 @@ module Gjp
 
     subcommand "purge-jars", "Locates jars in src/ and moves them to kit/" do
       def execute
-        project = Gjp::Project.new(".")
+        checking_exceptions do
+          project = Gjp::Project.new(".")
 
-        ensure_dry_running(false, project) do
-          project.purge_jars.each do |original, final|
-            puts "Replaced #{original} with symlink pointing to to #{final}"
+          ensure_dry_running(false, project) do
+            project.purge_jars.each do |original, final|
+              puts "Replaced #{original} with symlink pointing to to #{final}"
+            end
+          end
+        end
+      end
+    end
+
           end
         end
       end
