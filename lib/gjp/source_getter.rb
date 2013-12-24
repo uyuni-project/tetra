@@ -3,9 +3,28 @@
 require "rest_client"
 
 module Gjp
-  # attempts to get java projects' sources from scm
+  # attempts to get java projects' sources
   class SourceGetter
     include Logger
+
+    # looks for jars in maven's local repo and downloads corresponding
+    # source jars
+    def get_maven_source_jars(project)
+      kit_runner = Gjp::KitRunner.new(project)
+
+      project.from_directory do
+        paths = Find.find(".").reject {|path| artifact_from_path(path) == nil}.sort
+
+        succeded_paths = paths.select.with_index do |path, i|
+          artifact = artifact_from_path(path)
+          log.info("attempting source download for #{path} (#{artifact})")
+          status = kit_runner.mvn(["dependency:get", "-Dartifact=#{artifact}", "-Dtransitive=false"])
+          status.exitstatus == 0
+        end
+
+        [succeded_paths, (paths - succeded_paths)]
+      end
+    end
 
     # downloads a project's source into a specified directory
     def get_source(address, pomfile, directory)
@@ -81,5 +100,15 @@ module Gjp
   		best_version = version_matcher.best_match(version, versions_to_tags.keys)
   		versions_to_tags[best_version]
   	end
+
+    private
+
+    # if possible, turn path into a Maven artifact name, otherwise return nil
+    def artifact_from_path(path)
+      match = path.match(/\.\/kit\/m2\/(.+)\/(.+)\/(.+)\/\2-\3.*\.jar$/)
+      if match != nil
+        "#{match[1].gsub("/", ".")}:#{match[2]}:#{match[3]}:jar:sources"
+      end
+    end
   end
 end

@@ -31,6 +31,7 @@ module Gjp
     def run_executable(full_commandline)
       log.debug "running #{full_commandline}"
       Process.wait(Process.spawn(full_commandline))
+      $?
     end
 
     # runs mvn in a subprocess
