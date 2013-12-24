@@ -284,7 +284,7 @@ module Gjp
     subcommand "get-pom", "Retrieves a pom corresponding to a filename" do
       parameter "NAME", "a jar file name or a `name-version` string (heuristic)"
       def execute
-          checking_exceptions do
+        checking_exceptions do
           puts Gjp::PomGetter.new.get_pom(name)
         end
       end
@@ -293,7 +293,7 @@ module Gjp
     subcommand "get-parent-pom", "Retrieves a pom that is the parent of an existing pom" do
       parameter "POM", "a pom file path or URI"
       def execute
-          checking_exceptions do
+        checking_exceptions do
           puts Gjp::ParentPomGetter.new.get_parent_pom(pom)
         end
       end
