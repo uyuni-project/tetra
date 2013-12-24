@@ -13,9 +13,15 @@ module Gjp
   class PomGetter
     include Logger
 
-    # returns the pom corresponding to a filename
+    # saves a jar poms in <jar_filename>.pom
+    # returns filename and status if found, else nil
     def get_pom(filename)
-      (get_pom_from_jar(filename) or get_pom_from_sha1(filename) or get_pom_from_heuristic(filename))
+      content, status = (get_pom_from_jar(filename) or get_pom_from_sha1(filename) or get_pom_from_heuristic(filename))
+      if content
+        pom_filename = filename.sub(/(\.jar)?$/, ".pom")
+        File.open(pom_filename, "w") { |io| io.write(content) }
+        [pom_filename, status]
+      end
     end
 
     # returns a pom embedded in a jar file
@@ -24,7 +30,7 @@ module Gjp
         Zip::ZipFile.foreach(file) do |entry|
           if entry.name =~ /\/pom.xml$/
             log.info("pom.xml found in #{file}##{entry.name}")
-            return entry.get_input_stream.read
+            return entry.get_input_stream.read, :found_in_jar
           end
         end
       rescue Zip::ZipError
@@ -46,7 +52,7 @@ module Gjp
           if result != nil
             log.info("pom.xml for #{file} found on search.maven.org for sha1 #{sha1} (#{result["g"]}:#{result["a"]}:#{result["v"]})")
             group_id, artifact_id, version = site.get_maven_id_from result
-            return site.download_pom(group_id, artifact_id, version)
+            return site.download_pom(group_id, artifact_id, version), :found_via_sha1
           end
         end
         return nil
@@ -59,7 +65,7 @@ module Gjp
     def get_pom_from_heuristic(filename)
       begin
         site = MavenWebsite.new
-        filename = Pathname.new(filename).basename.to_s.sub(/.jar$/, "")
+        filename = cleanup_name(filename)
         version_matcher = VersionMatcher.new
         my_artifact_id, my_version = version_matcher.split_version(filename)
 
@@ -74,11 +80,16 @@ module Gjp
           group_id, artifact_id, version = site.get_maven_id_from(best_matched_result)
           log.warn("pom.xml for #{filename} found on search.maven.org with heuristic search (#{group_id}:#{artifact_id}:#{version})")
             
-          return site.download_pom(group_id, artifact_id, version)
+          return site.download_pom(group_id, artifact_id, version), :found_via_heuristic
         end
       rescue RestClient::ResourceNotFound
         log.error("Got an error while looking for #{filename}'s SHA1 in search.maven.org")
       end
+    end
+
+    # get a heuristic name from a path
+    def cleanup_name(path)
+      Pathname.new(path).basename.to_s.sub(/.jar$/, "")
     end
   end
 end

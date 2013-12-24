@@ -154,9 +154,14 @@ If you use Maven, most sources for binary jars in your kit can be automatically 
 
     gjp get-maven-source-jars
 
-For non-Maven jars, or Maven jars that have no available sources, some extra manual work is needed. At the moment `gjp` can help you with the following utility subcommands:
+For non-Maven jars, or Maven jars that have no available sources, some extra manual work is needed. First of all, you should get a `pom.xml` file for your jar, if you don't have it already:
 
-* `gjp get-pom NAME` will attempt to find a pom. `NAME` can be a jar file name or a `name-version` string. `gjp` will get the pom either from the package itself or through search.maven.org using heuristic searching;
+    gjp get-pom jarname.jar
+
+This will create a `jarname.pom` file (if it can be found in Maven Central, otherwise you will need to search the Internet manually).
+
+If you are lucky, the pom file will contain an URL to a site where sources can be downloaded, or even an SCM address. At the moment automatic source retrieval is not automated, but `gjp` can help you with the following utility subcommands:
+
 * `gjp get-parent-pom POM` will attempt to download a pom's parent from search.maven.org, where `POM` is a filename or URI;
 * `gjp get-source-address POM` will attempt to find the SCM Internet address of a pom.xml from the file itself or through api.github.com. `POM` can either be a filename or a URI;
 * `gjp get-source POM ADDRESS` downloads the source of a pom.xml's project from its SCM at ADDRESS;
@@ -169,7 +174,7 @@ Building Ant packages is not really different from Maven ones, as `gjp ant` will
 
 Sometimes you will have jar files distributed along with the source archive that will end up in `src/`: you don't want that, just run `gjp purge-jars` to have them moved to the kit. The command will generate a symlink back to the original, so builds will not fail.
 
-Once built, you are advised to grab an "informational" pom.xml (via `gjp get-pom` or Maven Central) in order to generate its spec.
+Once built, you should get a pom.xml file (via `gjp get-pom`, see above) in order to generate its spec.
 
 #### Optional: running networkless dry-run builds
 
