@@ -307,15 +307,6 @@ module Gjp
       end
     end
 
-    subcommand "get-parent-pom", "Retrieves a pom that is the parent of an existing pom" do
-      parameter "POM", "a pom file path or URI"
-      def execute
-        checking_exceptions do
-          puts Gjp::ParentPomGetter.new.get_parent_pom(pom)
-        end
-      end
-    end
-      
     subcommand "get-source-address", "Retrieves a project's SCM Internet address" do
       parameter "POM", "a pom file path or URI"
 

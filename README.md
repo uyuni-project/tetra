@@ -162,7 +162,6 @@ This will create a `jarname.pom` file (if it can be found in Maven Central, othe
 
 If you are lucky, the pom file will contain an URL to a site where sources can be downloaded, or even an SCM address. At the moment automatic source retrieval is not automated, but `gjp` can help you with the following utility subcommands:
 
-* `gjp get-parent-pom POM` will attempt to download a pom's parent from search.maven.org, where `POM` is a filename or URI;
 * `gjp get-source-address POM` will attempt to find the SCM Internet address of a pom.xml from the file itself or through api.github.com. `POM` can either be a filename or a URI;
 * `gjp get-source POM ADDRESS` downloads the source of a pom.xml's project from its SCM at ADDRESS;
 
