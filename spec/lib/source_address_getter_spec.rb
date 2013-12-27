@@ -13,7 +13,7 @@ describe Gjp::SourceAddressGetter do
     
     it "gets the source address from Github" do
       pom_path = File.join("spec", "data", "antlr", "pom.xml")
-      source_address_getter.get_source_address(pom_path).should eq [:found_in_github, "git:https://github.com/antlr/antlr4"]
+      source_address_getter.get_source_address(pom_path).should eq [:found_on_github, "git:https://github.com/antlr/antlr4"]
     end
   end
 end

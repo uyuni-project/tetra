@@ -18,7 +18,7 @@ module Gjp
       else
         github_address = get_source_address_from_github(pom_path)
         if github_address
-          [:found_in_github, github_address]
+          [:found_on_github, github_address]
         else
           :not_found
         end
