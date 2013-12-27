@@ -9,7 +9,7 @@ module Gjp
   class SourceAddressGetter
     include Logger
 
-    # returns the pom corresponding to a file or directory, if it can be found
+    # returns the SCM address for a project described in file
     def get_source_address(file)
       log.info("looking for source address for: #{file}")
       (get_source_address_from_pom(file) or get_source_address_from_github(file))
