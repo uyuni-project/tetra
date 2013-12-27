@@ -32,20 +32,15 @@ module Gjp
       end
     end
 
-    # downloads a project's source into a specified directory
-    def get_source(address, pomfile, directory)
-      log.info("downloading: #{address} in #{directory}, pomfile: #{pomfile}")
+    # checks code out from an scm
+    def get_source_from_scm(address, pomfile, directory)
+      log.info("downloading: #{address}, pomfile: #{pomfile}")
       
       dummy, prefix, scm_address = address.split(/^([^:]+):(.*)$/)
       log.info("prefix: #{prefix}, scm_address: #{scm_address}")
-  	
-  		get_source_from_scm(prefix, scm_address, pomfile, directory)
-    end
 
-    # checks code out from an scm
-    def get_source_from_scm(prefix, scm_address, pomfile, directory)
       pom = Pom.new(pomfile)
-      dir = File.join(directory, "#{pom.group_id}:#{pom.artifact_id}:#{pom.version}")
+      dir = File.join(directory, "#{pom.artifact_id}-#{pom.version}")
   		begin
   	    Dir::mkdir(dir)
   		rescue Errno::EEXIST
@@ -56,6 +51,8 @@ module Gjp
   			get_source_from_git(scm_address, dir, pom.version)
       elsif prefix == "svn"
   			get_source_from_svn(scm_address, dir, pom.version)
+      else
+        nil
   		end
     end
 
@@ -71,6 +68,9 @@ module Gjp
   				log.info("checking out tag: #{best_tag}")
 
   				`git checkout #{best_tag}`
+          best_tag
+        else
+          nil
   			end	
   		end
   	end
@@ -87,6 +87,9 @@ module Gjp
   				log.info("checking out tag: #{best_tag}")
 
   				`svn checkout ^/tags/#{best_tag}`
+          best_tag
+        else
+          nil
   			end
   		end
   	end

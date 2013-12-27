@@ -160,12 +160,17 @@ For non-Maven jars, or Maven jars that have no available sources, some extra man
 
 This will create a `jarname.pom` file (if it can be found in Maven Central, otherwise you will need to search the Internet manually).
 
-If you are lucky, the pom file will contain an URL to a site where sources can be downloaded, or even an SCM address. At the moment automatic source retrieval is not automated, but `gjp` can help you with the following utility subcommands:
+Then attempt getting the sources from information in the pom file:
 
-* `gjp get-source-address POM` will attempt to find the SCM Internet address of a pom.xml from the file itself or through api.github.com. `POM` can either be a filename or a URI;
-* `gjp get-source POM ADDRESS` downloads the source of a pom.xml's project from its SCM at ADDRESS;
+    gjp get-source jarname.pom
 
-More comprehensive support is planned in future releases.
+This will try to:
+* get the effective pom file resolving inheritance;
+* from the effective pom file, extract the SCM URL. If it is not found, attempt to look for one on GitHub;
+* from the SCM URL, grab a copy of the project sources;
+* guess the tag that corresponds to the version and check that out.
+
+Of course things can go wrong in a number of amusing ways, in that case you will need to resolve issues by hand.
 
 #### Optional: Ant packages
 
