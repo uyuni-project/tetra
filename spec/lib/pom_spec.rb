@@ -5,16 +5,6 @@ require 'spec_helper'
 describe Gjp::Pom do
   let(:pom) { Gjp::Pom.new(File.join("spec", "data", "commons-logging", "pom.xml")) }
 
-  describe "#connection_address" do
-    it "reads the SCM connection address" do
-      pom.connection_address.should eq "svn:http://svn.apache.org/repos/asf/commons/proper/logging/tags/commons-logging-1.1.1"
-    end
-
-    it "reads the SCM connection address from a remote repository" do
-      pom.connection_address.should eq "svn:http://svn.apache.org/repos/asf/commons/proper/logging/tags/commons-logging-1.1.1"
-    end
-  end
-
   describe "#group_id" do
     it "reads the group id" do
       pom.group_id.should eq "commons-logging"
@@ -24,6 +14,12 @@ describe Gjp::Pom do
   describe "#artifact_id" do
     it "reads the artifact id" do
       pom.artifact_id.should eq "commons-logging"
+    end
+  end
+
+  describe "#name" do
+    it "reads artifact name" do
+      pom.name.should eq "Commons Logging"
     end
   end
 
@@ -57,21 +53,15 @@ describe Gjp::Pom do
     end
   end
 
-  describe "#parent_group_id" do
-    it "reads the parent's group id" do
-      pom.parent_group_id.should eq "org.apache.commons"
+  describe "#scm_connection" do
+    it "reads the SCM connection address" do
+      pom.scm_connection.should eq "scm:svn:http://svn.apache.org/repos/asf/commons/proper/logging/tags/commons-logging-1.1.1"
     end
   end
 
-  describe "#parent_artifact_id" do
-    it "reads the parent's artifact id" do
-      pom.parent_artifact_id.should eq "commons-parent"
-    end
-  end
-
-  describe "#parent_version" do
-    it "reads the parent's version" do
-      pom.parent_version.should eq "5"
+  describe "#scm_url" do
+    it "reads the SCM connection url" do
+      pom.scm_url.should eq "http://svn.apache.org/repos/asf/commons/proper/logging/tags/commons-logging-1.1.1"
     end
   end
 end

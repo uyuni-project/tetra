@@ -10,14 +10,7 @@ module Gjp
       @doc = Nokogiri::XML(open(filename).read)
       @doc.remove_namespaces!
     end
-    
-    def connection_address
-      connection_nodes = @doc.xpath("//scm/connection/text()")    
-      if connection_nodes.any?
-        connection_nodes.first.to_s.sub(/^scm:/, "")
-      end
-    end
-    
+        
     def group_id
       @doc.xpath("project/groupId").text
     end
@@ -26,6 +19,10 @@ module Gjp
       @doc.xpath("project/artifactId").text
     end
     
+    def name
+      @doc.xpath("project/name").text
+    end
+
     def version
       @doc.xpath("project/version").text
     end
@@ -48,16 +45,12 @@ module Gjp
       end
     end
 
-    def parent_group_id
-      @doc.xpath("project/parent/groupId").text
+    def scm_connection
+      @doc.xpath("project/scm/connection").text
     end
-    
-    def parent_artifact_id
-      @doc.xpath("project/parent/artifactId").text
-    end
-    
-    def parent_version
-      @doc.xpath("project/parent/version").text
+
+    def scm_url
+      @doc.xpath("project/scm/url").text
     end
   end
 end
