@@ -332,7 +332,7 @@ module Gjp
                 puts "Project found on GitHub: #{address}, attempting checkout..."
               end
 
-              tag = Gjp::SourceGetter.new.get_source_from_scm(address, effective_pom_path, ".")
+              tag = Gjp::SourceGetter.new.get_source_from_scm(address, effective_pom_path, File.split(effective_pom_path).first)
               if tag
                 puts "Checked out tag #{tag}"
               else

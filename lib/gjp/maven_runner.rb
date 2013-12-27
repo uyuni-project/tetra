@@ -20,7 +20,7 @@ module Gjp
     # returns effective pom path or nil if not found
     def get_effective_pom(pom_path)
       effective_pom_path = "#{pom_path}.effective"
-      success = mvn(["help:effective-pom", "-f#{pom_path}", "-Doutput=#{effective_pom_path}"])
+      success = mvn(["help:effective-pom", "-f#{pom_path}", "-Doutput=#{File.split(effective_pom_path)[1]}"])
       if success
         effective_pom_path
       else
