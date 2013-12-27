@@ -33,28 +33,5 @@ describe Gjp::SourceGetter do
       end
     end
   end
-
-  describe "#get_source_from_git" do
-    it "gets the sources from a git repo" do
-      dir_path = File.join("spec", "data", "nailgun")
-      pom_path = File.join(dir_path, "pom.xml")
-      repo_path = File.join(dir_path, "nailgun-all-0.9.1")
-
-      source_getter.get_source_from_scm("git:git@github.com:martylamb/nailgun.git", pom_path, @project.full_path)
-
-      file_path = File.join(@project.full_path, "nailgun-all-0.9.1", "README.md")
-      File.open(file_path).readline.should eq "nailgun\n"
-    end
-    it "gets the sources from an svn repo" do  
-      dir_path = File.join("spec", "data", "struts-apps")
-      pom_path = File.join(dir_path, "pom.xml")
-      repo_path = File.join(dir_path, "struts2-apps-")
-
-      source_getter.get_source_from_scm("svn:http://svn.apache.org/repos/asf/struts/struts2/tags/STRUTS_2_3_14/apps", pom_path, @project.full_path)
-
-      file_path = File.join(@project.full_path, "struts2-apps-", "showcase", "README.txt")
-      File.open(file_path).readline.should eq "README.txt - showcase\n"
-    end
-  end
 end
 

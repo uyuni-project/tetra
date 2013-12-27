@@ -316,37 +316,24 @@ module Gjp
           project = Gjp::Project.new(".")
           source_getter = Gjp::SourceGetter.new
 
-          puts "Attempting to find source through Maven...\n"
+          puts "Attempting to find source through Maven..."
           if source_getter.get_maven_source_jar(project, pom)
-            puts "\nSource jar found and added to Maven repository in kit/"
+            puts "Source jar found and added to Maven repository."
           else
-            puts "\nSource jar not found in Maven. Saving effective POM..."
             effective_pom_path = Gjp::MavenRunner.new(project).get_effective_pom(pom)
-            puts "#{effective_pom_path} saved. Looking for SCM address..."
-            status, address = Gjp::SourceAddressGetter.new.get_source_address(effective_pom_path)
-            if status != :not_found
-              if status == :found_in_pom
-                puts "Source SCM address found in #{effective_pom_path}: #{address}, attempting checkout..."
-              elsif status == :found_on_github
-                puts "Source SCM not found in POM."
-                puts "Project found on GitHub: #{address}, attempting checkout..."
-              end
-
-              tag = Gjp::SourceGetter.new.get_source_from_scm(address, effective_pom_path, File.split(effective_pom_path).first)
-              if tag
-                puts "Checked out tag #{tag}"
-              else
-                puts "Checked out, no tag found"
-              end
-            else
-              puts "\nNothing found. Try:"
-              pom = new Gjp::Pom(effective_pom_path)
-              if pom.url and pom.url != ""
-                puts pom.url
-              else
-                puts "http://google.com/#q=#{URI::encode(pom.artifact_id)}"
-              end
+            puts "Source jar not found in Maven. Try looking here:"
+            pom = Gjp::Pom.new(effective_pom_path)
+            if pom.url && !pom.url.empty?
+              puts "Website: #{pom.url}"
             end
+            if pom.scm_connection && !pom.scm_connection.empty?
+              puts "SCM connection: #{pom.scm_connection}"
+            end
+            if pom.scm_url && !pom.scm_url.empty?
+              puts "SCM connection: #{pom.scm_url}"
+            end
+            puts "The effective POM: #{effective_pom_path}"
+            puts "Google: http://google.com/#q=#{URI::encode(pom.name + ' sources')}"
           end
         end
       end
