@@ -26,6 +26,7 @@ module Gjp
 
     # returns a pom embedded in a jar file
     def get_pom_from_jar(file)
+      log.debug("Attempting unpack of #{file} to find a POM")
       begin
         Zip::ZipFile.foreach(file) do |entry|
           if entry.name =~ /\/pom.xml$/
@@ -43,6 +44,7 @@ module Gjp
     
     # returns a pom from search.maven.org with a jar sha1 search
     def get_pom_from_sha1(file)
+      log.debug("Attempting SHA1 POM lookup for #{file}")
       begin
         if File.file?(file)
           site = MavenWebsite.new
@@ -55,24 +57,28 @@ module Gjp
             return site.download_pom(group_id, artifact_id, version), :found_via_sha1
           end
         end
-        return nil
       rescue RestClient::ResourceNotFound
-        log.error("Got an error while looking for #{file}'s SHA1 in search.maven.org")
+        log.warn("Got a 404 error while looking for #{file}'s SHA1 in search.maven.org")
       end
+      nil
     end
 
     # returns a pom from search.maven.org with a heuristic name search
     def get_pom_from_heuristic(filename)
       begin
+        log.debug("Attempting heuristic POM search for #{filename}")
         site = MavenWebsite.new
         filename = cleanup_name(filename)
         version_matcher = VersionMatcher.new
         my_artifact_id, my_version = version_matcher.split_version(filename)
+        log.debug("Guessed artifact id: #{my_artifact_id}, version: #{my_version}")
 
         result = site.search_by_name(my_artifact_id).first
+        log.debug("Artifact id search result: #{result}")
         if result != nil
           group_id, artifact_id, version = site.get_maven_id_from result
           results = site.search_by_group_id_and_artifact_id(group_id, artifact_id)
+          log.debug("All versions: #{results}")
           their_versions = results.map {|doc| doc["v"]}
           best_matched_version = if my_version != nil then version_matcher.best_match(my_version, their_versions) else their_versions.max end
           best_matched_result = (results.select{|result| result["v"] == best_matched_version}).first
@@ -83,8 +89,9 @@ module Gjp
           return site.download_pom(group_id, artifact_id, version), :found_via_heuristic
         end
       rescue RestClient::ResourceNotFound
-        log.error("Got an error while looking for #{filename}'s SHA1 in search.maven.org")
+        log.warn("Got a 404 error while looking for #{filename} heuristically in search.maven.org")
       end
+      nil
     end
 
     # get a heuristic name from a path
