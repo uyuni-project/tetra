@@ -44,4 +44,14 @@ describe Gjp::MavenRunner do
       end
     end
   end
+
+  describe "#get_source_jar"  do
+    it "runs maven to get a source jar" do
+      create_mock_executable("mvn")
+      @project.from_directory do
+        @kit_runner.get_source_jar("test_group", "test_artifact_id", "test_version")
+        File.read("test_out").strip.should match /dependency:get -Dartifact=test_group:test_artifact_id:test_version:jar:sources -Dtransitive=false$/
+      end
+    end
+  end
 end
