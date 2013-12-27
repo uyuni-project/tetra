@@ -301,7 +301,8 @@ module Gjp
 
             puts "#{format_path(path, project)} written, #{text_status}"
           else
-            puts "#{name} not found. Try http://google.com/#q=#{URI::encode(pom_getter.cleanup_name(name))}"
+            puts "#{name}'s pom not found. Try:"
+            puts "http://google.com/#q=#{URI::encode(pom_getter.cleanup_name(name) + " pom")}"
           end
         end
       end
