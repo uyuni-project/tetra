@@ -12,7 +12,17 @@ module Gjp
     # returns the SCM address for a project described in pom_path
     def get_source_address(pom_path)
       log.info("looking for source address for: #{pom_path}")
-      (get_source_address_from_pom(pom_path) or get_source_address_from_github(pom_path))
+      pom_address = get_source_address_from_pom(pom_path)
+      if pom_address
+        [:found_in_pom, pom_address]
+      else
+        github_address = get_source_address_from_github(pom_path)
+        if github_address
+          [:found_in_github, github_address]
+        else
+          :not_found
+        end
+      end
     end
 
     # returns an scm address in a pom pom_path
