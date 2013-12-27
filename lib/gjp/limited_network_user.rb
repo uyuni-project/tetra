@@ -43,7 +43,7 @@ module Gjp
 
     # determines if a user without Internet access exists
     def set_up?
-      user_exists? and firewall_rule_exists?
+      user_exists? && firewall_rule_exists?
     end
 
     # checks user existence

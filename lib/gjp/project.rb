@@ -26,7 +26,7 @@ module Gjp
     # finds the project directory up in the tree, like git does
     def self.find_project_dir(starting_dir)
       result = starting_dir
-      while is_project(result) == false and result != "/"
+      while is_project(result) == false && result != "/"
         result = File.expand_path("..", result)
       end
 
@@ -37,8 +37,8 @@ module Gjp
 
     # returns true if the specified directory is a valid gjp project
     def self.is_project(dir)
-      File.directory?(File.join(dir, "src")) and
-      File.directory?(File.join(dir, "kit")) and
+      File.directory?(File.join(dir, "src")) &&
+      File.directory?(File.join(dir, "kit")) &&
       File.directory?(File.join(dir, ".git"))
     end
 
@@ -49,7 +49,7 @@ module Gjp
         dir_path = Pathname.new(File.expand_path(dir)).relative_path_from(Pathname.new(@full_path))
         components = dir_path.to_s.split(File::SEPARATOR)
 
-        if components.count >= 2 and components.first == "src" and Dir.exist?(File.join(@full_path, components[0], components[1]))
+        if components.count >= 2 && components.first == "src" && Dir.exist?(File.join(@full_path, components[0], components[1]))
           components[1]
         else
           raise NoPackageDirectoryError
@@ -210,7 +210,7 @@ module Gjp
       from_directory do
         result = []
         Find.find("src") do |file|
-          if file =~ /.jar$/ and not File.symlink?(file)
+          if file =~ /.jar$/ && !File.symlink?(file)
             new_location = File.join("kit", "jars", Pathname.new(file).split[1])
             FileUtils.mv(file, new_location)
 

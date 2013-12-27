@@ -13,7 +13,7 @@ module Gjp
     # returns a [name, version] pair
   	def split_version(full_name)	
       matches = full_name.match(/(.*?)(?:[\.\-\_ ~,]?([0-9].*))?$/)
-      if matches != nil and matches.length > 1
+      if matches != nil && matches.length > 1
         [matches[1], matches[2]]
   		else
   			[full_string, nil]
@@ -82,7 +82,7 @@ module Gjp
       if their_chunk == nil
         their_chunk = "0"
       end
-      if my_chunk.is_i? and their_chunk.is_i?
+      if my_chunk.is_i? && their_chunk.is_i?
         return [(my_chunk.to_i - their_chunk.to_i).abs, 99].min
       else
         return [Text::Levenshtein.distance(my_chunk.upcase, their_chunk.upcase), 99].min
