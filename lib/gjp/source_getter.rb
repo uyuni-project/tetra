@@ -33,13 +33,13 @@ module Gjp
     end
 
     # checks code out from an scm
-    def get_source_from_scm(address, pomfile, directory)
-      log.info("downloading: #{address}, pomfile: #{pomfile}")
+    def get_source_from_scm(address, pom_path, directory)
+      log.info("downloading: #{address}, pom_path: #{pom_path}")
       
       dummy, prefix, scm_address = address.split(/^([^:]+):(.*)$/)
       log.info("prefix: #{prefix}, scm_address: #{scm_address}")
 
-      pom = Pom.new(pomfile)
+      pom = Pom.new(pom_path)
       dir = File.join(directory, "#{pom.artifact_id}-#{pom.version}")
   		begin
   	    Dir::mkdir(dir)
