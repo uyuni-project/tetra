@@ -9,15 +9,15 @@ module Gjp
   class SourceAddressGetter
     include Logger
 
-    # returns the SCM address for a project described in file
-    def get_source_address(file)
-      log.info("looking for source address for: #{file}")
-      (get_source_address_from_pom(file) or get_source_address_from_github(file))
+    # returns the SCM address for a project described in pom_path
+    def get_source_address(pom_path)
+      log.info("looking for source address for: #{pom_path}")
+      (get_source_address_from_pom(pom_path) or get_source_address_from_github(pom_path))
     end
 
-    # returns an scm address in a pom file
-    def get_source_address_from_pom(file)
-      pom = Pom.new(file)
+    # returns an scm address in a pom pom_path
+    def get_source_address_from_pom(pom_path)
+      pom = Pom.new(pom_path)
       result = pom.connection_address
 
       if result != nil
@@ -27,8 +27,8 @@ module Gjp
     end
     
     # returns an scm address looking for it on github
-    def get_source_address_from_github(file)
-      pom = Pom.new(file)
+    def get_source_address_from_github(pom_path)
+      pom = Pom.new(pom_path)
 
       result = (github_search(pom.artifact_id) or github_search(pom.artifact_id.split("-").first) or github_search(pom.group_id))
       
