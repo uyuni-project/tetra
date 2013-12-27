@@ -7,6 +7,13 @@ module Gjp
   class SourceGetter
     include Logger
 
+    # attempts to download a project's sources
+    def get_maven_source_jar(project, pom_path)
+      maven_runner = Gjp::MavenRunner.new(project)
+      pom = Pom.new(pom_path)
+      maven_runner.get_source_jar(pom.group_id, pom.artifact_id, pom.version)
+    end
+
     # looks for jars in maven's local repo and downloads corresponding
     # source jars
     def get_maven_source_jars(project)

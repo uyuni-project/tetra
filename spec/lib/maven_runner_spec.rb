@@ -54,4 +54,14 @@ describe Gjp::MavenRunner do
       end
     end
   end
+
+  describe "#get_effective_pom"  do
+    it "runs maven to get an effective pom" do
+      create_mock_executable("mvn")
+      @project.from_directory do
+        @kit_runner.get_effective_pom("test.pom").should eq "test.pom.effective"
+        File.read("test_out").strip.should match /help:effective-pom -ftest.pom -Doutput=test.pom.effective$/
+      end
+    end
+  end
 end
