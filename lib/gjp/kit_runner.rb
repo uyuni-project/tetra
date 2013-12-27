@@ -27,11 +27,11 @@ module Gjp
       nil
     end
 
-    # runs an external executable
+    # runs an external executable, returns true on success
     def run_executable(full_commandline)
       log.debug "running #{full_commandline}"
       Process.wait(Process.spawn(full_commandline))
-      $?
+      $?.exitstatus == 0
     end
   end
 
