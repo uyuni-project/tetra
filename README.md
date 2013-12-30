@@ -114,7 +114,7 @@ The remaining (mostly very outdated) jars will be listed by `gjp` when the downl
 
 to get pointers to relevant sites if available in the pom itself.
 
-A list of commonly used jars can be found [below](#frequently-used-jar-sources).
+A list of commonly used jars can be found [below](#frequently-used-sources).
 
 ### Ant builds
 
@@ -158,11 +158,27 @@ If you want to be 100% sure your package builds without network access, you can 
 
 * if packages build at first but then fail after a few days because Maven tries to connect to the Internet, add the `--option` flag to the `mvn` line in `build.sh`;
 
-### Frequently used jar sources
+### Frequently used sources
 
-* ant-launcher-1.6.5: is included in ant-1.6.5 sources, you most prbably have it already in `kit/m2/ant/ant/1.6.5`;
-* doxia-sink-api-1.0-alpha-4: use `svn checkout http://svn.apache.org/repos/asf/maven/doxia/doxia/tags/doxia-sink-api-1.0-alpha-4/ doxia-sink-api-1.0-alpha-4`;
-* kxml2-2.2.2: use http://downloads.sourceforge.net/project/kxml/kxml2/2.2.2/kxml2-src-2.2.2.zip;
+* antlr-2.7.7: `wget http://www.antlr2.org/download/antlr-2.7.7.tar.gz -O kit/m2/antlr/antlr/2.7.7/antlr-2.7.7-sources.tar.gz`;
+* ant-launcher-1.6.5: sources included in ant-1.6.5;
+* asm-3.3.1: `wget http://download.forge.ow2.org/asm/asm-3.3.1.tar.gz -O kit/m2/asm/asm/3.3.1/asm-3.3.1-sources.tar.gz`;
+* jsr305-1.3.9: sources included in jar;
+* jsr305-2.0.1: sources included in jar;
+* commons-lang-1.0: `wget http://archive.apache.org/dist/commons/lang/source/lang-1.0-src.tar.gz -O kit/m2/commons-lang/commons-lang/1.0/commons-lang-1.0-sources.tar.gz`;
+* commons-logging-api-1.1: `wget http://archive.apache.org/dist/commons/logging/source/commons-logging-1.1-src.tar.gz -O kit/m2/commons-logging/commons-logging/1.1/commons-logging-1.1-sources.tar.gz` (included in commons-logging-1.1);
+* commons-logging-1.0: `wget http://archive.apache.org/dist/commons/logging/source/commons-logging-1.0-src.tar.gz -O kit/m2/commons-logging/commons-logging/1.0/commons-logging-1.0-sources.tar.gz`;
+* dom4j-1.1: `wget http://dom4j.cvs.sourceforge.net/viewvc/dom4j/dom4j/?view=tar&pathrev=dom4j-1-1 -O kit/m2/dom4j/dom4j/1.1/dom4j-1.1-sources.tar.gz`;
+* doxia-sink-api-1.0-alpha-4: use `svn export http://svn.apache.org/repos/asf/maven/doxia/doxia/tags/doxia-sink-api-1.0-alpha-4/ kit/m2/doxia/doxia-sink-api/1.0-alpha-4/doxia-sink-api-1.0-alpha-4-sources`;
+* kxml2-2.2.2: use `wget http://sourceforge.net/projects/kxml/files/kxml2/2.2.2/kxml2-src-2.2.2.zip/download -O kit/m2/net/sf/kxml/kxml2/2.2.2/kxml2-2.2.2-sources.zip`;
+* log4j-1.2.12: `wget http://archive.apache.org/dist/logging/log4j/1.2.12/logging-log4j-1.2.12.tar.gz -O kit/m2/log4j/log4j/1.2.12/log4j-1.2.12-sources.tar.gz`;
+* stringtemplate-3.2: `wget http://www.stringtemplate.org/download/stringtemplate-3.2.tar.gz -O kit/m2/org/antlr/stringtemplate/3.2/stringtemplate-3.2-sources.tar.gz`;
+* velocity-tools-2.0: `wget http://archive.apache.org/dist/velocity/tools/2.0/velocity-tools-2.0-src.tar.gz -O kit/m2/org/apache/velocity/velocity-tools/2.0/velocity-tools-2.0-sources.tar.gz`;
+* velocity-1.5: `wget http://archive.apache.org/dist/velocity/engine/1.5/velocity-1.5.tar.gz -O kit/m2/org/apache/velocity/velocity/1.5/velocity-1.5-sources.tar.gz`;
+* trilead-ssh2-build213-svnkit-1.3: `svn export http://svn.svnkit.com/repos/svnkit/tags/1.3.5/ kit/m2/org/tmatesoft/svnkit/svnkit/1.3.5/svnkit-1.3.5-sources` (included in svnkit 1.3.5 full sources because of custom patch);
+* xercesImpl-2.9.1: `wget http://archive.apache.org/dist/xerces/j/source/Xerces-J-src.2.9.1.tar.gz -O kit/m2/xerces/xercesImpl/2.9.1/xercesImpl-2.9.1-sources.tar.gz`;
+* xmlpull-1.1.3.1: wget `http://www.extreme.indiana.edu/xmlpull-website/v1/download/xmlpull_1_1_3_4c_src.tgz -O kit/m2/xmlpull/xmlpull/1.1.3.1/xmlpull-1.1.3.1-sources.tar.gz`
+* xmlunit-1.3: `wget http://sourceforge.net/projects/xmlunit/files/xmlunit%20for%20Java/XMLUnit%20for%20Java%201.3/xmlunit-1.3-src.zip/download -O kit/m2/xmlunit/xmlunit/1.3/xmlunit-1.3-sources.zip`;
 
 ## Motivation
 
