@@ -339,6 +339,22 @@ module Gjp
       end
     end
 
+    subcommand "check-kit", "Locates jars in kit/ that have no source files" do
+      def execute
+        checking_exceptions do
+          project = Gjp::Project.new(".")
+          kit_checker = Gjp::KitChecker(project)
+
+          ensure_dry_running(false, project) do
+            puts "These jar files miss sources:"
+            kit_checker.get_unsourced.each do |archive|
+              puts " #{archive}"
+            end
+          end
+        end
+      end
+    end
+
     private
 
     def ensure_dry_running(state, project)

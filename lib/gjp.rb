@@ -17,5 +17,6 @@ require "gjp/kit_spec_adapter"
 require "gjp/package_spec_adapter"
 require "gjp/spec_generator"
 require "gjp/archiver"
+require "gjp/kit_checker"
 
 require "gjp/cli"
