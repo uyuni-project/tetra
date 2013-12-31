@@ -98,7 +98,7 @@ module Gjp
     end
 
     subcommand "finish", "Ends the current dry-run" do
-      option ["-f", "--abort"], :flag, "build abort, restore files as before dry-run"
+      option ["-a", "--abort"], :flag, "build abort, restore files as before dry-run"
       def execute
         checking_exceptions do
           if Gjp::Project.new(".").finish(abort?)
