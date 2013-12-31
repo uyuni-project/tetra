@@ -1,10 +1,10 @@
-# gjp – helps you build RPMs for Java software
+# gjp – builds RPMs for Java software
 
 `gjp` is a set of tools to help you build RPM packages for Java projects.
 
 Packaging of Java projects is sometimes hard because build tools like Maven partially overlap with distro tools like RPM in functionality.
 
-We are trying to come up with **a tool that drastically simplifies packaging**, and that is `gjp`.
+We are trying to come up with **a tool that drastically simplifies packaging**.
 
 ## Installation
 
@@ -25,14 +25,13 @@ Building a package with `gjp` is quite unusual — this is a deliberate choice, 
 * `gjp init` a new project;
 * add sources to `src/<package name>` and anything else needed for the build in `kit/` in binary form (typically a copy of Maven and maybe some other dependency jars);
 * execute `gjp dry-run`, then any command needed to compile your software, then `gjp finish`;
-* execute `gjp generate-all`: gjp will look at changed files and Bash history to scaffold spec files and tarballs. You should already have working RPMs at this point;
-* execute `gjp download-maven-source-jars` or [some other command](#kit-sources) to add sources of binary dependency in `kit/`, if required by licenses.
+* execute `gjp generate-all`: gjp will look at changed files and Bash history to scaffold spec files and tarballs.
 
 Done!
 
 ### How can that possibly work?
 
-With `gjp` you are not building all dependencies from source, just your package. Everything else is shipped already compiled with attached source files, which is much easier to implement and automate yet is enough to fulfill open source licenses and to have a repeatable, networkless build. See [MOTIVATION.md](MOTIVATION.md) for further information.
+With `gjp` you are not building all dependencies from source, just your package. Everything else is shipped already compiled with attached source files, which is much easier to implement and automate. Yet, it is sufficient to fulfill open source licenses and to have a repeatable, networkless build. See [MOTIVATION.md](MOTIVATION.md) for further information.
 
 ## A commons-collections walkthrough
 
@@ -85,7 +84,6 @@ An in-depth discussion of this project's motivation is available in the [MOTIVAT
 `gjp` is a research project currently in beta state. If you are a packager you can try to use it, any feedback would be **very** welcome!
 
 At the moment `gjp` is tested on openSUSE.
-
 
 ## Sources
 
