@@ -215,7 +215,7 @@ module Gjp
       end
     end
 
-    subcommand "purge-jars", "Locates jars in src/ and moves them to kit/" do
+    subcommand "move-jars-to-kit", "Locates jars in src/ and moves them to kit/" do
       def execute
         checking_exceptions do
           project = Gjp::Project.new(".")

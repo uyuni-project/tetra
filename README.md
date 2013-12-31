@@ -127,7 +127,7 @@ To get a list of jars that have one or more `.class` file which does not have a 
 
 Sometimes you will have jar files distributed along with the source archive that will end up in `src/`: you don't want that! Run
 
-    gjp purge-jars
+    gjp move-jars-to-kit
 
 to have them moved to `kit/jars`. The command will generate a symlink back to the original, so builds will work as expected.
 
