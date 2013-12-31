@@ -254,34 +254,6 @@ module Gjp
       end
     end
 
-    subcommand "set-up-nonet-user", "Sets up a \"nonet\" user that cannot access the network" do
-      def execute
-        checking_exceptions do
-          user = Gjp::LimitedNetworkUser.new("nonet")
-          user.set_up
-
-          "sudo #{user.get_path("useradd")} nonet\n" +
-          "sudo #{user.get_path("iptables")} -A OUTPUT -m owner --uid-owner nonet -j DROP\n" +
-          "User \"nonet\" set up, you can use \"sudo nonet\" to dry-run your build with no network access.\n" +
-          "Note that the above iptables rule will be cleared at next reboot, you can use your distribution " +
-          "tools to make it persistent or run \"gjp set-up-limited-nertwork-user\" again next time."
-        end
-      end
-    end
-
-    subcommand "tear-down-nonet-user", "Deletes a user previously created by gjp" do
-      def execute
-        checking_exceptions do
-          user = Gjp::LimitedNetworkUser.new("nonet")
-
-          user.tear_down
-
-          "sudo #{user.get_path("iptables")} -D OUTPUT -m owner --uid-owner nonet -j DROP\n" +
-          "sudo #{user.get_path("userdel")} nonet\n"
-        end
-      end
-    end
-
     subcommand "get-pom", "Retrieves a pom file" do
       parameter "NAME", "a jar file name or a `name-version` string (heuristic)"
       def execute

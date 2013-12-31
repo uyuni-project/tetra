@@ -15,7 +15,6 @@ First you need:
 * [Ruby 1.9](https://www.ruby-lang.org/en/);
 * [git](http://git-scm.com/);
 * a JDK that can compile whatever software you need to package;
-* only for the optional `set-up-nonet-user` subcommand, `sudo` and `iptables`.
 
 You can install gjp via RubyGems:
 
@@ -140,20 +139,6 @@ You can also ask `gjp` to find one via `gjp get-pom <filename>.jar` (be sure to 
 
 Other build tools are currently unsupported but will be added in the future. You can nevertheless use them - the only rule is that you have to keep all of their files in `kit`.
 
-### Optional: networkless dry-run builds
-
-If you want to be 100% sure your package builds without network access, you can use a special `gjp` subcommand to setup a `nonet` user that cannot use the Internet. Then you can simply retry the build using that user to see if it works. Note that the following commands will alter group permissions to allow both your current user and `nonet` to work on the same files.
-
-    gjp set-up-nonet-user
-    chmod -R g+rw ../../..
-    gjp dry-run
-    su nonet
-    ping www.google.com #this should fail!
-    gjp mvn package
-    chmod -R g+rw .
-    exit
-    gjp finish
-
 ### Gotchas
 
 * `gjp` internally uses `git` to keep track of files, any gjp project is actually also a `git` repo. Feel free to navigate it, you can commit, push and pull as long as the `gjp` tags are preserved. You can also delete commits and tags, effectively rewinding gjp history (just make sure to delete all tags pointing to a certain commit when you discard it);
@@ -163,6 +148,7 @@ If you want to be 100% sure your package builds without network access, you can 
     export NO_BRP_CHECK_BYTECODE_VERSION=true
 
 * if packages build at first but then fail after a few days because Maven tries to connect to the Internet, add the `--option` flag to the `mvn` line in `build.sh`;
+* if you want to be 100% sure your package builds without network access, you can use scripts in the `utils/` folder to create a special `nonet` user that cannot use the Internet and retry the build from that user.
 
 ### Frequently used sources
 
