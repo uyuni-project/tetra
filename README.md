@@ -105,7 +105,7 @@ Your kit is basically a binary blob. If its sources are needed for proper packag
 
 If you use Maven, most (~90%) sources can be automatically downloaded:
 
-    gjp get-maven-source-jars
+    gjp download-maven-source-jars
 
 The remaining (mostly very outdated) jars will be listed by `gjp` when the download ends. You need to manually find corresponding sources for them, you can use:
 

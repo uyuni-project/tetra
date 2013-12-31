@@ -229,7 +229,7 @@ module Gjp
       end
     end
 
-    subcommand "get-maven-source-jars", "Attempts to download Maven kit/ sources" do
+    subcommand "download-maven-source-jars", "Attempts to download Maven kit/ sources" do
       def execute
         checking_exceptions do
           project = Gjp::Project.new(".")
