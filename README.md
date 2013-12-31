@@ -18,7 +18,7 @@ First you need:
 
 You can install gjp via RubyGems:
 
-    $ gem install gjp
+     gem install gjp
 
 ## Workflow
 
