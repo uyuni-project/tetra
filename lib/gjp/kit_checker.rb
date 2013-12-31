@@ -11,68 +11,97 @@ module Gjp
       @project = project
     end
 
-    # yields a block for each file in kit, including those in archives
-    # block parameters are archive path or nil and entry path
-    def each_path
+    # returns an array of [path, archive] couples found in kit/
+    # archive is not nil if path is inside a zip file
+    def kit_file_paths
       @project.from_directory("kit") do
-        Dir[File.join("**", "*")].select do |path|
+        plain_file_paths = Dir[File.join("**", "*")].select do |path|
           File.file?(path)
         end.map do |path|
-          yield [nil, path]
-          if path =~ /\.(zip)|([jwe]ar)$/
-            Zip::ZipFile.foreach(path) do |entry|
-              if entry.file?
-                yield [path, entry.to_s]
-              end
+          [path, nil]
+        end
+
+        archived_file_paths = plain_file_paths.select do |path, archive|
+          path. =~ /\.(zip)|([jwe]ar)$/
+        end.map do |path, archive|
+          result = []
+          Zip::ZipFile.foreach(path) do |entry|
+            if entry.file?
+              result << [entry.to_s, path]
             end
           end
-        end
+          result
+        end.flatten(1)
+
+        plain_file_paths + archived_file_paths
       end
     end
 
-    # returns:
-    #   a hash that associates jars with compiled classes in them
-    #   a hash that associates jars with source classes in them
-    def get_classes
-      jars_to_classes = {}
-      jars_to_sources = {}
-      each_path do |archive, path|
-        if path =~ /\.class$/
-          add_class(archive, path, jars_to_classes)
-        elsif path =~ /\.java$/
-          add_class(archive, path, jars_to_sources)
+    # returns a list of class names for which
+    # we have source files in kit/
+    def get_source_class_names(paths)
+      source_paths = paths.select do |path, archive|
+        path =~ /\.java$/
+      end
+
+      # heuristically add all possible package names, walking 
+      # back the directory tree all the way back to root.
+      # This could add non-existent names, but allows not looking
+      # in the file at all
+      class_names = source_paths.map do |path, archive|
+        class_name = path_to_class(path)
+        parts = class_name.split(".")
+        last_index = parts.length() -1
+        (0..last_index).map do |i|
+          parts[i..last_index].join(".")
+        end
+      end.flatten
+
+      Set.new(class_names)
+    end
+
+    # returns a list of class names for which
+    # we have binary files in kit/
+    def get_compiled_classes(paths)
+      result = {}
+      compiled_paths = paths.select do |path, archive|
+        path =~ /\.class$/
+      end.each do |path, archive|
+        class_name = path_to_class(path)
+        if result[archive] == nil
+          result[archive] = [class_name]
+        else
+          result[archive] << class_name
         end
       end
 
-      [jars_to_classes, jars_to_sources]
+      result
     end
 
+    # returns a hash that associates archive names and
+    # the unsourced classes within them
     def get_unsourced
-      jars_to_classes, jars_to_sources = get_classes
-      sources = jars_to_sources.values.flatten
+      paths = kit_file_paths
+      source_class_names = get_source_class_names(paths)
+      archive_paths_to_class_names = get_compiled_classes(paths)
 
-      jars_to_classes.select do |archive, class_names|
-        class_names.any? do |class_name|
-          not sources.any? { |source| source.end_with?(class_name) }
+      result = archive_paths_to_class_names.map do |archive, class_names|
+        unsourced_class_names = class_names.select do |class_name|
+          source_class_names.include?(class_name) == false
         end
-      end.map { |archive, class_names| archive }
+        {:archive => archive, :class_names => class_names, :unsourced_class_names => unsourced_class_names}
+      end.select do |archive|
+        archive[:unsourced_class_names].any?
+      end
     end
 
     private
     # attempts to turn a .java/.class file name into a class name
     def path_to_class(path)
-      path.gsub(/$.+?\.$/, "").gsub(/\..+?$/, "").gsub("/", ".")
-    end
-
-    # adds path to hash as per get_classes signature
-    def add_class(archive, path, hash)
-      class_name = path_to_class(path)
-      existing_paths = hash[archive]
-      if !existing_paths
-        hash[archive] = [class_name]
-      else
-        existing_paths << class_name
-      end
+      path
+        .gsub(/\$.+?\./, ".") # remove $InnerClasses
+        .gsub(/\..+?$/, "") # remove .extension
+        .gsub("/", ".") # convert paths in package names
     end
   end
 end

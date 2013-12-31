@@ -16,8 +16,8 @@ describe Gjp::KitChecker do
     delete_mock_project
   end
 
-  describe "#each_path"  do
-    it "yields a block for each file in kit, including those in archives" do
+  describe "#kit_file_paths"  do
+    it "returns an array of paths found in kit" do
       @project.from_directory("kit") do
         FileUtils.touch("top_level")
         FileUtils.mkdir_p("directory")
@@ -29,38 +29,49 @@ describe Gjp::KitChecker do
         end
       end
 
-      all_files = []
-      @kit_checker.each_path do |archive, path|
-        all_files << [archive, path]
-      end
+      all_files = @kit_checker.kit_file_paths
 
-      all_files.should include [nil, "top_level"]
-      all_files.should_not include [nil, "directory"]
-      all_files.should include [nil, "directory/in_directory"]
-      all_files.should include [nil, "zipped.zip"]
-      all_files.should include ["zipped.zip", "directory/in_directory"]
+      all_files.should include ["top_level", nil]
+      all_files.should_not include ["directory", nil]
+      all_files.should include ["directory/in_directory", nil]
+      all_files.should include ["zipped.zip", nil]
+      all_files.should include ["directory/in_directory", "zipped.zip"]
     end
   end
 
-  describe "#get_classes"  do
-    it "distills source and compiled classes in kit" do
-      @project.from_directory("kit") do
-        FileUtils.touch("TopClass.java")
-        FileUtils.mkdir_p("package")
-        FileUtils.touch(File.join("package","InPackageClass.java"))
-        Zip::ZipFile.open("zipped.jar", Zip::ZipFile::CREATE) do |zipfile|
-          Dir[File.join("package", "**", "**")].each do |file|
-            zipfile.add(file.sub("/package", ""), file)
-          end
-        end
-        FileUtils.touch(File.join("package","OutOfArchiveClass.java"))
-      end
+  describe "#get_source_classes"  do
+    it "distills source class names in kit" do
+      all_files = [
+        ["path/to/ClassOne.java", nil],
+        ["path/to/ClassTwo.java", "path/to/archive.jar"],
+        ["ClassThree.java", "another_archive.jar"],
+        ["path/to/CompiledClass.class", "yet_another.jar"],
+      ]
 
-      jars_to_classes, jars_to_sources = @kit_checker.get_classes
+      class_names = @kit_checker.get_source_class_names(all_files)
 
-      jars_to_sources[nil].should include "TopClass"
-      jars_to_sources["zipped.jar"].should include "package.InPackageClass"
-      jars_to_sources[nil].should include "package.OutOfArchiveClass"
+      class_names.should include "path.to.ClassOne"
+      class_names.should include "path.to.ClassTwo"
+      class_names.should include "ClassThree"
+      class_names.should_not include "path.to.CompiledClass"
+    end
+  end
+
+  describe "#get_compiled_classes"  do
+    it "distills source class names in kit" do
+      all_files = [
+        ["path/to/ClassOne.class", nil],
+        ["path/to/ClassTwo.class", "path/to/archive.jar"],
+        ["ClassThree.class", "another_archive.jar"],
+        ["path/to/SourceClass.java", "yet_another.jar"],
+      ]
+
+      classes = @kit_checker.get_compiled_classes(all_files)
+
+      classes[nil].should include "path.to.ClassOne"
+      classes["path/to/archive.jar"].should include "path.to.ClassTwo"
+      classes["another_archive.jar"].should include "ClassThree"
+      classes["yet_another.jar"].should be_nil
     end
   end
 
@@ -96,11 +107,13 @@ describe Gjp::KitChecker do
       end
 
       unsourced = @kit_checker.get_unsourced
+      unsourced.length().should eq 1
 
-      unsourced.should include nil
-      unsourced.should_not include "zipped-source-2.jar"
-      unsourced.should_not include "zipped-2.jar"
-      unsourced.should_not include "zipped-3.jar"
+      unsourced.first[:archive].should be_nil
+      unsourced.first[:class_names].should include "package1.UnsourcedClass"
+      unsourced.first[:class_names].should include "package2.SourcedClass"
+      unsourced.first[:class_names].should include "package3.SourcedSameArchive"
+      unsourced.first[:unsourced_class_names].should include "package1.UnsourcedClass"
     end
   end
 end

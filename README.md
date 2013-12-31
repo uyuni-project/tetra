@@ -116,6 +116,12 @@ to get pointers to relevant sites if available in the pom itself.
 
 A list of commonly used jars can be found [below](#frequently-used-sources).
 
+You can also use:
+
+    gjp list-kit-missing-sources
+
+To get a list of jars that have one or more `.class` file which does not have a corresponding `.java` file in `kit/` (or zip files in `kit/`).
+
 ### Ant builds
 
 `gjp` is currently optimized for Maven as it is the most common build tool, but it can work with any other. In particular, support for Ant has already been implemented and `gjp ant` works like `gjp mvn`.
