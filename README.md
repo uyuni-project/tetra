@@ -59,19 +59,19 @@ Third, put all non-source files needed for the build in `kit/`. This means all b
 
 Fourth, you need to show `gjp` how to build your package by running appropriate commands between `gjp dry-run` and `gjp finish`. Bash history will be recorded to generate a "starting-point" build script (that will be sufficient in simple cases like this):
 
+    cd ../src/commons-collections/commons-collections-3.2.1-src/
     gjp dry-run
-    cd src/commons-collections/commons-collections-3.2.1-src/
     gjp mvn package
     gjp finish
 
 Note that we used `gjp mvn package` instead of `mvn package`: this will use of the Maven copy we put in `kit/` and the repository in `kit/m2`.
 Also note that this being a dry-run build, sources will be brought back to their original state after `gjp finish`, as this ensures build repeatability.
 
-Finally, generate build scripts, spec files and tarballs:
+Finally, generate build scripts, spec files and tarballs in the `output/` directory:
 
     gjp generate-all
 
-Note that `gjp` will also generate a special binary-only package called a **kit**, which contains basically the `kit/` folder. This is the only build-time requirement of any `gjp` package in your project.
+Note that `gjp` will generate files for the commons-collections package and for the binary-only myproject-kit package, which is a special container of all build-time dependencies (basically, the `kit/` folder). This will be shared among all packages you might add to your `gjp` project.
 
 ## In-depth information
 
