@@ -21,12 +21,12 @@ describe Gjp::MavenRunner do
       executable_path = create_mock_executable("mvn")
 
       @project.from_directory do
-        commandline = @kit_runner.get_maven_commandline(".")
-        commandline.should eq "./#{executable_path} -Dmaven.repo.local=./kit/m2 -s./kit/m2/settings.xml"
+        commandline = @kit_runner.get_maven_commandline(".", ["--otheroption"])
+        commandline.should eq "./#{executable_path} -Dmaven.repo.local=./kit/m2 -s./kit/m2/settings.xml --otheroption"
       end
     end
     it "doesn't return commandline options if Maven is not available" do
-      expect { @kit_runner.get_maven_commandline(".") }.to raise_error(Gjp::ExecutableNotFoundError)
+      expect { @kit_runner.get_maven_commandline(".", []) }.to raise_error(Gjp::ExecutableNotFoundError)
     end
   end
 

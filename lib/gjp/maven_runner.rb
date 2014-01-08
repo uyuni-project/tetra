@@ -7,7 +7,7 @@ module Gjp
 
     # runs Maven in a subprocess
     def mvn(options)
-      run_executable("#{get_maven_commandline(@project.full_path)} #{options.join(' ')}")
+      run_executable(get_maven_commandline(@project.full_path, options))
     end
 
     # runs Maven to attempt getting a source jar
@@ -30,7 +30,7 @@ module Gjp
 
     # returns a command line for running Maven from the specified
     # prefix
-    def get_maven_commandline(prefix)
+    def get_maven_commandline(prefix, options)
       executable = find_executable("mvn")
 
       if executable != nil
@@ -38,7 +38,7 @@ module Gjp
         repo_path = File.join(prefix, "kit", "m2")
         config_path = File.join(prefix, "kit", "m2", "settings.xml")
 
-        "#{mvn_path} -Dmaven.repo.local=#{repo_path} -s#{config_path}"
+        "#{mvn_path} -Dmaven.repo.local=#{repo_path} -s#{config_path} #{options.join(' ')}"
       else
         raise ExecutableNotFoundError.new("mvn")
       end
