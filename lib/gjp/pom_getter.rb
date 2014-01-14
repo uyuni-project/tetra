@@ -1,7 +1,7 @@
 # encoding: UTF-8
 
 require "digest/sha1"
-require "zip/zip"
+require "zip"
 require "rest_client"
 require "json"
 require "pathname"
@@ -28,13 +28,13 @@ module Gjp
     def get_pom_from_jar(file)
       log.debug("Attempting unpack of #{file} to find a POM")
       begin
-        Zip::ZipFile.foreach(file) do |entry|
+        Zip::File.foreach(file) do |entry|
           if entry.name =~ /\/pom.xml$/
             log.info("pom.xml found in #{file}##{entry.name}")
             return entry.get_input_stream.read, :found_in_jar
           end
         end
-      rescue Zip::ZipError
+      rescue Zip::Error
         log.warn("#{file} does not seem to be a valid jar archive, skipping")
       rescue TypeError
         log.warn("#{file} seems to be a valid jar archive but is corrupt, skipping")

@@ -2,7 +2,7 @@
 
 require "spec_helper"
 require "rubygems"
-require "zip/zip"
+require "zip"
 
 describe Gjp::KitChecker do
   include Gjp::Mockers
@@ -22,7 +22,7 @@ describe Gjp::KitChecker do
         FileUtils.touch("top_level")
         FileUtils.mkdir_p("directory")
         FileUtils.touch(File.join("directory","in_directory"))
-        Zip::ZipFile.open("zipped.zip", Zip::ZipFile::CREATE) do |zipfile|
+        Zip::File.open("zipped.zip", Zip::File::CREATE) do |zipfile|
           Dir[File.join("directory", "**", "**")].each do |file|
             zipfile.add(file.sub("/directory", ""), file)
           end
@@ -83,14 +83,14 @@ describe Gjp::KitChecker do
 
         FileUtils.mkdir_p("package2")
         FileUtils.touch(File.join("package2","SourcedClass.java"))
-        Zip::ZipFile.open("zipped-source-2.jar", Zip::ZipFile::CREATE) do |zipfile|
+        Zip::File.open("zipped-source-2.jar", Zip::File::CREATE) do |zipfile|
           Dir[File.join("package2", "**", "**")].each do |file|
             zipfile.add(file.sub("/package2", ""), file)
           end
         end
         FileUtils.rm(File.join("package2","SourcedClass.java"))
         FileUtils.touch(File.join("package2","SourcedClass.class"))
-        Zip::ZipFile.open("zipped-2.jar", Zip::ZipFile::CREATE) do |zipfile|
+        Zip::File.open("zipped-2.jar", Zip::File::CREATE) do |zipfile|
           Dir[File.join("package2", "**", "**")].each do |file|
             zipfile.add(file.sub("/package2", ""), file)
           end
@@ -99,7 +99,7 @@ describe Gjp::KitChecker do
         FileUtils.mkdir_p("package3")
         FileUtils.touch(File.join("package3","SourcedSameArchive.java"))
         FileUtils.touch(File.join("package3","SourcedSameArchive.class"))
-        Zip::ZipFile.open("zipped-3.zip", Zip::ZipFile::CREATE) do |zipfile|
+        Zip::File.open("zipped-3.zip", Zip::File::CREATE) do |zipfile|
           Dir[File.join("package3", "**", "**")].each do |file|
             zipfile.add(file.sub("/package3", ""), file)
           end

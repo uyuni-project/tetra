@@ -1,6 +1,7 @@
 # encoding: UTF-8
 
 require "find"
+require "zip"
 
 module Gjp
   # checks kits for errors
@@ -25,7 +26,7 @@ module Gjp
           path. =~ /\.(zip)|([jwe]ar)$/
         end.map do |path, archive|
           result = []
-          Zip::ZipFile.foreach(path) do |entry|
+          Zip::File.foreach(path) do |entry|
             if entry.file?
               result << [entry.to_s, path]
             end
