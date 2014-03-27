@@ -90,7 +90,7 @@ module Gjp
         files_to_delete = files_in_head - files_in_tag + files_added_after_head
 
         files_to_delete.each do |file|
-          File.delete(file)
+          FileUtils.rm_rf(file)
         end
       end
     end
