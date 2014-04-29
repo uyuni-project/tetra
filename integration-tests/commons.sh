@@ -31,7 +31,7 @@ cd ../../..
 cd src
 mkdir commons-fileupload
 cd commons-fileupload
-wget http://mirror.nohup.it/apache//commons/fileupload/source/commons-fileupload-1.3-src.zip
+wget http://archive.apache.org/dist/commons/fileupload/source/commons-fileupload-1.3-src.zip
 unzip commons-fileupload-1.3-src.zip
 rm commons-fileupload-1.3-src.zip
 
