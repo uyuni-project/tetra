@@ -43,7 +43,7 @@ Requires:       mvn(<%= dependency_id[0] %>:<%= dependency_id[1] %>) <% if depen
 %prep
 %setup -q -c -n src/<%= name %>
 cp -f %{SOURCE1} .
-ln -sf %{_datadir}/gjp/<%= project_name %>-kit ../../kit
+cp -Rf %{_datadir}/gjp/<%= project_name %>-kit ../../kit
 
 %build
 cd ../../
