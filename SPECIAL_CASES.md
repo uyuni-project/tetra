@@ -73,7 +73,6 @@ Note that the kit package is needed at build time only by OBS, no end user shoul
 
     export NO_BRP_CHECK_BYTECODE_VERSION=true
 
-* if packages build at first but then fail after a few days because Maven tries to connect to the Internet, add the `--option` flag to the `mvn` line in `build.sh`;
 * if you want to be 100% sure your package builds without network access, you can use scripts in the `utils/` folder to create a special `nonet` user that cannot use the Internet and retry the build from that user.
 
 ## Frequently used sources
