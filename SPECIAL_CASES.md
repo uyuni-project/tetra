@@ -73,6 +73,14 @@ Note that the kit package is needed at build time only by OBS, no end user shoul
 
     export NO_BRP_CHECK_BYTECODE_VERSION=true
 
+* some Maven plugins like the Eclipse Project ones ([Tycho](https://www.eclipse.org/tycho/)) will save data in `/tmp` downloaded from the Internet and will produce errors if this data is not there during offline builds. One way to work around that is to force Java to use a kit subdirectory as `/tmp`. Add the following option to `gjp mvn` during your build:
+
+    -DskipTests=true -Djava.io.tmpdir=<full path to project>/kit/tmp
+
+Use the following option in `mvn` in your build.sh file to make it reproducible:
+
+    -DskipTests=true -Djava.io.tmpdir=$PROJECT_PREFIX/kit/tmp
+
 * if you want to be 100% sure your package builds without network access, you can use scripts in the `utils/` folder to create a special `nonet` user that cannot use the Internet and retry the build from that user.
 
 ## Frequently used sources
