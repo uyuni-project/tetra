@@ -23,6 +23,28 @@ describe Gjp::Git do
     end
   end
 
+  describe "#commit_whole_directory" do
+    it "commits all contents of a directory to git for later use" do
+      Dir.chdir(@git_path) do
+        File.open("file1", "w") do |file|
+          file.write "test"
+        end
+
+        # check that gitignore files are moved correctly
+        File.open(".gitignore", "w") do |file|
+          file.write "file1o"
+        end
+
+        @git.commit_whole_directory("test", "test")
+
+        files = `git ls-tree --name-only -r HEAD`.split("\n")
+
+        files.should include("file1")
+        files.should include(".gitignore_disabled_by_gjp")
+      end
+    end
+  end
+
   describe "#changed_files_since"  do
     it "lists files changed since a gjp tag" do
       Dir.chdir(@git_path) do
