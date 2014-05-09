@@ -21,3 +21,7 @@ spec/data/test-project
 .yardoc
 _yardoc
 doc/
+
+# integration test files
+integration-tests/galaxy
+
