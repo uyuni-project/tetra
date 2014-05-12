@@ -80,6 +80,8 @@ Use the following option in `mvn` in your build.sh file to make it reproducible:
 
     -DskipTests=true -Djava.io.tmpdir=$PROJECT_PREFIX/kit/tmp
 
+* Tycho builds may also require NSS, so if you get NSS errors be sure to add `mozilla-nss` or an equivalent package in a BuildRequires: line;
+
 * if you want to be 100% sure your package builds without network access, you can use scripts in the `utils/` folder to create a special `nonet` user that cannot use the Internet and retry the build from that user.
 
 ## Frequently used sources
