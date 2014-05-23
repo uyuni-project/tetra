@@ -2,6 +2,8 @@
 
 # A crude integration test that builds commons-collections
 
+set -e
+
 rm -Rf galaxy
 mkdir galaxy
 cd galaxy
