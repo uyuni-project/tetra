@@ -39,7 +39,7 @@ describe Gjp::KitChecker do
     end
   end
 
-  describe "#get_source_classes"  do
+  describe "#source_class_names"  do
     it "distills source class names in kit" do
       all_files = [
         ["path/to/ClassOne.java", nil],
@@ -48,7 +48,7 @@ describe Gjp::KitChecker do
         ["path/to/CompiledClass.class", "yet_another.jar"],
       ]
 
-      class_names = @kit_checker.get_source_class_names(all_files)
+      class_names = @kit_checker.source_class_names(all_files)
 
       class_names.should include "path.to.ClassOne"
       class_names.should include "path.to.ClassTwo"
@@ -57,7 +57,7 @@ describe Gjp::KitChecker do
     end
   end
 
-  describe "#get_compiled_classes"  do
+  describe "#compiled_classes"  do
     it "distills source class names in kit" do
       all_files = [
         ["path/to/ClassOne.class", nil],
@@ -66,7 +66,7 @@ describe Gjp::KitChecker do
         ["path/to/SourceClass.java", "yet_another.jar"],
       ]
 
-      classes = @kit_checker.get_compiled_classes(all_files)
+      classes = @kit_checker.compiled_classes(all_files)
 
       classes[nil].should include "path.to.ClassOne"
       classes["path/to/archive.jar"].should include "path.to.ClassTwo"
@@ -75,7 +75,7 @@ describe Gjp::KitChecker do
     end
   end
 
-  describe "#get_unsourced" do
+  describe "#unsourced_archives" do
     it "returns a list of jars wich source files are missing" do
       @project.from_directory("kit") do
         FileUtils.mkdir_p("package1")
@@ -106,7 +106,7 @@ describe Gjp::KitChecker do
         end
       end
 
-      unsourced = @kit_checker.get_unsourced
+      unsourced = @kit_checker.unsourced_archives
       unsourced.length().should eq 1
 
       unsourced.first[:archive].should be_nil

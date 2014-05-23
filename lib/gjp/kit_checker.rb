@@ -40,7 +40,7 @@ module Gjp
 
     # returns a list of class names for which
     # we have source files in kit/
-    def get_source_class_names(paths)
+    def source_class_names(paths)
       source_paths = paths.select do |path, archive|
         path =~ /\.java$/
       end
@@ -63,7 +63,7 @@ module Gjp
 
     # returns a list of class names for which
     # we have binary files in kit/
-    def get_compiled_classes(paths)
+    def compiled_classes(paths)
       result = {}
       compiled_paths = paths.select do |path, archive|
         path =~ /\.class$/
@@ -81,10 +81,10 @@ module Gjp
 
     # returns a hash that associates archive names and
     # the unsourced classes within them
-    def get_unsourced
+    def unsourced_archives
       paths = kit_file_paths
-      source_class_names = get_source_class_names(paths)
-      archive_paths_to_class_names = get_compiled_classes(paths)
+      source_class_names = source_class_names(paths)
+      archive_paths_to_class_names = compiled_classes(paths)
 
       result = archive_paths_to_class_names.map do |archive, class_names|
         unsourced_class_names = class_names.select do |class_name|

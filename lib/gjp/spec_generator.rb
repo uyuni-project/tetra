@@ -17,7 +17,7 @@ module Gjp
         FileUtils.mkdir_p(output_dir)
 
         adapter = Gjp::KitSpecAdapter.new(@project)
-        conflict_count = generate_merging("kit.spec", adapter.get_binding, spec_path, :generate_kit_spec)
+        conflict_count = generate_merging("kit.spec", adapter.public_binding, spec_path, :generate_kit_spec)
 
         symlink_to_output(spec_path, output_dir)
 
@@ -34,7 +34,7 @@ module Gjp
         FileUtils.mkdir_p(output_dir)
 
         adapter = Gjp::PackageSpecAdapter.new(@project, name, pom, filter)
-        conflict_count = generate_merging("package.spec", adapter.get_binding, spec_path, "generate_#{name}_spec")
+        conflict_count = generate_merging("package.spec", adapter.public_binding, spec_path, "generate_#{name}_spec")
 
         symlink_to_output(spec_path, output_dir)
 

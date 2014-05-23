@@ -39,12 +39,12 @@ describe Gjp::TemplateManager do
           "World!"
         end
 
-        def get_binding
-         binding
+        def public_binding
+          binding
         end
       end
 
-      template_manager.generate("test.erb", WorldClass.new.get_binding, destination_path)
+      template_manager.generate("test.erb", WorldClass.new.public_binding, destination_path)
       File.unlink(template_path)
 
       File.read(destination_path).should eq "Hello World!\n"

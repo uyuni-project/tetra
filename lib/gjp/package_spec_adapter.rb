@@ -41,7 +41,7 @@ module Gjp
       end
     end
 
-    def get_binding
+    def public_binding
       binding
     end
 
