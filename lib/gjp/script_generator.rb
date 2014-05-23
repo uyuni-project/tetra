@@ -43,7 +43,7 @@ module Gjp
         script_name = "build.sh"
         result_path = File.join("src", name, script_name)
         conflict_count = @project.merge_new_content(new_content, result_path, "Build script generated", 
-          "generate_#{name}_build_script")
+                                                    "generate_#{name}_build_script")
 
         destination_dir = File.join("output", name)
         FileUtils.mkdir_p(destination_dir)
