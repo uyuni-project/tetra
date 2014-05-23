@@ -77,12 +77,12 @@ module Gjp
     def get_tag_maximum_suffix(prefix)
       Dir.chdir(@directory) do
         `git tag`.split.map do |tag|
-          if tag =~ /^gjp_#{prefix}_([0-9]+)$/
-            $1.to_i
-          else
-            0
-          end
-         end.max || 0
+           if tag =~ /^gjp_#{prefix}_([0-9]+)$/
+             $1.to_i
+           else
+             0
+           end
+        end.max || 0
       end
     end
 
