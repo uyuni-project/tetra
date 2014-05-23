@@ -42,7 +42,7 @@ describe Gjp::MavenWebsite do
 
   describe "#get_maven_id_from" do
     it "uses search.maven.org to look for poms" do
-      site.get_maven_id_from({"g" => 1, "a" => 2, "v" => 3}).should eq([1, 2, 3])
+      site.get_maven_id_from("g" => 1, "a" => 2, "v" => 3).should eq([1, 2, 3])
     end
   end
 
