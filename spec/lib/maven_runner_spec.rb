@@ -50,7 +50,8 @@ describe Gjp::MavenRunner do
       create_mock_executable("mvn")
       @project.from_directory do
         @kit_runner.get_source_jar("test_group", "test_artifact_id", "test_version")
-        File.read("test_out").strip.should match /dependency:get -Dartifact=test_group:test_artifact_id:test_version:jar:sources -Dtransitive=false$/
+        expected = /dependency:get -Dartifact=test_group:test_artifact_id:test_version:jar:sources -Dtransitive=false$/
+        File.read("test_out").strip.should match expected
       end
     end
   end

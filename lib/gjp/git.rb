@@ -39,7 +39,8 @@ module Gjp
         else
           "HEAD"
         end
-        `git diff-tree --no-commit-id --name-only -r #{prefixed_start_tag} #{prefixed_end_tag} -- #{directory}`.split("\n")
+        `git diff-tree --no-commit-id --name-only -r #{prefixed_start_tag} #{prefixed_end_tag} -- #{directory}`
+          .split("\n")
       end
     end
 
@@ -111,7 +112,8 @@ module Gjp
         log.debug "calling git show gjp_#{tag}:#{path} > #{path}.old_version, output follows"
         `git show gjp_#{tag}:#{path} > #{path}.old_version`
         log.debug "calling git merge-file #{path} #{path}.old_version #{new_path}, output follows"
-        `git merge-file #{path} #{path}.old_version #{new_path} -L "newly generated" -L "previously generated" -L "user edited"`
+        `git merge-file #{path} #{path}.old_version #{new_path} \
+          -L "newly generated" -L "previously generated" -L "user edited"`
         conflict_count = $?.exitstatus
         File.delete "#{path}.old_version"
         return conflict_count

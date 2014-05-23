@@ -78,7 +78,8 @@ describe Gjp::Project do
 
     it "returns the package on an existing package subsubdirectory" do
       FileUtils.mkdir_p(File.join(@project_path, "src", "test_package", "subdir1", "subdir2"))
-      @project.get_package_name(File.join(@project_path, "src", "test_package", "subdir1", "subdir2")).should eq "test_package"
+      @project.get_package_name(File.join(@project_path, "src", "test_package", "subdir1", "subdir2"))
+        .should eq "test_package"
     end
   end
 

@@ -52,7 +52,9 @@ module Gjp
           results = site.search_by_sha1(sha1).select {|result| result["ec"].include?(".pom")}
           result = results.first    
           if result != nil
-            log.info("pom.xml for #{file} found on search.maven.org for sha1 #{sha1} (#{result["g"]}:#{result["a"]}:#{result["v"]})")
+            log.info("pom.xml for #{file} found on search.maven.org for sha1 #{sha1}\
+              (#{result["g"]}:#{result["a"]}:#{result["v"]})"
+            )
             group_id, artifact_id, version = site.get_maven_id_from result
             return site.download_pom(group_id, artifact_id, version), :found_via_sha1
           end
@@ -80,11 +82,17 @@ module Gjp
           results = site.search_by_group_id_and_artifact_id(group_id, artifact_id)
           log.debug("All versions: #{results}")
           their_versions = results.map {|doc| doc["v"]}
-          best_matched_version = if my_version != nil then version_matcher.best_match(my_version, their_versions) else their_versions.max end
+          best_matched_version = if my_version != nil
+            version_matcher.best_match(my_version, their_versions)
+          else
+            their_versions.max
+          end
           best_matched_result = (results.select{|result| result["v"] == best_matched_version}).first
             
           group_id, artifact_id, version = site.get_maven_id_from(best_matched_result)
-          log.warn("pom.xml for #{filename} found on search.maven.org with heuristic search (#{group_id}:#{artifact_id}:#{version})")
+          log.warn("pom.xml for #{filename} found on search.maven.org with heuristic search\
+            (#{group_id}:#{artifact_id}:#{version})"
+          )
             
           return site.download_pom(group_id, artifact_id, version), :found_via_heuristic
         end

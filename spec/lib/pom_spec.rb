@@ -31,7 +31,8 @@ describe Gjp::Pom do
 
   describe "#description" do
     it "reads the description" do
-      pom.description.should eq "Commons Logging is a thin adapter allowing configurable bridging to other,\n    well known logging systems."
+      pom.description.should eq "Commons Logging is a thin adapter allowing configurable bridging to other,\n    " +
+        "well known logging systems."
     end
   end
 
@@ -55,7 +56,8 @@ describe Gjp::Pom do
 
   describe "#scm_connection" do
     it "reads the SCM connection address" do
-      pom.scm_connection.should eq "scm:svn:http://svn.apache.org/repos/asf/commons/proper/logging/tags/commons-logging-1.1.1"
+      pom.scm_connection.should eq "scm:svn:http://svn.apache.org/repos/asf/commons/proper/" +
+        "logging/tags/commons-logging-1.1.1"
     end
   end
 

@@ -13,17 +13,17 @@ module Gjp
     def archive_kit(full)
       destination_dir = File.join(@project.full_path, "output", "#{@project.name}-kit")
       FileUtils.mkdir_p(destination_dir)
-      destination_file_prefix = "#{@project.name}-kit"
-      destination_file_suffix = ".tar.xz"
+      file_prefix = "#{@project.name}-kit"
+      file_suffix = ".tar.xz"
 
       @project.take_snapshot "Kit archival started"
 
       destination_file = if full
-        remove_stale_incremental(destination_dir, destination_file_prefix, destination_file_suffix)
-        archive_single("kit", File.join(destination_dir, destination_file_prefix + destination_file_suffix))
+        remove_stale_incremental(destination_dir, file_prefix, file_suffix)
+        archive_single("kit", File.join(destination_dir, file_prefix + file_suffix))
       else
         log.debug "doing incremental archive"
-        archive_incremental("kit", destination_dir, destination_file_prefix, destination_file_suffix, :archive_kit)
+        archive_incremental("kit", destination_dir, file_prefix, file_suffix, :archive_kit)
       end
 
       @project.take_snapshot "Kit archive generated", :archive_kit
@@ -52,15 +52,15 @@ module Gjp
 
     # archives a directory's changed contents since last time archive_incremental was called
     # uses snapshots with tag_prefix to keep track of calls to this method
-    # destination files will be destination_file_prefix_NNNN_destination_file_suffix
-    def archive_incremental(source_directory, destination_dir, destination_file_prefix, destination_file_suffix, tag_prefix)
+    # destination files will be file_prefix_NNNN_file_suffix
+    def archive_incremental(source_directory, destination_dir, file_prefix, file_suffix, tag_prefix)
       @project.from_directory do
         latest_tag_count = @project.latest_tag_count(tag_prefix)
 
         if latest_tag_count == 0
-          archive_single(source_directory, File.join(destination_dir, destination_file_prefix + destination_file_suffix))
+          archive_single(source_directory, File.join(destination_dir, file_prefix + file_suffix))
         else
-          destination_file = File.join(destination_dir, "#{destination_file_prefix}_#{"%04d" % (latest_tag_count)}#{destination_file_suffix}")
+          destination_file = File.join(destination_dir, "#{file_prefix}_#{"%04d" % (latest_tag_count)}#{file_suffix}")
           tag = @project.latest_tag(tag_prefix)
           log.debug "creating #{destination_file} with files newer than #{tag}"
 
@@ -80,9 +80,9 @@ module Gjp
     end
 
     # removes any stale incremental files
-    def remove_stale_incremental(destination_dir, destination_file_prefix, destination_file_suffix)
+    def remove_stale_incremental(destination_dir, file_prefix, file_suffix)
       Dir.entries(destination_dir)
-        .select { |f| f =~ /^#{destination_file_prefix}_([0-9]+)#{destination_file_suffix}$/}
+        .select { |f| f =~ /^#{file_prefix}_([0-9]+)#{file_suffix}$/}
         .each do |f|
         log.debug "removing stale incremental archive #{f}"
         File.delete(File.join(destination_dir, f))

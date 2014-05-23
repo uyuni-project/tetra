@@ -8,8 +8,8 @@ describe Gjp::TemplateManager do
   describe "#template_path" do
     it "returns the pathname where all templates are stored" do
       relative_path = template_manager.template_path
-
-      File.expand_path(relative_path).should eq File.expand_path(File.join(File.dirname(__FILE__), "..", "..", "lib", "template"))
+      expected_path = File.expand_path(File.join(File.dirname(__FILE__), "..", "..", "lib", "template"))
+      File.expand_path(relative_path).should eq expected_path
     end
   end
 

@@ -40,7 +40,9 @@ module Gjp
     end
 
     def runtime_dependency_ids
-      result = @doc.xpath("project/dependencies/dependency[not(optional='true') and not(scope='provided') and not(scope='test') and not(scope='system')]").map do |element|
+      result = @doc.xpath("project/dependencies/dependency[\
+        not(optional='true') and not(scope='provided') and not(scope='test') and not(scope='system')\
+      ]").map do |element|
         [element.xpath("groupId").text, element.xpath("artifactId").text, element.xpath("version").text]
       end
     end

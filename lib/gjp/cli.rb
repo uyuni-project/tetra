@@ -147,7 +147,8 @@ module Gjp
           ensure_dry_running(false, project) do
             package_name = project.get_package_name(directory)
             history_file = File.join(Dir.home, ".bash_history")
-            result_path, conflict_count = Gjp::ScriptGenerator.new(project, history_file).generate_build_script(package_name)
+            result_path, conflict_count = Gjp::ScriptGenerator.new(project, history_file)
+              .generate_build_script(package_name)
             print_generation_result(project, result_path, conflict_count)
           end
         end
@@ -177,7 +178,8 @@ module Gjp
           project = Gjp::Project.new(".")
           ensure_dry_running(false, project) do
             package_name = project.get_package_name(directory)
-            result_path, conflict_count = Gjp::SpecGenerator.new(project).generate_package_spec package_name, pom, filter
+            result_path, conflict_count = Gjp::SpecGenerator.new(project)
+              .generate_package_spec(package_name, pom, filter)
             print_generation_result(project, result_path, conflict_count)
           end
         end
@@ -202,13 +204,15 @@ module Gjp
             print_generation_result(project, result_path, conflict_count)
 
             history_file = File.join(Dir.home, ".bash_history")
-            result_path, conflict_count = Gjp::ScriptGenerator.new(project, history_file).generate_build_script(package_name)
+            result_path, conflict_count = Gjp::ScriptGenerator.new(project, history_file)
+              .generate_build_script(package_name)
             print_generation_result(project, result_path, conflict_count)
 
             result_path = Gjp::Archiver.new(project).archive_package package_name
             print_generation_result(project, result_path)
 
-            result_path, conflict_count = Gjp::SpecGenerator.new(project).generate_package_spec package_name, pom, filter
+            result_path, conflict_count = Gjp::SpecGenerator.new(project)
+              .generate_package_spec package_name, pom, filter
             print_generation_result(project, result_path, conflict_count)
           end
         end

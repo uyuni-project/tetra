@@ -38,7 +38,9 @@ module Gjp
     # returns a search result object from search.maven.com
     # see input and output format at http://search.maven.org/#api
     def search(params)
-        response = RestClient.get "http://search.maven.org/solrsearch/select", {:params => params.merge({"rows" => "100", "wt" => "json"})}
+        response = RestClient.get("http://search.maven.org/solrsearch/select",
+          {:params => params.merge({"rows" => "100", "wt" => "json"})}
+        )
         json = JSON.parse(response.to_s)
         return json["response"]["docs"]
     end

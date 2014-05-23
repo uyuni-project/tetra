@@ -1,4 +1,7 @@
 inherit_from: .rubocop_todo.yml
 
+LineLength:
+  Max: 120
+
 StringLiterals:
   EnforcedStyle: double_quotes
