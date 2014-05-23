@@ -16,7 +16,7 @@ module Gjp
     # saves a jar poms in <jar_filename>.pom
     # returns filename and status if found, else nil
     def get_pom(filename)
-      content, status = (get_pom_from_jar(filename) or get_pom_from_sha1(filename) or get_pom_from_heuristic(filename))
+      content, status = (get_pom_from_jar(filename) || get_pom_from_sha1(filename) || get_pom_from_heuristic(filename))
       if content
         pom_filename = filename.sub(/(\.jar)?$/, ".pom")
         File.open(pom_filename, "w") { |io| io.write(content) }

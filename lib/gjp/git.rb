@@ -82,7 +82,7 @@ module Gjp
           else
             0
           end
-         end.max or 0
+         end.max || 0
       end
     end
 
