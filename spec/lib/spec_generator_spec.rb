@@ -68,7 +68,7 @@ describe Gjp::SpecGenerator do
         spec_path = File.join("output", "test-project-kit", "test-project-kit.spec")
         spec_contents = File.read spec_path
 
-        spec_contents.gsub! /^Version:.*$/, "CONFLICTING!"
+        spec_contents.gsub!(/^Version:.*$/, "CONFLICTING!")
 
         File.open(spec_path, "w+") do |io|
           io.write(spec_contents)

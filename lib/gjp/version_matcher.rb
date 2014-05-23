@@ -30,11 +30,11 @@ module Gjp
     def best_match(my_version, their_versions)
       log.debug("version comparison: #{my_version} vs #{their_versions.join(", ")}")
     
-      my_chunks = my_version.split /[\.\-\_ ~,]/
+      my_chunks = my_version.split(/[\.\-\_ ~,]/)
       their_chunks_hash = Hash[
         their_versions.map do |their_version|
           their_chunks_for_version = if their_version != nil
-            their_version.split /[\.\-\_ ~,]/
+            their_version.split(/[\.\-\_ ~,]/)
           else
             []
           end

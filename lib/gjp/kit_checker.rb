@@ -23,7 +23,7 @@ module Gjp
         end
 
         archived_file_paths = plain_file_paths.select do |path, archive|
-          path. =~ /\.(zip)|([jwe]ar)$/
+          path. =~ (/\.(zip)|([jwe]ar)$/)
         end.map do |path, archive|
           result = []
           Zip::File.foreach(path) do |entry|

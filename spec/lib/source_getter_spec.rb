@@ -27,7 +27,7 @@ describe Gjp::SourceGetter do
 
         successes, failures = source_getter.get_maven_source_jars(@project)
         commandline = File.read(File.join("..", "..", "test_out")).strip
-        commandline.should match /-Dartifact=net.test:artifact:1.0:jar:sources -Dtransitive=false$/
+        commandline.should match(/-Dartifact=net.test:artifact:1.0:jar:sources -Dtransitive=false$/)
         successes.should include File.join(".", "kit", "m2", jar_path)
         failures.should eq []
       end

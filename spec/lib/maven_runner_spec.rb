@@ -35,7 +35,7 @@ describe Gjp::MavenRunner do
       create_mock_executable("mvn")
       @project.from_directory do
         @kit_runner.mvn(["extra-option"])
-        File.read("test_out").strip.should match /extra-option$/
+        File.read("test_out").strip.should match(/extra-option$/)
       end
     end
     it "doesn't run Maven if it is not available" do
@@ -61,7 +61,7 @@ describe Gjp::MavenRunner do
       create_mock_executable("mvn")
       @project.from_directory do
         @kit_runner.get_effective_pom("test.pom").should eq "test.pom.effective"
-        File.read("test_out").strip.should match /help:effective-pom -ftest.pom -Doutput=test.pom.effective$/
+        File.read("test_out").strip.should match(/help:effective-pom -ftest.pom -Doutput=test.pom.effective$/)
       end
     end
   end
