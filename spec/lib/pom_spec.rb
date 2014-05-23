@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-require 'spec_helper'
+require "spec_helper"
 
 describe Gjp::Pom do
   let(:pom) { Gjp::Pom.new(File.join("spec", "data", "commons-logging", "pom.xml")) }

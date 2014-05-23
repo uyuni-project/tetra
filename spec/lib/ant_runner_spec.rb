@@ -1,7 +1,7 @@
 # encoding: UTF-8
 
-require 'spec_helper'
-require 'lib/kit_runner_spec'
+require "spec_helper"
+require "lib/kit_runner_spec"
 
 describe Gjp::AntRunner do
   it_behaves_like Gjp::KitRunner

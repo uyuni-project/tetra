@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-require 'spec_helper'
+require "spec_helper"
 
 describe Gjp::PomGetter do
   let(:pom_getter) { Gjp::PomGetter.new }

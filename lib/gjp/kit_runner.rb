@@ -1,7 +1,7 @@
 # encoding: UTF-8
 
-require 'find'
-require 'pathname'
+require "find"
+require "pathname"
 
 module Gjp
   # runs programs from a gjp kit with gjp-specific options

@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-require 'spec_helper'
+require "spec_helper"
 
 describe Gjp::VersionMatcher do      
   let(:version_matcher) { Gjp::VersionMatcher.new }

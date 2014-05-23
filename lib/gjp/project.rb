@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-require 'find'
+require "find"
 
 module Gjp
   # encapsulates a Gjp project directory

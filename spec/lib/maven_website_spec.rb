@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-require 'spec_helper'
+require "spec_helper"
 
 describe Gjp::MavenWebsite do
   let(:site) { Gjp::MavenWebsite.new }

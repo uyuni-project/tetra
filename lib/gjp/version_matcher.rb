@@ -28,7 +28,7 @@ module Gjp
     #  - score weighs differently on chunk index (first chunks are most important)
     #  - lowest score wins
     def best_match(my_version, their_versions)
-      log.debug("version comparison: #{my_version} vs #{their_versions.join(', ')}")
+      log.debug("version comparison: #{my_version} vs #{their_versions.join(", ")}")
     
       my_chunks = my_version.split /[\.\-\_ ~,]/
       their_chunks_hash = Hash[

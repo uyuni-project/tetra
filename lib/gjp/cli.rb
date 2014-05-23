@@ -305,7 +305,7 @@ module Gjp
               puts "SCM connection: #{pom.scm_url}"
             end
             puts "The effective POM: #{effective_pom_path}"
-            puts "Google: http://google.com/#q=#{URI::encode(pom.name + ' sources')}"
+            puts "Google: http://google.com/#q=#{URI::encode(pom.name + " sources")}"
           end
         end
       end
