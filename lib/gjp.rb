@@ -1,3 +1,4 @@
+# backend
 require "gjp/version"
 require "gjp/logger"
 require "gjp/template_manager"
@@ -18,4 +19,24 @@ require "gjp/spec_generator"
 require "gjp/archiver"
 require "gjp/kit_checker"
 
-require "gjp/cli"
+# UI
+require "gjp/commands/base"
+
+require "gjp/commands/ant"
+require "gjp/commands/download-maven-source-jars"
+require "gjp/commands/dry-run"
+require "gjp/commands/finish"
+require "gjp/commands/generate-all"
+require "gjp/commands/generate-kit-archive"
+require "gjp/commands/generate-kit-spec"
+require "gjp/commands/generate-package-archive"
+require "gjp/commands/generate-package-script"
+require "gjp/commands/generate-package-spec"
+require "gjp/commands/get-pom"
+require "gjp/commands/get-source"
+require "gjp/commands/init"
+require "gjp/commands/list-kit-missing-sources"
+require "gjp/commands/move-jars-to-kit"
+require "gjp/commands/mvn"
+
+require "gjp/main"
