@@ -29,41 +29,41 @@ describe Gjp::Project do
       Gjp::Project.find_project_dir(File.expand_path("src", @project_path)).should eq expanded_path
       Gjp::Project.find_project_dir(File.expand_path("kit", @project_path)).should eq expanded_path
 
-      expect {
+      expect do
         Gjp::Project.find_project_dir(File.expand_path("..", @project_path)).should raise_error
-      }.to raise_error(Gjp::NoProjectDirectoryError)
+      end.to raise_error(Gjp::NoProjectDirectoryError)
     end
   end
 
   describe ".get_package_name"  do
     it "raises an error with a directory outside a gjp project" do
-      expect {
+      expect do
         @project.get_package_name("/")
-      }.to raise_error(Gjp::NoPackageDirectoryError)
+      end.to raise_error(Gjp::NoPackageDirectoryError)
     end
 
     it "raises an error with a gjp project directory" do
-      expect {
+      expect do
         @project.get_package_name(@project_path)
-      }.to raise_error(Gjp::NoPackageDirectoryError)
+      end.to raise_error(Gjp::NoPackageDirectoryError)
     end
 
     it "raises an error with a gjp kit directory" do
-      expect {
+      expect do
         @project.get_package_name(File.join(@project_path, "kit"))
-      }.to raise_error(Gjp::NoPackageDirectoryError)
+      end.to raise_error(Gjp::NoPackageDirectoryError)
     end
 
     it "raises an error with a gjp src directory" do
-      expect {
+      expect do
         @project.get_package_name(File.join(@project_path, "src"))
-      }.to raise_error(Gjp::NoPackageDirectoryError)
+      end.to raise_error(Gjp::NoPackageDirectoryError)
     end
 
     it "raises an error with a nonexisting package directory" do
-      expect {
+      expect do
         @project.get_package_name(File.join(@project_path, "src", "test_package"))
-      }.to raise_error(Gjp::NoPackageDirectoryError)
+      end.to raise_error(Gjp::NoPackageDirectoryError)
     end
 
     it "returns the package on an existing package directory" do

@@ -17,9 +17,9 @@ describe Gjp::Git do
 
   describe "#init"  do
     it "complains if a double initialization is attempted" do
-      expect {
+      expect do
         @git.init
-      }.to raise_error(Gjp::GitAlreadyInitedError)
+      end.to raise_error(Gjp::GitAlreadyInitedError)
     end
   end
 
