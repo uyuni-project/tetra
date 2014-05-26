@@ -22,7 +22,7 @@ unzip apache-maven-*.zip
 rm apache-maven-*.zip
 cd ..
 
-gjp dry-run
+gjp dry-run --very-very-verbose
 cd src/commons-collections/commons-collections-3.2.1-src/
 gjp mvn package -DskipTests
 gjp finish
