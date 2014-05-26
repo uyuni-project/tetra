@@ -41,7 +41,7 @@ describe Gjp::ScriptGenerator do
 
         lines.should include("#!/bin/bash\n")
         lines.should include("cd somewhere significant\n")
-        lines.should include("$PROJECT_PREFIX/kit/mvn/bin/mvn -Dmaven.repo.local=$PROJECT_PREFIX/kit/m2 " +
+        lines.should include("$PROJECT_PREFIX/kit/mvn/bin/mvn -Dmaven.repo.local=$PROJECT_PREFIX/kit/m2 " \
           "-s$PROJECT_PREFIX/kit/m2/settings.xml -o --options\n"
         )
 

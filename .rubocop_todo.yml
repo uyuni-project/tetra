@@ -42,11 +42,6 @@ GuardClause:
 IfUnlessModifier:
   Enabled: false
 
-# Offense count: 3
-# Cop supports --auto-correct.
-LineEndConcatenation:
-  Enabled: false
-
 # Offense count: 4
 # Cop supports --auto-correct.
 MethodCallParentheses:
