@@ -52,7 +52,7 @@ module Gjp
       class_names = source_paths.map do |path, archive|
         class_name = path_to_class(path)
         parts = class_name.split(".")
-        last_index = parts.length() -1
+        last_index = parts.length() - 1
         (0..last_index).map do |i|
           parts[i..last_index].join(".")
         end
@@ -90,7 +90,7 @@ module Gjp
         unsourced_class_names = class_names.select do |class_name|
           source_class_names.include?(class_name) == false
         end
-        {archive: archive, class_names: class_names, unsourced_class_names: unsourced_class_names}
+        { archive: archive, class_names: class_names, unsourced_class_names: unsourced_class_names }
       end.select do |archive|
         archive[:unsourced_class_names].any?
       end

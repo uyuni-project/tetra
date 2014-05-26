@@ -24,7 +24,7 @@ describe Gjp::VersionMatcher do
 
       version_matcher.chunk_distance("snap", "SNAP").should eq(0)
       version_matcher.chunk_distance("snap", "snippete").should eq(5)
-      version_matcher.chunk_distance("snap", "l"*999).should eq(99)
+      version_matcher.chunk_distance("snap", "l" * 999).should eq(99)
       
       version_matcher.chunk_distance("1", "SNAP").should eq(4)
       

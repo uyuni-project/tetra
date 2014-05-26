@@ -84,7 +84,7 @@ module Gjp
     # removes any stale incremental files
     def remove_stale_incremental(destination_dir, file_prefix, file_suffix)
       Dir.entries(destination_dir)
-        .select { |f| f =~ /^#{file_prefix}_([0-9]+)#{file_suffix}$/}
+        .select { |f| f =~ /^#{file_prefix}_([0-9]+)#{file_suffix}$/ }
         .each do |f|
         log.debug "removing stale incremental archive #{f}"
         File.delete(File.join(destination_dir, f))

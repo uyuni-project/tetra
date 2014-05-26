@@ -56,7 +56,7 @@ describe Gjp::Archiver do
   describe "#archive_kit" do
     it "archives a kit package files, not incrementally" do
       @project.from_directory do
-        File.open(File.join("kit","kit_test"), "w") { |io| io.puts "test content" }
+        File.open(File.join("kit", "kit_test"), "w") { |io| io.puts "test content" }
       end
       @project.finish(false)
 
@@ -67,7 +67,7 @@ describe Gjp::Archiver do
     end
     it "archives a kit package files incrementally" do
       @project.from_directory do
-        File.open(File.join("kit","kit_test"), "w") { |io| io.puts "test content" }
+        File.open(File.join("kit", "kit_test"), "w") { |io| io.puts "test content" }
       end
       @project.finish(false)
 
@@ -77,7 +77,7 @@ describe Gjp::Archiver do
       end
 
       @project.from_directory do
-        File.open(File.join("kit","kit_test2"), "w") { |io| io.puts "test content" }
+        File.open(File.join("kit", "kit_test2"), "w") { |io| io.puts "test content" }
       end
 
       archiver.archive_kit(false)

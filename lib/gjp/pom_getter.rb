@@ -49,7 +49,7 @@ module Gjp
         if File.file?(file)
           site = MavenWebsite.new
           sha1 = Digest::SHA1.hexdigest File.read(file)
-          results = site.search_by_sha1(sha1).select {|result| result["ec"].include?(".pom")}
+          results = site.search_by_sha1(sha1).select { |result| result["ec"].include?(".pom") }
           result = results.first    
           if result != nil
             log.info("pom.xml for #{file} found on search.maven.org for sha1 #{sha1}\
@@ -81,7 +81,7 @@ module Gjp
           group_id, artifact_id, version = site.get_maven_id_from result
           results = site.search_by_group_id_and_artifact_id(group_id, artifact_id)
           log.debug("All versions: #{results}")
-          their_versions = results.map {|doc| doc["v"]}
+          their_versions = results.map { |doc| doc["v"] }
           best_matched_version = (
             if my_version != nil
               version_matcher.best_match(my_version, their_versions)
@@ -89,7 +89,7 @@ module Gjp
               their_versions.max
             end
           )
-          best_matched_result = (results.select{|result| result["v"] == best_matched_version}).first
+          best_matched_result = (results.select { |result| result["v"] == best_matched_version }).first
             
           group_id, artifact_id, version = site.get_maven_id_from(best_matched_result)
           log.warn("pom.xml for #{filename} found on search.maven.org with heuristic search\

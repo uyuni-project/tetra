@@ -81,7 +81,7 @@ describe Gjp::Git do
           file.write "test"
         end
         Dir.mkdir("subdir")
-        File.open(File.join("subdir","file3"), "w") do |file|
+        File.open(File.join("subdir", "file3"), "w") do |file|
           file.write "test"
         end
 

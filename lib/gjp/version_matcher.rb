@@ -40,30 +40,30 @@ module Gjp
               []
             end
           )
-          their_chunks_for_version += [nil]*[my_chunks.length - their_chunks_for_version.length, 0].max
+          their_chunks_for_version += [nil] * [my_chunks.length - their_chunks_for_version.length, 0].max
           [their_version, their_chunks_for_version]
         end
       ]
       
-      max_chunks_length = ([my_chunks.length] + their_chunks_hash.values.map {|chunk| chunk.length}).max
+      max_chunks_length = ([my_chunks.length] + their_chunks_hash.values.map { |chunk| chunk.length }).max
       
       scoreboard = []
       their_versions.each do |their_version|
         their_chunks = their_chunks_hash[their_version]
         score = 0
         their_chunks.each_with_index do |their_chunk, i|
-          score_multiplier = 100**(max_chunks_length -i -1)
+          score_multiplier = 100**(max_chunks_length - i - 1)
           my_chunk = my_chunks[i]
           score += chunk_distance(my_chunk, their_chunk) * score_multiplier
         end
-        scoreboard << {version: their_version, score: score}
+        scoreboard << { version: their_version, score: score }
       end
       
-      scoreboard = scoreboard.sort_by {|element| element[:score]}
+      scoreboard = scoreboard.sort_by { |element| element[:score] }
 
       log.debug("scoreboard: ")
       scoreboard.each_with_index do |element, i|
-        log.debug("  #{i+1}. #{element[:version]} (score: #{element[:score]})")
+        log.debug("  #{i + 1}. #{element[:version]} (score: #{element[:score]})")
       end
       
       return scoreboard.first[:version] unless scoreboard.first.nil?

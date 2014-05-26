@@ -51,7 +51,7 @@ module Gjp
       raw
         .gsub(/[\s]+/, " ")
         .strip
-        .slice(0..max_length -1)
+        .slice(0..max_length - 1)
         .sub(/\s\w+$/, "")
         .sub(/\.+$/, "")
     end

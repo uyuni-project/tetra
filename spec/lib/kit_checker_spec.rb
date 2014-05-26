@@ -21,7 +21,7 @@ describe Gjp::KitChecker do
       @project.from_directory("kit") do
         FileUtils.touch("top_level")
         FileUtils.mkdir_p("directory")
-        FileUtils.touch(File.join("directory","in_directory"))
+        FileUtils.touch(File.join("directory", "in_directory"))
         Zip::File.open("zipped.zip", Zip::File::CREATE) do |zipfile|
           Dir[File.join("directory", "**", "**")].each do |file|
             zipfile.add(file.sub("/directory", ""), file)
@@ -79,17 +79,17 @@ describe Gjp::KitChecker do
     it "returns a list of jars wich source files are missing" do
       @project.from_directory("kit") do
         FileUtils.mkdir_p("package1")
-        FileUtils.touch(File.join("package1","UnsourcedClass.class"))
+        FileUtils.touch(File.join("package1", "UnsourcedClass.class"))
 
         FileUtils.mkdir_p("package2")
-        FileUtils.touch(File.join("package2","SourcedClass.java"))
+        FileUtils.touch(File.join("package2", "SourcedClass.java"))
         Zip::File.open("zipped-source-2.jar", Zip::File::CREATE) do |zipfile|
           Dir[File.join("package2", "**", "**")].each do |file|
             zipfile.add(file.sub("/package2", ""), file)
           end
         end
-        FileUtils.rm(File.join("package2","SourcedClass.java"))
-        FileUtils.touch(File.join("package2","SourcedClass.class"))
+        FileUtils.rm(File.join("package2", "SourcedClass.java"))
+        FileUtils.touch(File.join("package2", "SourcedClass.class"))
         Zip::File.open("zipped-2.jar", Zip::File::CREATE) do |zipfile|
           Dir[File.join("package2", "**", "**")].each do |file|
             zipfile.add(file.sub("/package2", ""), file)
@@ -97,8 +97,8 @@ describe Gjp::KitChecker do
         end
 
         FileUtils.mkdir_p("package3")
-        FileUtils.touch(File.join("package3","SourcedSameArchive.java"))
-        FileUtils.touch(File.join("package3","SourcedSameArchive.class"))
+        FileUtils.touch(File.join("package3", "SourcedSameArchive.java"))
+        FileUtils.touch(File.join("package3", "SourcedSameArchive.class"))
         Zip::File.open("zipped-3.zip", Zip::File::CREATE) do |zipfile|
           Dir[File.join("package3", "**", "**")].each do |file|
             zipfile.add(file.sub("/package3", ""), file)

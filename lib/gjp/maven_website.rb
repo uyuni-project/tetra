@@ -55,7 +55,7 @@ module Gjp
     def download_pom(group_id, artifact_id, version)
       path = "#{group_id.gsub(".", "/")}/#{artifact_id}/#{version}/#{artifact_id}-#{version}.pom"
       log.debug("downloading #{path}...")
-      (RestClient.get "http://search.maven.org/remotecontent", params: {filepath: path}).to_s
+      (RestClient.get "http://search.maven.org/remotecontent", params: { filepath: path }).to_s
     end
   end
 end

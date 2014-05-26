@@ -107,34 +107,6 @@ ShadowingOuterLocalVariable:
 SignalException:
   Enabled: false
 
-# Offense count: 11
-# Cop supports --auto-correct.
-SpaceAfterComma:
-  Enabled: false
-
-# Offense count: 8
-# Cop supports --auto-correct.
-SpaceAroundOperators:
-  Enabled: false
-
-# Offense count: 2
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-SpaceBeforeBlockBraces:
-  Enabled: false
-
-# Offense count: 13
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles, EnforcedStyleForEmptyBraces, SpaceBeforeBlockParameters.
-SpaceInsideBlockBraces:
-  Enabled: false
-
-# Offense count: 22
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, EnforcedStyleForEmptyBraces, SupportedStyles.
-SpaceInsideHashLiteralBraces:
-  Enabled: false
-
 # Offense count: 4
 # Cop supports --auto-correct.
 SpecialGlobalVars:
