@@ -8,7 +8,7 @@ module Gjp
   class KitChecker
     include Logging
 
-    def initialize(project)      
+    def initialize(project)
       @project = project
     end
 
@@ -45,7 +45,7 @@ module Gjp
         path =~ /\.java$/
       end
 
-      # heuristically add all possible package names, walking 
+      # heuristically add all possible package names, walking
       # back the directory tree all the way back to root.
       # This could add non-existent names, but allows not looking
       # in the file at all

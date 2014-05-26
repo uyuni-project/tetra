@@ -116,22 +116,6 @@ SpecialGlobalVars:
 Tab:
   Enabled: false
 
-# Offense count: 8
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-TrailingBlankLines:
-  Enabled: false
-
-# Offense count: 2
-# Configuration parameters: EnforcedStyleForMultiline, SupportedStyles.
-TrailingComma:
-  Enabled: false
-
-# Offense count: 45
-# Cop supports --auto-correct.
-TrailingWhitespace:
-  Enabled: false
-
 # Offense count: 2
 # Cop supports --auto-correct.
 # Configuration parameters: ExactNameMatch, AllowPredicates, AllowDSLWriters, Whitelist.

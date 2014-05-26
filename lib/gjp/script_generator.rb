@@ -11,7 +11,7 @@ module Gjp
       @maven_runner = Gjp::MavenRunner.new(project)
       @history_path = history_path
     end
-    
+
     def generate_build_script(name)
       @project.from_directory do
         history_lines = File.readlines(@history_path).map { |e| e.strip }
@@ -42,12 +42,12 @@ module Gjp
 
         script_name = "build.sh"
         result_path = File.join("src", name, script_name)
-        conflict_count = @project.merge_new_content(new_content, result_path, "Build script generated", 
+        conflict_count = @project.merge_new_content(new_content, result_path, "Build script generated",
                                                     "generate_#{name}_build_script")
 
         destination_dir = File.join("output", name)
         FileUtils.mkdir_p(destination_dir)
-        destination_script_path =  File.join(destination_dir, script_name)        
+        destination_script_path =  File.join(destination_dir, script_name)
         FileUtils.symlink(File.expand_path(result_path), destination_script_path, force: true)
 
         [result_path, conflict_count]

@@ -67,4 +67,3 @@ describe Gjp::Pom do
     end
   end
 end
-

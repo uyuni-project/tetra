@@ -10,15 +10,15 @@ module Gjp
       @doc = Nokogiri::XML(open(filename).read)
       @doc.remove_namespaces!
     end
-        
+
     def group_id
       @doc.xpath("project/groupId").text || ""
     end
-    
+
     def artifact_id
       @doc.xpath("project/artifactId").text || ""
     end
-    
+
     def name
       @doc.xpath("project/name").text || ""
     end
@@ -56,4 +56,3 @@ module Gjp
     end
   end
 end
-

@@ -3,7 +3,6 @@ require "clamp"
 require "gjp/logger"
 
 module Gjp
-  
   # implements common options and utility methods
   class BaseCommand < Clamp::Command
     include Logging
@@ -17,11 +16,11 @@ module Gjp
     def very_very_verbose=(flag)
       configure_log_level(verbose?, very_verbose?, flag)
     end
-    
+
     def very_verbose=(flag)
       configure_log_level(verbose?, flag, very_very_verbose?)
     end
-    
+
     def verbose=(flag)
       configure_log_level(flag, very_verbose?, very_very_verbose?)
     end

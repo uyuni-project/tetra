@@ -64,4 +64,3 @@ describe Gjp::ScriptGenerator do
     end
   end
 end
-

@@ -57,4 +57,3 @@ module Gjp
     end
   end
 end
-

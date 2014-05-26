@@ -4,7 +4,7 @@ require "text"
 
 module Gjp
   # heuristically matches version strings
-  class VersionMatcher 
+  class VersionMatcher
     include Logging
 
     # heuristically splits a full name into an artifact name and version string
@@ -29,7 +29,7 @@ module Gjp
     #  - lowest score wins
     def best_match(my_version, their_versions)
       log.debug("version comparison: #{my_version} vs #{their_versions.join(", ")}")
-    
+
       my_chunks = my_version.split(/[\.\-\_ ~,]/)
       their_chunks_hash = Hash[
         their_versions.map do |their_version|
@@ -44,9 +44,9 @@ module Gjp
           [their_version, their_chunks_for_version]
         end
       ]
-      
+
       max_chunks_length = ([my_chunks.length] + their_chunks_hash.values.map { |chunk| chunk.length }).max
-      
+
       scoreboard = []
       their_versions.each do |their_version|
         their_chunks = their_chunks_hash[their_version]
@@ -58,17 +58,17 @@ module Gjp
         end
         scoreboard << { version: their_version, score: score }
       end
-      
+
       scoreboard = scoreboard.sort_by { |element| element[:score] }
 
       log.debug("scoreboard: ")
       scoreboard.each_with_index do |element, i|
         log.debug("  #{i + 1}. #{element[:version]} (score: #{element[:score]})")
       end
-      
+
       return scoreboard.first[:version] unless scoreboard.first.nil?
     end
-    
+
     # returns a score representing the distance between two version chunks
     # for integers, the score is the difference between their values
     # for strings, the score is the Levenshtein distance

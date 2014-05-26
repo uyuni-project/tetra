@@ -45,7 +45,7 @@ describe Gjp::KitChecker do
         ["path/to/ClassOne.java", nil],
         ["path/to/ClassTwo.java", "path/to/archive.jar"],
         ["ClassThree.java", "another_archive.jar"],
-        ["path/to/CompiledClass.class", "yet_another.jar"],
+        ["path/to/CompiledClass.class", "yet_another.jar"]
       ]
 
       class_names = @kit_checker.source_class_names(all_files)
@@ -63,7 +63,7 @@ describe Gjp::KitChecker do
         ["path/to/ClassOne.class", nil],
         ["path/to/ClassTwo.class", "path/to/archive.jar"],
         ["ClassThree.class", "another_archive.jar"],
-        ["path/to/SourceClass.java", "yet_another.jar"],
+        ["path/to/SourceClass.java", "yet_another.jar"]
       ]
 
       classes = @kit_checker.compiled_classes(all_files)

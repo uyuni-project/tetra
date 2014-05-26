@@ -41,7 +41,7 @@ module Gjp
       end
       nil
     end
-    
+
     # returns a pom from search.maven.org with a jar sha1 search
     def get_pom_from_sha1(file)
       log.debug("Attempting SHA1 POM lookup for #{file}")
@@ -50,7 +50,7 @@ module Gjp
           site = MavenWebsite.new
           sha1 = Digest::SHA1.hexdigest File.read(file)
           results = site.search_by_sha1(sha1).select { |result| result["ec"].include?(".pom") }
-          result = results.first    
+          result = results.first
           if result != nil
             log.info("pom.xml for #{file} found on search.maven.org for sha1 #{sha1}\
               (#{result["g"]}:#{result["a"]}:#{result["v"]})"
@@ -90,12 +90,12 @@ module Gjp
             end
           )
           best_matched_result = (results.select { |result| result["v"] == best_matched_version }).first
-            
+
           group_id, artifact_id, version = site.get_maven_id_from(best_matched_result)
           log.warn("pom.xml for #{filename} found on search.maven.org with heuristic search\
             (#{group_id}:#{artifact_id}:#{version})"
           )
-            
+
           return site.download_pom(group_id, artifact_id, version), :found_via_heuristic
         end
       rescue RestClient::ResourceNotFound

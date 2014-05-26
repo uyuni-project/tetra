@@ -34,4 +34,3 @@ describe Gjp::SourceGetter do
     end
   end
 end
-

@@ -10,7 +10,7 @@ module Gjp
     attr_accessor :full_path
     attr_accessor :git
 
-    def initialize(path)      
+    def initialize(path)
       @full_path = Gjp::Project.find_project_dir(File.expand_path(path))
       @git = Gjp::Git.new(@full_path)
     end
@@ -207,7 +207,7 @@ module Gjp
     end
 
     # moves any .jar from src/ to kit/ and links it back
-    def purge_jars      
+    def purge_jars
       from_directory do
         result = []
         Find.find("src") do |file|

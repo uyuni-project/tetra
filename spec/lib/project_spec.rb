@@ -17,7 +17,7 @@ describe Gjp::Project do
 
   describe "#is_project"  do
     it "checks if a directory is a gjp project or not" do
-      Gjp::Project.is_project(@project_path).should be_true    
+      Gjp::Project.is_project(@project_path).should be_true
       Gjp::Project.is_project(File.join(@project_path, "..")).should be_false
     end
   end
@@ -123,7 +123,7 @@ describe Gjp::Project do
       end
     end
   end
-  
+
   describe "#finish" do
     it "ends the current dry-run phase after a successful build" do
       @project.from_directory do
@@ -203,7 +203,7 @@ describe Gjp::Project do
         `git diff-tree --no-commit-id --name-only -r HEAD`.split("\n").should include("src/test")
         `git cat-file tag gjp_dry_run_started_1 | tail -1`.should include("src")
       end
-    end    
+    end
   end
 
   describe "#get_produced_files" do

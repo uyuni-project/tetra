@@ -34,7 +34,7 @@ describe Gjp::TemplateManager do
       destination_path = destination.path
       destination.unlink
 
-      class WorldClass        
+      class WorldClass
         def world_property
           "World!"
         end

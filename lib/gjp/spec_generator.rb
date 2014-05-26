@@ -47,7 +47,7 @@ module Gjp
     # generates a spec file from a template and 3-way merges it
     def generate_merging(template, binding, path, tag_prefix)
       new_content = TemplateManager.new.generate(template, binding)
-      @project.merge_new_content(new_content, path, "Spec generated", tag_prefix)      
+      @project.merge_new_content(new_content, path, "Spec generated", tag_prefix)
     end
 
     # links a spec file in a subdirectory of output/

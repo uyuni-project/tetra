@@ -23,7 +23,7 @@ describe Gjp::PomGetter do
       File.exist?(path).should be_true
       FileUtils.rm(path)
     end
-    
+
     it "gets the pom from a heuristic" do
       dir_path = File.join("spec", "data", "nailgun")
       jar_path = File.join(dir_path, "nailgun-0.7.1.jar")
@@ -31,7 +31,6 @@ describe Gjp::PomGetter do
       status.should eq :found_via_heuristic
       File.exist?(path).should be_true
       FileUtils.rm(path)
-    end         
+    end
   end
 end
-

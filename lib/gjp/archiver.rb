@@ -29,7 +29,7 @@ module Gjp
       )
 
       @project.take_snapshot "Kit archive generated", :archive_kit
-      
+
       destination_file
     end
 
@@ -68,7 +68,7 @@ module Gjp
 
           log.debug "files that changed since then: #{@project.git.changed_files_since(tag)}"
           list = @project.git.changed_files_since(tag).select do |file|
-            File.expand_path(file) =~ /^#{File.expand_path(source_directory)}\//            
+            File.expand_path(file) =~ /^#{File.expand_path(source_directory)}\//
           end.map do |file|
             Pathname.new(file).relative_path_from Pathname.new(source_directory)
           end

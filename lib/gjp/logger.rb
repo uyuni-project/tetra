@@ -8,9 +8,9 @@ module Gjp
   class Logger
     include Singleton
     extend Forwardable
- 
+
     def_delegators :@logger, :debug, :info, :warn, :error, :fatal, :level=
- 
+
     def initialize
       @logger = ::Logger.new(STDERR)
       @logger.datetime_format = "%Y-%m-%d %H:%M "

@@ -8,7 +8,7 @@ module Gjp
   class KitRunner
     include Logging
 
-    def initialize(project)      
+    def initialize(project)
       @project = project
     end
 

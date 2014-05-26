@@ -4,7 +4,7 @@ require "text"
 
 module Gjp
   # Facade to search.maven.org
-  class MavenWebsite 
+  class MavenWebsite
     include Logging
 
     # returns a search result object from search.maven.com
@@ -50,7 +50,7 @@ module Gjp
     def get_maven_id_from(result)
       [result["g"], result["a"], result["v"]]
     end
-    
+
     # downloads a POM from a search.maven.com search result
     def download_pom(group_id, artifact_id, version)
       path = "#{group_id.gsub(".", "/")}/#{artifact_id}/#{version}/#{artifact_id}-#{version}.pom"
