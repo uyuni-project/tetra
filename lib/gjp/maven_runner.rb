@@ -33,7 +33,7 @@ module Gjp
     def get_maven_commandline(prefix, options)
       executable = find_executable("mvn")
 
-      if executable != nil
+      if !executable.nil?
         mvn_path = File.join(prefix, executable)
         repo_path = File.join(prefix, "kit", "m2")
         config_path = File.join(prefix, "kit", "m2", "settings.xml")

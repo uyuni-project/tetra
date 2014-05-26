@@ -25,7 +25,7 @@ module Gjp
       erb = ERB.new File.read(File.join(template_path, template_name)), nil, "<>"
       new_content =  erb.result(object_binding)
 
-      if destination_path != nil
+      unless destination_path.nil?
         File.open(destination_path, "w") { |io| io.write new_content }
       end
 

@@ -65,8 +65,8 @@ module Gjp
         `git add .`
         `git commit -m "#{message}"`
 
-        if tag != nil
-          if tag_message != nil
+        unless tag.nil?
+          if !tag_message.nil?
             `git tag gjp_#{tag} -m "#{tag_message}"`
           else
             `git tag gjp_#{tag}`

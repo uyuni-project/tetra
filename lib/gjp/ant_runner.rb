@@ -15,7 +15,7 @@ module Gjp
     def get_ant_commandline(prefix)
       executable = find_executable("ant")
 
-      if executable != nil
+      if !executable.nil?
         ant_path = File.join(prefix, executable)
 
         "#{ant_path}"

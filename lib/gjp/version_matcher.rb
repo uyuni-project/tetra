@@ -13,7 +13,7 @@ module Gjp
     # returns a [name, version] pair
     def split_version(full_name)
       matches = full_name.match(/(.*?)(?:[\.\-\_ ~,]?([0-9].*))?$/)
-      if matches != nil && matches.length > 1
+      if !matches.nil? && matches.length > 1
         [matches[1], matches[2]]
       else
         [full_string, nil]
@@ -34,7 +34,7 @@ module Gjp
       their_chunks_hash = Hash[
         their_versions.map do |their_version|
           their_chunks_for_version = (
-            if their_version != nil
+            if !their_version.nil?
               their_version.split(/[\.\-\_ ~,]/)
             else
               []
