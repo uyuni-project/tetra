@@ -2,7 +2,7 @@
 
 module Gjp
   class AntCommand < Gjp::BaseCommand
-    parameter "[ANT OPTIONS] ...", "ant options", :attribute_name => "dummy"
+    parameter "[ANT OPTIONS] ...", "ant options", attribute_name: "dummy"
 
     # override parsing in order to pipe everything to mvn
     def parse(args)

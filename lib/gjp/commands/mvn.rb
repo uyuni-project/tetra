@@ -2,7 +2,7 @@
 
 module Gjp
   class MavenCommand < Gjp::BaseCommand
-    parameter "[MAVEN OPTIONS] ...", "mvn options", :attribute_name => "dummy"
+    parameter "[MAVEN OPTIONS] ...", "mvn options", attribute_name: "dummy"
 
     # override parsing in order to pipe everything to mvn
     def parse(args)

@@ -54,7 +54,7 @@ module Gjp
           my_chunk = my_chunks[i]
           score += chunk_distance(my_chunk, their_chunk) * score_multiplier
         end
-        scoreboard << {:version => their_version, :score => score}
+        scoreboard << {version: their_version, score: score}
       end
       
       scoreboard = scoreboard.sort_by {|element| element[:score]}

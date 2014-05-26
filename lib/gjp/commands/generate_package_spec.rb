@@ -2,9 +2,9 @@
 
 module Gjp
   class GeneratePackageSpecCommand < Gjp::BaseCommand
-    option ["-f", "--filter"], "FILTER", "filter files to be installed by this spec", :default => "*.jar"
-    parameter "[DIRECTORY]", "path to a package directory (src/<package name>)", :default => "."
-    parameter "[POM]", "a pom file path", :default => "pom.xml"
+    option ["-f", "--filter"], "FILTER", "filter files to be installed by this spec", default: "*.jar"
+    parameter "[DIRECTORY]", "path to a package directory (src/<package name>)", default: "."
+    parameter "[POM]", "a pom file path", default: "pom.xml"
 
     def execute
       checking_exceptions do

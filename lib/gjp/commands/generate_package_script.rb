@@ -2,7 +2,7 @@
 
 module Gjp
   class GeneratePackageScriptCommand < Gjp::BaseCommand
-    parameter "[DIRECTORY]", "path to a package directory (src/<package name>)", :default => "."
+    parameter "[DIRECTORY]", "path to a package directory (src/<package name>)", default: "."
 
     def execute
       checking_exceptions do

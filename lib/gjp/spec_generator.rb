@@ -54,7 +54,7 @@ module Gjp
     def symlink_to_output(spec_path, destination_dir)
       spec_name = Pathname.new(spec_path).basename.to_s
       destination_spec_path = File.join(destination_dir, spec_name)
-      FileUtils.symlink(File.expand_path(spec_path), destination_spec_path, :force => true)
+      FileUtils.symlink(File.expand_path(spec_path), destination_spec_path, force: true)
     end
   end
 end

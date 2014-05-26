@@ -48,7 +48,7 @@ module Gjp
         destination_dir = File.join("output", name)
         FileUtils.mkdir_p(destination_dir)
         destination_script_path =  File.join(destination_dir, script_name)        
-        FileUtils.symlink(File.expand_path(result_path), destination_script_path, :force => true)
+        FileUtils.symlink(File.expand_path(result_path), destination_script_path, force: true)
 
         [result_path, conflict_count]
       end

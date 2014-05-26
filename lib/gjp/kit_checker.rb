@@ -90,7 +90,7 @@ module Gjp
         unsourced_class_names = class_names.select do |class_name|
           source_class_names.include?(class_name) == false
         end
-        {:archive => archive, :class_names => class_names, :unsourced_class_names => unsourced_class_names}
+        {archive: archive, class_names: class_names, unsourced_class_names: unsourced_class_names}
       end.select do |archive|
         archive[:unsourced_class_names].any?
       end
