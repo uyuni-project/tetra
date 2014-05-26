@@ -1,5 +1,5 @@
 # encoding: UTF-8
 
 module Gjp
-  VERSION = "0.37.0"
+  VERSION = "0.38.0"
 end
