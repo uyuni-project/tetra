@@ -62,11 +62,13 @@ module Gjp
 
     # generates a version of path relative to the current directory
     def format_path(path, project)
-      full_path = if Pathname.new(path).relative?
-        File.join(project.full_path, path)
-      else
-        path
-      end
+      full_path = (
+        if Pathname.new(path).relative?
+          File.join(project.full_path, path)
+        else
+          path
+        end
+      )
       Pathname.new(full_path).relative_path_from(Pathname.new(Dir.pwd))
     end
 

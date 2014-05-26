@@ -82,11 +82,13 @@ module Gjp
           results = site.search_by_group_id_and_artifact_id(group_id, artifact_id)
           log.debug("All versions: #{results}")
           their_versions = results.map {|doc| doc["v"]}
-          best_matched_version = if my_version != nil
-            version_matcher.best_match(my_version, their_versions)
-          else
-            their_versions.max
-          end
+          best_matched_version = (
+            if my_version != nil
+              version_matcher.best_match(my_version, their_versions)
+            else
+              their_versions.max
+            end
+          )
           best_matched_result = (results.select{|result| result["v"] == best_matched_version}).first
             
           group_id, artifact_id, version = site.get_maven_id_from(best_matched_result)

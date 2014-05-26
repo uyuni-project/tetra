@@ -21,11 +21,13 @@ module Gjp
     def initialize(project, package_name, pom, filter)
       @name = package_name
       @version = pom.version
-      @license = if pom.license_name != ""
-        pom.license_name
-      else
-        "Apache-2.0"
-      end
+      @license = (
+        if pom.license_name != ""
+          pom.license_name
+        else
+          "Apache-2.0"
+        end
+      )
       @summary = cleanup_description(pom.description, 60)
       @url = pom.url
       @project_name = project.name

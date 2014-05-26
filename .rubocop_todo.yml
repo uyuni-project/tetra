@@ -44,16 +44,6 @@ IfUnlessModifier:
 
 # Offense count: 3
 # Cop supports --auto-correct.
-IndentationConsistency:
-  Enabled: false
-
-# Offense count: 15
-# Cop supports --auto-correct.
-IndentationWidth:
-  Enabled: false
-
-# Offense count: 3
-# Cop supports --auto-correct.
 LineEndConcatenation:
   Enabled: false
 

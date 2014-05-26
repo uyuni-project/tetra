@@ -34,11 +34,13 @@ module Gjp
     def changed_files_between(start_tag, end_tag, directory)
       Dir.chdir(@directory) do
         prefixed_start_tag = "gjp_#{start_tag}"
-        prefixed_end_tag = if end_tag
-          "gjp_#{end_tag}"
-        else
-          "HEAD"
-        end
+        prefixed_end_tag = (
+          if end_tag
+            "gjp_#{end_tag}"
+          else
+            "HEAD"
+          end
+        )
         `git diff-tree --no-commit-id --name-only -r #{prefixed_start_tag} #{prefixed_end_tag} -- #{directory}`
           .split("\n")
       end
@@ -77,11 +79,11 @@ module Gjp
     def get_tag_maximum_suffix(prefix)
       Dir.chdir(@directory) do
         `git tag`.split.map do |tag|
-           if tag =~ /^gjp_#{prefix}_([0-9]+)$/
-             $1.to_i
-           else
-             0
-           end
+          if tag =~ /^gjp_#{prefix}_([0-9]+)$/
+            $1.to_i
+          else
+            0
+          end
         end.max || 0
       end
     end

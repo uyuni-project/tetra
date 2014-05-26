@@ -123,11 +123,13 @@ module Gjp
 
     # takes a revertable snapshot of this project
     def take_snapshot(message, tag_prefix = nil, tag_message = nil)
-      tag = if tag_prefix
-        "#{tag_prefix}_#{latest_tag_count(tag_prefix) + 1}"
-      else
-        nil
-      end
+      tag = (
+        if tag_prefix
+          "#{tag_prefix}_#{latest_tag_count(tag_prefix) + 1}"
+        else
+          nil
+        end
+      )
 
       @git.commit_whole_directory(message, tag, tag_message)
     end

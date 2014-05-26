@@ -18,13 +18,15 @@ module Gjp
 
       @project.take_snapshot "Kit archival started"
 
-      destination_file = if full
-        remove_stale_incremental(destination_dir, file_prefix, file_suffix)
-        archive_single("kit", File.join(destination_dir, file_prefix + file_suffix))
-      else
-        log.debug "doing incremental archive"
-        archive_incremental("kit", destination_dir, file_prefix, file_suffix, :archive_kit)
-      end
+      destination_file = (
+        if full
+          remove_stale_incremental(destination_dir, file_prefix, file_suffix)
+          archive_single("kit", File.join(destination_dir, file_prefix + file_suffix))
+        else
+          log.debug "doing incremental archive"
+          archive_incremental("kit", destination_dir, file_prefix, file_suffix, :archive_kit)
+        end
+      )
 
       @project.take_snapshot "Kit archive generated", :archive_kit
       
