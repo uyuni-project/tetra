@@ -12,31 +12,31 @@ module Gjp
     end
         
     def group_id
-      @doc.xpath("project/groupId").text
+      @doc.xpath("project/groupId").text || ""
     end
     
     def artifact_id
-      @doc.xpath("project/artifactId").text
+      @doc.xpath("project/artifactId").text || ""
     end
     
     def name
-      @doc.xpath("project/name").text
+      @doc.xpath("project/name").text || ""
     end
 
     def version
-      @doc.xpath("project/version").text
+      @doc.xpath("project/version").text || ""
     end
 
     def description
-      @doc.xpath("project/description").text
+      @doc.xpath("project/description").text || ""
     end
 
     def url
-      @doc.xpath("project/url").text
+      @doc.xpath("project/url").text || ""
     end
 
     def license_name
-      @doc.xpath("project/licenses/license/name").text
+      @doc.xpath("project/licenses/license/name").text || ""
     end
 
     def runtime_dependency_ids
@@ -48,11 +48,11 @@ module Gjp
     end
 
     def scm_connection
-      @doc.xpath("project/scm/connection").text
+      @doc.xpath("project/scm/connection").text || ""
     end
 
     def scm_url
-      @doc.xpath("project/scm/url").text
+      @doc.xpath("project/scm/url").text || ""
     end
   end
 end

@@ -17,13 +17,13 @@ module Gjp
           effective_pom_path = Gjp::MavenRunner.new(project).get_effective_pom(pom)
           puts "Source jar not found in Maven. Try looking here:"
           pom = Gjp::Pom.new(effective_pom_path)
-          if pom.url && !pom.url.empty?
+          unless pom.url.empty?
             puts "Website: #{pom.url}"
           end
-          if pom.scm_connection && !pom.scm_connection.empty?
+          unless pom.scm_connection.empty?
             puts "SCM connection: #{pom.scm_connection}"
           end
-          if pom.scm_url && !pom.scm_url.empty?
+          unless pom.scm_url.empty?
             puts "SCM connection: #{pom.scm_url}"
           end
           puts "The effective POM: #{effective_pom_path}"
