@@ -39,7 +39,7 @@ module Gjp
       rescue TypeError
         log.warn("#{file} seems to be a valid jar archive but is corrupt, skipping")
       end
-      return nil
+      nil
     end
     
     # returns a pom from search.maven.org with a jar sha1 search

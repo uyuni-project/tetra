@@ -45,20 +45,17 @@ module Gjp
     # returns the package name corresponding to the specified dir, if any
     # raises NoPackageDirectoryError if dir is not a (sub)directory of a package
     def get_package_name(dir)
-      begin
-        dir_path = Pathname.new(File.expand_path(dir)).relative_path_from(Pathname.new(@full_path))
-        components = dir_path.to_s.split(File::SEPARATOR)
-
-        if components.count >= 2 &&
-          components.first == "src" &&
-          Dir.exist?(File.join(@full_path, components[0], components[1]))
-          components[1]
-        else
-          raise NoPackageDirectoryError
-        end
-      rescue ArgumentError, NoProjectDirectoryError
-        raise NoPackageDirectoryError.new(dir)
-      end
+      dir_path = Pathname.new(File.expand_path(dir)).relative_path_from(Pathname.new(@full_path))
+      components = dir_path.to_s.split(File::SEPARATOR)
+      if components.count >= 2 &&
+       components.first == "src" &&
+       Dir.exist?(File.join(@full_path, components[0], components[1]))
+        components[1]
+     else
+       raise NoPackageDirectoryError
+     end
+    rescue ArgumentError, NoProjectDirectoryError
+      raise NoPackageDirectoryError.new(dir)
     end
 
     # inits a new project directory structure

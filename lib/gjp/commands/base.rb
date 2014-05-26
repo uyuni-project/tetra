@@ -74,23 +74,21 @@ module Gjp
 
     # handles most fatal exceptions
     def checking_exceptions
-      begin
-        yield
-      rescue Errno::EACCES => e
-        $stderr.puts e
-      rescue Errno::ENOENT => e
-        $stderr.puts e
-      rescue Errno::EEXIST => e
-        $stderr.puts e
-      rescue NoProjectDirectoryError => e
-        $stderr.puts "#{e.directory} is not a gjp project directory, see gjp init"
-      rescue NoPackageDirectoryError => e
-        $stderr.puts "#{e.directory} is not a gjp package directory, see README"
-      rescue GitAlreadyInitedError => e
-        $stderr.puts "This directory is already a gjp project"
-      rescue ExecutableNotFoundError => e
-        $stderr.puts "Executable #{e.executable} not found in kit/ or any of its subdirectories"
-      end
+      yield
+    rescue Errno::EACCES => e
+      $stderr.puts e
+    rescue Errno::ENOENT => e
+      $stderr.puts e
+    rescue Errno::EEXIST => e
+      $stderr.puts e
+    rescue NoProjectDirectoryError => e
+      $stderr.puts "#{e.directory} is not a gjp project directory, see gjp init"
+    rescue NoPackageDirectoryError => e
+      $stderr.puts "#{e.directory} is not a gjp package directory, see README"
+    rescue GitAlreadyInitedError => e
+      $stderr.puts "This directory is already a gjp project"
+    rescue ExecutableNotFoundError => e
+      $stderr.puts "Executable #{e.executable} not found in kit/ or any of its subdirectories"
     end
   end
 end

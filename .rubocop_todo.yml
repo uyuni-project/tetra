@@ -92,17 +92,6 @@ PredicateName:
 RaiseArgs:
   EnforcedStyle: compact
 
-# Offense count: 2
-# Cop supports --auto-correct.
-RedundantBegin:
-  Enabled: false
-
-# Offense count: 8
-# Cop supports --auto-correct.
-# Configuration parameters: AllowMultipleReturnValues.
-RedundantReturn:
-  Enabled: false
-
 # Offense count: 1
 # Configuration parameters: MaxSlashes.
 RegexpLiteral:
