@@ -68,10 +68,6 @@ Note that the kit package is needed at build time only by OBS, no end user shoul
 ## Gotchas
 
 * `gjp` internally uses `git` to keep track of files, any gjp project is actually also a `git` repo. Feel free to navigate it, you can commit, push and pull as long as the `gjp` tags are preserved. You can also delete commits and tags, effectively rewinding gjp history (just make sure to delete all tags pointing to a certain commit when you discard it);
-* if OBS complains that jars in your kit or package are compiled for a JDK version higher than 1.5, add the following line after `%install` to squelch the error:
-
-    export NO_BRP_CHECK_BYTECODE_VERSION=true
-
 * some Maven plugins like the Eclipse Project ones ([Tycho](https://www.eclipse.org/tycho/)) will save data in `/tmp` downloaded from the Internet and will produce errors if this data is not there during offline builds. One way to work around that is to force Java to use a kit subdirectory as `/tmp`. Add the following option to `gjp mvn` during your build:
 
     -DskipTests=true -Djava.io.tmpdir=<full path to project>/kit/tmp

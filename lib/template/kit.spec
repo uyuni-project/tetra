@@ -52,6 +52,7 @@ be installed on end users' systems.
 # nothing to do, gjp kits are precompiled by design
 
 %install
+export NO_BRP_CHECK_BYTECODE_VERSION=true
 install -d -m 0755 %{buildroot}%{_datadir}/gjp/%{name}/
 cp -a * %{buildroot}%{_datadir}/gjp/%{name}/
 %fdupes -s %{buildroot}%{_datadir}/gjp/%{name}/

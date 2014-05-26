@@ -50,6 +50,7 @@ cd ../../
 sh src/<%= name %>/build.sh
 
 %install
+export NO_BRP_CHECK_BYTECODE_VERSION=true
 mkdir -p %{buildroot}%{_javadir}
 <% outputs.each do |output| %>
 cp -a <%= output %> %{buildroot}%{_javadir}/<%= File.basename(output) %>
