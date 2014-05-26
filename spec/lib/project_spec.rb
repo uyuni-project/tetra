@@ -92,10 +92,10 @@ describe Gjp::Project do
   describe "#init" do
     it "inits a new project" do
       kit_path = File.join(@project_path, "kit")
-      Dir.exists?(kit_path).should be_true
+      Dir.exist?(kit_path).should be_true
 
       src_path = File.join(@project_path, "src")
-      Dir.exists?(src_path).should be_true
+      Dir.exist?(src_path).should be_true
     end
   end
 
@@ -149,7 +149,7 @@ describe Gjp::Project do
         File.read("src/abc/test").should eq "A\n"
 
         `git diff-tree --no-commit-id --name-only -r HEAD~`.split("\n").should include("src/abc/test2")
-        File.exists?("src/abc/test2").should be_false
+        File.exist?("src/abc/test2").should be_false
       end
     end
     it "ends the current dry-run phase after a failed build" do
@@ -177,10 +177,10 @@ describe Gjp::Project do
       @project.from_directory do
         `git rev-list --all`.split("\n").length.should eq 2
         File.read("src/abc/test").should eq "A\n"
-        File.exists?("src/abc/test2").should be_false
+        File.exist?("src/abc/test2").should be_false
 
         File.read("kit/test").should eq "A\n"
-        File.exists?("kit/test2").should be_false
+        File.exist?("kit/test2").should be_false
       end
     end
   end

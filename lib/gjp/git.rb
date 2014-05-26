@@ -15,7 +15,7 @@ module Gjp
     # inits a repo
     def init
       Dir.chdir(@directory) do
-        if Dir.exists?(".git") == false
+        if Dir.exist?(".git") == false
           `git init`
         else
           raise GitAlreadyInitedError
