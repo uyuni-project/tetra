@@ -56,11 +56,6 @@ MultilineBlockChain:
 Next:
   Enabled: false
 
-# Offense count: 1
-# Cop supports --auto-correct.
-PerlBackrefs:
-  Enabled: false
-
 # Offense count: 3
 # Configuration parameters: NamePrefixBlacklist.
 PredicateName:

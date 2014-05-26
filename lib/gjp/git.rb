@@ -80,7 +80,7 @@ module Gjp
       Dir.chdir(@directory) do
         `git tag`.split.map do |tag|
           if tag =~ /^gjp_#{prefix}_([0-9]+)$/
-            $1.to_i
+            Regexp.last_match[1].to_i
           else
             0
           end
