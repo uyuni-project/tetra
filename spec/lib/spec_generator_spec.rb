@@ -109,7 +109,6 @@ describe Gjp::SpecGenerator do
           `touch src/test/out/test#{i}.jar`
         end
 
-
         @project.finish(false)
       end
 
