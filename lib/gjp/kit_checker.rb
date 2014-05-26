@@ -69,7 +69,7 @@ module Gjp
         path =~ /\.class$/
       end.each do |path, archive|
         class_name = path_to_class(path)
-        if result[archive] == nil
+        if result[archive].nil?
           result[archive] = [class_name]
         else
           result[archive] << class_name

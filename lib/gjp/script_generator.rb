@@ -18,10 +18,10 @@ module Gjp
         relevant_lines =
           history_lines
             .reverse
-            .take_while { |e| e.match(/gjp +dry-run/) == nil }
+            .take_while { |e| e.match(/gjp +dry-run/).nil? }
             .reverse
-            .take_while { |e| e.match(/gjp +finish/) == nil }
-            .select { |e| e.match(/^#/) == nil }
+            .take_while { |e| e.match(/gjp +finish/).nil? }
+            .select { |e| e.match(/^#/).nil? }
 
         script_lines = [
           "#!/bin/bash",

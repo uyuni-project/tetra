@@ -20,7 +20,7 @@ module Gjp
       maven_runner = Gjp::MavenRunner.new(project)
 
       project.from_directory do
-        paths = Find.find(".").reject { |path| artifact_from_path(path) == nil }.sort
+        paths = Find.find(".").reject { |path| artifact_from_path(path).nil? }.sort
 
         succeded_paths = paths.select.with_index do |path, i|
           group_id, artifact_id, version = artifact_from_path(path)
