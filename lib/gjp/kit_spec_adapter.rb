@@ -1,4 +1,4 @@
-  # encoding: UTF-8
+# encoding: UTF-8
 
 module Gjp
   # encapsulates details of a kit needed by the spec file

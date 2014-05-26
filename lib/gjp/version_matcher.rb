@@ -7,20 +7,20 @@ module Gjp
   class VersionMatcher 
     include Logging
 
-  	# heuristically splits a full name into an artifact name and version string
+    # heuristically splits a full name into an artifact name and version string
     # assumes that version strings begin with a numeric character and are separated
     # by a ., -, _, ~ or space
     # returns a [name, version] pair
-  	def split_version(full_name)	
+    def split_version(full_name)
       matches = full_name.match(/(.*?)(?:[\.\-\_ ~,]?([0-9].*))?$/)
       if matches != nil && matches.length > 1
         [matches[1], matches[2]]
-  		else
-  			[full_string, nil]
-  		end
-  	end
+      else
+        [full_string, nil]
+      end
+    end
 
-  	# returns the "best match" between a version number and a set of available version numbers
+    # returns the "best match" between a version number and a set of available version numbers
     # using a heuristic criterion. Idea:
     #  - split the version number in chunks divided by ., - etc.
     #  - every chunk with same index is "compared", differences make up a score
