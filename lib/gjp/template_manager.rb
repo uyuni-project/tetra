@@ -5,7 +5,7 @@ require "erb"
 module Gjp
   # operates on files in template/
   class TemplateManager
-    include Logger
+    include Logging
 
     attr_reader :template_path
 

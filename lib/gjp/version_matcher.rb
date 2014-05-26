@@ -5,7 +5,7 @@ require "text"
 module Gjp
   # heuristically matches version strings
   class VersionMatcher 
-    include Logger
+    include Logging
 
   	# heuristically splits a full name into an artifact name and version string
     # assumes that version strings begin with a numeric character and are separated

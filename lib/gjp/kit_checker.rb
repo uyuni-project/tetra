@@ -6,7 +6,7 @@ require "zip"
 module Gjp
   # checks kits for errors
   class KitChecker
-    include Logger
+    include Logging
 
     def initialize(project)      
       @project = project

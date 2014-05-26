@@ -5,7 +5,7 @@ require "rest_client"
 module Gjp
   # attempts to get java projects' sources
   class SourceGetter
-    include Logger
+    include Logging
 
     # attempts to download a project's sources
     def get_maven_source_jar(project, pom_path)

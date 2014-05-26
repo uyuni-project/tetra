@@ -3,7 +3,7 @@
 module Gjp
   # generates build scripts from bash_history
   class ScriptGenerator
-    include Logger
+    include Logging
 
     def initialize(project, history_path)
       @project = project

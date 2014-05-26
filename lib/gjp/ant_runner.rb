@@ -3,7 +3,7 @@
 module Gjp
   # runs Ant with gjp-specific options
   class AntRunner < KitRunner
-    include Logger
+    include Logging
 
     # runs ant in a subprocess
     def ant(options)

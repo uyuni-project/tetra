@@ -3,7 +3,7 @@
 module Gjp
   # runs Maven with gjp-specific options
   class MavenRunner < KitRunner
-    include Logger
+    include Logging
 
     # runs Maven in a subprocess
     def mvn(options)

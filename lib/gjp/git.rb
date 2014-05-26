@@ -4,7 +4,7 @@ module Gjp
   # facade to git, currently implemented with calls to the git command
   # prefixes all tags with "gjp_"
   class Git
-    include Logger
+    include Logging
 
     # inits a new git manager object pointing to the specified
     # directory

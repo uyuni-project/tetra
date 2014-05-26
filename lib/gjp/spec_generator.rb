@@ -3,7 +3,7 @@
 module Gjp
   # creates and updates spec files
   class SpecGenerator
-    include Logger
+    include Logging
 
     def initialize(project)
       @project = project

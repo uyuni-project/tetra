@@ -6,7 +6,7 @@ module Gjp
   
   # implements common options and utility methods
   class BaseCommand < Clamp::Command
-    include Logger
+    include Logging
 
     # Options available to all gjp commands
     option ["-v", "--verbose"], :flag, "verbose output"

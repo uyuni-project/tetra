@@ -3,7 +3,7 @@
 module Gjp
   # generates file archives that accompany spec files
   class Archiver
-    include Logger
+    include Logging
 
     def initialize(project)
       @project = project

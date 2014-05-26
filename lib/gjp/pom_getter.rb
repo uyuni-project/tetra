@@ -11,7 +11,7 @@ require "gjp/version_matcher"
 module Gjp
   # attempts to get java projects' pom file
   class PomGetter
-    include Logger
+    include Logging
 
     # saves a jar poms in <jar_filename>.pom
     # returns filename and status if found, else nil

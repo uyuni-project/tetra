@@ -5,7 +5,7 @@ require "text"
 module Gjp
   # Facade to search.maven.org
   class MavenWebsite 
-    include Logger
+    include Logging
 
     # returns a search result object from search.maven.com
     # searching by a jar sha1 hash

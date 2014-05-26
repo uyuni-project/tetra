@@ -6,7 +6,7 @@ require "pathname"
 module Gjp
   # runs programs from a gjp kit with gjp-specific options
   class KitRunner
-    include Logger
+    include Logging
 
     def initialize(project)      
       @project = project

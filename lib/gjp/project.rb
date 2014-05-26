@@ -5,7 +5,7 @@ require "find"
 module Gjp
   # encapsulates a Gjp project directory
   class Project
-    include Logger
+    include Logging
 
     attr_accessor :full_path
     attr_accessor :git
