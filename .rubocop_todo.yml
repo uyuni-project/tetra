@@ -75,12 +75,6 @@ RegexpLiteral:
 ShadowingOuterLocalVariable:
   Enabled: false
 
-
-# Offense count: 4
-# Cop supports --auto-correct.
-SpecialGlobalVars:
-  Enabled: false
-
 # Offense count: 7
 Tab:
   Enabled: false

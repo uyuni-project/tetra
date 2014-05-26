@@ -1,5 +1,7 @@
 # encoding: UTF-8
 
+require "English"
+
 module Gjp
   # facade to git, currently implemented with calls to the git command
   # prefixes all tags with "gjp_"
@@ -116,7 +118,7 @@ module Gjp
         log.debug "calling git merge-file #{path} #{path}.old_version #{new_path}, output follows"
         `git merge-file #{path} #{path}.old_version #{new_path} \
           -L "newly generated" -L "previously generated" -L "user edited"`
-        conflict_count = $?.exitstatus
+        conflict_count = $CHILD_STATUS.exitstatus
         File.delete "#{path}.old_version"
         return conflict_count
       end

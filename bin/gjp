@@ -16,7 +16,7 @@
 #
 
 if File.exist?(File.join(File.dirname(__FILE__), "..", ".git"))
-  $: << File.join(File.dirname(__FILE__), "..", "lib")
+  $LOAD_PATH << File.join(File.dirname(__FILE__), "..", "lib")
 end
 
 begin
