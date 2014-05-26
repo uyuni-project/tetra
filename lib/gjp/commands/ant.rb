@@ -5,6 +5,7 @@ module Gjp
     parameter "[ANT OPTIONS] ...", "ant options", attribute_name: "dummy"
 
     # override parsing in order to pipe everything to mvn
+    # rubocop:disable TrivialAccessors
     def parse(args)
       @options = args
     end

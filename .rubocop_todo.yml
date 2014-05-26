@@ -79,11 +79,6 @@ ShadowingOuterLocalVariable:
 Tab:
   Enabled: false
 
-# Offense count: 2
-# Cop supports --auto-correct.
-# Configuration parameters: ExactNameMatch, AllowPredicates, AllowDSLWriters, Whitelist.
-TrivialAccessors:
-  Enabled: false
 
 # Offense count: 8
 # Cop supports --auto-correct.

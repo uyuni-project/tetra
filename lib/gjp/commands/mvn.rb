@@ -5,6 +5,7 @@ module Gjp
     parameter "[MAVEN OPTIONS] ...", "mvn options", attribute_name: "dummy"
 
     # override parsing in order to pipe everything to mvn
+    # rubocop:disable TrivialAccessors
     def parse(args)
       @options = args
     end
