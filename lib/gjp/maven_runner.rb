@@ -40,7 +40,7 @@ module Gjp
 
         "#{mvn_path} -Dmaven.repo.local=#{repo_path} -s#{config_path} #{options.join(" ")}"
       else
-        raise ExecutableNotFoundError.new("mvn")
+        fail ExecutableNotFoundError.new("mvn")
       end
     end
   end

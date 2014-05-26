@@ -75,11 +75,6 @@ RegexpLiteral:
 ShadowingOuterLocalVariable:
   Enabled: false
 
-# Offense count: 5
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-SignalException:
-  Enabled: false
 
 # Offense count: 4
 # Cop supports --auto-correct.

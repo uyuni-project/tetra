@@ -18,7 +18,7 @@ module Gjp
         if Dir.exist?(".git") == false
           `git init`
         else
-          raise GitAlreadyInitedError
+          fail GitAlreadyInitedError
         end
       end
     end
