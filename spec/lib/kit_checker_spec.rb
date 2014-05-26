@@ -107,7 +107,7 @@ describe Gjp::KitChecker do
       end
 
       unsourced = @kit_checker.unsourced_archives
-      unsourced.length().should eq 1
+      unsourced.length.should eq 1
 
       unsourced.first[:archive].should be_nil
       unsourced.first[:class_names].should include "package1.UnsourcedClass"

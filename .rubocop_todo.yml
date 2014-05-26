@@ -42,11 +42,6 @@ GuardClause:
 IfUnlessModifier:
   Enabled: false
 
-# Offense count: 4
-# Cop supports --auto-correct.
-MethodCallParentheses:
-  Enabled: false
-
 # Offense count: 28
 # Configuration parameters: CountComments.
 MethodLength:

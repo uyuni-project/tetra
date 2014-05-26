@@ -52,7 +52,7 @@ module Gjp
       class_names = source_paths.map do |path, archive|
         class_name = path_to_class(path)
         parts = class_name.split(".")
-        last_index = parts.length() - 1
+        last_index = parts.length - 1
         (0..last_index).map do |i|
           parts[i..last_index].join(".")
         end
