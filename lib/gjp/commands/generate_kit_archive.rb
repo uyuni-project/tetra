@@ -2,7 +2,6 @@
 
 module Gjp
   class GenerateKitArchiveCommand < Gjp::BaseCommand
-
     option ["-f", "--full"], :flag, "create a full archive (not incremental)"
 
     def execute

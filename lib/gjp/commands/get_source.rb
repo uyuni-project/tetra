@@ -2,7 +2,6 @@
 
 module Gjp
   class GetSourceCommand < Gjp::BaseCommand
-
     parameter "POM", "a pom file path or URI"
 
     def execute

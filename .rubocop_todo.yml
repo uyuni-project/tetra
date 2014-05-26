@@ -17,11 +17,6 @@ DoubleNegation:
 EmptyLinesAroundAccessModifier:
   Enabled: false
 
-# Offense count: 1
-# Cop supports --auto-correct.
-EmptyLinesAroundBody:
-  Enabled: false
-
 # Offense count: 2
 # Configuration parameters: EnforcedStyle, SupportedStyles.
 Encoding:

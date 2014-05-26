@@ -2,7 +2,6 @@
 
 module Gjp
   class GenerateAllCommand < Gjp::BaseCommand
-
     option ["-f", "--filter"], "FILTER", "filter files to be installed by this package spec", :default => "*.jar"
     option ["-f", "--full"], :flag, "create a full archive (not incremental)"
     parameter "[DIRECTORY]", "path to a package directory (src/<package name>)", :default => "."

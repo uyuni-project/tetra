@@ -3,7 +3,6 @@ require "clamp"
 
 module Gjp
   class MainCommand < Clamp::Command
-
     subcommand(
       "init",
       "Inits a gjp project in the current directory",

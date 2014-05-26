@@ -2,7 +2,6 @@
 
 module Gjp
   class InitCommand < Gjp::BaseCommand
-
     def execute
       checking_exceptions do
         Gjp::Project.init(".")

@@ -2,7 +2,6 @@
 
 module Gjp
   class GenerateKitSpecCommand < Gjp::BaseCommand
-
     def execute
       checking_exceptions do
         project = Gjp::Project.new(".")

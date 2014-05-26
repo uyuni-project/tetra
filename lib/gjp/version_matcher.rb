@@ -89,7 +89,6 @@ module Gjp
       end
     end
   end
-
 end
 
 class String
