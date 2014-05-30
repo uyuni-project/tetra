@@ -1,10 +1,14 @@
-inherit_from: .rubocop_todo.yml
-
 ClassLength:
   Max: 200
 
 LineLength:
   Max: 120
 
+MethodLength:
+  Max: 35
+
 StringLiterals:
   EnforcedStyle: double_quotes
+
+MultilineBlockChain:
+  Enabled: false
