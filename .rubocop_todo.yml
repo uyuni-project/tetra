@@ -18,8 +18,3 @@ MultilineBlockChain:
 # Configuration parameters: EnforcedStyle, SupportedStyles.
 Next:
   Enabled: false
-
-# Offense count: 3
-# Configuration parameters: NamePrefixBlacklist.
-PredicateName:
-  Enabled: false

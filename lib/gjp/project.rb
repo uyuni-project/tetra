@@ -24,7 +24,7 @@ module Gjp
     # finds the project directory up in the tree, like git does
     def self.find_project_dir(starting_dir)
       result = starting_dir
-      while is_project(result) == false && result != "/"
+      while project?(result) == false && result != "/"
         result = File.expand_path("..", result)
       end
 
@@ -34,7 +34,7 @@ module Gjp
     end
 
     # returns true if the specified directory is a valid gjp project
-    def self.is_project(dir)
+    def self.project?(dir)
       File.directory?(File.join(dir, "src")) &&
       File.directory?(File.join(dir, "kit")) &&
       File.directory?(File.join(dir, ".git"))
@@ -81,7 +81,7 @@ module Gjp
     # to the kit package, src/ will be reset at the current state
     # when finished
     def dry_run
-      return false if is_dry_running
+      return false if dry_running?
 
       current_directory = Pathname.new(Dir.pwd).relative_path_from Pathname.new(@full_path)
 
@@ -90,7 +90,7 @@ module Gjp
     end
 
     # returns true iff we are currently dry-running
-    def is_dry_running
+    def dry_running?
       latest_tag_count(:dry_run_started) > latest_tag_count(:dry_run_finished)
     end
 
@@ -98,7 +98,7 @@ module Gjp
     # if abort is true, reverts the whole directory
     # if abort is false, reverts sources and updates output file lists
     def finish(abort)
-      if is_dry_running
+      if dry_running?
         if abort
           @git.revert_whole_directory(".", latest_tag(:dry_run_started))
           @git.delete_tag(latest_tag(:dry_run_started))

@@ -38,7 +38,7 @@ module Gjp
 
     # prints an error message and exits unless there is a dry-run in progress
     def ensure_dry_running(state, project)
-      if project.is_dry_running == state
+      if project.dry_running? == state
         yield
       else
         if state == true

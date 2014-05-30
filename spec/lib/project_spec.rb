@@ -15,10 +15,10 @@ describe Gjp::Project do
     FileUtils.rm_rf(@project_path)
   end
 
-  describe "#is_project"  do
+  describe "#project?"  do
     it "checks if a directory is a gjp project or not" do
-      Gjp::Project.is_project(@project_path).should be_true
-      Gjp::Project.is_project(File.join(@project_path, "..")).should be_false
+      Gjp::Project.project?(@project_path).should be_true
+      Gjp::Project.project?(File.join(@project_path, "..")).should be_false
     end
   end
 
@@ -99,14 +99,14 @@ describe Gjp::Project do
     end
   end
 
-  describe "#is_dry_running" do
+  describe "#dry_running?" do
     it "checks if a project is dry running" do
       @project.from_directory do
-        @project.is_dry_running.should be_false
+        @project.dry_running?.should be_false
         @project.dry_run
-        @project.is_dry_running.should be_true
+        @project.dry_running?.should be_true
         @project.finish(false)
-        @project.is_dry_running.should be_false
+        @project.dry_running?.should be_false
       end
     end
   end
@@ -142,7 +142,7 @@ describe Gjp::Project do
       end
 
       @project.finish(false).should be_true
-      @project.is_dry_running.should be_false
+      @project.dry_running?.should be_false
 
       @project.from_directory do
         `git rev-list --all`.split("\n").length.should eq 4
@@ -172,7 +172,7 @@ describe Gjp::Project do
       end
 
       @project.finish(true).should be_true
-      @project.is_dry_running.should be_false
+      @project.dry_running?.should be_false
 
       @project.from_directory do
         `git rev-list --all`.split("\n").length.should eq 2
@@ -198,7 +198,7 @@ describe Gjp::Project do
       end
 
       @project.from_directory do
-        @project.is_dry_running.should be_true
+        @project.dry_running?.should be_true
         `git rev-list --all`.split("\n").length.should eq 2
         `git diff-tree --no-commit-id --name-only -r HEAD`.split("\n").should include("src/test")
         `git cat-file tag gjp_dry_run_started_1 | tail -1`.should include("src")
