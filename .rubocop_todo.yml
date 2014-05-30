@@ -37,8 +37,3 @@ RegexpLiteral:
 # Offense count: 1
 ShadowingOuterLocalVariable:
   Enabled: false
-
-# Offense count: 7
-Tab:
-  Enabled: false
-
