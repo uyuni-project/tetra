@@ -56,9 +56,9 @@ module Gjp
         # rename all .gitignore files by default as
         # they prevent snapshotting
         Find.find(".") do |file|
-          if file =~ /\.gitignore$/
-            FileUtils.mv(file, "#{file}_disabled_by_gjp")
-          end
+          next unless file =~ /\.gitignore$/
+
+          FileUtils.mv(file, "#{file}_disabled_by_gjp")
         end
 
         `git rm -r --cached --ignore-unmatch .`

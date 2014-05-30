@@ -207,17 +207,17 @@ module Gjp
       from_directory do
         result = []
         Find.find("src") do |file|
-          if file =~ /.jar$/ && !File.symlink?(file)
-            new_location = File.join("kit", "jars", Pathname.new(file).split[1])
-            FileUtils.mv(file, new_location)
+          next unless file =~ /.jar$/ && !File.symlink?(file)
 
-            link_target = Pathname.new(new_location)
-              .relative_path_from(Pathname.new(file).split.first)
-              .to_s
+          new_location = File.join("kit", "jars", Pathname.new(file).split[1])
+          FileUtils.mv(file, new_location)
 
-            File.symlink(link_target, file)
-            result << [file, new_location]
-          end
+          link_target = Pathname.new(new_location)
+            .relative_path_from(Pathname.new(file).split.first)
+            .to_s
+
+          File.symlink(link_target, file)
+          result << [file, new_location]
         end
 
         result

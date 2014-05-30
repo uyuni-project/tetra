@@ -13,10 +13,10 @@ module Gjp
     def find_executable(name)
       @project.from_directory do
         Find.find("kit") do |path|
-          if path =~ /bin\/#{name}$/
-            log.debug("found #{name} executable: #{path}")
-            return path
-          end
+          next unless path =~ /bin\/#{name}$/
+
+          log.debug("found #{name} executable: #{path}")
+          return path
         end
       end
 

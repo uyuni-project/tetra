@@ -13,8 +13,3 @@ MethodLength:
 # Offense count: 6
 MultilineBlockChain:
   Enabled: false
-
-# Offense count: 3
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-Next:
-  Enabled: false
