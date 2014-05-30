@@ -20,7 +20,7 @@ module Gjp
 
         "#{ant_path}"
       else
-        fail ExecutableNotFoundError.new("ant")
+        fail ExecutableNotFoundError, "ant"
       end
     end
   end

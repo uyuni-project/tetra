@@ -28,7 +28,7 @@ module Gjp
         result = File.expand_path("..", result)
       end
 
-      fail NoProjectDirectoryError.new(starting_dir) if result == "/"
+      fail NoProjectDirectoryError, starting_dir if result == "/"
 
       result
     end
@@ -53,7 +53,7 @@ module Gjp
         fail NoPackageDirectoryError
       end
     rescue ArgumentError, NoProjectDirectoryError
-      raise NoPackageDirectoryError.new(dir)
+      raise NoPackageDirectoryError, dir
     end
 
     # inits a new project directory structure

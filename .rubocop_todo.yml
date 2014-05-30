@@ -23,8 +23,3 @@ Next:
 # Configuration parameters: NamePrefixBlacklist.
 PredicateName:
   Enabled: false
-
-# Offense count: 4
-# Configuration parameters: SupportedStyles.
-RaiseArgs:
-  EnforcedStyle: compact
