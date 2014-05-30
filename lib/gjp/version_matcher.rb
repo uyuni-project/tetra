@@ -72,12 +72,9 @@ module Gjp
     # for strings, the score is the Levenshtein distance
     # in any case score is normalized between 0 (identical) and 99 (very different/uncomparable)
     def chunk_distance(my_chunk, their_chunk)
-      if my_chunk.nil?
-        my_chunk = "0"
-      end
-      if their_chunk.nil?
-        their_chunk = "0"
-      end
+      my_chunk = "0" if my_chunk.nil?
+      their_chunk = "0" if their_chunk.nil?
+
       if is_i?(my_chunk) && is_i?(their_chunk)
         return [(my_chunk.to_i - their_chunk.to_i).abs, 99].min
       else

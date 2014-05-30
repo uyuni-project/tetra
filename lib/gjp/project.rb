@@ -81,9 +81,7 @@ module Gjp
     # to the kit package, src/ will be reset at the current state
     # when finished
     def dry_run
-      if is_dry_running
-        return false
-      end
+      return false if is_dry_running
 
       current_directory = Pathname.new(Dir.pwd).relative_path_from Pathname.new(@full_path)
 

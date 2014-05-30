@@ -24,9 +24,7 @@ module Gjp
         end.map do |path, _archive|
           result = []
           Zip::File.foreach(path) do |entry|
-            if entry.file?
-              result << [entry.to_s, path]
-            end
+            result << [entry.to_s, path] if entry.file?
           end
           result
         end.flatten(1)
