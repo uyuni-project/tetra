@@ -79,12 +79,6 @@ ShadowingOuterLocalVariable:
 Tab:
   Enabled: false
 
-
-# Offense count: 8
-# Cop supports --auto-correct.
-UnusedBlockArgument:
-  Enabled: false
-
 # Offense count: 6
 UselessAssignment:
   Enabled: false

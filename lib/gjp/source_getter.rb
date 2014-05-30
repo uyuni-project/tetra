@@ -22,7 +22,7 @@ module Gjp
       project.from_directory do
         paths = Find.find(".").reject { |path| artifact_from_path(path).nil? }.sort
 
-        succeded_paths = paths.select.with_index do |path, i|
+        succeded_paths = paths.each do |path|
           group_id, artifact_id, version = artifact_from_path(path)
           log.info("attempting source download for #{path} (#{group_id}:#{artifact_id}:#{version})")
           maven_runner.get_source_jar(group_id, artifact_id, version)

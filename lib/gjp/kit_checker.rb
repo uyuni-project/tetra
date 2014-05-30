@@ -22,9 +22,9 @@ module Gjp
           [path, nil]
         end
 
-        archived_file_paths = plain_file_paths.select do |path, archive|
+        archived_file_paths = plain_file_paths.select do |path, _archive|
           path. =~ (/\.(zip)|([jwe]ar)$/)
-        end.map do |path, archive|
+        end.map do |path, _archive|
           result = []
           Zip::File.foreach(path) do |entry|
             if entry.file?
@@ -41,7 +41,7 @@ module Gjp
     # returns a list of class names for which
     # we have source files in kit/
     def source_class_names(paths)
-      source_paths = paths.select do |path, archive|
+      source_paths = paths.select do |path, _archive|
         path =~ /\.java$/
       end
 
@@ -49,7 +49,7 @@ module Gjp
       # back the directory tree all the way back to root.
       # This could add non-existent names, but allows not looking
       # in the file at all
-      class_names = source_paths.map do |path, archive|
+      class_names = source_paths.map do |path, _archive|
         class_name = path_to_class(path)
         parts = class_name.split(".")
         last_index = parts.length - 1
@@ -65,7 +65,7 @@ module Gjp
     # we have binary files in kit/
     def compiled_classes(paths)
       result = {}
-      compiled_paths = paths.select do |path, archive|
+      compiled_paths = paths.select do |path, _archive|
         path =~ /\.class$/
       end.each do |path, archive|
         class_name = path_to_class(path)

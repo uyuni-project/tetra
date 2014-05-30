@@ -15,7 +15,7 @@ module Gjp
       @logger = ::Logger.new(STDERR)
       @logger.datetime_format = "%Y-%m-%d %H:%M "
       @logger.level = ::Logger::ERROR
-      @logger.formatter = proc do |severity, datetime, progname, msg|
+      @logger.formatter = proc do |severity, _datetime, _progname, msg|
         "#{severity.chars.first}: #{msg}\n"
       end
     end
