@@ -10,7 +10,7 @@ module Gjp
     end
 
     # generates an archive for the kit package
-    def archive_kit(full)
+    def archive_kit(whole)
       destination_dir = File.join(@project.full_path, "output", "#{@project.name}-kit")
       FileUtils.mkdir_p(destination_dir)
       file_prefix = "#{@project.name}-kit"
@@ -19,7 +19,7 @@ module Gjp
       @project.take_snapshot "Kit archival started"
 
       destination_file = (
-        if full
+        if whole
           remove_stale_incremental(destination_dir, file_prefix, file_suffix)
           archive_single("kit", File.join(destination_dir, file_prefix + file_suffix))
         else

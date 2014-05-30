@@ -14,7 +14,7 @@ You can do any manual changes to spec and build.sh files and regenerate them lat
 * `gjp generate-package-archive`: (re)generates a package tarball;
 * `gjp generate-package-spec`: (re)generates a package spec;
 
-Note that, by default, `generate-kit-archive` will generate additional "diff" tar.xz files instead of rewriting the whole archive - this will result in faster uploads if you use OBS (see below). You can use the `--full` option to regenerate a single complete archive.
+Note that, by default, `generate-kit-archive` will generate additional "diff" tar.xz files instead of rewriting the whole archive - this will result in faster uploads if you use OBS (see below). You can use the `--whole` option to regenerate a single complete archive.
 
 ## Kit sources
 

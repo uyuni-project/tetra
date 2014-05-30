@@ -3,7 +3,7 @@
 module Gjp
   class GenerateAllCommand < Gjp::BaseCommand
     option %w(-f --filter), "FILTER", "filter files to be installed by this package spec", default: "*.jar"
-    option %w(-f --full), :flag, "create a full archive (not incremental)"
+    option %w(-w --whole), :flag, "recreate the whole archive (not incremental)"
     parameter "[DIRECTORY]", "path to a package directory (src/<package name>)", default: "."
     parameter "[POM]", "a package pom file path", default: "pom.xml"
 
@@ -13,7 +13,7 @@ module Gjp
         ensure_dry_running(false, project) do
           package_name = project.get_package_name(directory)
 
-          result_path = Gjp::Archiver.new(project).archive_kit(full?)
+          result_path = Gjp::Archiver.new(project).archive_kit(whole?)
           print_generation_result(project, result_path)
 
           result_path, conflict_count = Gjp::SpecGenerator.new(project).generate_kit_spec
