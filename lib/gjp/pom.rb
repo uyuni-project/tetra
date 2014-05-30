@@ -1,8 +1,5 @@
 # encoding: UTF-8
 
-require "nokogiri"
-require "open-uri"
-
 module Gjp
   # encapsulates a pom.xml file
   class Pom

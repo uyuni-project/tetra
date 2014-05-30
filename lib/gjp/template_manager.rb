@@ -1,7 +1,5 @@
 # encoding: UTF-8
 
-require "erb"
-
 module Gjp
   # operates on files in template/
   class TemplateManager

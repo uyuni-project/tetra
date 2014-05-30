@@ -1,7 +1,5 @@
 # encoding: UTF-8
 
-require "text"
-
 module Gjp
   # Facade to search.maven.org
   class MavenWebsite

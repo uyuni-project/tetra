@@ -1,7 +1,5 @@
 # encoding: UTF-8
 
-require "find"
-
 module Gjp
   # encapsulates a Gjp project directory
   class Project

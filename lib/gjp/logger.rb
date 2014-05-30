@@ -1,9 +1,5 @@
 # encoding: UTF-8
 
-require "singleton"
-require "forwardable"
-require "logger"
-
 module Gjp
   # configures logging for this application
   class Logger

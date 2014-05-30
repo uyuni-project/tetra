@@ -1,7 +1,5 @@
 # encoding: UTF-8
 
-require "rest_client"
-
 module Gjp
   # attempts to get java projects' sources
   class SourceGetter

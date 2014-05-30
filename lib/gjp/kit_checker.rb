@@ -1,8 +1,5 @@
 # encoding: UTF-8
 
-require "find"
-require "zip"
-
 module Gjp
   # checks kits for errors
   class KitChecker

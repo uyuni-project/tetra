@@ -1,5 +1,4 @@
 # encoding: UTF-8
-require "clamp"
 
 module Gjp
   # program entry point

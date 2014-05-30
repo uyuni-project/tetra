@@ -1,6 +1,25 @@
 # encoding: UTF-8
 
-# backend
+# ruby standard library
+require "digest/sha1"
+require "English"
+require "erb"
+require "find"
+require "forwardable"
+require "logger"
+require "open-uri"
+require "pathname"
+require "singleton"
+require "text"
+
+# third party libraries
+require "clamp"
+require "json"
+require "nokogiri"
+require "rest_client"
+require "zip"
+
+# internal, backend
 require "gjp/version"
 require "gjp/logger"
 require "gjp/template_manager"
@@ -21,7 +40,7 @@ require "gjp/spec_generator"
 require "gjp/archiver"
 require "gjp/kit_checker"
 
-# UI
+# internal, UI
 require "gjp/commands/base"
 
 require "gjp/commands/ant"

@@ -1,9 +1,5 @@
 # encoding: UTF-8
 
-require "find"
-require "pathname"
-require "English"
-
 module Gjp
   # runs programs from a gjp kit with gjp-specific options
   class KitRunner

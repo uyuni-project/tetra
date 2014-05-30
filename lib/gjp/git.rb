@@ -1,7 +1,5 @@
 # encoding: UTF-8
 
-require "English"
-
 module Gjp
   # facade to git, currently implemented with calls to the git command
   # prefixes all tags with "gjp_"

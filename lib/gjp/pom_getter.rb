@@ -1,13 +1,5 @@
 # encoding: UTF-8
 
-require "digest/sha1"
-require "zip"
-require "rest_client"
-require "json"
-require "pathname"
-
-require "gjp/version_matcher"
-
 module Gjp
   # attempts to get java projects' pom file
   class PomGetter

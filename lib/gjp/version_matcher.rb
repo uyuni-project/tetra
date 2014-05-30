@@ -1,7 +1,5 @@
 # encoding: UTF-8
 
-require "text"
-
 module Gjp
   # heuristically matches version strings
   class VersionMatcher

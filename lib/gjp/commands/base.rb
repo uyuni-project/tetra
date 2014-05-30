@@ -1,6 +1,4 @@
 # encoding: UTF-8
-require "clamp"
-require "gjp/logger"
 
 module Gjp
   # implements common options and utility methods
