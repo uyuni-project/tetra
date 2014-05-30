@@ -1,6 +1,7 @@
 # encoding: UTF-8
 
 module Gjp
+  # gjp generate-kit-spec
   class GenerateKitSpecCommand < Gjp::BaseCommand
     def execute
       checking_exceptions do

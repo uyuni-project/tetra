@@ -34,6 +34,7 @@ describe Gjp::TemplateManager do
       destination_path = destination.path
       destination.unlink
 
+      # binding test class
       class WorldClass
         def world_property
           "World!"

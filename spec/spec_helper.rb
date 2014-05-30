@@ -2,8 +2,8 @@
 
 require "gjp"
 
-# custom mock methods
 module Gjp
+  # custom mock methods
   module Mockers
     # creates a minimal gjp project
     def create_mock_project

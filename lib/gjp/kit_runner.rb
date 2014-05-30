@@ -36,6 +36,7 @@ module Gjp
     end
   end
 
+  # an executable from the kit was not found
   class ExecutableNotFoundError < Exception
     attr_reader :executable
 

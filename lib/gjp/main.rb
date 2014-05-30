@@ -2,6 +2,7 @@
 require "clamp"
 
 module Gjp
+  # program entry point
   class MainCommand < Clamp::Command
     subcommand(
       "init",

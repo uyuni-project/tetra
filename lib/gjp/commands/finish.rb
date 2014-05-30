@@ -1,6 +1,7 @@
 # encoding: UTF-8
 
 module Gjp
+  # gjp finish
   class FinishCommand < Gjp::BaseCommand
     option %w(-a --abort), :flag, "build abort, restore files as before dry-run"
 

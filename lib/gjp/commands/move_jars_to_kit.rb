@@ -1,6 +1,7 @@
 # encoding: UTF-8
 
 module Gjp
+  # gjp move-jars-to-kit
   class MoveJarsToKitCommand < Gjp::BaseCommand
     def execute
       checking_exceptions do

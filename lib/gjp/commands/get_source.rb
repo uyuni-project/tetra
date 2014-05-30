@@ -1,6 +1,7 @@
 # encoding: UTF-8
 
 module Gjp
+  # gjp get-source
   class GetSourceCommand < Gjp::BaseCommand
     parameter "POM", "a pom file path or URI"
 

@@ -80,17 +80,16 @@ module Gjp
       if their_chunk.nil?
         their_chunk = "0"
       end
-      if my_chunk.is_i? && their_chunk.is_i?
+      if is_i?(my_chunk) && is_i?(their_chunk)
         return [(my_chunk.to_i - their_chunk.to_i).abs, 99].min
       else
         return [Text::Levenshtein.distance(my_chunk.upcase, their_chunk.upcase), 99].min
       end
     end
-  end
-end
 
-class String
-  def is_i?
-    !!(self =~ /^[0-9]+$/)
+    # true for integer strings
+    def is_i?(string)
+      !!(string =~ /^[0-9]+$/)
+    end
   end
 end

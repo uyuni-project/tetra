@@ -1,6 +1,7 @@
 # encoding: UTF-8
 
 module Gjp
+  # gjp list-kit-missing-sources
   class ListKitMissingSourcesCommand < Gjp::BaseCommand
     def execute
       checking_exceptions do

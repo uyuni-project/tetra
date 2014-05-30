@@ -1,6 +1,7 @@
 # encoding: UTF-8
 
 module Gjp
+  # gjp mvn
   class MavenCommand < Gjp::BaseCommand
     parameter "[MAVEN OPTIONS] ...", "mvn options", attribute_name: "dummy"
 

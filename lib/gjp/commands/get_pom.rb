@@ -1,6 +1,7 @@
 # encoding: UTF-8
 
 module Gjp
+  # gjp get-pom
   class GetPomCommand < Gjp::BaseCommand
     parameter "NAME", "a jar file name or a `name-version` string (heuristic)"
 

@@ -1,6 +1,7 @@
 # encoding: UTF-8
 
 module Gjp
+  # gjp generate-package-script
   class GeneratePackageScriptCommand < Gjp::BaseCommand
     parameter "[DIRECTORY]", "path to a package directory (src/<package name>)", default: "."
 

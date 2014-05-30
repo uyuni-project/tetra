@@ -5,6 +5,7 @@ require "forwardable"
 require "logger"
 
 module Gjp
+  # configures logging for this application
   class Logger
     include Singleton
     extend Forwardable
@@ -21,6 +22,7 @@ module Gjp
     end
   end
 
+  # convenience methods
   module Logging
     # convenience instance method
     def log

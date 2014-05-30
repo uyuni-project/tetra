@@ -229,6 +229,7 @@ module Gjp
     end
   end
 
+  # current directory is not a gjp project
   class NoProjectDirectoryError < StandardError
     attr_reader :directory
 
@@ -236,6 +237,8 @@ module Gjp
       @directory = directory
     end
   end
+
+  # current directory is not a gjp package directory
   class NoPackageDirectoryError < StandardError
     attr_reader :directory
 

@@ -1,6 +1,7 @@
 # encoding: UTF-8
 
 module Gjp
+  # gjp generate-all
   class GenerateAllCommand < Gjp::BaseCommand
     option %w(-f --filter), "FILTER", "filter files to be installed by this package spec", default: "*.jar"
     option %w(-w --whole), :flag, "recreate the whole archive (not incremental)"

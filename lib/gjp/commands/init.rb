@@ -1,6 +1,7 @@
 # encoding: UTF-8
 
 module Gjp
+  # gjp init
   class InitCommand < Gjp::BaseCommand
     def execute
       checking_exceptions do

@@ -1,6 +1,7 @@
 # encoding: UTF-8
 
 module Gjp
+  # gjp ant
   class AntCommand < Gjp::BaseCommand
     parameter "[ANT OPTIONS] ...", "ant options", attribute_name: "dummy"
 

@@ -1,6 +1,7 @@
 # encoding: UTF-8
 
 module Gjp
+  # gjp generate-package-spec
   class GeneratePackageSpecCommand < Gjp::BaseCommand
     option %w(-f --filter), "FILTER", "filter files to be installed by this spec", default: "*.jar"
     parameter "[DIRECTORY]", "path to a package directory (src/<package name>)", default: "."

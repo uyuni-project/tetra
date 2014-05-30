@@ -1,6 +1,7 @@
 # encoding: UTF-8
 
 module Gjp
+  # gjp dry-run
   class DryRunCommand < Gjp::BaseCommand
     def execute
       checking_exceptions do

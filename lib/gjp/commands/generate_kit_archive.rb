@@ -1,6 +1,7 @@
 # encoding: UTF-8
 
 module Gjp
+  # gjp generate-kit-archive
   class GenerateKitArchiveCommand < Gjp::BaseCommand
     option %w(-w --whole), :flag, "recreate the whole archive (not incremental)"
 

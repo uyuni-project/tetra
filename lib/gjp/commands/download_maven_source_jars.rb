@@ -1,6 +1,7 @@
 # encoding: UTF-8
 
 module Gjp
+  # gjp download-maven-source-jars
   class DownloadMavenSourceJarsCommand < Gjp::BaseCommand
     def execute
       checking_exceptions do
