@@ -83,7 +83,3 @@ Tab:
 UselessAssignment:
   Enabled: false
 
-# Offense count: 6
-# Cop supports --auto-correct.
-WordArray:
-  MinSize: 2

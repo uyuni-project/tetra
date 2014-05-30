@@ -8,7 +8,7 @@ module Gjp
     include Logging
 
     # Options available to all gjp commands
-    option ["-v", "--verbose"], :flag, "verbose output"
+    option %w(-v --verbose), :flag, "verbose output"
     option ["--very-verbose"], :flag, "very verbose output"
     option ["--very-very-verbose"], :flag, "very very verbose output"
 
