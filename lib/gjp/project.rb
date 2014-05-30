@@ -46,12 +46,12 @@ module Gjp
       dir_path = Pathname.new(File.expand_path(dir)).relative_path_from(Pathname.new(@full_path))
       components = dir_path.to_s.split(File::SEPARATOR)
       if components.count >= 2 &&
-       components.first == "src" &&
-       Dir.exist?(File.join(@full_path, components[0], components[1]))
+        components.first == "src" &&
+        Dir.exist?(File.join(@full_path, components[0], components[1]))
         components[1]
-     else
-       fail NoPackageDirectoryError
-     end
+      else
+        fail NoPackageDirectoryError
+      end
     rescue ArgumentError, NoProjectDirectoryError
       raise NoPackageDirectoryError.new(dir)
     end
