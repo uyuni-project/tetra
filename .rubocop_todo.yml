@@ -33,7 +33,3 @@ RaiseArgs:
 # Configuration parameters: MaxSlashes.
 RegexpLiteral:
   Enabled: false
-
-# Offense count: 1
-ShadowingOuterLocalVariable:
-  Enabled: false
