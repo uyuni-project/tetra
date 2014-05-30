@@ -62,7 +62,8 @@ module Gjp
         if latest_tag_count == 0
           archive_single(source_directory, File.join(destination_dir, file_prefix + file_suffix))
         else
-          destination_file = File.join(destination_dir, "#{file_prefix}_#{"%04d" % (latest_tag_count)}#{file_suffix}")
+          destination_file = File.join(destination_dir,
+                                       "#{file_prefix}_#{format("%04d", latest_tag_count)}#{file_suffix}")
           tag = @project.latest_tag(tag_prefix)
           log.debug "creating #{destination_file} with files newer than #{tag}"
 
