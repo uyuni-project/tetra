@@ -97,6 +97,7 @@ module Gjp
     end
 
     private
+
     # attempts to turn a .java/.class file name into a class name
     def path_to_class(path)
       path
