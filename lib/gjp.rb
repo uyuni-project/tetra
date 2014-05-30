@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 # backend
 require "gjp/version"
 require "gjp/logger"
