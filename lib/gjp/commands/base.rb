@@ -52,9 +52,7 @@ module Gjp
     # outputs output of a file generation
     def print_generation_result(project, result_path, conflict_count = 0)
       puts "#{format_path(result_path, project)} generated"
-      if conflict_count > 0
-        puts "Warning: #{conflict_count} unresolved conflicts"
-      end
+      puts "Warning: #{conflict_count} unresolved conflicts" if conflict_count > 0
     end
 
     # generates a version of path relative to the current directory

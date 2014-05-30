@@ -35,9 +35,7 @@ module Gjp
     # if possible, turn path into a Maven artifact name, otherwise return nil
     def artifact_from_path(path)
       match = path.match(/\.\/kit\/m2\/(.+)\/(.+)\/(.+)\/\2-\3.*\.jar$/)
-      unless match.nil?
-        [match[1].gsub("/", "."), match[2], match[3]]
-      end
+      [match[1].gsub("/", "."), match[2], match[3]] unless match.nil?
     end
   end
 end

@@ -9,11 +9,11 @@ module Gjp
     # returns filename and status if found, else nil
     def get_pom(filename)
       content, status = (get_pom_from_jar(filename) || get_pom_from_sha1(filename) || get_pom_from_heuristic(filename))
-      if content
-        pom_filename = filename.sub(/(\.jar)?$/, ".pom")
-        File.open(pom_filename, "w") { |io| io.write(content) }
-        [pom_filename, status]
-      end
+      return unless content
+
+      pom_filename = filename.sub(/(\.jar)?$/, ".pom")
+      File.open(pom_filename, "w") { |io| io.write(content) }
+      [pom_filename, status]
     end
 
     # returns a pom embedded in a jar file
