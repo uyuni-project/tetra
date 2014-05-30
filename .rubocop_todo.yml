@@ -6,10 +6,6 @@
 # versions of RuboCop, may require this file to be generated again.
 
 # Offense count: 1
-DoubleNegation:
-  Enabled: false
-
-# Offense count: 1
 EmptyLinesAroundAccessModifier:
   Enabled: false
 

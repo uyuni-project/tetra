@@ -89,7 +89,7 @@ module Gjp
 
     # true for integer strings
     def is_i?(string)
-      !!(string =~ /^[0-9]+$/)
+      string =~ /^[0-9]+$/
     end
   end
 end
