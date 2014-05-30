@@ -21,6 +21,7 @@ describe Gjp::ScriptGenerator do
       end
 
       FileUtils.mkdir_p(File.join("src", "test-package"))
+      @project.dry_run
 
       @generator = Gjp::ScriptGenerator.new(@project, "history")
     end
