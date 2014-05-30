@@ -21,7 +21,8 @@ module Gjp
           puts "SCM connection: #{pom.scm_connection}" unless pom.scm_connection.empty?
           puts "SCM connection: #{pom.scm_url}" unless pom.scm_url.empty?
           puts "The effective POM: #{effective_pom_path}"
-          puts "Google: http://google.com/#q=#{URI.encode(pom.name + " sources")}"
+          name = !pom.name.empty? ? pom.name : pom.artifact_id
+          puts "Google: http://google.com/#q=#{URI.encode("#{name} sources")}"
         end
       end
     end
