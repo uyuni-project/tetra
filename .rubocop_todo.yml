@@ -28,8 +28,3 @@ PredicateName:
 # Configuration parameters: SupportedStyles.
 RaiseArgs:
   EnforcedStyle: compact
-
-# Offense count: 1
-# Configuration parameters: MaxSlashes.
-RegexpLiteral:
-  Enabled: false
