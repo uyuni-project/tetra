@@ -42,7 +42,3 @@ ShadowingOuterLocalVariable:
 Tab:
   Enabled: false
 
-# Offense count: 6
-UselessAssignment:
-  Enabled: false
-

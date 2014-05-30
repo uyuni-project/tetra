@@ -60,7 +60,7 @@ module Gjp
     # we have binary files in kit/
     def compiled_classes(paths)
       result = {}
-      compiled_paths = paths.select do |path, _archive|
+      paths.select do |path, _archive|
         path =~ /\.class$/
       end.each do |path, archive|
         class_name = path_to_class(path)
@@ -81,7 +81,7 @@ module Gjp
       source_class_names = source_class_names(paths)
       archive_paths_to_class_names = compiled_classes(paths)
 
-      result = archive_paths_to_class_names.map do |archive, class_names|
+      archive_paths_to_class_names.map do |archive, class_names|
         unsourced_class_names = class_names.select do |class_name|
           source_class_names.include?(class_name) == false
         end

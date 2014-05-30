@@ -70,7 +70,7 @@ module Gjp
         result = site.search_by_name(my_artifact_id).first
         log.debug("Artifact id search result: #{result}")
         unless result.nil?
-          group_id, artifact_id, version = site.get_maven_id_from result
+          group_id, artifact_id, _ = site.get_maven_id_from result
           results = site.search_by_group_id_and_artifact_id(group_id, artifact_id)
           log.debug("All versions: #{results}")
           their_versions = results.map { |doc| doc["v"] }

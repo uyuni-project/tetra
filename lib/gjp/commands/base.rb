@@ -80,7 +80,7 @@ module Gjp
       $stderr.puts "#{e.directory} is not a gjp project directory, see gjp init"
     rescue NoPackageDirectoryError => e
       $stderr.puts "#{e.directory} is not a gjp package directory, see README"
-    rescue GitAlreadyInitedError => e
+    rescue GitAlreadyInitedError
       $stderr.puts "This directory is already a gjp project"
     rescue ExecutableNotFoundError => e
       $stderr.puts "Executable #{e.executable} not found in kit/ or any of its subdirectories"

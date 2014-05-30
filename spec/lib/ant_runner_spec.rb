@@ -31,7 +31,7 @@ describe Gjp::AntRunner do
 
   describe "#ant"  do
     it "runs Ant" do
-      executable_path = create_mock_executable("ant")
+      create_mock_executable("ant")
       @project.from_directory do
         @kit_runner.ant(["extra-option"])
         File.read("test_out").strip.should match(/extra-option$/)
