@@ -1,6 +1,7 @@
 # encoding: UTF-8
 
 require "gjp"
+Dir["./spec/support/**/*.rb"].sort.each { |f| require f}
 
 module Gjp
   # custom mock methods
