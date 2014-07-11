@@ -2,20 +2,20 @@
 
 require "spec_helper"
 
-describe Gjp::Archiver do
+describe Tetra::Archiver do
   before(:each) do
     @project_path = File.join("spec", "data", "test-project")
     Dir.mkdir(@project_path)
 
-    Gjp::Project.init(@project_path)
-    @project = Gjp::Project.new(@project_path)
+    Tetra::Project.init(@project_path)
+    @project = Tetra::Project.new(@project_path)
   end
 
   after(:each) do
     FileUtils.rm_rf(@project_path)
   end
 
-  let(:archiver) { Gjp::Archiver.new(@project) }
+  let(:archiver) { Tetra::Archiver.new(@project) }
 
   describe "#archive_single" do
     it "archives a list of files" do

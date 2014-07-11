@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
- | This is the configuration file used by default by `gjp mvn`.
- | Feel free to add settings here if any are needed for gjp dry runs.
+ | This is the configuration file used by default by `tetra mvn`.
+ | Feel free to add settings here if any are needed for tetra dry runs.
  |-->
 <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"

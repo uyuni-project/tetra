@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-module Gjp
+module Tetra
   # heuristically matches version strings
   class VersionMatcher
     include Logging

@@ -2,13 +2,13 @@
 
 require "spec_helper"
 
-describe Gjp::AntRunner do
-  it_behaves_like Gjp::KitRunner
-  include Gjp::Mockers
+describe Tetra::AntRunner do
+  it_behaves_like Tetra::KitRunner
+  include Tetra::Mockers
 
   before(:each) do
     create_mock_project
-    @kit_runner = Gjp::AntRunner.new(@project)
+    @kit_runner = Tetra::AntRunner.new(@project)
   end
 
   after(:each) do
@@ -24,7 +24,7 @@ describe Gjp::AntRunner do
       end
     end
     it "doesn't return commandline options if Ant is not available" do
-      expect { @kit_runner.get_ant_commandline(".") }.to raise_error(Gjp::ExecutableNotFoundError)
+      expect { @kit_runner.get_ant_commandline(".") }.to raise_error(Tetra::ExecutableNotFoundError)
     end
   end
 
@@ -38,7 +38,7 @@ describe Gjp::AntRunner do
     end
     it "doesn't run Ant if it is not available" do
       @project.from_directory do
-        expect { @kit_runner.ant([]) }.to raise_error(Gjp::ExecutableNotFoundError)
+        expect { @kit_runner.ant([]) }.to raise_error(Tetra::ExecutableNotFoundError)
       end
     end
   end

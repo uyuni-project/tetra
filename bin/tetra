@@ -20,10 +20,10 @@ if File.exist?(File.join(File.dirname(__FILE__), "..", ".git"))
 end
 
 begin
-  require "gjp"
+  require "tetra"
 rescue LoadError
   require "rubygems"
-  require "gjp"
+  require "tetra"
 end
 
-Gjp::MainCommand.run
+Tetra::MainCommand.run

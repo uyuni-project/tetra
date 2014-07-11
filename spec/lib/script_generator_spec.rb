@@ -2,28 +2,28 @@
 
 require "spec_helper"
 
-describe Gjp::ScriptGenerator do
+describe Tetra::ScriptGenerator do
   before(:each) do
     @project_path = File.join("spec", "data", "test-project")
     Dir.mkdir(@project_path)
 
-    Gjp::Project.init(@project_path)
-    @project = Gjp::Project.new(@project_path)
+    Tetra::Project.init(@project_path)
+    @project = Tetra::Project.new(@project_path)
 
     @project.from_directory do
       File.open("history", "w") do |io|
         io.puts "some earlier command"
-        io.puts "gjp dry-run --unwanted-options"
+        io.puts "tetra dry-run --unwanted-options"
         io.puts "cd somewhere significant"
-        io.puts "gjp mvn --options"
-        io.puts "gjp finish -a"
+        io.puts "tetra mvn --options"
+        io.puts "tetra finish -a"
         io.puts "some later command"
       end
 
       FileUtils.mkdir_p(File.join("src", "test-package"))
       @project.dry_run
 
-      @generator = Gjp::ScriptGenerator.new(@project, "history")
+      @generator = Tetra::ScriptGenerator.new(@project, "history")
     end
 
     mock_maven_executable
@@ -47,9 +47,9 @@ describe Gjp::ScriptGenerator do
         )
 
         lines.should_not include("some earlier command\n")
-        lines.should_not include("gjp dry-run --unwanted-options\n")
-        lines.should_not include("gjp dry-run --unwanted-options\n")
-        lines.should_not include("gjp finish -a\n")
+        lines.should_not include("tetra dry-run --unwanted-options\n")
+        lines.should_not include("tetra dry-run --unwanted-options\n")
+        lines.should_not include("tetra finish -a\n")
         lines.should_not include("some later command\n")
       end
     end

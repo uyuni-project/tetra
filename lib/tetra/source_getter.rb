@@ -1,13 +1,13 @@
 # encoding: UTF-8
 
-module Gjp
+module Tetra
   # attempts to get java projects' sources
   class SourceGetter
     include Logging
 
     # attempts to download a project's sources
     def get_maven_source_jar(project, pom_path)
-      maven_runner = Gjp::MavenRunner.new(project)
+      maven_runner = Tetra::MavenRunner.new(project)
       pom = Pom.new(pom_path)
       maven_runner.get_source_jar(pom.group_id, pom.artifact_id, pom.version)
     end
@@ -15,7 +15,7 @@ module Gjp
     # looks for jars in maven's local repo and downloads corresponding
     # source jars
     def get_maven_source_jars(project)
-      maven_runner = Gjp::MavenRunner.new(project)
+      maven_runner = Tetra::MavenRunner.new(project)
 
       project.from_directory do
         paths = Find.find(".").reject { |path| artifact_from_path(path).nil? }.sort

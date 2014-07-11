@@ -2,12 +2,12 @@
 
 require "spec_helper"
 
-describe Gjp::Git do
+describe Tetra::Git do
   before(:each) do
     @git_path = File.expand_path(File.join("spec", "data", "test-repo"))
     Dir.mkdir(@git_path)
 
-    @git = Gjp::Git.new(@git_path)
+    @git = Tetra::Git.new(@git_path)
     @git.init
   end
 
@@ -19,7 +19,7 @@ describe Gjp::Git do
     it "complains if a double initialization is attempted" do
       expect do
         @git.init
-      end.to raise_error(Gjp::GitAlreadyInitedError)
+      end.to raise_error(Tetra::GitAlreadyInitedError)
     end
   end
 
@@ -40,13 +40,13 @@ describe Gjp::Git do
         files = `git ls-tree --name-only -r HEAD`.split("\n")
 
         files.should include("file1")
-        files.should include(".gitignore_disabled_by_gjp")
+        files.should include(".gitignore_disabled_by_tetra")
       end
     end
   end
 
   describe "#changed_files_since"  do
-    it "lists files changed since a gjp tag" do
+    it "lists files changed since a tetra tag" do
       Dir.chdir(@git_path) do
         File.open("file1", "w") do |file|
           file.write "test"
@@ -69,7 +69,7 @@ describe Gjp::Git do
   end
 
   describe "#changed_files_between"  do
-    it "lists files changed between gjp tags" do
+    it "lists files changed between tetra tags" do
       Dir.chdir(@git_path) do
         File.open("file1", "w") do |file|
           file.write "test"

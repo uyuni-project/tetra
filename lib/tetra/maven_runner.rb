@@ -1,7 +1,7 @@
 # encoding: UTF-8
 
-module Gjp
-  # runs Maven with gjp-specific options
+module Tetra
+  # runs Maven with tetra-specific options
   class MavenRunner < KitRunner
     include Logging
 

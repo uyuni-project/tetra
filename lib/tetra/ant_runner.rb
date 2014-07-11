@@ -1,7 +1,7 @@
 # encoding: UTF-8
 
-module Gjp
-  # runs Ant with gjp-specific options
+module Tetra
+  # runs Ant with tetra-specific options
   class AntRunner < KitRunner
     include Logging
 

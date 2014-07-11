@@ -1,7 +1,7 @@
 # encoding: UTF-8
 
-module Gjp
-  # runs programs from a gjp kit with gjp-specific options
+module Tetra
+  # runs programs from a tetra kit with tetra-specific options
   class KitRunner
     include Logging
 

@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-module Gjp
+module Tetra
   # attempts to get java projects' pom file
   class PomGetter
     include Logging

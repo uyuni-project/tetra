@@ -1,14 +1,14 @@
 # encoding: UTF-8
 
-module Gjp
-  # gjp get-pom
-  class GetPomCommand < Gjp::BaseCommand
+module Tetra
+  # tetra get-pom
+  class GetPomCommand < Tetra::BaseCommand
     parameter "NAME", "a jar file name or a `name-version` string (heuristic)"
 
     def execute
       checking_exceptions do
-        project = Gjp::Project.new(".")
-        pom_getter = Gjp::PomGetter.new
+        project = Tetra::Project.new(".")
+        pom_getter = Tetra::PomGetter.new
 
         path, status = pom_getter.get_pom(name)
         if path

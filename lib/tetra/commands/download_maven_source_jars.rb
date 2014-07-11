@@ -1,12 +1,12 @@
 # encoding: UTF-8
 
-module Gjp
-  # gjp download-maven-source-jars
-  class DownloadMavenSourceJarsCommand < Gjp::BaseCommand
+module Tetra
+  # tetra download-maven-source-jars
+  class DownloadMavenSourceJarsCommand < Tetra::BaseCommand
     def execute
       checking_exceptions do
-        project = Gjp::Project.new(".")
-        source_getter = Gjp::SourceGetter.new
+        project = Tetra::Project.new(".")
+        source_getter = Tetra::SourceGetter.new
 
         ensure_dry_running(false, project) do
           puts "Getting sources from Maven..."

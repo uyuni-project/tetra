@@ -3,9 +3,9 @@
 require "spec_helper"
 require "fileutils"
 
-describe Gjp::SourceGetter do
-  include Gjp::Mockers
-  let(:source_getter) { Gjp::SourceGetter.new }
+describe Tetra::SourceGetter do
+  include Tetra::Mockers
+  let(:source_getter) { Tetra::SourceGetter.new }
 
   before(:each) do
     create_mock_project

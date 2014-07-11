@@ -1,6 +1,6 @@
-# gjp – builds RPMs for Java software
+# tetra – builds RPMs for Java software
 
-`gjp` is a set of tools to help you build RPM packages for Java projects.
+`tetra` is a set of tools to help you build RPM packages for Java projects.
 
 Packaging of Java projects is sometimes hard because build tools like Maven partially overlap with distro tools like RPM in functionality.
 
@@ -14,32 +14,32 @@ You need:
 * [git](http://git-scm.com/);
 * a JDK that can compile whatever software you need to package;
 
-Install `gjp` via RubyGems:
+Install `tetra` via RubyGems:
 
-     gem install gjp
+     gem install tetra
 
 ## Workflow
 
-Building a package with `gjp` is quite unusual — this is a deliberate choice, so don't worry. Basic steps are:
+Building a package with `tetra` is quite unusual — this is a deliberate choice, so don't worry. Basic steps are:
 
-* `gjp init` a new project;
+* `tetra init` a new project;
 * add sources to `src/<package name>` and anything else needed for the build in `kit/` in binary form (typically a copy of Maven and maybe some other dependency jars);
-* execute `gjp dry-run`, then any command needed to compile your software, then `gjp finish`;
-* execute `gjp generate-all`: gjp will look at changed files and Bash history to scaffold spec files and tarballs.
+* execute `tetra dry-run`, then any command needed to compile your software, then `tetra finish`;
+* execute `tetra generate-all`: tetra will look at changed files and Bash history to scaffold spec files and tarballs.
 
 Done!
 
 ### How can that possibly work?
 
-With `gjp` you are not building all dependencies from source, just your package. Everything else is shipped already compiled with attached source files, which is much easier to implement and automate. Yet, it is sufficient to fulfill open source licenses and to have a repeatable, networkless build. See [MOTIVATION.md](MOTIVATION.md) for further information.
+With `tetra` you are not building all dependencies from source, just your package. Everything else is shipped already compiled with attached source files, which is much easier to implement and automate. Yet, it is sufficient to fulfill open source licenses and to have a repeatable, networkless build. See [MOTIVATION.md](MOTIVATION.md) for further information.
 
 ## A commons-collections walkthrough
 
-First, ceate a new `gjp` project, in this example named "myproject":
+First, ceate a new `tetra` project, in this example named "myproject":
 
     mkdir myproject
     cd myproject
-    gjp init
+    tetra init
 
 Second, place commons-collections source files in the `src/` folder. Specifically, every `src/` subfolder will become a separate package named after the folder itself, so you can use the following:
 
@@ -57,21 +57,21 @@ Third, put all non-source files needed for the build in `kit/`. This means all b
     unzip apache-maven-3.1.1-bin.zip
     rm apache-maven-3.1.1-bin.zip
 
-Fourth, you need to show `gjp` how to build your package by running appropriate commands between `gjp dry-run` and `gjp finish`. Bash history will be recorded to generate a "starting-point" build script (that will be sufficient in simple cases like this):
+Fourth, you need to show `tetra` how to build your package by running appropriate commands between `tetra dry-run` and `tetra finish`. Bash history will be recorded to generate a "starting-point" build script (that will be sufficient in simple cases like this):
 
     cd ../src/commons-collections/commons-collections-3.2.1-src/
-    gjp dry-run
-    gjp mvn package
-    gjp finish
+    tetra dry-run
+    tetra mvn package
+    tetra finish
 
-Note that we used `gjp mvn package` instead of `mvn package`: this will use of the Maven copy we put in `kit/` and the repository in `kit/m2`.
-Also note that this being a dry-run build, sources will be brought back to their original state after `gjp finish`, as this ensures build repeatability.
+Note that we used `tetra mvn package` instead of `mvn package`: this will use of the Maven copy we put in `kit/` and the repository in `kit/m2`.
+Also note that this being a dry-run build, sources will be brought back to their original state after `tetra finish`, as this ensures build repeatability.
 
 Finally, generate build scripts, spec files and tarballs in the `output/` directory:
 
-    gjp generate-all
+    tetra generate-all
 
-Note that `gjp` will generate files for the commons-collections package and for the binary-only myproject-kit package, which is a special container of all build-time dependencies (basically, the `kit/` folder). This will be shared among all packages you might add to your `gjp` project.
+Note that `tetra` will generate files for the commons-collections package and for the binary-only myproject-kit package, which is a special container of all build-time dependencies (basically, the `kit/` folder). This will be shared among all packages you might add to your `tetra` project.
 
 ## In-depth information
 
@@ -81,23 +81,23 @@ An in-depth discussion of this project's motivation is available in the [MOTIVAT
 
 ## Status
 
-`gjp` is a research project currently in beta state. If you are a packager you can try to use it, any feedback would be **very** welcome!
+`tetra` is a research project currently in beta state. If you are a packager you can try to use it, any feedback would be **very** welcome!
 
-At the moment `gjp` is tested on openSUSE.
+At the moment `tetra` is tested on openSUSE.
 
 ## Sources
 
-`gjp`'s Git repo is available on GitHub, which can be browsed at:
+`tetra`'s Git repo is available on GitHub, which can be browsed at:
 
-    https://github.com/SilvioMoioli/gjp
+    https://github.com/SilvioMoioli/tetra
 
 and cloned with:
 
-    git clone git@github.com:SilvioMoioli/gjp.git
+    git clone git@github.com:SilvioMoioli/tetra.git
 
 ## Contact
 
-Are you using `gjp` or even just reading this? Let's get in touch!
+Are you using `tetra` or even just reading this? Let's get in touch!
 
     smoioli at suse dot de
 

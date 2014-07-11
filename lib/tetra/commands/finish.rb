@@ -1,13 +1,13 @@
 # encoding: UTF-8
 
-module Gjp
-  # gjp finish
-  class FinishCommand < Gjp::BaseCommand
+module Tetra
+  # tetra finish
+  class FinishCommand < Tetra::BaseCommand
     option %w(-a --abort), :flag, "build abort, restore files as before dry-run"
 
     def execute
       checking_exceptions do
-        if Gjp::Project.new(".").finish(abort?)
+        if Tetra::Project.new(".").finish(abort?)
           if abort?
             puts "Project reverted as before dry-run."
           else

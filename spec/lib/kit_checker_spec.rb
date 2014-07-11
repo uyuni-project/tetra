@@ -4,12 +4,12 @@ require "spec_helper"
 require "rubygems"
 require "zip"
 
-describe Gjp::KitChecker do
-  include Gjp::Mockers
+describe Tetra::KitChecker do
+  include Tetra::Mockers
 
   before(:each) do
     create_mock_project
-    @kit_checker = Gjp::KitChecker.new(@project)
+    @kit_checker = Tetra::KitChecker.new(@project)
   end
 
   after(:each) do

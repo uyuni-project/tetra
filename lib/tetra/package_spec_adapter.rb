@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-module Gjp
+module Tetra
   # encapsulates details of a package needed by the spec file
   # retrieving them from other objects
   class PackageSpecAdapter

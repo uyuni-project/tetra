@@ -1,12 +1,12 @@
 # encoding: UTF-8
 
-module Gjp
-  # gjp list-kit-missing-sources
-  class ListKitMissingSourcesCommand < Gjp::BaseCommand
+module Tetra
+  # tetra list-kit-missing-sources
+  class ListKitMissingSourcesCommand < Tetra::BaseCommand
     def execute
       checking_exceptions do
-        project = Gjp::Project.new(".")
-        kit_checker = Gjp::KitChecker.new(project)
+        project = Tetra::Project.new(".")
+        kit_checker = Tetra::KitChecker.new(project)
 
         ensure_dry_running(false, project) do
           puts "Some source files were not found in these archives:"

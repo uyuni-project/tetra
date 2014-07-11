@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-module Gjp
+module Tetra
   # Facade to search.maven.org
   class MavenWebsite
     include Logging

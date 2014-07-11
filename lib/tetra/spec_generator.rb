@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-module Gjp
+module Tetra
   # creates and updates spec files
   class SpecGenerator
     include Logging
@@ -16,7 +16,7 @@ module Gjp
         output_dir = File.join("output", "#{@project.name}-kit")
         FileUtils.mkdir_p(output_dir)
 
-        adapter = Gjp::KitSpecAdapter.new(@project)
+        adapter = Tetra::KitSpecAdapter.new(@project)
         conflict_count = generate_merging("kit.spec", adapter.public_binding, spec_path, :generate_kit_spec)
 
         symlink_to_output(spec_path, output_dir)
@@ -26,14 +26,14 @@ module Gjp
     end
 
     def generate_package_spec(name, pom_path, filter)
-      pom = Gjp::Pom.new(pom_path)
+      pom = Tetra::Pom.new(pom_path)
       @project.from_directory do
         spec_name = "#{name}.spec"
         spec_path = File.join("src", name, spec_name)
         output_dir = File.join("output", name)
         FileUtils.mkdir_p(output_dir)
 
-        adapter = Gjp::PackageSpecAdapter.new(@project, name, pom, filter)
+        adapter = Tetra::PackageSpecAdapter.new(@project, name, pom, filter)
         conflict_count = generate_merging("package.spec", adapter.public_binding, spec_path, "generate_#{name}_spec")
 
         symlink_to_output(spec_path, output_dir)

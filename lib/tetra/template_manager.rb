@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-module Gjp
+module Tetra
   # operates on files in template/
   class TemplateManager
     include Logging

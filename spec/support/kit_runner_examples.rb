@@ -1,7 +1,7 @@
 # encoding: UTF-8
 
-shared_examples_for Gjp::KitRunner do
-  include Gjp::Mockers
+shared_examples_for Tetra::KitRunner do
+  include Tetra::Mockers
 
   describe "#find_executable"  do
     it "finds an executable in kit" do

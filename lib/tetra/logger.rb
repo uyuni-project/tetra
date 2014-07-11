@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-module Gjp
+module Tetra
   # configures logging for this application
   class Logger
     include Singleton
@@ -22,7 +22,7 @@ module Gjp
   module Logging
     # convenience instance method
     def log
-      Gjp::Logger.instance
+      Tetra::Logger.instance
     end
   end
 end

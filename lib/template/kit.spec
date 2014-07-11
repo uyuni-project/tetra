@@ -1,5 +1,5 @@
 #
-# spec file for gjp kit for project "<%= name %>"
+# spec file for tetra kit for project "<%= name %>"
 #
 # Copyright (c) <%= Time.now.year %> <%= Etc.getlogin %>
 #
@@ -19,8 +19,8 @@ Name:           <%= name %>-kit
 Version:        <%= version %>
 Release:        1
 License:        Apache-2.0
-Summary:        Build-time dependencies for gjp project <%= name %>
-Url:            https://github.com/SilvioMoioli/gjp
+Summary:        Build-time dependencies for tetra project <%= name %>
+Url:            https://github.com/SilvioMoioli/tetra
 Group:          Development/Libraries/Java
 <% archives.each_with_index do |archive, i| %>
 Source<%= i %>:        <%= archive %>
@@ -29,12 +29,12 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 BuildArch:      noarch
 BuildRequires:  xz
 BuildRequires:  fdupes
-Provides:       gjp(kit)
+Provides:       tetra(kit)
 # no two kits should ever be installed at any given time
-Conflicts:      otherproviders(gjp(kit))
+Conflicts:      otherproviders(tetra(kit))
 
 %description
-This package has been automatically created by gjp in order to
+This package has been automatically created by tetra in order to
 satisfy build time dependencies of some Java packages. It should
 not be used except for rebuilding those packages and it should never
 be installed on end users' systems.
@@ -49,16 +49,16 @@ be installed on end users' systems.
 <% end %>
 
 %build
-# nothing to do, gjp kits are precompiled by design
+# nothing to do, tetra kits are precompiled by design
 
 %install
 export NO_BRP_CHECK_BYTECODE_VERSION=true
-install -d -m 0755 %{buildroot}%{_datadir}/gjp/%{name}/
-cp -a * %{buildroot}%{_datadir}/gjp/%{name}/
-%fdupes -s %{buildroot}%{_datadir}/gjp/%{name}/
+install -d -m 0755 %{buildroot}%{_datadir}/tetra/%{name}/
+cp -a * %{buildroot}%{_datadir}/tetra/%{name}/
+%fdupes -s %{buildroot}%{_datadir}/tetra/%{name}/
 
 %files
 %defattr(-,root,root)
-%{_datadir}/gjp/
+%{_datadir}/tetra/
 
 %changelog

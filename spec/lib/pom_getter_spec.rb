@@ -2,8 +2,8 @@
 
 require "spec_helper"
 
-describe Gjp::PomGetter do
-  let(:pom_getter) { Gjp::PomGetter.new }
+describe Tetra::PomGetter do
+  let(:pom_getter) { Tetra::PomGetter.new }
 
   describe "#get_pom" do
     it "gets the pom from a jar" do

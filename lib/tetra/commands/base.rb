@@ -1,11 +1,11 @@
 # encoding: UTF-8
 
-module Gjp
+module Tetra
   # implements common options and utility methods
   class BaseCommand < Clamp::Command
     include Logging
 
-    # Options available to all gjp commands
+    # Options available to all tetra commands
     option %w(-v --verbose), :flag, "verbose output"
     option ["--very-verbose"], :flag, "very verbose output"
     option ["--very-very-verbose"], :flag, "very very verbose output"
@@ -42,9 +42,9 @@ module Gjp
         yield
       else
         if state == true
-          puts "Please start a dry-run first, use \"gjp dry-run\""
+          puts "Please start a dry-run first, use \"tetra dry-run\""
         else
-          puts "Please finish or abort this dry-run first, use \"gjp finish\" or \"gjp finish --abort\""
+          puts "Please finish or abort this dry-run first, use \"tetra finish\" or \"tetra finish --abort\""
         end
       end
     end
@@ -77,11 +77,11 @@ module Gjp
     rescue Errno::EEXIST => e
       $stderr.puts e
     rescue NoProjectDirectoryError => e
-      $stderr.puts "#{e.directory} is not a gjp project directory, see gjp init"
+      $stderr.puts "#{e.directory} is not a tetra project directory, see tetra init"
     rescue NoPackageDirectoryError => e
-      $stderr.puts "#{e.directory} is not a gjp package directory, see README"
+      $stderr.puts "#{e.directory} is not a tetra package directory, see README"
     rescue GitAlreadyInitedError
-      $stderr.puts "This directory is already a gjp project"
+      $stderr.puts "This directory is already a tetra project"
     rescue ExecutableNotFoundError => e
       $stderr.puts "Executable #{e.executable} not found in kit/ or any of its subdirectories"
     end

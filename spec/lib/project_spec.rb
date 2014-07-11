@@ -2,13 +2,13 @@
 
 require "spec_helper"
 
-describe Gjp::Project do
+describe Tetra::Project do
   before(:each) do
     @project_path = File.join("spec", "data", "test-project")
     Dir.mkdir(@project_path)
 
-    Gjp::Project.init(@project_path)
-    @project = Gjp::Project.new(@project_path)
+    Tetra::Project.init(@project_path)
+    @project = Tetra::Project.new(@project_path)
   end
 
   after(:each) do
@@ -16,54 +16,54 @@ describe Gjp::Project do
   end
 
   describe "#project?"  do
-    it "checks if a directory is a gjp project or not" do
-      Gjp::Project.project?(@project_path).should be_true
-      Gjp::Project.project?(File.join(@project_path, "..")).should be_false
+    it "checks if a directory is a tetra project or not" do
+      Tetra::Project.project?(@project_path).should be_true
+      Tetra::Project.project?(File.join(@project_path, "..")).should be_false
     end
   end
 
   describe "#find_project_dir"  do
     it "recursively the parent project directory" do
       expanded_path = File.expand_path(@project_path)
-      Gjp::Project.find_project_dir(expanded_path).should eq expanded_path
-      Gjp::Project.find_project_dir(File.expand_path("src", @project_path)).should eq expanded_path
-      Gjp::Project.find_project_dir(File.expand_path("kit", @project_path)).should eq expanded_path
+      Tetra::Project.find_project_dir(expanded_path).should eq expanded_path
+      Tetra::Project.find_project_dir(File.expand_path("src", @project_path)).should eq expanded_path
+      Tetra::Project.find_project_dir(File.expand_path("kit", @project_path)).should eq expanded_path
 
       expect do
-        Gjp::Project.find_project_dir(File.expand_path("..", @project_path)).should raise_error
-      end.to raise_error(Gjp::NoProjectDirectoryError)
+        Tetra::Project.find_project_dir(File.expand_path("..", @project_path)).should raise_error
+      end.to raise_error(Tetra::NoProjectDirectoryError)
     end
   end
 
   describe ".get_package_name"  do
-    it "raises an error with a directory outside a gjp project" do
+    it "raises an error with a directory outside a tetra project" do
       expect do
         @project.get_package_name("/")
-      end.to raise_error(Gjp::NoPackageDirectoryError)
+      end.to raise_error(Tetra::NoPackageDirectoryError)
     end
 
-    it "raises an error with a gjp project directory" do
+    it "raises an error with a tetra project directory" do
       expect do
         @project.get_package_name(@project_path)
-      end.to raise_error(Gjp::NoPackageDirectoryError)
+      end.to raise_error(Tetra::NoPackageDirectoryError)
     end
 
-    it "raises an error with a gjp kit directory" do
+    it "raises an error with a tetra kit directory" do
       expect do
         @project.get_package_name(File.join(@project_path, "kit"))
-      end.to raise_error(Gjp::NoPackageDirectoryError)
+      end.to raise_error(Tetra::NoPackageDirectoryError)
     end
 
-    it "raises an error with a gjp src directory" do
+    it "raises an error with a tetra src directory" do
       expect do
         @project.get_package_name(File.join(@project_path, "src"))
-      end.to raise_error(Gjp::NoPackageDirectoryError)
+      end.to raise_error(Tetra::NoPackageDirectoryError)
     end
 
     it "raises an error with a nonexisting package directory" do
       expect do
         @project.get_package_name(File.join(@project_path, "src", "test_package"))
-      end.to raise_error(Gjp::NoPackageDirectoryError)
+      end.to raise_error(Tetra::NoPackageDirectoryError)
     end
 
     it "returns the package on an existing package directory" do
@@ -201,7 +201,7 @@ describe Gjp::Project do
         @project.dry_running?.should be_true
         `git rev-list --all`.split("\n").length.should eq 2
         `git diff-tree --no-commit-id --name-only -r HEAD`.split("\n").should include("src/test")
-        `git cat-file tag gjp_dry_run_started_1 | tail -1`.should include("src")
+        `git cat-file tag tetra_dry_run_started_1 | tail -1`.should include("src")
       end
     end
   end

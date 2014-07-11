@@ -2,13 +2,13 @@
 
 require "spec_helper"
 
-describe Gjp::MavenRunner do
-  it_behaves_like Gjp::KitRunner
-  include Gjp::Mockers
+describe Tetra::MavenRunner do
+  it_behaves_like Tetra::KitRunner
+  include Tetra::Mockers
 
   before(:each) do
     create_mock_project
-    @kit_runner = Gjp::MavenRunner.new(@project)
+    @kit_runner = Tetra::MavenRunner.new(@project)
   end
 
   after(:each) do
@@ -25,7 +25,7 @@ describe Gjp::MavenRunner do
       end
     end
     it "doesn't return commandline options if Maven is not available" do
-      expect { @kit_runner.get_maven_commandline(".", []) }.to raise_error(Gjp::ExecutableNotFoundError)
+      expect { @kit_runner.get_maven_commandline(".", []) }.to raise_error(Tetra::ExecutableNotFoundError)
     end
   end
 
@@ -39,7 +39,7 @@ describe Gjp::MavenRunner do
     end
     it "doesn't run Maven if it is not available" do
       @project.from_directory do
-        expect { @kit_runner.mvn([]) }.to raise_error(Gjp::ExecutableNotFoundError)
+        expect { @kit_runner.mvn([]) }.to raise_error(Tetra::ExecutableNotFoundError)
       end
     end
   end

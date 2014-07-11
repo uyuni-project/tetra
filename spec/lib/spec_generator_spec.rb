@@ -2,13 +2,13 @@
 
 require "spec_helper"
 
-describe Gjp::SpecGenerator do
+describe Tetra::SpecGenerator do
   before(:each) do
     @project_path = File.join("spec", "data", "test-project")
     Dir.mkdir(@project_path)
 
-    Gjp::Project.init(@project_path)
-    @project = Gjp::Project.new(@project_path)
+    Tetra::Project.init(@project_path)
+    @project = Tetra::Project.new(@project_path)
 
     @project.dry_run
     Dir.chdir(@project_path) do
@@ -17,7 +17,7 @@ describe Gjp::SpecGenerator do
     end
     @project.finish(false)
 
-    @spec_generator = Gjp::SpecGenerator.new(@project)
+    @spec_generator = Tetra::SpecGenerator.new(@project)
   end
 
   after(:each) do

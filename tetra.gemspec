@@ -1,18 +1,18 @@
 # encoding: UTF-8
 $LOAD_PATH.push File.expand_path("../lib", __FILE__)
-require "gjp/version"
+require "tetra/version"
 
 Gem::Specification.new do |s|
-  s.name = "gjp"
-  s.version = Gjp::VERSION
+  s.name = "tetra"
+  s.version = Tetra::VERSION
   s.authors = ["Silvio Moioli"]
   s.email = ["smoioli@suse.de"]
-  s.homepage = "https://github.com/SilvioMoioli/gjp"
+  s.homepage = "https://github.com/SilvioMoioli/tetra"
   s.summary = "Green Java Packager's Tools"
   s.description = "A suite of tools to ease Java packaging in SUSE systems"
   s.license = "MIT"
 
-  s.rubyforge_project = "gjp"
+  s.rubyforge_project = "tetra"
 
   s.files = `git ls-files`.split("\n")
   s.test_files = `git ls-files -- {test,spec,features}/*`.split("\n")

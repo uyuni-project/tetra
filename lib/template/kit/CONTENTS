@@ -1,4 +1,4 @@
-This directory contains all binary files needed to build a gjp project's
+This directory contains all binary files needed to build a tetra project's
 packages.
 
 These files should only be used during build and should not be installed

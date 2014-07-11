@@ -1,14 +1,14 @@
 # encoding: UTF-8
 
-module Gjp
-  # gjp init
-  class InitCommand < Gjp::BaseCommand
+module Tetra
+  # tetra init
+  class InitCommand < Tetra::BaseCommand
     def execute
       checking_exceptions do
-        Gjp::Project.init(".")
+        Tetra::Project.init(".")
         puts "Project inited."
         puts "Add sources to src/<package name>, binary dependencies to kit/."
-        puts "When you are ready to test a build, use \"gjp dry-run\"."
+        puts "When you are ready to test a build, use \"tetra dry-run\"."
       end
     end
   end

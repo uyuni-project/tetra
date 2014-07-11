@@ -2,8 +2,8 @@
 
 require "spec_helper"
 
-describe Gjp::TemplateManager do
-  let(:template_manager) { Gjp::TemplateManager.new }
+describe Tetra::TemplateManager do
+  let(:template_manager) { Tetra::TemplateManager.new }
 
   describe "#template_path" do
     it "returns the pathname where all templates are stored" do

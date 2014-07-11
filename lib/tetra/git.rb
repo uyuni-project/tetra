@@ -1,8 +1,8 @@
 # encoding: UTF-8
 
-module Gjp
+module Tetra
   # facade to git, currently implemented with calls to the git command
-  # prefixes all tags with "gjp_"
+  # prefixes all tags with "tetra_"
   class Git
     include Logging
 
@@ -33,10 +33,10 @@ module Gjp
     # between specified tags, in a certain directory
     def changed_files_between(start_tag, end_tag, directory)
       Dir.chdir(@directory) do
-        prefixed_start_tag = "gjp_#{start_tag}"
+        prefixed_start_tag = "tetra_#{start_tag}"
         prefixed_end_tag = (
           if end_tag
-            "gjp_#{end_tag}"
+            "tetra_#{end_tag}"
           else
             "HEAD"
           end
@@ -58,7 +58,7 @@ module Gjp
         Find.find(".") do |file|
           next unless file =~ /\.gitignore$/
 
-          FileUtils.mv(file, "#{file}_disabled_by_gjp")
+          FileUtils.mv(file, "#{file}_disabled_by_tetra")
         end
 
         `git rm -r --cached --ignore-unmatch .`
@@ -67,9 +67,9 @@ module Gjp
 
         unless tag.nil?
           if !tag_message.nil?
-            `git tag gjp_#{tag} -m "#{tag_message}"`
+            `git tag tetra_#{tag} -m "#{tag_message}"`
           else
-            `git tag gjp_#{tag}`
+            `git tag tetra_#{tag}`
           end
         end
       end
@@ -79,7 +79,7 @@ module Gjp
     def get_tag_maximum_suffix(prefix)
       Dir.chdir(@directory) do
         `git tag`.split.map do |tag|
-          if tag =~ /^gjp_#{prefix}_([0-9]+)$/
+          if tag =~ /^tetra_#{prefix}_([0-9]+)$/
             Regexp.last_match[1].to_i
           else
             0
@@ -92,10 +92,10 @@ module Gjp
     def revert_whole_directory(path, tag)
       Dir.chdir(@directory) do
         # reverts added and modified files, both in index and working tree
-        `git checkout -f gjp_#{tag} -- #{path}`
+        `git checkout -f tetra_#{tag} -- #{path}`
 
         # compute the list of deleted files
-        files_in_tag = `git ls-tree --name-only -r gjp_#{tag} -- #{path}`.split("\n")
+        files_in_tag = `git ls-tree --name-only -r tetra_#{tag} -- #{path}`.split("\n")
         files_in_head = `git ls-tree --name-only -r HEAD -- #{path}`.split("\n")
         files_added_after_head = `git ls-files -o -- #{path}`.split("\n")
         files_to_delete = files_in_head - files_in_tag + files_added_after_head
@@ -111,8 +111,8 @@ module Gjp
     # returns the conflict count
     def merge_with_tag(path, new_path, tag)
       Dir.chdir(@directory) do
-        log.debug "calling git show gjp_#{tag}:#{path} > #{path}.old_version, output follows"
-        `git show gjp_#{tag}:#{path} > #{path}.old_version`
+        log.debug "calling git show tetra_#{tag}:#{path} > #{path}.old_version, output follows"
+        `git show tetra_#{tag}:#{path} > #{path}.old_version`
         log.debug "calling git merge-file #{path} #{path}.old_version #{new_path}, output follows"
         `git merge-file #{path} #{path}.old_version #{new_path} \
           -L "newly generated" -L "previously generated" -L "user edited"`
@@ -125,13 +125,13 @@ module Gjp
     # deletes a tag
     def delete_tag(tag)
       Dir.chdir(@directory) do
-        `git tag -d gjp_#{tag}`
+        `git tag -d tetra_#{tag}`
       end
     end
 
     # returns the tag message
     def get_message(tag)
-      `git cat-file tag gjp_#{tag}`.split.last
+      `git cat-file tag tetra_#{tag}`.split.last
     end
   end
 

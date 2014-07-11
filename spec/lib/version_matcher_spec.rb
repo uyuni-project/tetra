@@ -2,8 +2,8 @@
 
 require "spec_helper"
 
-describe Gjp::VersionMatcher do
-  let(:version_matcher) { Gjp::VersionMatcher.new }
+describe Tetra::VersionMatcher do
+  let(:version_matcher) { Tetra::VersionMatcher.new }
 
   describe "#split_version" do
     it "splits full names into names and version numbers" do

@@ -1,7 +1,7 @@
 # encoding: UTF-8
 
-module Gjp
-  # encapsulates a Gjp project directory
+module Tetra
+  # encapsulates a Tetra project directory
   class Project
     include Logging
 
@@ -9,8 +9,8 @@ module Gjp
     attr_accessor :git
 
     def initialize(path)
-      @full_path = Gjp::Project.find_project_dir(File.expand_path(path))
-      @git = Gjp::Git.new(@full_path)
+      @full_path = Tetra::Project.find_project_dir(File.expand_path(path))
+      @git = Tetra::Git.new(@full_path)
     end
 
     def name
@@ -33,7 +33,7 @@ module Gjp
       result
     end
 
-    # returns true if the specified directory is a valid gjp project
+    # returns true if the specified directory is a valid tetra project
     def self.project?(dir)
       File.directory?(File.join(dir, "src")) &&
       File.directory?(File.join(dir, "kit")) &&
@@ -59,7 +59,7 @@ module Gjp
     # inits a new project directory structure
     def self.init(dir)
       Dir.chdir(dir) do
-        Gjp::Git.new(".").init
+        Tetra::Git.new(".").init
 
         FileUtils.mkdir_p "src"
         FileUtils.mkdir_p "kit"
@@ -67,7 +67,7 @@ module Gjp
         # populate the project with templates and take a snapshot
         project = Project.new(".")
 
-        template_manager = Gjp::TemplateManager.new
+        template_manager = Tetra::TemplateManager.new
         template_manager.copy "output", "."
         template_manager.copy "kit", "."
         template_manager.copy "src", "."
@@ -138,8 +138,8 @@ module Gjp
         previous_tag = latest_tag(tag_prefix)
 
         if already_existing
-          log.debug "moving #{path} to #{path}.gjp_user_edited"
-          File.rename path, "#{path}.gjp_user_edited"
+          log.debug "moving #{path} to #{path}.tetra_user_edited"
+          File.rename path, "#{path}.tetra_user_edited"
         end
 
         File.open(path, "w") { |io| io.write(new_content) }
@@ -154,8 +154,8 @@ module Gjp
           end
 
           # 3-way merge
-          conflict_count = @git.merge_with_tag("#{path}", "#{path}.gjp_user_edited", previous_tag)
-          File.delete "#{path}.gjp_user_edited"
+          conflict_count = @git.merge_with_tag("#{path}", "#{path}.tetra_user_edited", previous_tag)
+          File.delete "#{path}.tetra_user_edited"
           return conflict_count
         end
         return 0
@@ -225,7 +225,7 @@ module Gjp
     end
   end
 
-  # current directory is not a gjp project
+  # current directory is not a tetra project
   class NoProjectDirectoryError < StandardError
     attr_reader :directory
 
@@ -234,7 +234,7 @@ module Gjp
     end
   end
 
-  # current directory is not a gjp package directory
+  # current directory is not a tetra package directory
   class NoPackageDirectoryError < StandardError
     attr_reader :directory
 

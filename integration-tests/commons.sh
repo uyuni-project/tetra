@@ -7,7 +7,7 @@ set -e
 rm -Rf galaxy
 mkdir galaxy
 cd galaxy
-gjp init
+tetra init
 
 cd src
 mkdir commons-collections
@@ -22,12 +22,12 @@ unzip apache-maven-*.zip
 rm apache-maven-*.zip
 cd ..
 
-gjp dry-run --very-very-verbose
+tetra dry-run --very-very-verbose
 cd src/commons-collections/commons-collections-3.2.1-src/
-gjp mvn package -DskipTests
-gjp finish
+tetra mvn package -DskipTests
+tetra finish
 
-gjp generate-all
+tetra generate-all
 cd ../../..
 
 cd src
@@ -37,16 +37,16 @@ wget http://archive.apache.org/dist/commons/fileupload/source/commons-fileupload
 unzip commons-fileupload-1.3-src.zip
 rm commons-fileupload-1.3-src.zip
 
-gjp dry-run
+tetra dry-run
 cd commons-fileupload-1.3-src/
-gjp mvn package -DskipTests
-gjp finish
+tetra mvn package -DskipTests
+tetra finish
 
-gjp generate-kit-archive
-gjp generate-kit-spec
-gjp generate-package-script
-gjp generate-package-archive
-gjp generate-package-spec
+tetra generate-kit-archive
+tetra generate-kit-spec
+tetra generate-package-script
+tetra generate-package-archive
+tetra generate-package-spec
 cd ../../..
 
 

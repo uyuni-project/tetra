@@ -2,8 +2,8 @@
 
 require "spec_helper"
 
-describe Gjp::MavenWebsite do
-  let(:site) { Gjp::MavenWebsite.new }
+describe Tetra::MavenWebsite do
+  let(:site) { Tetra::MavenWebsite.new }
 
   describe "#search_by_sha1" do
     it "uses search.maven.org to look for poms by jar SHA1" do

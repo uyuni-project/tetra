@@ -2,8 +2,8 @@
 
 require "spec_helper"
 
-describe Gjp::Pom do
-  let(:pom) { Gjp::Pom.new(File.join("spec", "data", "commons-logging", "pom.xml")) }
+describe Tetra::Pom do
+  let(:pom) { Tetra::Pom.new(File.join("spec", "data", "commons-logging", "pom.xml")) }
 
   describe "#group_id" do
     it "reads the group id" do

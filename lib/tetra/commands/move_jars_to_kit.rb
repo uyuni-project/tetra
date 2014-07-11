@@ -1,11 +1,11 @@
 # encoding: UTF-8
 
-module Gjp
-  # gjp move-jars-to-kit
-  class MoveJarsToKitCommand < Gjp::BaseCommand
+module Tetra
+  # tetra move-jars-to-kit
+  class MoveJarsToKitCommand < Tetra::BaseCommand
     def execute
       checking_exceptions do
-        project = Gjp::Project.new(".")
+        project = Tetra::Project.new(".")
 
         ensure_dry_running(false, project) do
           project.purge_jars.each do |original, final|

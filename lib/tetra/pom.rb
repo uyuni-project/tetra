@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-module Gjp
+module Tetra
   # encapsulates a pom.xml file
   class Pom
     def initialize(filename)

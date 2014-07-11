@@ -1,4 +1,4 @@
 source "http://rubygems.org"
 
-# See gjp.gemspec
+# See tetra.gemspec
 gemspec

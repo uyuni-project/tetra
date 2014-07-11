@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-module Gjp
+module Tetra
   # generates file archives that accompany spec files
   class Archiver
     include Logging

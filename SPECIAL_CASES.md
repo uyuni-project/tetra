@@ -2,17 +2,17 @@
 
 ## Failing builds
 
-If your build fails for whatever reason, abort it with `gjp finish --abort`. `gjp` will restore all project files as they were before build.
+If your build fails for whatever reason, abort it with `tetra finish --abort`. `tetra` will restore all project files as they were before build.
 
 ## Manual changes to generated files
 
-You can do any manual changes to spec and build.sh files and regenerate them later, `gjp` will reconcile changes with a [three-way merge](http://en.wikipedia.org/wiki/Three-way_merge#Three-way_merge) and alert about any conflicts. You can generate single files with the following commands:
+You can do any manual changes to spec and build.sh files and regenerate them later, `tetra` will reconcile changes with a [three-way merge](http://en.wikipedia.org/wiki/Three-way_merge#Three-way_merge) and alert about any conflicts. You can generate single files with the following commands:
 
-* `gjp generate-kit-archive`: (re)generates the kit tarball;
-* `gjp generate-kit-spec`: (re)generates the kit spec;
-* `gjp generate-package-script`: (re)generates the `build.sh` file from the latest bash history (assumes `gjp dry-run` and `gjp finish`have been used). Assumes your current working directory is in a package folder (that is, a subdirectory of `src/<package name>/`);
-* `gjp generate-package-archive`: (re)generates a package tarball;
-* `gjp generate-package-spec`: (re)generates a package spec;
+* `tetra generate-kit-archive`: (re)generates the kit tarball;
+* `tetra generate-kit-spec`: (re)generates the kit spec;
+* `tetra generate-package-script`: (re)generates the `build.sh` file from the latest bash history (assumes `tetra dry-run` and `tetra finish`have been used). Assumes your current working directory is in a package folder (that is, a subdirectory of `src/<package name>/`);
+* `tetra generate-package-archive`: (re)generates a package tarball;
+* `tetra generate-package-spec`: (re)generates a package spec;
 
 Note that, by default, `generate-kit-archive` will generate additional "diff" tar.xz files instead of rewriting the whole archive - this will result in faster uploads if you use OBS (see below). You can use the `--whole` option to regenerate a single complete archive.
 
@@ -22,11 +22,11 @@ Your kit is basically a binary blob. If its sources are needed for proper packag
 
 If you use Maven, most (~90%) sources can be automatically downloaded:
 
-    gjp download-maven-source-jars
+    tetra download-maven-source-jars
 
-The remaining (mostly very outdated) jars will be listed by `gjp` when the download ends. You need to manually find corresponding sources for them, you can use:
+The remaining (mostly very outdated) jars will be listed by `tetra` when the download ends. You need to manually find corresponding sources for them, you can use:
 
-    gjp get-source /path/to/<jar name>.pom
+    tetra get-source /path/to/<jar name>.pom
 
 to get pointers to relevant sites if available in the pom itself.
 
@@ -34,23 +34,23 @@ A list of commonly used jars can be found [below](#frequently-used-sources).
 
 You can also use:
 
-    gjp list-kit-missing-sources
+    tetra list-kit-missing-sources
 
 To get a list of jars that have one or more `.class` file which does not have a corresponding `.java` file in `kit/` (or zip files in `kit/`).
 
 ## Ant builds
 
-`gjp` is currently optimized for Maven as it is the most common build tool, but it can work with any other. In particular, support for Ant has already been implemented and `gjp ant` works like `gjp mvn`.
+`tetra` is currently optimized for Maven as it is the most common build tool, but it can work with any other. In particular, support for Ant has already been implemented and `tetra ant` works like `tetra mvn`.
 
 Sometimes you will have jar files distributed along with the source archive that will end up in `src/`: you don't want that! Run
 
-    gjp move-jars-to-kit
+    tetra move-jars-to-kit
 
 to have them moved to `kit/jars`. The command will generate a symlink back to the original, so builds will work as expected.
 
-When generating spec files, be sure to have a `pom.xml` in your package directory even if you are not using Maven: `gjp` will automatically take advantage of information from it to compile many fields.
+When generating spec files, be sure to have a `pom.xml` in your package directory even if you are not using Maven: `tetra` will automatically take advantage of information from it to compile many fields.
 
-You can also ask `gjp` to find one via `gjp get-pom <filename>.jar` (be sure to have Maven in your kit).
+You can also ask `tetra` to find one via `tetra get-pom <filename>.jar` (be sure to have Maven in your kit).
 
 ## Other build tools
 
@@ -58,7 +58,7 @@ Other build tools are currently unsupported but will be added in the future. You
 
 ## [OBS](build.opensuse.org) integration
 
-If you want to submit packages to OBS, you can do so by replacing the `output/` directory in your `gjp` project with a symlink to your OBS project directory.
+If you want to submit packages to OBS, you can do so by replacing the `output/` directory in your `tetra` project with a symlink to your OBS project directory.
 
 Packages will rebuild cleanly in OBS because no Internet access is needed - all files were already downloaded during dry-run and are included in the kit.
 
@@ -67,8 +67,8 @@ Note that the kit package is needed at build time only by OBS, no end user shoul
 
 ## Gotchas
 
-* `gjp` internally uses `git` to keep track of files, any gjp project is actually also a `git` repo. Feel free to navigate it, you can commit, push and pull as long as the `gjp` tags are preserved. You can also delete commits and tags, effectively rewinding gjp history (just make sure to delete all tags pointing to a certain commit when you discard it);
-* some Maven plugins like the Eclipse Project ones ([Tycho](https://www.eclipse.org/tycho/)) will save data in `/tmp` downloaded from the Internet and will produce errors if this data is not there during offline builds. One way to work around that is to force Java to use a kit subdirectory as `/tmp`. Add the following option to `gjp mvn` during your build:
+* `tetra` internally uses `git` to keep track of files, any tetra project is actually also a `git` repo. Feel free to navigate it, you can commit, push and pull as long as the `tetra` tags are preserved. You can also delete commits and tags, effectively rewinding tetra history (just make sure to delete all tags pointing to a certain commit when you discard it);
+* some Maven plugins like the Eclipse Project ones ([Tycho](https://www.eclipse.org/tycho/)) will save data in `/tmp` downloaded from the Internet and will produce errors if this data is not there during offline builds. One way to work around that is to force Java to use a kit subdirectory as `/tmp`. Add the following option to `tetra mvn` during your build:
 
     -DskipTests=true -Djava.io.tmpdir=<full path to project>/kit/tmp
 

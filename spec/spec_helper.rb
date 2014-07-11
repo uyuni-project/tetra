@@ -1,18 +1,18 @@
 # encoding: UTF-8
 
-require "gjp"
+require "tetra"
 Dir["./spec/support/**/*.rb"].sort.each { |f| require f}
 
-module Gjp
+module Tetra
   # custom mock methods
   module Mockers
-    # creates a minimal gjp project
+    # creates a minimal tetra project
     def create_mock_project
       @project_path = File.join("spec", "data", "test-project")
       Dir.mkdir(@project_path)
 
-      Gjp::Project.init(@project_path)
-      @project = Gjp::Project.new(@project_path)
+      Tetra::Project.init(@project_path)
+      @project = Tetra::Project.new(@project_path)
     end
 
     # deletes the mock project and all contents

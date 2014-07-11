@@ -1,14 +1,14 @@
 # encoding: UTF-8
 
-module Gjp
+module Tetra
   # generates build scripts from bash_history
   class ScriptGenerator
     include Logging
 
     def initialize(project, history_path)
       @project = project
-      @ant_runner = Gjp::AntRunner.new(project)
-      @maven_runner = Gjp::MavenRunner.new(project)
+      @ant_runner = Tetra::AntRunner.new(project)
+      @maven_runner = Tetra::MavenRunner.new(project)
       @history_path = history_path
     end
 
@@ -18,9 +18,9 @@ module Gjp
         relevant_lines =
           history_lines
             .reverse
-            .take_while { |e| e.match(/gjp +dry-run/).nil? }
+            .take_while { |e| e.match(/tetra +dry-run/).nil? }
             .reverse
-            .take_while { |e| e.match(/gjp +finish/).nil? }
+            .take_while { |e| e.match(/tetra +finish/).nil? }
             .select { |e| e.match(/^#/).nil? }
 
         script_lines = [
@@ -29,10 +29,10 @@ module Gjp
           "cd #{@project.latest_dry_run_directory}"
         ] +
         relevant_lines.map do |line|
-          if line =~ /gjp +mvn/
-            line.gsub(/gjp +mvn/, "#{@maven_runner.get_maven_commandline("$PROJECT_PREFIX", ["-o"])}")
-          elsif line =~ /gjp +ant/
-            line.gsub(/gjp +ant/, "#{@ant_runner.get_ant_commandline("$PROJECT_PREFIX")}")
+          if line =~ /tetra +mvn/
+            line.gsub(/tetra +mvn/, "#{@maven_runner.get_maven_commandline("$PROJECT_PREFIX", ["-o"])}")
+          elsif line =~ /tetra +ant/
+            line.gsub(/tetra +ant/, "#{@ant_runner.get_ant_commandline("$PROJECT_PREFIX")}")
           else
             line
           end

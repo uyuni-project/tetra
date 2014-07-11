@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-module Gjp
+module Tetra
   # checks kits for errors
   class KitChecker
     include Logging
