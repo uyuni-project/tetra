@@ -4,7 +4,7 @@
 
 Packaging of Java projects is sometimes hard because build tools like Maven partially overlap with distro tools like RPM in functionality.
 
-We are trying to come up with **a tool that drastically simplifies packaging**.
+This tool's goal is to drastically simplifies packaging.
 
 ## Installation
 
