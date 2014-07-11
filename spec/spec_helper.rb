@@ -1,7 +1,7 @@
 # encoding: UTF-8
 
 require "tetra"
-Dir["./spec/support/**/*.rb"].sort.each { |f| require f}
+Dir["./spec/support/**/*.rb"].sort.each { |f| require f }
 
 module Tetra
   # custom mock methods

@@ -21,7 +21,8 @@ describe Tetra::MavenRunner do
 
       @project.from_directory do
         commandline = @kit_runner.get_maven_commandline(".", ["--otheroption"])
-        expect(commandline).to eq "./#{executable_path} -Dmaven.repo.local=./kit/m2 -s./kit/m2/settings.xml --otheroption"
+        expected_commandline = "./#{executable_path} -Dmaven.repo.local=./kit/m2 -s./kit/m2/settings.xml --otheroption"
+        expect(commandline).to eq expected_commandline
       end
     end
     it "doesn't return commandline options if Maven is not available" do
