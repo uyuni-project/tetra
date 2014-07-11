@@ -20,7 +20,7 @@ describe Tetra::AntRunner do
       executable_path = create_mock_executable("ant")
       @project.from_directory do
         commandline = @kit_runner.get_ant_commandline(".")
-        commandline.should eq "./#{executable_path}"
+        expect(commandline).to eq "./#{executable_path}"
       end
     end
     it "doesn't return commandline options if Ant is not available" do
@@ -33,7 +33,7 @@ describe Tetra::AntRunner do
       create_mock_executable("ant")
       @project.from_directory do
         @kit_runner.ant(["extra-option"])
-        File.read("test_out").strip.should match(/extra-option$/)
+        expect(File.read("test_out").strip).to match(/extra-option$/)
       end
     end
     it "doesn't run Ant if it is not available" do

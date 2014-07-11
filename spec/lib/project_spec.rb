@@ -17,20 +17,20 @@ describe Tetra::Project do
 
   describe "#project?"  do
     it "checks if a directory is a tetra project or not" do
-      Tetra::Project.project?(@project_path).should be_true
-      Tetra::Project.project?(File.join(@project_path, "..")).should be_false
+      expect(Tetra::Project.project?(@project_path)).to be_truthy
+      expect(Tetra::Project.project?(File.join(@project_path, ".."))).to be_falsey
     end
   end
 
   describe "#find_project_dir"  do
     it "recursively the parent project directory" do
       expanded_path = File.expand_path(@project_path)
-      Tetra::Project.find_project_dir(expanded_path).should eq expanded_path
-      Tetra::Project.find_project_dir(File.expand_path("src", @project_path)).should eq expanded_path
-      Tetra::Project.find_project_dir(File.expand_path("kit", @project_path)).should eq expanded_path
+      expect(Tetra::Project.find_project_dir(expanded_path)).to eq expanded_path
+      expect(Tetra::Project.find_project_dir(File.expand_path("src", @project_path))).to eq expanded_path
+      expect(Tetra::Project.find_project_dir(File.expand_path("kit", @project_path))).to eq expanded_path
 
       expect do
-        Tetra::Project.find_project_dir(File.expand_path("..", @project_path)).should raise_error
+        expect(Tetra::Project.find_project_dir(File.expand_path("..", @project_path))).to raise_error
       end.to raise_error(Tetra::NoProjectDirectoryError)
     end
   end
@@ -68,45 +68,45 @@ describe Tetra::Project do
 
     it "returns the package on an existing package directory" do
       FileUtils.mkdir_p(File.join(@project_path, "src", "test_package"))
-      @project.get_package_name(File.join(@project_path, "src", "test_package")).should eq "test_package"
+      expect(@project.get_package_name(File.join(@project_path, "src", "test_package"))).to eq "test_package"
     end
 
     it "returns the package on an existing package subdirectory" do
       FileUtils.mkdir_p(File.join(@project_path, "src", "test_package", "subdir1"))
-      @project.get_package_name(File.join(@project_path, "src", "test_package", "subdir1")).should eq "test_package"
+      expect(@project.get_package_name(File.join(@project_path, "src", "test_package", "subdir1"))).to eq "test_package"
     end
 
     it "returns the package on an existing package subsubdirectory" do
       FileUtils.mkdir_p(File.join(@project_path, "src", "test_package", "subdir1", "subdir2"))
-      @project.get_package_name(File.join(@project_path, "src", "test_package", "subdir1", "subdir2"))
-        .should eq "test_package"
+      expect(@project.get_package_name(File.join(@project_path, "src", "test_package", "subdir1", "subdir2")))
+        .to eq "test_package"
     end
   end
 
   describe "full_path" do
     it "returns the project's full path" do
-      @project.full_path.should eq File.expand_path(@project_path)
+      expect(@project.full_path).to eq File.expand_path(@project_path)
     end
   end
 
   describe "#init" do
     it "inits a new project" do
       kit_path = File.join(@project_path, "kit")
-      Dir.exist?(kit_path).should be_true
+      expect(Dir.exist?(kit_path)).to be_truthy
 
       src_path = File.join(@project_path, "src")
-      Dir.exist?(src_path).should be_true
+      expect(Dir.exist?(src_path)).to be_truthy
     end
   end
 
   describe "#dry_running?" do
     it "checks if a project is dry running" do
       @project.from_directory do
-        @project.dry_running?.should be_false
+        expect(@project.dry_running?).to be_falsey
         @project.dry_run
-        @project.dry_running?.should be_true
+        expect(@project.dry_running?).to be_truthy
         @project.finish(false)
-        @project.dry_running?.should be_false
+        expect(@project.dry_running?).to be_falsey
       end
     end
   end
@@ -118,8 +118,8 @@ describe Tetra::Project do
 
         @project.take_snapshot "test", :revertable
 
-        `git rev-list --all`.split("\n").length.should eq 2
-        @project.latest_tag(:revertable).should eq "revertable_1"
+        expect(`git rev-list --all`.split("\n").length).to eq 2
+        expect(@project.latest_tag(:revertable)).to eq "revertable_1"
       end
     end
   end
@@ -131,25 +131,25 @@ describe Tetra::Project do
         `echo A > src/abc/test`
       end
 
-      @project.finish(true).should be_false
-      @project.finish(false).should be_false
+      expect(@project.finish(true)).to be_falsey
+      expect(@project.finish(false)).to be_falsey
 
-      @project.dry_run.should be_true
+      expect(@project.dry_run).to be_truthy
 
       @project.from_directory do
         `echo B > src/abc/test`
         `touch src/abc/test2`
       end
 
-      @project.finish(false).should be_true
-      @project.dry_running?.should be_false
+      expect(@project.finish(false)).to be_truthy
+      expect(@project.dry_running?).to be_falsey
 
       @project.from_directory do
-        `git rev-list --all`.split("\n").length.should eq 4
-        File.read("src/abc/test").should eq "A\n"
+        expect(`git rev-list --all`.split("\n").length).to eq 4
+        expect(File.read("src/abc/test")).to eq "A\n"
 
-        `git diff-tree --no-commit-id --name-only -r HEAD~`.split("\n").should include("src/abc/test2")
-        File.exist?("src/abc/test2").should be_false
+        expect(`git diff-tree --no-commit-id --name-only -r HEAD~`.split("\n")).to include("src/abc/test2")
+        expect(File.exist?("src/abc/test2")).to be_falsey
       end
     end
     it "ends the current dry-run phase after a failed build" do
@@ -159,10 +159,10 @@ describe Tetra::Project do
         `echo A > kit/test`
       end
 
-      @project.finish(true).should be_false
-      @project.finish(false).should be_false
+      expect(@project.finish(true)).to be_falsey
+      expect(@project.finish(false)).to be_falsey
 
-      @project.dry_run.should be_true
+      expect(@project.dry_run).to be_truthy
 
       @project.from_directory do
         `echo B > src/abc/test`
@@ -171,37 +171,37 @@ describe Tetra::Project do
         `touch kit/test2`
       end
 
-      @project.finish(true).should be_true
-      @project.dry_running?.should be_false
+      expect(@project.finish(true)).to be_truthy
+      expect(@project.dry_running?).to be_falsey
 
       @project.from_directory do
-        `git rev-list --all`.split("\n").length.should eq 2
-        File.read("src/abc/test").should eq "A\n"
-        File.exist?("src/abc/test2").should be_false
+        expect(`git rev-list --all`.split("\n").length).to eq 2
+        expect(File.read("src/abc/test")).to eq "A\n"
+        expect(File.exist?("src/abc/test2")).to be_falsey
 
-        File.read("kit/test").should eq "A\n"
-        File.exist?("kit/test2").should be_false
+        expect(File.read("kit/test")).to eq "A\n"
+        expect(File.exist?("kit/test2")).to be_falsey
       end
     end
   end
 
   describe "#dry_run" do
     it "starts a dry running phase" do
-      @project.finish(false).should be_false
+      expect(@project.finish(false)).to be_falsey
 
       @project.from_directory do
         `touch src/test`
       end
 
       @project.from_directory("src") do
-        @project.dry_run.should be_true
+        expect(@project.dry_run).to be_truthy
       end
 
       @project.from_directory do
-        @project.dry_running?.should be_true
-        `git rev-list --all`.split("\n").length.should eq 2
-        `git diff-tree --no-commit-id --name-only -r HEAD`.split("\n").should include("src/test")
-        `git cat-file tag tetra_dry_run_started_1 | tail -1`.should include("src")
+        expect(@project.dry_running?).to be_truthy
+        expect(`git rev-list --all`.split("\n").length).to eq 2
+        expect(`git diff-tree --no-commit-id --name-only -r HEAD`.split("\n")).to include("src/test")
+        expect(`git cat-file tag tetra_dry_run_started_1 | tail -1`).to include("src")
       end
     end
   end
@@ -213,25 +213,25 @@ describe Tetra::Project do
         `echo A > src/abc/added_outside_dry_run`
       end
 
-      @project.dry_run.should be_true
+      expect(@project.dry_run).to be_truthy
       @project.from_directory do
         `echo A > src/abc/added_in_first_dry_run`
         `echo A > src/added_outside_directory`
       end
-      @project.finish(false).should be_true
+      expect(@project.finish(false)).to be_truthy
 
-      @project.dry_run.should be_true
+      expect(@project.dry_run).to be_truthy
       @project.from_directory do
         `echo A > src/abc/added_in_second_dry_run`
       end
-      @project.finish(false).should be_true
+      expect(@project.finish(false)).to be_truthy
 
       list = @project.get_produced_files("abc")
-      list.should include("added_in_first_dry_run")
-      list.should include("added_in_second_dry_run")
+      expect(list).to include("added_in_first_dry_run")
+      expect(list).to include("added_in_second_dry_run")
 
-      list.should_not include("added_outside_dry_run")
-      list.should_not include("added_outside_directory")
+      expect(list).not_to include("added_outside_dry_run")
+      expect(list).not_to include("added_outside_directory")
     end
   end
 
@@ -240,14 +240,14 @@ describe Tetra::Project do
       @project.from_directory do
         `echo "jarring" > src/test.jar`
       end
-      @project.finish(false).should be_false
+      expect(@project.finish(false)).to be_falsey
 
       @project.purge_jars
 
       @project.from_directory do
-        File.symlink?(File.join("src", "test.jar")).should be_true
-        File.readlink(File.join("src", "test.jar")).should eq "../kit/jars/test.jar"
-        File.readlines(File.join("kit", "jars", "test.jar")).should include("jarring\n")
+        expect(File.symlink?(File.join("src", "test.jar"))).to be_truthy
+        expect(File.readlink(File.join("src", "test.jar"))).to eq "../kit/jars/test.jar"
+        expect(File.readlines(File.join("kit", "jars", "test.jar"))).to include("jarring\n")
       end
     end
   end

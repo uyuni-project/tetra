@@ -39,8 +39,8 @@ describe Tetra::Git do
 
         files = `git ls-tree --name-only -r HEAD`.split("\n")
 
-        files.should include("file1")
-        files.should include(".gitignore_disabled_by_tetra")
+        expect(files).to include("file1")
+        expect(files).to include(".gitignore_disabled_by_tetra")
       end
     end
   end
@@ -62,8 +62,8 @@ describe Tetra::Git do
 
         files = @git.changed_files_since("test")
 
-        files.should_not include("file1")
-        files.should include("file2")
+        expect(files).not_to include("file1")
+        expect(files).to include("file2")
       end
     end
   end
@@ -95,10 +95,10 @@ describe Tetra::Git do
 
         files = @git.changed_files_between("test_start", "test_end", "subdir")
 
-        files.should_not include("file1")
-        files.should_not include("file2")
-        files.should include("subdir/file3")
-        files.should_not include("file4")
+        expect(files).not_to include("file1")
+        expect(files).not_to include("file2")
+        expect(files).to include("subdir/file3")
+        expect(files).not_to include("file4")
       end
     end
   end

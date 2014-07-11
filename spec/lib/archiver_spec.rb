@@ -23,7 +23,7 @@ describe Tetra::Archiver do
         File.open("test", "w") { |io| io.puts "test content" }
 
         archiver.archive_single(".", "test.tar.xz")
-        `tar -Jtf test.tar.xz`.split.should include("test")
+        expect(`tar -Jtf test.tar.xz`.split).to include("test")
       end
     end
   end
@@ -34,7 +34,7 @@ describe Tetra::Archiver do
         File.open("test", "w") { |io| io.puts "test content 1" }
         File.open("test2", "w") { |io| io.puts "test content 1" }
         archiver.archive_incremental(".", ".", "test", ".tar.xz", :archive_kit)
-        `tar -Jtf test.tar.xz`.split.should include("test")
+        expect(`tar -Jtf test.tar.xz`.split).to include("test")
 
         @project.take_snapshot("test archive snapshot 1", :archive_kit)
 
@@ -46,9 +46,9 @@ describe Tetra::Archiver do
         archiver.archive_incremental(".", ".", "test", ".tar.xz", :archive_kit)
         files = `tar -Jtf test_0001.tar.xz`.split
 
-        files.should include("test")
-        files.should include("test3")
-        files.should_not include("test2")
+        expect(files).to include("test")
+        expect(files).to include("test3")
+        expect(files).not_to include("test2")
       end
     end
   end
@@ -62,7 +62,7 @@ describe Tetra::Archiver do
 
       archiver.archive_kit(true)
       @project.from_directory do
-        `tar -Jtf output/test-project-kit/test-project-kit.tar.xz`.split.should include("kit_test")
+        expect(`tar -Jtf output/test-project-kit/test-project-kit.tar.xz`.split).to include("kit_test")
       end
     end
     it "archives a kit package files incrementally" do
@@ -73,7 +73,7 @@ describe Tetra::Archiver do
 
       archiver.archive_kit(false)
       @project.from_directory do
-        `tar -Jtf output/test-project-kit/test-project-kit.tar.xz`.split.should include("kit_test")
+        expect(`tar -Jtf output/test-project-kit/test-project-kit.tar.xz`.split).to include("kit_test")
       end
 
       @project.from_directory do
@@ -83,8 +83,8 @@ describe Tetra::Archiver do
       archiver.archive_kit(false)
       @project.from_directory do
         files = `tar -Jtf output/test-project-kit/test-project-kit_0001.tar.xz`.split
-        files.should include("kit_test2")
-        files.should_not include("kit_test")
+        expect(files).to include("kit_test2")
+        expect(files).not_to include("kit_test")
       end
     end
   end
@@ -99,7 +99,7 @@ describe Tetra::Archiver do
 
       archiver.archive_package "package-name"
       @project.from_directory do
-        `tar -Jtf output/package-name/package-name.tar.xz`.split.should include("src_test")
+        expect(`tar -Jtf output/package-name/package-name.tar.xz`.split).to include("src_test")
       end
     end
   end

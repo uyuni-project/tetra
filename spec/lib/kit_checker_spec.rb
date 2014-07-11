@@ -31,11 +31,11 @@ describe Tetra::KitChecker do
 
       all_files = @kit_checker.kit_file_paths
 
-      all_files.should include ["top_level", nil]
-      all_files.should_not include ["directory", nil]
-      all_files.should include ["directory/in_directory", nil]
-      all_files.should include ["zipped.zip", nil]
-      all_files.should include ["directory/in_directory", "zipped.zip"]
+      expect(all_files).to include ["top_level", nil]
+      expect(all_files).not_to include ["directory", nil]
+      expect(all_files).to include ["directory/in_directory", nil]
+      expect(all_files).to include ["zipped.zip", nil]
+      expect(all_files).to include ["directory/in_directory", "zipped.zip"]
     end
   end
 
@@ -50,10 +50,10 @@ describe Tetra::KitChecker do
 
       class_names = @kit_checker.source_class_names(all_files)
 
-      class_names.should include "path.to.ClassOne"
-      class_names.should include "path.to.ClassTwo"
-      class_names.should include "ClassThree"
-      class_names.should_not include "path.to.CompiledClass"
+      expect(class_names).to include "path.to.ClassOne"
+      expect(class_names).to include "path.to.ClassTwo"
+      expect(class_names).to include "ClassThree"
+      expect(class_names).not_to include "path.to.CompiledClass"
     end
   end
 
@@ -68,10 +68,10 @@ describe Tetra::KitChecker do
 
       classes = @kit_checker.compiled_classes(all_files)
 
-      classes[nil].should include "path.to.ClassOne"
-      classes["path/to/archive.jar"].should include "path.to.ClassTwo"
-      classes["another_archive.jar"].should include "ClassThree"
-      classes["yet_another.jar"].should be_nil
+      expect(classes[nil]).to include "path.to.ClassOne"
+      expect(classes["path/to/archive.jar"]).to include "path.to.ClassTwo"
+      expect(classes["another_archive.jar"]).to include "ClassThree"
+      expect(classes["yet_another.jar"]).to be_nil
     end
   end
 
@@ -107,13 +107,13 @@ describe Tetra::KitChecker do
       end
 
       unsourced = @kit_checker.unsourced_archives
-      unsourced.length.should eq 1
+      expect(unsourced.length).to eq 1
 
-      unsourced.first[:archive].should be_nil
-      unsourced.first[:class_names].should include "package1.UnsourcedClass"
-      unsourced.first[:class_names].should include "package2.SourcedClass"
-      unsourced.first[:class_names].should include "package3.SourcedSameArchive"
-      unsourced.first[:unsourced_class_names].should include "package1.UnsourcedClass"
+      expect(unsourced.first[:archive]).to be_nil
+      expect(unsourced.first[:class_names]).to include "package1.UnsourcedClass"
+      expect(unsourced.first[:class_names]).to include "package2.SourcedClass"
+      expect(unsourced.first[:class_names]).to include "package3.SourcedSameArchive"
+      expect(unsourced.first[:unsourced_class_names]).to include "package1.UnsourcedClass"
     end
   end
 end

@@ -21,7 +21,7 @@ describe Tetra::MavenRunner do
 
       @project.from_directory do
         commandline = @kit_runner.get_maven_commandline(".", ["--otheroption"])
-        commandline.should eq "./#{executable_path} -Dmaven.repo.local=./kit/m2 -s./kit/m2/settings.xml --otheroption"
+        expect(commandline).to eq "./#{executable_path} -Dmaven.repo.local=./kit/m2 -s./kit/m2/settings.xml --otheroption"
       end
     end
     it "doesn't return commandline options if Maven is not available" do
@@ -34,7 +34,7 @@ describe Tetra::MavenRunner do
       create_mock_executable("mvn")
       @project.from_directory do
         @kit_runner.mvn(["extra-option"])
-        File.read("test_out").strip.should match(/extra-option$/)
+        expect(File.read("test_out").strip).to match(/extra-option$/)
       end
     end
     it "doesn't run Maven if it is not available" do
@@ -50,7 +50,7 @@ describe Tetra::MavenRunner do
       @project.from_directory do
         @kit_runner.get_source_jar("test_group", "test_artifact_id", "test_version")
         expected = /dependency:get -Dartifact=test_group:test_artifact_id:test_version:jar:sources -Dtransitive=false$/
-        File.read("test_out").strip.should match expected
+        expect(File.read("test_out").strip).to match expected
       end
     end
   end
@@ -59,8 +59,8 @@ describe Tetra::MavenRunner do
     it "runs maven to get an effective pom" do
       create_mock_executable("mvn")
       @project.from_directory do
-        @kit_runner.get_effective_pom("test.pom").should eq "test.pom.effective"
-        File.read("test_out").strip.should match(/help:effective-pom -ftest.pom -Doutput=test.pom.effective$/)
+        expect(@kit_runner.get_effective_pom("test.pom")).to eq "test.pom.effective"
+        expect(File.read("test_out").strip).to match(/help:effective-pom -ftest.pom -Doutput=test.pom.effective$/)
       end
     end
   end

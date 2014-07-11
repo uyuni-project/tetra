@@ -26,17 +26,17 @@ describe Tetra::SpecGenerator do
 
   describe "#generate_kit_spec" do
     it "generates the first version" do
-      @spec_generator.generate_kit_spec.should be_true
+      expect(@spec_generator.generate_kit_spec).to be_truthy
 
       @project.from_directory do
         spec_lines = File.readlines(File.join("output", "test-project-kit", "test-project-kit.spec"))
-        spec_lines.should include("Name:           test-project-kit\n")
-        spec_lines.should include("Version:        1\n")
-        spec_lines.should include("Source0:        test-project-kit.tar.xz\n")
+        expect(spec_lines).to include("Name:           test-project-kit\n")
+        expect(spec_lines).to include("Version:        1\n")
+        expect(spec_lines).to include("Source0:        test-project-kit.tar.xz\n")
       end
     end
     it "generates a second version" do
-      @spec_generator.generate_kit_spec.should be_true
+      expect(@spec_generator.generate_kit_spec).to be_truthy
       @project.dry_run
       Dir.chdir(@project_path) do
         test_file = File.join("kit", "test")
@@ -48,18 +48,18 @@ describe Tetra::SpecGenerator do
       end
       @project.finish(false)
 
-      @spec_generator.generate_kit_spec.should be_true
+      expect(@spec_generator.generate_kit_spec).to be_truthy
 
       @project.from_directory do
         spec_lines = File.readlines(File.join("output", "test-project-kit", "test-project-kit.spec"))
-        spec_lines.should include("Name:           test-project-kit\n")
-        spec_lines.should include("Version:        2\n")
-        spec_lines.should include("Source0:        test-project-kit.tar.xz\n")
-        spec_lines.should include("nonconflicting line\n")
+        expect(spec_lines).to include("Name:           test-project-kit\n")
+        expect(spec_lines).to include("Version:        2\n")
+        expect(spec_lines).to include("Source0:        test-project-kit.tar.xz\n")
+        expect(spec_lines).to include("nonconflicting line\n")
       end
     end
     it "generates a conflicting version" do
-      @spec_generator.generate_kit_spec.should be_true
+      expect(@spec_generator.generate_kit_spec).to be_truthy
       @project.dry_run
       Dir.chdir(@project_path) do
         test_file = File.join("kit", "test")
@@ -76,17 +76,17 @@ describe Tetra::SpecGenerator do
       end
       @project.finish(false)
 
-      @spec_generator.generate_kit_spec.should be_true
+      expect(@spec_generator.generate_kit_spec).to be_truthy
 
       @project.from_directory do
         spec_lines = File.readlines(File.join("output", "test-project-kit", "test-project-kit.spec"))
-        spec_lines.should include("Name:           test-project-kit\n")
-        spec_lines.should include("Source0:        test-project-kit.tar.xz\n")
-        spec_lines.should include("<<<<<<< newly generated\n")
-        spec_lines.should include("Version:        2\n")
-        spec_lines.should include("=======\n")
-        spec_lines.should include("CONFLICTING!\n")
-        spec_lines.should include(">>>>>>> user edited\n")
+        expect(spec_lines).to include("Name:           test-project-kit\n")
+        expect(spec_lines).to include("Source0:        test-project-kit.tar.xz\n")
+        expect(spec_lines).to include("<<<<<<< newly generated\n")
+        expect(spec_lines).to include("Version:        2\n")
+        expect(spec_lines).to include("=======\n")
+        expect(spec_lines).to include("CONFLICTING!\n")
+        expect(spec_lines).to include(">>>>>>> user edited\n")
       end
     end
   end
@@ -117,13 +117,13 @@ describe Tetra::SpecGenerator do
 
       @project.from_directory do
         spec_lines = File.readlines(File.join("output", "test", "test.spec"))
-        spec_lines.should include("Name:           test\n")
-        spec_lines.should include("License:        The Apache Software License, Version 2.0\n")
-        spec_lines.should include("Summary:        Nailgun is a client, protocol, and server for running Java\n")
-        spec_lines.should include("Url:            http://martiansoftware.com/nailgun\n")
-        spec_lines.should include("BuildRequires:  #{@project.name}-kit >= 2\n")
-        spec_lines.should include("Provides:       mvn(com.martiansoftware:nailgun-all) == 0.9.1\n")
-        spec_lines.should include("cp -a out/test3.jar %{buildroot}%{_javadir}/test3.jar\n")
+        expect(spec_lines).to include("Name:           test\n")
+        expect(spec_lines).to include("License:        The Apache Software License, Version 2.0\n")
+        expect(spec_lines).to include("Summary:        Nailgun is a client, protocol, and server for running Java\n")
+        expect(spec_lines).to include("Url:            http://martiansoftware.com/nailgun\n")
+        expect(spec_lines).to include("BuildRequires:  #{@project.name}-kit >= 2\n")
+        expect(spec_lines).to include("Provides:       mvn(com.martiansoftware:nailgun-all) == 0.9.1\n")
+        expect(spec_lines).to include("cp -a out/test3.jar %{buildroot}%{_javadir}/test3.jar\n")
       end
     end
   end

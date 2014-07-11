@@ -9,7 +9,7 @@ describe Tetra::TemplateManager do
     it "returns the pathname where all templates are stored" do
       relative_path = template_manager.template_path
       expected_path = File.expand_path(File.join(File.dirname(__FILE__), "..", "..", "lib", "template"))
-      File.expand_path(relative_path).should eq expected_path
+      expect(File.expand_path(relative_path)).to eq expected_path
     end
   end
 
@@ -48,7 +48,7 @@ describe Tetra::TemplateManager do
       template_manager.generate("test.erb", WorldClass.new.public_binding, destination_path)
       File.unlink(template_path)
 
-      File.read(destination_path).should eq "Hello World!\n"
+      expect(File.read(destination_path)).to eq "Hello World!\n"
     end
   end
 end
