@@ -8,8 +8,8 @@ Gem::Specification.new do |s|
   s.authors = ["Silvio Moioli"]
   s.email = ["smoioli@suse.de"]
   s.homepage = "https://github.com/SilvioMoioli/tetra"
-  s.summary = "Green Java Packager's Tools"
-  s.description = "A suite of tools to ease Java packaging in SUSE systems"
+  s.summary = "A tool to package Java projects"
+  s.description = "Tetra simplifies the creation of spec files and archives to distribute Java projects in RPM format"
   s.license = "MIT"
 
   s.rubyforge_project = "tetra"
