@@ -23,5 +23,5 @@ _yardoc
 doc/
 
 # integration test files
-integration-tests/galaxy
+integration-tests/commons
 
