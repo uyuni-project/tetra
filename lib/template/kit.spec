@@ -22,9 +22,7 @@ License:        Apache-2.0
 Summary:        Build-time dependencies for tetra project <%= name %>
 Url:            https://github.com/SilvioMoioli/tetra
 Group:          Development/Libraries/Java
-<% archives.each_with_index do |archive, i| %>
-Source<%= i %>:        <%= archive %>
-<% end %>
+Source0:        <%= name %>-kit.tar.xz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 BuildArch:      noarch
 BuildRequires:  xz
@@ -40,13 +38,7 @@ not be used except for rebuilding those packages and it should never
 be installed on end users' systems.
 
 %prep
-<% (0..(archives.length-1)).each do |i| %>
-<% if i > 0 %>
-%setup -q -c -T -D -b <%= i %>
-<% else %>
-%setup -q -c -T -b <%= i %>
-<% end %>
-<% end %>
+%setup -q -c
 
 %build
 # nothing to do, tetra kits are precompiled by design

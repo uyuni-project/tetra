@@ -4,7 +4,6 @@ module Tetra
   # tetra generate-all
   class GenerateAllCommand < Tetra::BaseCommand
     option %w(-f --filter), "FILTER", "filter files to be installed by this package spec", default: "*.jar"
-    option %w(-w --whole), :flag, "recreate the whole archive (not incremental)"
     parameter "[DIRECTORY]", "path to a package directory (src/<package name>)", default: "."
     parameter "[POM]", "a package pom file path", default: "pom.xml"
 
@@ -14,7 +13,7 @@ module Tetra
         ensure_dry_running(false, project) do
           package_name = project.get_package_name(directory)
 
-          result_path = Tetra::Archiver.new(project).archive_kit(whole?)
+          result_path = Tetra::Archiver.new(project).archive_kit
           print_generation_result(project, result_path)
 
           result_path, conflict_count = Tetra::SpecGenerator.new(project).generate_kit_spec
