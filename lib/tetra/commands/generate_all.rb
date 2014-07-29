@@ -11,25 +11,23 @@ module Tetra
       checking_exceptions do
         project = Tetra::Project.new(".")
         ensure_dry_running(false, project) do
-          package_name = project.get_package_name(directory)
+          GenerateKitArchiveCommand.new(@invocation_path).execute
 
-          result_path = Tetra::Archiver.new(project).archive_kit
-          print_generation_result(project, result_path)
+          GenerateKitSpecCommand.new(@invocation_path).execute
 
-          result_path, conflict_count = Tetra::SpecGenerator.new(project).generate_kit_spec
-          print_generation_result(project, result_path, conflict_count)
+          script_command = GeneratePackageScriptCommand.new(@invocation_path)
+          script_command.directory = directory
+          script_command.execute
 
-          history_file = File.join(Dir.home, ".bash_history")
-          result_path, conflict_count = Tetra::ScriptGenerator.new(project, history_file)
-            .generate_build_script(package_name)
-          print_generation_result(project, result_path, conflict_count)
+          archive_command = GeneratePackageArchiveCommand.new(@invocation_path)
+          archive_command.directory = directory
+          archive_command.execute
 
-          result_path = Tetra::Archiver.new(project).archive_package package_name
-          print_generation_result(project, result_path)
-
-          result_path, conflict_count = Tetra::SpecGenerator.new(project)
-            .generate_package_spec package_name, pom, filter
-          print_generation_result(project, result_path, conflict_count)
+          archive_command = GeneratePackageSpecCommand.new(@invocation_path)
+          archive_command.filter = filter
+          archive_command.directory = directory
+          archive_command.pom = pom
+          archive_command.execute
         end
       end
     end
