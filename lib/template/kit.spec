@@ -22,7 +22,7 @@ License:        Apache-2.0
 Summary:        Build-time dependencies for tetra project <%= name %>
 Url:            https://github.com/SilvioMoioli/tetra
 Group:          Development/Libraries/Java
-Source0:        <%= name %>-kit.tar.xz
+Source0:        %{name}.tar.xz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 BuildArch:      noarch
 BuildRequires:  xz
