@@ -5,6 +5,7 @@ module Tetra
   # in src/
   class Package
     extend Forwardable
+    include SpecGenerator
 
     attr_reader :name
 
@@ -42,23 +43,6 @@ module Tetra
       end
     end
 
-    def generate_spec
-      @project.from_directory do
-        spec_name = "#{@name}.spec"
-        spec_path = File.join("src", name, spec_name)
-        output_dir = File.join("output", name)
-        FileUtils.mkdir_p(output_dir)
-
-        new_content = TemplateManager.new.generate("package.spec", binding)
-        conflict_count = @project.merge_new_content(new_content, spec_path, "Spec generated", "generate_#{name}_spec")
-
-        destination_spec_path = File.join(output_dir, spec_name)
-        FileUtils.symlink(File.expand_path(spec_path), destination_spec_path, force: true)
-
-        [spec_path, conflict_count]
-      end
-    end
-
     def cleanup_description(raw, max_length)
       raw
         .gsub(/[\s]+/, " ")
@@ -66,6 +50,25 @@ module Tetra
         .slice(0..max_length - 1)
         .sub(/\s\w+$/, "")
         .sub(/\.+$/, "")
+    end
+
+    # needed by SpecGenerator
+    attr_reader :project
+
+    def package_name
+      name
+    end
+
+    def spec_path
+      File.join("src", name, package_name)
+    end
+
+    def template_spec_name
+      "package.spec"
+    end
+
+    def spec_tag
+      name
     end
   end
 end

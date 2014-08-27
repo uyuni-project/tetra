@@ -4,6 +4,7 @@ module Tetra
   # represents a package of binary dependencies
   class Kit
     extend Forwardable
+    include SpecGenerator
 
     def_delegator :@project, :name
     def_delegator :@project, :version
@@ -12,21 +13,23 @@ module Tetra
       @project = project
     end
 
-    def generate_spec
-      @project.from_directory do
-        spec_name = "#{@project.name}-kit.spec"
-        spec_path = File.join("kit", spec_name)
-        output_dir = File.join("output", "#{@project.name}-kit")
-        FileUtils.mkdir_p(output_dir)
+    # needed by SpecGenerator
+    attr_reader :project
 
-        new_content = TemplateManager.new.generate("kit.spec", binding)
-        conflict_count = @project.merge_new_content(new_content, spec_path, "Kit spec generated", :generate_kit_spec)
+    def package_name
+      "#{@project.name}-kit"
+    end
 
-        destination_spec_path = File.join(output_dir, spec_name)
-        FileUtils.symlink(File.expand_path(spec_path), destination_spec_path, force: true)
+    def spec_path
+      File.join("kit", package_name)
+    end
 
-        [spec_path, conflict_count]
-      end
+    def template_spec_name
+      "kit.spec"
+    end
+
+    def spec_tag
+      "kit"
     end
   end
 end
