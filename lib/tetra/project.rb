@@ -67,11 +67,18 @@ module Tetra
         # populate the project with templates and take a snapshot
         project = Project.new(".")
 
-        template_manager = Tetra::TemplateManager.new
-        template_manager.copy "output", "."
-        template_manager.copy "kit", "."
-        template_manager.copy "src", "."
-        template_manager.copy "gitignore", ".gitignore"
+        template_path = File.join(File.dirname(__FILE__), "..", "template")
+
+        templates = {
+          "output" => ".",
+          "kit" => ".",
+          "src" => ".",
+          "gitignore" => ".gitignore"
+        }
+
+        templates.each do |source, destination|
+          FileUtils.cp_r(File.join(template_path, source), destination)
+        end
 
         project.take_snapshot "Template files added", :init
       end

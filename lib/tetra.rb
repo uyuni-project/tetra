@@ -22,7 +22,6 @@ require "zip"
 # internal, backend
 require "tetra/version"
 require "tetra/logger"
-require "tetra/template_manager"
 require "tetra/git"
 require "tetra/script_generator"
 require "tetra/project"
