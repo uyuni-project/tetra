@@ -24,9 +24,9 @@ describe Tetra::Kit do
     FileUtils.rm_rf(@project_path)
   end
 
-  describe "#generate_spec" do
+  describe "#to_spec" do
     it "generates the first version" do
-      expect(@kit.generate_spec).to be_truthy
+      expect(@kit.to_spec).to be_truthy
 
       @project.from_directory do
         spec_lines = File.readlines(File.join("output", "test-project-kit", "test-project-kit.spec"))
@@ -36,7 +36,7 @@ describe Tetra::Kit do
       end
     end
     it "generates a second version" do
-      expect(@kit.generate_spec).to be_truthy
+      expect(@kit.to_spec).to be_truthy
       @project.dry_run
       Dir.chdir(@project_path) do
         test_file = File.join("kit", "test")
@@ -48,7 +48,7 @@ describe Tetra::Kit do
       end
       @project.finish(false)
 
-      expect(@kit.generate_spec).to be_truthy
+      expect(@kit.to_spec).to be_truthy
 
       @project.from_directory do
         spec_lines = File.readlines(File.join("output", "test-project-kit", "test-project-kit.spec"))
@@ -59,7 +59,7 @@ describe Tetra::Kit do
       end
     end
     it "generates a conflicting version" do
-      expect(@kit.generate_spec).to be_truthy
+      expect(@kit.to_spec).to be_truthy
       @project.dry_run
       Dir.chdir(@project_path) do
         test_file = File.join("kit", "test")
@@ -76,7 +76,7 @@ describe Tetra::Kit do
       end
       @project.finish(false)
 
-      expect(@kit.generate_spec).to be_truthy
+      expect(@kit.to_spec).to be_truthy
 
       @project.from_directory do
         spec_lines = File.readlines(File.join("output", "test-project-kit", "test-project-kit.spec"))

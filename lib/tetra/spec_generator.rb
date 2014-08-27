@@ -10,7 +10,7 @@ module Tetra
     #   template_spec_name (string)
     #   spec_tag (string)
 
-    def generate_spec
+    def to_spec
       project.from_directory do
         output_dir = File.join("output", package_name)
         FileUtils.mkdir_p(output_dir)

@@ -44,9 +44,9 @@ describe Tetra::Package do
     FileUtils.rm_rf(@project_path)
   end
 
-  describe "#generate_spec" do
+  describe "#to_spec" do
     it "generates the first version" do
-      @package.generate_spec
+      @package.to_spec
 
       @project.from_directory do
         spec_lines = File.readlines(File.join("output", "test", "test.spec"))

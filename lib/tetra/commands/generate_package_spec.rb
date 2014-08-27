@@ -12,8 +12,8 @@ module Tetra
         project = Tetra::Project.new(".")
         ensure_dry_running(false, project) do
           package_name = project.get_package_name(directory)
-          result_path, conflict_count = Tetra::Package.new(project, package_name,
-                                                           pom, filter).generate_spec
+          result_path, conflict_count =
+            Tetra::Package.new(project, package_name, pom, filter).to_spec
           print_generation_result(project, result_path, conflict_count)
         end
       end
