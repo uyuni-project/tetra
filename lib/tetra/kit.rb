@@ -5,6 +5,8 @@ module Tetra
   class Kit
     extend Forwardable
     include SpecGenerator
+    include Archiver
+    include Logging
 
     def_delegator :@project, :name
     def_delegator :@project, :version
@@ -30,6 +32,15 @@ module Tetra
 
     def spec_tag
       "kit"
+    end
+
+    # needed by Archiver
+    def archive_source_dir
+      "kit"
+    end
+
+    def archive_destination_dir
+      "#{@project.name}-kit"
     end
   end
 end

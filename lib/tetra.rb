@@ -34,9 +34,9 @@ require "tetra/kit_runner"
 require "tetra/ant_runner"
 require "tetra/maven_runner"
 require "tetra/spec_generator"
+require "tetra/archiver"
 require "tetra/kit"
 require "tetra/package"
-require "tetra/archiver"
 require "tetra/kit_checker"
 
 # internal, UI

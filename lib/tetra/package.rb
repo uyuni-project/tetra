@@ -6,6 +6,7 @@ module Tetra
   class Package
     extend Forwardable
     include SpecGenerator
+    include Archiver
 
     attr_reader :name
 
@@ -19,10 +20,10 @@ module Tetra
     def_delegator :@pom, :version
     def_delegator :@pom, :runtime_dependency_ids
 
-    def initialize(project, name, pom_path, filter)
+    def initialize(project, name, pom_path = nil, filter = nil)
       @project = project
       @name = name
-      @pom = Tetra::Pom.new(pom_path)
+      @pom = pom_path.nil? ? nil : Tetra::Pom.new(pom_path)
       @filter = filter
     end
 
@@ -68,6 +69,15 @@ module Tetra
     end
 
     def spec_tag
+      name
+    end
+
+    # needed by Archiver
+    def archive_source_dir
+      File.join("src", name)
+    end
+
+    def archive_destination_dir
       name
     end
   end

@@ -89,5 +89,18 @@ describe Tetra::Kit do
         expect(spec_lines).to include(">>>>>>> user edited\n")
       end
     end
+
+  describe "#to_archive" do
+    it "generates an archive" do
+      @project.from_directory("kit") do
+        FileUtils.touch("kit_test")
+      end
+
+      @kit.to_archive
+
+      @project.from_directory do
+        expect(`tar -Jtf output/test-project-kit/test-project-kit.tar.xz`.split).to include("kit_test")
+      end
+    end
   end
 end

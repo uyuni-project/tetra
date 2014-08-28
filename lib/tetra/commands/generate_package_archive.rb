@@ -10,7 +10,7 @@ module Tetra
         project = Tetra::Project.new(".")
         ensure_dry_running(false, project) do
           package_name = project.get_package_name(directory)
-          result_path = Tetra::Archiver.new(project).archive_package package_name
+          result_path = Tetra::Package.new(project, package_name).to_archive
           print_generation_result(project, result_path)
         end
       end
