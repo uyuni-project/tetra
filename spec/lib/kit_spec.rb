@@ -3,25 +3,19 @@
 require "spec_helper"
 
 describe Tetra::Kit do
-  before(:each) do
-    @project_path = File.join("spec", "data", "test-project")
-    Dir.mkdir(@project_path)
+  include Tetra::Mockers
 
-    Tetra::Project.init(@project_path)
-    @project = Tetra::Project.new(@project_path)
+  before(:each) do
+    create_mock_project
 
     @project.dry_run
-    Dir.chdir(@project_path) do
-      test_file = File.join("kit", "test")
-      File.open(test_file, "w") { |io| io.puts "kit content test file" }
-    end
     @project.finish(false)
 
     @kit = Tetra::Kit.new(@project)
   end
 
   after(:each) do
-    FileUtils.rm_rf(@project_path)
+    delete_mock_project
   end
 
   describe "#to_spec" do
