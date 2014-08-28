@@ -28,6 +28,9 @@ BuildArch:      noarch
 BuildRequires:  xz
 BuildRequires:  fdupes
 Provides:       tetra(kit)
+<% binary_packages.each do |binary_package| %>
+Provides:       mvn(<%= binary_package.group_id %>:<%= binary_package.artifact_id %>) == <%= binary_package.version %>
+<% end %>
 # no two kits should ever be installed at any given time
 Conflicts:      otherproviders(tetra(kit))
 

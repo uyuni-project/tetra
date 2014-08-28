@@ -18,6 +18,30 @@ describe Tetra::Kit do
     delete_mock_project
   end
 
+  describe "#binary_packages" do
+    it "finds binary packages" do
+      @project.from_directory(File.join("kit", "m2")) do
+        binary_package_path = File.join(".", "com", "company",
+                                        "project", "artifact", "1.0")
+        FileUtils.mkdir_p(binary_package_path)
+
+        expected_pom = File.join(binary_package_path, "artifact-1.0.pom")
+        expected_other_files = [
+          File.join(binary_package_path, "artifact-1.0.jar"),
+          File.join(binary_package_path, "artifact-1.0.sha1")
+        ]
+
+        ([expected_pom] + expected_other_files).each do |file|
+          FileUtils.touch(file)
+        end
+
+        expected_binary_package = Tetra::BinaryPackage.new(expected_pom, expected_other_files)
+
+        expect(@kit.binary_packages.first).to eql(expected_binary_package)
+      end
+    end
+  end
+
   describe "#to_spec" do
     it "generates the first version" do
       expect(@kit.to_spec).to be_truthy
@@ -83,6 +107,23 @@ describe Tetra::Kit do
         expect(spec_lines).to include(">>>>>>> user edited\n")
       end
     end
+    it "generates a version with binary packages" do
+      @project.from_directory(File.join("kit", "m2")) do
+        FileUtils.mkdir_p("org1/group1/artifact1/1/")
+        FileUtils.touch("org1/group1/artifact1/1/artifact1-1.pom")
+        FileUtils.mkdir_p("org2/group2/artifact2/2/")
+        FileUtils.touch("org2/group2/artifact2/2/artifact2-2.pom")
+      end
+
+      expect(@kit.to_spec).to be_truthy
+
+      @project.from_directory do
+        spec_lines = File.readlines(File.join("output", "test-project-kit", "test-project-kit.spec"))
+        expect(spec_lines).to include("Provides:       mvn(org1.group1:artifact1) == 1\n")
+        expect(spec_lines).to include("Provides:       mvn(org2.group2:artifact2) == 2\n")
+      end
+    end
+  end
 
   describe "#to_archive" do
     it "generates an archive" do

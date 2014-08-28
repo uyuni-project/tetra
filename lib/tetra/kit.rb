@@ -15,6 +15,30 @@ module Tetra
       @project = project
     end
 
+    def binary_packages
+      @project.from_directory(File.join("kit", "m2")) do
+        files_in_dir = {}
+        poms = []
+        Find.find(".") do |file|
+          dir = File.dirname(file)
+          if files_in_dir.key?(dir)
+            files_in_dir[dir] << file
+          else
+            files_in_dir[dir] = [file]
+          end
+
+          if file =~ /\.pom$/
+            log.debug "pom found in #{file}"
+            poms << file
+          end
+        end
+
+        poms.map do |pom|
+          Tetra::BinaryPackage.new(pom, files_in_dir[File.dirname(pom)] - [pom])
+        end
+      end
+    end
+
     # needed by SpecGenerator
     attr_reader :project
 
