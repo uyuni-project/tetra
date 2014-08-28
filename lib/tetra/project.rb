@@ -61,8 +61,8 @@ module Tetra
       Dir.chdir(dir) do
         Tetra::Git.new(".").init
 
-        FileUtils.mkdir_p "src"
-        FileUtils.mkdir_p "kit"
+        FileUtils.mkdir_p("src")
+        FileUtils.mkdir_p("kit")
 
         # populate the project with templates and take a snapshot
         project = Project.new(".")
