@@ -15,6 +15,10 @@ module Tetra
       @project = project
     end
 
+    def items
+      maven_kit_items
+    end
+
     def maven_kit_items
       @project.from_directory(File.join("kit", "m2")) do
         files_in_dir = {}

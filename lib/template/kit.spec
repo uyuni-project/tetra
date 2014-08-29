@@ -28,8 +28,8 @@ BuildArch:      noarch
 BuildRequires:  xz
 BuildRequires:  fdupes
 Provides:       tetra(kit)
-<% maven_kit_items.each do |maven_kit_item| %>
-Provides:       mvn(<%= maven_kit_item.group_id %>:<%= maven_kit_item.artifact_id %>) == <%= maven_kit_item.version %>
+<% items.each do |item| %>
+Provides:       <%= item.provides_symbol %> == <%= item.provides_version %>
 <% end %>
 # no two kits should ever be installed at any given time
 Conflicts:      otherproviders(tetra(kit))

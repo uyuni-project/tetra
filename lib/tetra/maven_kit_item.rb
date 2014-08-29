@@ -1,7 +1,8 @@
 # encoding: UTF-8
 
 module Tetra
-  # represents a prebuilt package dependency
+  # represents a prebuilt package dependency from a Maven local repo
+  # in a kit
   class MavenKitItem
     attr_reader :pom
     attr_reader :files
@@ -18,6 +19,14 @@ module Tetra
       rest, @version = path.split
       group_directory, @artifact_id = rest.split
       @group_id = path_to_group(group_directory)
+    end
+
+    def provides_symbol
+      "mvn(#{@group_id}:#{@artifact_id})"
+    end
+
+    def provides_version
+      version
     end
 
     def path_to_group(path)
