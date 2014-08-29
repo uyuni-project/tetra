@@ -15,7 +15,7 @@ module Tetra
       @project = project
     end
 
-    def binary_packages
+    def maven_kit_items
       @project.from_directory(File.join("kit", "m2")) do
         files_in_dir = {}
         poms = []
@@ -34,7 +34,7 @@ module Tetra
         end
 
         poms.map do |pom|
-          Tetra::BinaryPackage.new(pom, files_in_dir[File.dirname(pom)] - [pom])
+          Tetra::MavenKitItem.new(pom, files_in_dir[File.dirname(pom)] - [pom])
         end
       end
     end

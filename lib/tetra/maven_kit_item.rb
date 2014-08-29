@@ -2,7 +2,7 @@
 
 module Tetra
   # represents a prebuilt package dependency
-  class BinaryPackage
+  class MavenKitItem
     attr_reader :pom
     attr_reader :files
 
@@ -29,10 +29,10 @@ module Tetra
       end
     end
 
-    def eql?(binary_package)
-      self.class.equal?(binary_package.class) &&
-        pom == binary_package.pom &&
-        files == binary_package.files
+    def eql?(maven_kit_item)
+      self.class.equal?(maven_kit_item.class) &&
+        pom == maven_kit_item.pom &&
+        files == maven_kit_item.files
     end
   end
 end

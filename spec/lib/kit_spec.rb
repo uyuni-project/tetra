@@ -18,26 +18,26 @@ describe Tetra::Kit do
     delete_mock_project
   end
 
-  describe "#binary_packages" do
+  describe "#maven_kit_items" do
     it "finds binary packages" do
       @project.from_directory(File.join("kit", "m2")) do
-        binary_package_path = File.join(".", "com", "company",
+        maven_kit_item_path = File.join(".", "com", "company",
                                         "project", "artifact", "1.0")
-        FileUtils.mkdir_p(binary_package_path)
+        FileUtils.mkdir_p(maven_kit_item_path)
 
-        expected_pom = File.join(binary_package_path, "artifact-1.0.pom")
+        expected_pom = File.join(maven_kit_item_path, "artifact-1.0.pom")
         expected_other_files = [
-          File.join(binary_package_path, "artifact-1.0.jar"),
-          File.join(binary_package_path, "artifact-1.0.sha1")
+          File.join(maven_kit_item_path, "artifact-1.0.jar"),
+          File.join(maven_kit_item_path, "artifact-1.0.sha1")
         ]
 
         ([expected_pom] + expected_other_files).each do |file|
           FileUtils.touch(file)
         end
 
-        expected_binary_package = Tetra::BinaryPackage.new(expected_pom, expected_other_files)
+        expected_maven_kit_item = Tetra::MavenKitItem.new(expected_pom, expected_other_files)
 
-        expect(@kit.binary_packages.first).to eql(expected_binary_package)
+        expect(@kit.maven_kit_items.first).to eql(expected_maven_kit_item)
       end
     end
   end
