@@ -6,10 +6,9 @@ module Tetra
     include Logging
     # expected attributes:
     #   project (Tetra::Project)
-    #   archive_dir (string)
-    #   spec_path (string)
-    #   template_spec_name (string)
-    #   spec_tag (string)
+    #   package_name (string)
+    #   archive_source_dir (string)
+    #   archive_destination_dir (string)
 
     # generates an archive and returns its name
     def to_archive

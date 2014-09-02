@@ -107,7 +107,7 @@ describe Tetra::Kit do
         expect(spec_lines).to include(">>>>>>> user edited\n")
       end
     end
-    it "generates a version with binary packages" do
+    it "generates a version with binary packages from the kit Maven repo" do
       @project.from_directory(File.join("kit", "m2")) do
         FileUtils.mkdir_p("org1/group1/artifact1/1/")
         FileUtils.touch("org1/group1/artifact1/1/artifact1-1.pom")
@@ -121,6 +121,30 @@ describe Tetra::Kit do
         spec_lines = File.readlines(File.join("output", "test-project-kit", "test-project-kit.spec"))
         expect(spec_lines).to include("Provides:       mvn(org1.group1:artifact1) == 1\n")
         expect(spec_lines).to include("Provides:       mvn(org2.group2:artifact2) == 2\n")
+      end
+    end
+
+    it "generates a version with binary packages from the jars directory" do
+      @project.from_directory(File.join("kit", "jars")) do
+        File.open("test1.jar", "w") { |f| f.write("test1") }
+        File.open("test2.jar", "w") { |f| f.write("test2") }
+      end
+
+      expect(@kit.to_spec).to be_truthy
+
+      @project.from_directory do
+        spec_lines = File.readlines(File.join("output", "test-project-kit", "test-project-kit.spec"))
+        expect(spec_lines).to include("Provides:       jar(test1.jar) == b444ac06613fc8d63795be9ad0beaf55011936ac\n")
+        expect(spec_lines).to include("Provides:       jar(test2.jar) == 109f4b3c50d7b0df729d299bc6f8e9ef9066971f\n")
+      end
+    end
+
+    it "generates a version with the glue binary package" do
+      expect(@kit.to_spec).to be_truthy
+
+      @project.from_directory do
+        spec_lines = File.readlines(File.join("output", "test-project-kit", "test-project-kit.spec"))
+        expect(spec_lines).to include("Provides:       kit-glue(test-project)\n")
       end
     end
   end

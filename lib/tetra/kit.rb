@@ -16,7 +16,7 @@ module Tetra
     end
 
     def items
-      maven_kit_items
+      maven_kit_items + jar_kit_items + glue_kit_items
     end
 
     def maven_kit_items
@@ -41,6 +41,20 @@ module Tetra
           Tetra::MavenKitItem.new(pom, files_in_dir[File.dirname(pom)] - [pom])
         end
       end
+    end
+
+    def jar_kit_items
+      @project.from_directory(File.join("kit")) do
+        Pathname.new("jars").children.select do |child|
+          child.to_s =~ /.jar$/
+        end.sort.map do |jar|
+          Tetra::JarKitItem.new(jar)
+        end
+      end
+    end
+
+    def glue_kit_items
+      [Tetra::GlueKitItem.new(@project.name)]
     end
 
     # needed by SpecGenerator
