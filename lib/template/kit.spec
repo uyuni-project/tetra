@@ -27,12 +27,9 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 BuildArch:      noarch
 BuildRequires:  xz
 BuildRequires:  fdupes
-Provides:       tetra(kit)
 <% items.each do |item| %>
 Provides:       <%= item.provides_symbol %><% if item.provides_version %> == <%= item.provides_version %><% end %>
 <% end %>
-# no two kits should ever be installed at any given time
-Conflicts:      otherproviders(tetra(kit))
 
 %description
 This package has been automatically created by tetra in order to
