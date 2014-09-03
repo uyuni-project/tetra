@@ -28,7 +28,7 @@ BuildArch:      noarch
 BuildRequires:  xz
 BuildRequires:  fdupes
 <% items.each do |item| %>
-Provides:       <%= item.provides_symbol %><% if item.provides_version %> == <%= item.provides_version %><% end %>
+Provides:       <%= item.provides_symbol %> == <%= item.provides_version %>
 <% end %>
 
 %description
