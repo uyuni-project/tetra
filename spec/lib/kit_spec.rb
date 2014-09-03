@@ -144,7 +144,7 @@ describe Tetra::Kit do
 
       @project.from_directory do
         spec_lines = File.readlines(File.join("output", "test-project-kit", "test-project-kit.spec"))
-        expect(spec_lines).to include("Provides:       kit-glue(test-project)\n")
+        expect(spec_lines).to include("Provides:       kit-glue(test-project) == 1\n")
       end
     end
   end

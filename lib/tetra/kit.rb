@@ -54,7 +54,7 @@ module Tetra
     end
 
     def glue_kit_items
-      [Tetra::GlueKitItem.new(@project.name)]
+      [Tetra::GlueKitItem.new(@project)]
     end
 
     # needed by SpecGenerator

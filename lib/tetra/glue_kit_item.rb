@@ -4,8 +4,9 @@ module Tetra
   # represents a prebuilt package dependency from a jar file
   # in a kit
   class GlueKitItem
-    def initialize(name)
-      @name = name
+    def initialize(project)
+      @name = project.name
+      @version = project.version
     end
 
     def provides_symbol
@@ -13,7 +14,7 @@ module Tetra
     end
 
     def provides_version
-      nil
+      @version
     end
   end
 end
