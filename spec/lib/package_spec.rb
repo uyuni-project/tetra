@@ -12,8 +12,7 @@ describe Tetra::Package do
 
     @project.dry_run
     Dir.chdir(@project_path) do
-      test_file = File.join("kit", "test")
-      File.open(test_file, "w") { |io| io.puts "kit content test file" }
+      FileUtils.touch(File.join("kit", "jars", "test.jar"))
     end
     @project.finish(false)
 
@@ -54,7 +53,8 @@ describe Tetra::Package do
         expect(spec_lines).to include("License:        The Apache Software License, Version 2.0\n")
         expect(spec_lines).to include("Summary:        Nailgun is a client, protocol, and server for running Java\n")
         expect(spec_lines).to include("Url:            http://martiansoftware.com/nailgun\n")
-        expect(spec_lines).to include("BuildRequires:  #{@project.name}-kit >= 2\n")
+        expect(spec_lines).to include("BuildRequires:  jar(test.jar) == da39a3ee5e6b4b0d3255bfef95601890afd80709\n")
+        expect(spec_lines).to include("BuildRequires:  kit-glue(#{@project.name}) == 2\n")
         expect(spec_lines).to include("Provides:       mvn(com.martiansoftware:nailgun-all) == 0.9.1\n")
         expect(spec_lines).to include("cp -a out/test3.jar %{buildroot}%{_javadir}/test3.jar\n")
       end

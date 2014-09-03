@@ -11,7 +11,8 @@ module Tetra
     attr_reader :name
 
     def_delegator :@project, :name, :project_name
-    def_delegator :@project, :version, :project_version
+
+    def_delegator :@kit, :items, :kit_items
 
     def_delegator :@pom, :license_name, :license
     def_delegator :@pom, :url
@@ -22,6 +23,7 @@ module Tetra
 
     def initialize(project, name, pom_path = nil, filter = nil)
       @project = project
+      @kit = Tetra::Kit.new(project)
       @name = name
       @pom = pom_path.nil? ? nil : Tetra::Pom.new(pom_path)
       @filter = filter
