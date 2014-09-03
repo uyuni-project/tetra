@@ -22,10 +22,11 @@ module Tetra
         conflict_count = project.merge_new_content(new_content, spec_path,
                                                    "Spec generated", "generate_#{spec_tag}_spec")
 
-        destination_spec_path = File.join(output_dir, "#{package_name}.spec")
+        destination_spec_name = "#{package_name}.spec"
+        destination_spec_path = File.join(output_dir, destination_spec_name)
         FileUtils.symlink(File.expand_path(spec_path), destination_spec_path, force: true)
 
-        [spec_path, conflict_count]
+        [File.join(spec_path, destination_spec_name), conflict_count]
       end
     end
 
