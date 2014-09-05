@@ -38,7 +38,7 @@ module Tetra
         end
 
         poms.map do |pom|
-          Tetra::MavenKitItem.new(pom, files_in_dir[File.dirname(pom)] - [pom])
+          Tetra::MavenKitItem.new(pom, files_in_dir[File.dirname(pom)])
         end
       end
     end

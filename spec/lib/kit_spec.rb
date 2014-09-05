@@ -25,19 +25,18 @@ describe Tetra::Kit do
                                         "project", "artifact", "1.0")
         FileUtils.mkdir_p(maven_kit_item_path)
 
-        expected_pom = File.join(maven_kit_item_path, "artifact-1.0.pom")
-        expected_other_files = [
+        expected_files = [
           File.join(maven_kit_item_path, "artifact-1.0.jar"),
+          File.join(maven_kit_item_path, "artifact-1.0.pom"),
           File.join(maven_kit_item_path, "artifact-1.0.sha1")
         ]
 
-        ([expected_pom] + expected_other_files).each do |file|
+        expected_files.each do |file|
           FileUtils.touch(file)
         end
 
-        expected_maven_kit_item = Tetra::MavenKitItem.new(expected_pom, expected_other_files)
-
-        expect(@kit.maven_kit_items.first).to eql(expected_maven_kit_item)
+        actual_maven_kit_item = @kit.maven_kit_items.first
+        expect(actual_maven_kit_item.files.sort).to eql(expected_files)
       end
     end
   end
