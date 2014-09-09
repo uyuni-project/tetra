@@ -116,7 +116,7 @@ describe Tetra::Project do
       @project.from_directory do
         `touch kit/test`
 
-        @project.take_snapshot "test", :revertable
+        @project.take_snapshot("test", :revertable)
 
         expect(`git rev-list --all`.split("\n").length).to eq 2
         expect(@project.latest_tag(:revertable)).to eq "revertable_1"

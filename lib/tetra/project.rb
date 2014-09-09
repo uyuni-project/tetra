@@ -80,7 +80,7 @@ module Tetra
           FileUtils.cp_r(File.join(template_path, source), destination)
         end
 
-        project.take_snapshot "Template files added", :init
+        project.take_snapshot("Template files added", :init)
       end
     end
 
@@ -90,7 +90,7 @@ module Tetra
     def dry_run
       return false if dry_running?
 
-      current_directory = Pathname.new(Dir.pwd).relative_path_from Pathname.new(@full_path)
+      current_directory = Pathname.new(Dir.pwd).relative_path_from(Pathname.new(@full_path))
 
       take_snapshot("Dry-run started", :dry_run_started, current_directory)
       true
@@ -110,11 +110,11 @@ module Tetra
           @git.revert_whole_directory(".", latest_tag(:dry_run_started))
           @git.delete_tag(latest_tag(:dry_run_started))
         else
-          take_snapshot "Changes during dry-run", :dry_run_changed
+          take_snapshot("Changes during dry-run", :dry_run_changed)
 
           @git.revert_whole_directory("src", latest_tag(:dry_run_started))
 
-          take_snapshot "Dry run finished", :dry_run_finished
+          take_snapshot("Dry run finished", :dry_run_finished)
         end
         return true
       end
