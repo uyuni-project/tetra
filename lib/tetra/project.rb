@@ -122,16 +122,8 @@ module Tetra
     end
 
     # takes a revertable snapshot of this project
-    def take_snapshot(message, tag_prefix = nil, tag_message = nil)
-      tag = (
-        if tag_prefix
-          "#{tag_prefix}_#{latest_tag_count(tag_prefix) + 1}"
-        else
-          nil
-        end
-      )
-
-      @git.commit_whole_directory(message, tag, tag_message)
+    def take_snapshot(message, tag_prefix, tag_message = nil)
+      @git.commit_whole_directory(message, next_tag(tag_prefix), tag_message)
     end
 
     # replaces content in path with new_content, takes a snapshot using
@@ -177,6 +169,11 @@ module Tetra
     # returns the maximum tag count for a given tag prefix
     def latest_tag_count(prefix)
       @git.get_tag_maximum_suffix(prefix)
+    end
+
+    # returns the next tag for a given tag prefix
+    def next_tag(prefix)
+      "#{prefix}_#{latest_tag_count(prefix) + 1}"
     end
 
     # runs a block from the project directory or a subdirectory
