@@ -25,6 +25,8 @@ module Tetra
       @provides_version = version.to_s
     end
 
+    private
+
     def path_to_group(path)
       splits = path.split
       if splits[0].to_s == "."
