@@ -17,7 +17,7 @@ describe Tetra::MavenKitItem do
   end
 
   describe "#provides_version" do
-    it "returns the sepec Provides: version" do
+    it "returns the spec Provides: version" do
       expect(maven_kit_item.provides_version).to eq("1.0")
     end
   end
