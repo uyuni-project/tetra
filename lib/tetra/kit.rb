@@ -64,16 +64,12 @@ module Tetra
       "#{@project.name}-kit"
     end
 
-    def spec_path
-      File.join("kit", package_name)
+    def spec_dir
+      "kit"
     end
 
     def template_spec_name
       "kit.spec"
-    end
-
-    def spec_tag
-      "kit"
     end
 
     # needed by Archiver

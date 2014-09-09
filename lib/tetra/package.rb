@@ -62,16 +62,12 @@ module Tetra
       name
     end
 
-    def spec_path
-      File.join("src", name, package_name)
+    def spec_dir
+      File.join("src", name)
     end
 
     def template_spec_name
       "package.spec"
-    end
-
-    def spec_tag
-      name
     end
 
     # needed by Archiver

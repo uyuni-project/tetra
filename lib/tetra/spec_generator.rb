@@ -6,27 +6,28 @@ module Tetra
     # expected attributes:
     #   project (Tetra::Project)
     #   package_name (string)
-    #   spec_path (string)
+    #   spec_dir (string)
     #   template_spec_name (string)
-    #   spec_tag (string)
 
     # saves a specfile for this object in correct directories
     # returns the spec path and the conflict count with the previously generated
     # version, if any
     def to_spec
       project.from_directory do
-        output_dir = File.join("output", package_name)
-        FileUtils.mkdir_p(output_dir)
+        spec_name = "#{package_name}.spec"
+        spec_path = File.join(spec_dir, spec_name)
 
         new_content = generate(template_spec_name, binding)
         conflict_count = project.merge_new_content(new_content, spec_path,
-                                                   "Spec generated", "generate_#{spec_tag}_spec")
+                                                   "Spec generated", "generate_#{package_name}_spec")
 
-        destination_spec_name = "#{package_name}.spec"
-        destination_spec_path = File.join(output_dir, destination_spec_name)
-        FileUtils.symlink(File.expand_path(spec_path), destination_spec_path, force: true)
+        output_dir = File.join("output", package_name)
+        FileUtils.mkdir_p(output_dir)
 
-        [File.join(spec_path, destination_spec_name), conflict_count]
+        spec_link_path = File.join(output_dir, spec_name)
+        FileUtils.symlink(File.expand_path(spec_path), spec_link_path, force: true)
+
+        [spec_path, conflict_count]
       end
     end
 
