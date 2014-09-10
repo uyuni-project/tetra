@@ -73,6 +73,17 @@ module Tetra
       end
     end
 
+    # commits and tags one single file
+    # if tag is given, commit is also tagged
+    def commit_file(path, message, tag)
+      Dir.chdir(@directory) do
+        log.debug "committing path #{path} with message: #{message}"
+        `git add #{path}`
+        `git commit -m "#{message}"`
+        `git tag tetra_#{tag}`
+      end
+    end
+
     # returns the highest suffix found in tags with the given prefix
     def get_tag_maximum_suffix(prefix)
       Dir.chdir(@directory) do

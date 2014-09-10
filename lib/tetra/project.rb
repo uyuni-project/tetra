@@ -143,7 +143,7 @@ module Tetra
 
         File.open(path, "w") { |io| io.write(new_content) }
         log.debug "taking snapshot with new content: #{snapshot_message}"
-        take_snapshot(snapshot_message, tag_prefix)
+        @git.commit_file(path, snapshot_message, next_tag(tag_prefix))
 
         if already_existing
           if previous_tag == ""
