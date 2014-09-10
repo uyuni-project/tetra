@@ -5,14 +5,23 @@ module Tetra
   class Kit
     extend Forwardable
     include SpecGenerator
-    include Archiver
     include Logging
 
     def_delegator :@project, :name
     def_delegator :@project, :version
 
+    # implement to_archive
+    include Archiver
+    attr_reader :source_dir
+    attr_reader :source_paths
+    attr_reader :destination_dir
+
     def initialize(project)
       @project = project
+
+      @source_dir = "kit"
+      @source_paths = ["*"]
+      @destination_dir = "#{@project.name}-kit"
     end
 
     def items
@@ -70,15 +79,6 @@ module Tetra
 
     def template_spec_name
       "kit.spec"
-    end
-
-    # needed by Archiver
-    def archive_source_dir
-      "kit"
-    end
-
-    def archive_destination_dir
-      "#{@project.name}-kit"
     end
   end
 end

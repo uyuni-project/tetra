@@ -16,7 +16,15 @@ describe Tetra::Archiver do
     FileUtils.rm_rf(@project_path)
   end
 
-  let(:instance) { Class.new { include Tetra::Archiver }.new }
+  class TestClass
+    include Tetra::Archiver
+
+    def source_paths
+      ["*"]
+    end
+  end
+
+  let(:instance) { TestClass.new }
 
   describe "#archive" do
     it "archives a list of files" do
