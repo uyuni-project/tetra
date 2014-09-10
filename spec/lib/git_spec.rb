@@ -35,7 +35,7 @@ describe Tetra::Git do
           file.write "file1o"
         end
 
-        @git.commit_whole_directory("test", "test")
+        @git.commit_whole_directory("test", :test)
 
         files = `git ls-tree --name-only -r HEAD`.split("\n")
 
@@ -52,15 +52,15 @@ describe Tetra::Git do
           file.write "test"
         end
 
-        @git.commit_whole_directory("test", "test")
+        @git.commit_whole_directory("test", :test_start)
 
         File.open("file2", "w") do |file|
           file.write "test"
         end
 
-        @git.commit_whole_directory("test end")
+        @git.commit_whole_directory("test end", :test_end)
 
-        files = @git.changed_files_since("test")
+        files = @git.changed_files_since(:test_start)
 
         expect(files).not_to include("file1")
         expect(files).to include("file2")
@@ -75,7 +75,7 @@ describe Tetra::Git do
           file.write "test"
         end
 
-        @git.commit_whole_directory("test", "test_start")
+        @git.commit_whole_directory("test", :test_start)
 
         File.open("file2", "w") do |file|
           file.write "test"
@@ -85,15 +85,15 @@ describe Tetra::Git do
           file.write "test"
         end
 
-        @git.commit_whole_directory("test", "test_end")
+        @git.commit_whole_directory("test", :test_end)
 
         File.open("file4", "w") do |file|
           file.write "test"
         end
 
-        @git.commit_whole_directory("test")
+        @git.commit_whole_directory("test", :test_after)
 
-        files = @git.changed_files_between("test_start", "test_end", "subdir")
+        files = @git.changed_files_between(:test_start, :test_end, "subdir")
 
         expect(files).not_to include("file1")
         expect(files).not_to include("file2")

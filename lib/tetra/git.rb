@@ -46,10 +46,10 @@ module Tetra
       end
     end
 
-    # adds all files in the current directory and removes
-    # all files not in the current directory.
-    # if tag is given, commit is also tagged
-    def commit_whole_directory(message, tag = nil, tag_message = nil)
+    # adds all files in the current directory, removes
+    # all files not in the current directory, commits
+    # and tags with prefix
+    def commit_whole_directory(message, tag, tag_message = nil)
       Dir.chdir(@directory) do
         log.debug "committing with message: #{message}"
 
@@ -65,12 +65,10 @@ module Tetra
         `git add .`
         `git commit -m "#{message}"`
 
-        unless tag.nil?
-          if !tag_message.nil?
-            `git tag tetra_#{tag} -m "#{tag_message}"`
-          else
-            `git tag tetra_#{tag}`
-          end
+        if !tag_message.nil?
+          `git tag tetra_#{tag} -m "#{tag_message}"`
+        else
+          `git tag tetra_#{tag}`
         end
       end
     end
