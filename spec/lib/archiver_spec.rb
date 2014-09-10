@@ -23,7 +23,7 @@ describe Tetra::Archiver do
       @project.from_directory do
         File.open("test", "w") { |io| io.puts "test content" }
 
-        instance.archive(".", "test.tar.xz")
+        instance.archive("test.tar.xz")
         expect(`tar -Jtf test.tar.xz`.split).to include("test")
       end
     end

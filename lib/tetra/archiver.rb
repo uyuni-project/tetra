@@ -16,12 +16,12 @@ module Tetra
       FileUtils.mkdir_p(destination_dir)
 
       project.from_directory(archive_source_dir) do
-        archive(archive_source_dir, File.join(destination_dir, "#{package_name}.tar.xz"))
+        archive(File.join(destination_dir, "#{package_name}.tar.xz"))
       end
     end
 
     # archives a directory's contents to the destination file
-    def archive(_source_directory, destination_file)
+    def archive(destination_file)
       log.debug "creating #{destination_file}"
       `tar -cJf #{destination_file} *`
 
