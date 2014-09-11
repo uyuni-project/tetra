@@ -39,11 +39,11 @@ thus it should never be installed on end users' systems.
 
 %install
 export NO_BRP_CHECK_BYTECODE_VERSION=true
-install -d -m 0755 %{buildroot}%{_datadir}/tetra/<%= install_dir %>/
-cp -a * %{buildroot}%{_datadir}/tetra/<%= install_dir %>/
+install -d -m 0755 %{buildroot}%{_datadir}/tetra/<%= install_dir %>
+cp -a * %{buildroot}%{_datadir}/tetra/<%= install_dir %>
 
 %files
 %defattr(-,root,root)
-%{_datadir}/tetra/<%= install_dir %>/
+%{_datadir}/tetra/<%= install_dir %>
 
 %changelog

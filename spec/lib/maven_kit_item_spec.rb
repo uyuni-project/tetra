@@ -46,9 +46,9 @@ describe Tetra::MavenKitItem do
         expect(spec_lines).to include("Summary:        Build-time dependency of project \"test-project\"\n")
         expect(spec_lines).to include("Provides:       mvn(#{group_id}:#{artifact_id}) == #{version}\n")
 
-        expect(spec_lines).to include("install -d -m 0755 %{buildroot}%{_datadir}/tetra/m2/\n")
-        expect(spec_lines).to include("cp -a * %{buildroot}%{_datadir}/tetra/m2/\n")
-        expect(spec_lines).to include("%{_datadir}/tetra/m2/\n")
+        expect(spec_lines).to include("install -d -m 0755 %{buildroot}%{_datadir}/tetra/m2\n")
+        expect(spec_lines).to include("cp -a * %{buildroot}%{_datadir}/tetra/m2\n")
+        expect(spec_lines).to include("%{_datadir}/tetra/m2\n")
       end
     end
   end
