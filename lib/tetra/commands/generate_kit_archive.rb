@@ -12,7 +12,7 @@ module Tetra
           result_path = kit.to_archive
           print_generation_result(project, result_path)
 
-          kit.maven_kit_items.each do |item|
+          (kit.maven_kit_items + kit.jar_kit_items).each do |item|
             result_path = item.to_archive
             print_generation_result(project, result_path)
           end

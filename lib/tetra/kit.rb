@@ -53,8 +53,8 @@ module Tetra
     end
 
     def jar_kit_items
-      @project.from_directory(File.join("kit")) do
-        Pathname.new("jars").children.select do |child|
+      @project.from_directory(File.join("kit", "jars")) do
+        Pathname.new(".").children.select do |child|
           child.to_s =~ /.jar$/
         end.sort.map do |jar|
           Tetra::JarKitItem.new(@project, jar)

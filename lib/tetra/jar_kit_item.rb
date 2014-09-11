@@ -11,6 +11,12 @@ module Tetra
     attr_reader :spec_dir
     attr_reader :template_spec_name
 
+    # implement to_archive
+    include Archiver
+    attr_reader :source_dir
+    attr_reader :source_paths
+    attr_reader :destination_dir
+
     # template-specific  attributes
     attr_reader :provides_symbol
     attr_reader :provides_version
@@ -21,9 +27,13 @@ module Tetra
       hash = Digest::SHA1.file(path).hexdigest
 
       @project = project
-      @package_name = "kit-item-#{name.to_s.gsub('.','-')}"
+      @package_name = "kit-item-#{name.to_s.gsub(".", "-")}"
       @spec_dir = "kit"
       @template_spec_name = "kit_item.spec"
+
+      @source_dir = File.join("kit", "jars")
+      @source_paths = [path]
+      @destination_dir = @package_name
 
       @provides_symbol = "jar(#{name})"
       @provides_version = hash
