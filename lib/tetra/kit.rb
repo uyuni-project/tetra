@@ -25,7 +25,9 @@ module Tetra
     end
 
     def items
-      maven_kit_items + jar_kit_items + glue_kit_items
+      managed_items = maven_kit_items + jar_kit_items
+
+      managed_items + glue_kit_items(managed_items)
     end
 
     def maven_kit_items
@@ -62,8 +64,25 @@ module Tetra
       end
     end
 
-    def glue_kit_items
-      [Tetra::GlueKitItem.new(@project)]
+    def glue_kit_items(managed_items)
+      managed_files = managed_items.map do |item|
+        item.source_paths.map do |e|
+          Pathname.new(File.join(item.source_dir, e)).cleanpath
+        end
+      end.flatten
+
+      unmanaged_files = []
+
+      @project.from_directory do
+        Find.find("kit") do |file|
+          pathname = Pathname.new(file)
+          if (!managed_files.include?(pathname) && !File.directory?(pathname))
+            unmanaged_files << pathname.relative_path_from(Pathname.new("kit"))
+          end
+        end
+      end
+
+      [Tetra::GlueKitItem.new(@project, unmanaged_files)]
     end
 
     # needed by SpecGenerator
