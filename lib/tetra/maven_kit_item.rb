@@ -39,7 +39,7 @@ module Tetra
 
       @source_dir = File.join("kit", "m2")
       @source_paths = source_paths
-      @destination_dir = "#{@project.name}-kit"
+      @destination_dir = @package_name
     end
 
     private

@@ -19,6 +19,7 @@ describe Tetra::MavenKitItem do
   let(:dir) { File.join(group_id.gsub(".", File::SEPARATOR), artifact_id, version) }
   let(:pom) { File.join(dir, "#{artifact_id}-#{version}.pom") }
   let(:jar) { File.join(dir, "#{artifact_id}.jar") }
+  let(:package_name) { "kit-item-#{group_id.gsub(".", "-")}-#{artifact_id}-#{version}" }
   let(:maven_kit_item) { Tetra::MavenKitItem.new(@project, pom, [pom, jar]) }
 
   describe "#provides_symbol" do
@@ -38,7 +39,6 @@ describe Tetra::MavenKitItem do
       expect(maven_kit_item.to_spec).to be_truthy
 
       @project.from_directory do
-        package_name = "kit-item-#{group_id.gsub(".", "-")}-#{artifact_id}-#{version}"
         spec_lines = File.readlines(File.join("output", package_name, "#{package_name}.spec"))
 
         expect(spec_lines).to include("# spec file for a build-time dependency of project \"test-project\"\n")
@@ -65,7 +65,7 @@ describe Tetra::MavenKitItem do
       expect(maven_kit_item.to_archive).to end_with(expected_filename)
 
       @project.from_directory do
-        contents = `tar -Jtf output/test-project-kit/kit-item-com-company-project-artifact-1.0.tar.xz`.split
+        contents = `tar -Jtf output/#{package_name}/#{package_name}.tar.xz`.split
         expect(contents).to include("com/company/project/artifact/1.0/artifact-1.0.pom")
         expect(contents).to include("com/company/project/artifact/1.0/artifact.jar")
       end
