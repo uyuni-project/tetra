@@ -44,6 +44,7 @@ cp -a * %{buildroot}%{_datadir}/tetra/<%= install_dir %>
 
 %files
 %defattr(-,root,root)
+%{_datadir}/tetra
 %{_datadir}/tetra/<%= install_dir %>
 
 %changelog
