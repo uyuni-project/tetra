@@ -17,7 +17,7 @@ module Tetra
     attr_reader :source_paths
     attr_reader :destination_dir
 
-    # template-specific  attributes
+    # template-specific attributes
     attr_reader :provides_symbol
     attr_reader :provides_version
     attr_reader :install_dir
