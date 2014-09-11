@@ -18,7 +18,8 @@ describe Tetra::MavenKitItem do
   let(:version) { "1.0" }
   let(:dir) { File.join(group_id.gsub(".", File::SEPARATOR), artifact_id, version) }
   let(:pom) { File.join(dir, "#{artifact_id}-#{version}.pom") }
-  let(:maven_kit_item) { Tetra::MavenKitItem.new(@project, pom, File.join(dir, "pom.xml", [])) }
+  let(:jar) { File.join(dir, "#{artifact_id}.jar") }
+  let(:maven_kit_item) { Tetra::MavenKitItem.new(@project, pom, [pom, jar]) }
 
   describe "#provides_symbol" do
     it "returns the sepec Provides: symbol" do
@@ -48,6 +49,25 @@ describe Tetra::MavenKitItem do
         expect(spec_lines).to include("install -d -m 0755 %{buildroot}%{_datadir}/tetra/m2/\n")
         expect(spec_lines).to include("cp -a * %{buildroot}%{_datadir}/tetra/m2/\n")
         expect(spec_lines).to include("%{_datadir}/tetra/m2/\n")
+      end
+    end
+  end
+
+  describe "#to_archive" do
+    it "generates an archive" do
+      @project.from_directory(File.join("kit", "m2")) do
+        FileUtils.mkdir_p(dir)
+        FileUtils.touch(pom)
+        FileUtils.touch(jar)
+      end
+
+      expected_filename = File::SEPARATOR + "kit-item-com-company-project-artifact-1.0.tar.xz"
+      expect(maven_kit_item.to_archive).to end_with(expected_filename)
+
+      @project.from_directory do
+        contents = `tar -Jtf output/test-project-kit/kit-item-com-company-project-artifact-1.0.tar.xz`.split
+        expect(contents).to include("com/company/project/artifact/1.0/artifact-1.0.pom")
+        expect(contents).to include("com/company/project/artifact/1.0/artifact.jar")
       end
     end
   end

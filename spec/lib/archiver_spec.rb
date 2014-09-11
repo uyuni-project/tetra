@@ -16,6 +16,7 @@ describe Tetra::Archiver do
     FileUtils.rm_rf(@project_path)
   end
 
+  # mock
   class TestClass
     include Tetra::Archiver
 
