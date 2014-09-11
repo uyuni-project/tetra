@@ -57,7 +57,7 @@ module Tetra
         Pathname.new("jars").children.select do |child|
           child.to_s =~ /.jar$/
         end.sort.map do |jar|
-          Tetra::JarKitItem.new(jar)
+          Tetra::JarKitItem.new(@project, jar)
         end
       end
     end

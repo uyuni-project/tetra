@@ -11,7 +11,7 @@ module Tetra
           result_path, conflict_count = kit.to_spec
           print_generation_result(project, result_path, conflict_count)
 
-          kit.maven_kit_items.each do |item|
+          (kit.maven_kit_items + kit.jar_kit_items).each do |item|
             result_path, conflict_count = item.to_spec
             print_generation_result(project, result_path, conflict_count)
           end
