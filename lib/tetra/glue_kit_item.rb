@@ -24,7 +24,7 @@ module Tetra
 
     def initialize(project, source_paths)
       @project = project
-      @package_name = "kit-glue-#{project.name}"
+      @package_name = "kit-item-glue-#{project.name}"
       @spec_dir = "kit"
       @template_spec_name = "kit_item.spec"
 
@@ -32,7 +32,7 @@ module Tetra
       @source_paths = source_paths
       @destination_dir = @package_name
 
-      @provides_symbol = "kit-glue(#{project.name})"
+      @provides_symbol = "tetra-glue(#{project.name})"
       @provides_version = project.version
       @install_dir = ""
     end

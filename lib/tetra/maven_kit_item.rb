@@ -33,7 +33,7 @@ module Tetra
       @spec_dir = "kit"
       @template_spec_name = "kit_item.spec"
 
-      @provides_symbol = "mvn(#{group_id}:#{artifact_id})"
+      @provides_symbol = "tetra-mvn(#{group_id}:#{artifact_id})"
       @provides_version = version
       @install_dir = "m2"
 

@@ -35,7 +35,7 @@ module Tetra
       @source_paths = [path]
       @destination_dir = @package_name
 
-      @provides_symbol = "jar(#{name})"
+      @provides_symbol = "tetra-jar(#{name})"
       @provides_version = hash
       @install_dir = "jars"
     end

@@ -24,7 +24,7 @@ describe Tetra::MavenKitItem do
 
   describe "#provides_symbol" do
     it "returns the sepec Provides: symbol" do
-      expect(maven_kit_item.provides_symbol).to eq("mvn(com.company.project:artifact)")
+      expect(maven_kit_item.provides_symbol).to eq("tetra-mvn(com.company.project:artifact)")
     end
   end
 
@@ -44,7 +44,7 @@ describe Tetra::MavenKitItem do
         expect(spec_lines).to include("# spec file for a build-time dependency of project \"test-project\"\n")
         expect(spec_lines).to include("Name:           kit-item-com-company-project-artifact-1.0\n")
         expect(spec_lines).to include("Summary:        Build-time dependency of project \"test-project\"\n")
-        expect(spec_lines).to include("Provides:       mvn(#{group_id}:#{artifact_id}) == #{version}\n")
+        expect(spec_lines).to include("Provides:       tetra-mvn(#{group_id}:#{artifact_id}) == #{version}\n")
 
         expect(spec_lines).to include("install -d -m 0755 %{buildroot}%{_datadir}/tetra/m2\n")
         expect(spec_lines).to include("cp -a * %{buildroot}%{_datadir}/tetra/m2\n")
