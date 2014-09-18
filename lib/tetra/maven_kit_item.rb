@@ -10,6 +10,7 @@ module Tetra
     attr_reader :package_name
     attr_reader :spec_dir
     attr_reader :template_spec_name
+    attr_reader :conflicts
 
     # implement to_archive
     include Archiver
@@ -32,6 +33,7 @@ module Tetra
       @package_name = "kit-item-#{group_id.gsub(".", "-")}-#{artifact_id}-#{version}"
       @spec_dir = "kit"
       @template_spec_name = "kit_item.spec"
+      @conflicts = false
 
       @provides_symbol = "tetra-mvn(#{group_id}:#{artifact_id})"
       @provides_version = version

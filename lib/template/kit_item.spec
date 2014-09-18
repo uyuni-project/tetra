@@ -24,6 +24,9 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 BuildArch:      noarch
 BuildRequires:  xz
 Provides:       <%= provides_symbol %> == <%= provides_version %>
+<% if conflicts %>
+Conflicts:      otherproviders(<%= provides_symbol %>)
+<% end %>
 
 %description
 This package has been automatically created by tetra in order to

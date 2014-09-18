@@ -55,7 +55,7 @@ describe Tetra::Package do
         expect(spec_lines).to include("Url:            http://martiansoftware.com/nailgun\n")
         expect(spec_lines).to include("BuildRequires:  tetra-jar(test.jar) == \
 da39a3ee5e6b4b0d3255bfef95601890afd80709\n")
-        expect(spec_lines).to include("BuildRequires:  tetra-glue(#{@project.name}) == 2\n")
+        expect(spec_lines).to include("BuildRequires:  tetra-glue == test-project-2\n")
         expect(spec_lines).to include("Provides:       mvn(com.martiansoftware:nailgun-all) == 0.9.1\n")
         expect(spec_lines).to include("cp -a out/test3.jar %{buildroot}%{_javadir}/test3.jar\n")
       end

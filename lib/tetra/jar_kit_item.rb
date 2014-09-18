@@ -10,6 +10,7 @@ module Tetra
     attr_reader :package_name
     attr_reader :spec_dir
     attr_reader :template_spec_name
+    attr_reader :conflicts
 
     # implement to_archive
     include Archiver
@@ -30,6 +31,7 @@ module Tetra
       @package_name = "kit-item-#{name.to_s.gsub(".", "-")}"
       @spec_dir = "kit"
       @template_spec_name = "kit_item.spec"
+      @conflicts = false
 
       @source_dir = File.join("kit", "jars")
       @source_paths = [path]

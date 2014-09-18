@@ -10,6 +10,7 @@ module Tetra
     attr_reader :package_name
     attr_reader :spec_dir
     attr_reader :template_spec_name
+    attr_reader :conflicts
 
     # implement to_archive
     include Archiver
@@ -27,13 +28,14 @@ module Tetra
       @package_name = "kit-item-glue-#{project.name}"
       @spec_dir = "kit"
       @template_spec_name = "kit_item.spec"
+      @conflicts = true
 
       @source_dir = File.join("kit")
       @source_paths = source_paths
       @destination_dir = @package_name
 
-      @provides_symbol = "tetra-glue(#{project.name})"
-      @provides_version = project.version
+      @provides_symbol = "tetra-glue"
+      @provides_version = "#{project.name}-#{project.version}"
       @install_dir = ""
     end
   end
