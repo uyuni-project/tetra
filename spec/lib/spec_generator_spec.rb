@@ -3,32 +3,100 @@
 require "spec_helper"
 
 describe Tetra::SpecGenerator do
-  let(:instance) { Class.new { include Tetra::SpecGenerator }.new }
+  include Tetra::Mockers
 
-  describe "#generate" do
-    it "compiles a file from a template and a value objects file" do
-      template_path = File.join(instance.template_path, "test.erb")
-      File.open(template_path, "w") { |io| io.puts "Hello <%= world_property %>" }
+  # mock
+  class SpecGeneratorTestClass
+    attr_accessor :world_property
 
-      destination = Tempfile.new("TemplateManager spec")
-      destination_path = destination.path
-      destination.unlink
+    include Tetra::SpecGenerator
+    attr_reader :project
+    attr_reader :package_name
+    attr_reader :spec_dir
+    attr_reader :template_spec_name
 
-      # binding test class
-      class WorldClass
-        def world_property
-          "World!"
-        end
+    def initialize(project)
+      @world_property = "World!"
 
-        def public_binding
-          binding
+      @project = project
+      @package_name = "test-package"
+      @spec_dir = "kit"
+      @template_spec_name = "test.spec"
+    end
+  end
+
+  before(:each) do
+    create_mock_project
+
+    @template_path = File.join(instance.template_path, "test.spec")
+    File.open(@template_path, "w") { |io| io.puts "Hello <%= world_property %>\nintentionally blank line\n" }
+
+    @destination_path = File.join("output", instance.package_name, "#{instance.package_name}.spec")
+  end
+
+  let(:instance) { SpecGeneratorTestClass.new(@project) }
+
+  after(:each) do
+    delete_mock_project
+    FileUtils.rm_rf(@template_path)
+  end
+
+  describe "#to_spec" do
+    it "generates a first version" do
+      expect(instance.to_spec).to be_truthy
+
+      @project.from_directory do
+        spec_lines = File.readlines(@destination_path)
+        expect(spec_lines).to include("Hello World!\n")
+      end
+    end
+
+    it "generates a second version" do
+      expect(instance.to_spec).to be_truthy
+
+      @project.from_directory do
+        File.open(@destination_path, "a") do |io|
+          io.write("nonconflicting line\n")
         end
       end
 
-      instance.generate("test.erb", WorldClass.new.public_binding, destination_path)
-      File.unlink(template_path)
+      instance.world_property = "Mario!"
 
-      expect(File.read(destination_path)).to eq "Hello World!\n"
+      expect(instance.to_spec).to be_truthy
+
+      @project.from_directory do
+        spec_lines = File.readlines(@destination_path)
+        expect(spec_lines).not_to include("Hello World!\n")
+        expect(spec_lines).to include("Hello Mario!\n")
+        expect(spec_lines).to include("nonconflicting line\n")
+      end
+    end
+
+    it "generates a conflicting version" do
+      expect(instance.to_spec).to be_truthy
+
+      @project.from_directory do
+        spec_contents = File.read(@destination_path)
+        spec_contents.gsub!(/Hello World/, "CONFLICTING!")
+
+        File.open(@destination_path, "w+") do |io|
+          io.write(spec_contents)
+        end
+      end
+
+      instance.world_property = "Mario!"
+
+      expect(instance.to_spec).to be_truthy
+
+      @project.from_directory do
+        spec_lines = File.readlines(@destination_path)
+        expect(spec_lines).to include("<<<<<<< newly generated\n")
+        expect(spec_lines).to include("Hello Mario!\n")
+        expect(spec_lines).to include("=======\n")
+        expect(spec_lines).to include("CONFLICTING!!\n")
+        expect(spec_lines).to include(">>>>>>> user edited\n")
+        expect(spec_lines).to include("intentionally blank line\n")
+      end
     end
   end
 end

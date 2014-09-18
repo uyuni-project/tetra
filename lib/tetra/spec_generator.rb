@@ -36,6 +36,8 @@ module Tetra
       File.join(File.dirname(__FILE__), "..", "template")
     end
 
+    private
+
     # generates content from an ERB template and an object binding
     # if destination_path is given, write it to that file, otherwise just
     # return it

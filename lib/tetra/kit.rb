@@ -1,27 +1,12 @@
 # encoding: UTF-8
 
 module Tetra
-  # represents a package of binary dependencies
+  # represents a set of binary dependency packages
   class Kit
-    extend Forwardable
-    include SpecGenerator
     include Logging
-
-    def_delegator :@project, :name
-    def_delegator :@project, :version
-
-    # implement to_archive
-    include Archiver
-    attr_reader :source_dir
-    attr_reader :source_paths
-    attr_reader :destination_dir
 
     def initialize(project)
       @project = project
-
-      @source_dir = "kit"
-      @source_paths = ["*"]
-      @destination_dir = "#{@project.name}-kit"
     end
 
     def items
@@ -76,28 +61,13 @@ module Tetra
       @project.from_directory do
         Find.find("kit") do |file|
           pathname = Pathname.new(file)
-          if (!managed_files.include?(pathname) && !File.directory?(pathname))
+          if !managed_files.include?(pathname) && !File.directory?(pathname)
             unmanaged_files << pathname.relative_path_from(Pathname.new("kit"))
           end
         end
       end
 
       [Tetra::GlueKitItem.new(@project, unmanaged_files)]
-    end
-
-    # needed by SpecGenerator
-    attr_reader :project
-
-    def package_name
-      "#{@project.name}-kit"
-    end
-
-    def spec_dir
-      "kit"
-    end
-
-    def template_spec_name
-      "kit.spec"
     end
   end
 end

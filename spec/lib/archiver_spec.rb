@@ -3,37 +3,47 @@
 require "spec_helper"
 
 describe Tetra::Archiver do
-
-  before(:each) do
-    @project_path = File.join("spec", "data", "test-project")
-    Dir.mkdir(@project_path)
-
-    Tetra::Project.init(@project_path)
-    @project = Tetra::Project.new(@project_path)
-  end
-
-  after(:each) do
-    FileUtils.rm_rf(@project_path)
-  end
+  include Tetra::Mockers
 
   # mock
-  class TestClass
+  class TestArchiverClass
     include Tetra::Archiver
 
-    def source_paths
-      ["*"]
+    attr_reader :project
+    attr_reader :package_name
+    attr_reader :source_dir
+    attr_reader :source_paths
+    attr_reader :destination_dir
+
+    def initialize(project)
+      @project = project
+      @package_name = "test-package"
+      @source_dir = "kit"
+      @source_paths = ["*"]
+      @destination_dir = "test-package"
     end
   end
 
-  let(:instance) { TestClass.new }
+  before(:each) do
+    create_mock_project
+  end
 
-  describe "#archive" do
-    it "archives a list of files" do
+  let(:instance) { TestArchiverClass.new(@project) }
+
+  after(:each) do
+    delete_mock_project
+  end
+
+  describe "#to_archive" do
+    it "generates an archive" do
+      @project.from_directory("kit") do
+        FileUtils.touch("kit_test")
+      end
+
+      instance.to_archive
+
       @project.from_directory do
-        File.open("test", "w") { |io| io.puts "test content" }
-
-        instance.archive("test.tar.xz")
-        expect(`tar -Jtf test.tar.xz`.split).to include("test")
+        expect(`tar -Jtf output/test-package/test-package.tar.xz`.split).to include("kit_test")
       end
     end
   end
