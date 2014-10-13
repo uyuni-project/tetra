@@ -16,7 +16,7 @@ You can do any manual changes to spec and build.sh files and regenerate them lat
 
 ## Kit sources
 
-Your kit is basically a binary blob. If its sources are needed for proper packaging, for example to comply with the GPL, some extra steps are needed.
+Your kit packages are basically binary blobs. If its sources are needed for proper packaging, for example to comply with the GPL, some extra steps are needed.
 
 If you use Maven, most (~90%) sources can be automatically downloaded:
 

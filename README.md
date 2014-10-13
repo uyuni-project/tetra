@@ -1,10 +1,10 @@
 # tetra – builds RPMs for Java software
 
-`tetra` is a set of tools to help you build RPM packages for Java projects.
+`tetra` is a tool to help you build RPM packages for Java projects.
 
-Packaging of Java projects is sometimes hard because build tools like Maven partially overlap with distro tools like RPM in functionality.
+Packaging of Java projects is sometimes hard - mainly because build tools like Maven partially overlap with distro ones like RPM.
 
-This tool's goal is to drastically simplifies packaging.
+See [MOTIVATION.md](MOTIVATION.md) for further information.
 
 ## Installation
 
@@ -31,7 +31,7 @@ Done!
 
 ### How can that possibly work?
 
-With `tetra` you are not building all dependencies from source, just your package. Everything else is shipped already compiled with attached source files, which is much easier to implement and automate. Yet, it is sufficient to fulfill open source licenses and to have a repeatable, networkless build. See [MOTIVATION.md](MOTIVATION.md) for further information.
+With `tetra` you are not building all dependencies from source, just your package. Everything else is shipped already compiled with attached source files, which is much easier to implement and automate. Yet, it is sufficient to fulfill open source licenses and to have a repeatable, networkless build.
 
 ## A commons-collections walkthrough
 
@@ -71,7 +71,7 @@ Finally, generate build scripts, spec files and tarballs in the `output/` direct
 
     tetra generate-all
 
-Note that `tetra` will generate files for the commons-collections package and for the binary-only myproject-kit package, which is a special container of all build-time dependencies (basically, the `kit/` folder). This will be shared among all packages you might add to your `tetra` project.
+Note that `tetra` will generate files for the commons-collections package and all binary-only build-time dependencies (basically, the `kit/` folder). This will be shared among all packages you might add to your `tetra` project.
 
 ## In-depth information
 
