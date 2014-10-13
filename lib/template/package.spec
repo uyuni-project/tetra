@@ -37,6 +37,9 @@ Requires:       java
 Requires:       mvn(<%= dependency_id[0] %>:<%= dependency_id[1] %>) <% if dependency_id[3] != nil %>==<%= dependency_id[3] %><% end %>
 <% end %>
 
+# to use this package in other tetra builds, uncomment the following
+#Provides:       tetra-mvn(<%= group_id %>:<%= artifact_id %>) == <%= version %>
+
 %description
 <%=
   description
@@ -57,6 +60,14 @@ mkdir -p %{buildroot}%{_javadir}
 <% outputs.each do |output| %>
 cp -a <%= output %> %{buildroot}%{_javadir}/<%= File.basename(output) %>
 <% end %>
+
+# to use this package in other tetra builds, uncomment and edit appropriately
+#%define _kitdir %{_datadir}/tetra/m2/<%= group_id.gsub(".", "/") %>/<%= artifact_id %>/<%= version %>
+#mkdir -p %_kitdir
+<% outputs.each do |output| %>
+#ln -s %{buildroot}%{_javadir}/<%= File.basename(output) %> %_kitdir
+<% end %>
+#ln -s <pomfile> %_kitdir
 
 %files
 %defattr(-,root,root)
