@@ -3,127 +3,99 @@
 require "spec_helper"
 
 describe Tetra::SpecGenerator do
-  before(:each) do
-    @project_path = File.join("spec", "data", "test-project")
-    Dir.mkdir(@project_path)
+  include Tetra::Mockers
 
-    Tetra::Project.init(@project_path)
-    @project = Tetra::Project.new(@project_path)
+  # mock
+  class SpecGeneratorTestClass
+    attr_accessor :world_property
 
-    @project.dry_run
-    Dir.chdir(@project_path) do
-      test_file = File.join("kit", "test")
-      File.open(test_file, "w") { |io| io.puts "kit content test file" }
+    include Tetra::SpecGenerator
+    attr_reader :project
+    attr_reader :package_name
+    attr_reader :spec_dir
+    attr_reader :template_spec_name
+
+    def initialize(project)
+      @world_property = "World!"
+
+      @project = project
+      @package_name = "test-package"
+      @spec_dir = "kit"
+      @template_spec_name = "test.spec"
     end
-    @project.finish(false)
-
-    @spec_generator = Tetra::SpecGenerator.new(@project)
   end
+
+  before(:each) do
+    create_mock_project
+
+    @template_path = File.join(instance.template_path, "test.spec")
+    File.open(@template_path, "w") { |io| io.puts "Hello <%= world_property %>\nintentionally blank line\n" }
+
+    @destination_path = File.join("output", instance.package_name, "#{instance.package_name}.spec")
+  end
+
+  let(:instance) { SpecGeneratorTestClass.new(@project) }
 
   after(:each) do
-    FileUtils.rm_rf(@project_path)
+    delete_mock_project
+    FileUtils.rm_rf(@template_path)
   end
 
-  describe "#generate_kit_spec" do
-    it "generates the first version" do
-      expect(@spec_generator.generate_kit_spec).to be_truthy
+  describe "#to_spec" do
+    it "generates a first version" do
+      expect(instance.to_spec).to be_truthy
 
       @project.from_directory do
-        spec_lines = File.readlines(File.join("output", "test-project-kit", "test-project-kit.spec"))
-        expect(spec_lines).to include("Name:           test-project-kit\n")
-        expect(spec_lines).to include("Version:        1\n")
-        expect(spec_lines).to include("Source0:        test-project-kit.tar.xz\n")
+        spec_lines = File.readlines(@destination_path)
+        expect(spec_lines).to include("Hello World!\n")
       end
     end
+
     it "generates a second version" do
-      expect(@spec_generator.generate_kit_spec).to be_truthy
-      @project.dry_run
-      Dir.chdir(@project_path) do
-        test_file = File.join("kit", "test")
-        File.open(test_file, "w") { |io| io.puts "changed kit content test file" }
-
-        File.open(File.join("output", "test-project-kit", "test-project-kit.spec"), "a") do |io|
-          io.write("nonconflicting line")
-        end
-      end
-      @project.finish(false)
-
-      expect(@spec_generator.generate_kit_spec).to be_truthy
+      expect(instance.to_spec).to be_truthy
 
       @project.from_directory do
-        spec_lines = File.readlines(File.join("output", "test-project-kit", "test-project-kit.spec"))
-        expect(spec_lines).to include("Name:           test-project-kit\n")
-        expect(spec_lines).to include("Version:        2\n")
-        expect(spec_lines).to include("Source0:        test-project-kit.tar.xz\n")
+        File.open(@destination_path, "a") do |io|
+          io.write("nonconflicting line\n")
+        end
+      end
+
+      instance.world_property = "Mario!"
+
+      expect(instance.to_spec).to be_truthy
+
+      @project.from_directory do
+        spec_lines = File.readlines(@destination_path)
+        expect(spec_lines).not_to include("Hello World!\n")
+        expect(spec_lines).to include("Hello Mario!\n")
         expect(spec_lines).to include("nonconflicting line\n")
       end
     end
+
     it "generates a conflicting version" do
-      expect(@spec_generator.generate_kit_spec).to be_truthy
-      @project.dry_run
-      Dir.chdir(@project_path) do
-        test_file = File.join("kit", "test")
-        File.open(test_file, "w") { |io| io.puts "changed kit content test file" }
+      expect(instance.to_spec).to be_truthy
 
-        spec_path = File.join("output", "test-project-kit", "test-project-kit.spec")
-        spec_contents = File.read spec_path
+      @project.from_directory do
+        spec_contents = File.read(@destination_path)
+        spec_contents.gsub!(/Hello World/, "CONFLICTING!")
 
-        spec_contents.gsub!(/^Version:.*$/, "CONFLICTING!")
-
-        File.open(spec_path, "w+") do |io|
+        File.open(@destination_path, "w+") do |io|
           io.write(spec_contents)
         end
       end
-      @project.finish(false)
 
-      expect(@spec_generator.generate_kit_spec).to be_truthy
+      instance.world_property = "Mario!"
+
+      expect(instance.to_spec).to be_truthy
 
       @project.from_directory do
-        spec_lines = File.readlines(File.join("output", "test-project-kit", "test-project-kit.spec"))
-        expect(spec_lines).to include("Name:           test-project-kit\n")
-        expect(spec_lines).to include("Source0:        test-project-kit.tar.xz\n")
+        spec_lines = File.readlines(@destination_path)
         expect(spec_lines).to include("<<<<<<< newly generated\n")
-        expect(spec_lines).to include("Version:        2\n")
+        expect(spec_lines).to include("Hello Mario!\n")
         expect(spec_lines).to include("=======\n")
-        expect(spec_lines).to include("CONFLICTING!\n")
+        expect(spec_lines).to include("CONFLICTING!!\n")
         expect(spec_lines).to include(">>>>>>> user edited\n")
-      end
-    end
-  end
-
-  describe "#generate_package_spec" do
-    it "generates the first version" do
-
-      @project.from_directory do
-        FileUtils.mkdir_p File.join("src", "test", "out")
-        (1..5).each do |i|
-          `touch src/test/test#{i}.java`
-        end
-        @project.dry_run
-
-        (1..5).each do |i|
-          `touch src/test/test#{i}.class`
-        end
-
-        (1..5).each do |i|
-          `touch src/test/out/test#{i}.jar`
-        end
-
-        @project.finish(false)
-      end
-
-      FileUtils.copy(File.join("spec", "data", "nailgun", "pom.xml"), @project_path)
-      @spec_generator.generate_package_spec "test", File.join(@project_path, "pom.xml"), "*.jar"
-
-      @project.from_directory do
-        spec_lines = File.readlines(File.join("output", "test", "test.spec"))
-        expect(spec_lines).to include("Name:           test\n")
-        expect(spec_lines).to include("License:        The Apache Software License, Version 2.0\n")
-        expect(spec_lines).to include("Summary:        Nailgun is a client, protocol, and server for running Java\n")
-        expect(spec_lines).to include("Url:            http://martiansoftware.com/nailgun\n")
-        expect(spec_lines).to include("BuildRequires:  #{@project.name}-kit >= 2\n")
-        expect(spec_lines).to include("Provides:       mvn(com.martiansoftware:nailgun-all) == 0.9.1\n")
-        expect(spec_lines).to include("cp -a out/test3.jar %{buildroot}%{_javadir}/test3.jar\n")
+        expect(spec_lines).to include("intentionally blank line\n")
       end
     end
   end

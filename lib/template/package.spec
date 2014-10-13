@@ -27,7 +27,9 @@ Source1:        build.sh
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 BuildRequires:  xz
 BuildRequires:  java-devel
-BuildRequires:  <%= project_name %>-kit >= <%= project_version %>
+<% kit_items.each do |item| %>
+BuildRequires:  <%= item.provides_symbol %> == <%= item.provides_version %>
+<% end %>
 BuildArch:      noarch
 Provides:       mvn(<%= group_id %>:<%= artifact_id %>) == <%= version %>
 Requires:       java
@@ -43,7 +45,7 @@ Requires:       mvn(<%= dependency_id[0] %>:<%= dependency_id[1] %>) <% if depen
 %prep
 %setup -q -c -n src/<%= name %>
 cp -f %{SOURCE1} .
-cp -Rf %{_datadir}/tetra/<%= project_name %>-kit ../../kit
+cp -Rf %{_datadir}/tetra ../../kit
 
 %build
 cd ../../

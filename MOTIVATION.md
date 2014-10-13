@@ -11,13 +11,19 @@ A typical example is packaging any software built by Maven on SUSE distros. A nu
 * Maven often uses multiple versions of a same library or plugin during the same build. Usually distros do not accept more than one version of any given library to reduce maintenance work;
 * Maven requires itself in order to build. To be more exact, Maven needs Nexus, which in turn needs Maven and Nexus. To be more exact, its build dependency graph is a very complicated mess with lots of cycles that have to be broken manually.
 
-The current solution in openSUSE is having the packager handle those differences, but this limits the amount of software the community is able to package due to the high effort required to overcome them.
+## Existing solutions
 
-The Fedora community is experimenting with another set of tools, [XMvn](http://mizdebsk.fedorapeople.org/xmvn/site/), which goals are similar to `tetra`'s. 
+In the openSUSE community, it is a packager's duty to handle those differences, but this limits the amount of software the community is able to package due to the high effort required to overcome them.
+
+The Fedora community uses another set of tools, [XMvn](http://mizdebsk.fedorapeople.org/xmvn/site/), which goals are similar to `tetra`'s. They are limited to Maven, though.
+
+The Debian community has [various tools](https://wiki.debian.org/Java/Packaging), and among those one that automatically patches `pom.xml` Maven files. The downside is that those files will be different from the original upstream's, so they will have to be kept up to date.
+
+The Arch community [basically ignores the problem](https://wiki.archlinux.org/index.php/Java_Package_Guidelines): "You do not need to compile Java applications from source.".
 
 ## Kit rationale
 
-`tetra` simplifies the packaging process mostly because of its use of a binary blob package that contains all build time dependencies for a set of packages called a **kit**.
+`tetra` simplifies the packaging process mostly because of its use of packaged binary blobs that contain all build time dependencies for a set of packages. This is called a **kit**.
 
 Building software from a binary blob is unusual for Linux distros, and it surely has some drawbacks. It is anyway believed that benefits outweigh them, in fact using prebuilt software:
 

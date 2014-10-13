@@ -61,19 +61,26 @@ module Tetra
       Dir.chdir(dir) do
         Tetra::Git.new(".").init
 
-        FileUtils.mkdir_p "src"
-        FileUtils.mkdir_p "kit"
+        FileUtils.mkdir_p("src")
+        FileUtils.mkdir_p("kit")
 
         # populate the project with templates and take a snapshot
         project = Project.new(".")
 
-        template_manager = Tetra::TemplateManager.new
-        template_manager.copy "output", "."
-        template_manager.copy "kit", "."
-        template_manager.copy "src", "."
-        template_manager.copy "gitignore", ".gitignore"
+        template_path = File.join(File.dirname(__FILE__), "..", "template")
 
-        project.take_snapshot "Template files added", :init
+        templates = {
+          "output" => ".",
+          "kit" => ".",
+          "src" => ".",
+          "gitignore" => ".gitignore"
+        }
+
+        templates.each do |source, destination|
+          FileUtils.cp_r(File.join(template_path, source), destination)
+        end
+
+        project.take_snapshot("Template files added", :init)
       end
     end
 
@@ -83,7 +90,7 @@ module Tetra
     def dry_run
       return false if dry_running?
 
-      current_directory = Pathname.new(Dir.pwd).relative_path_from Pathname.new(@full_path)
+      current_directory = Pathname.new(Dir.pwd).relative_path_from(Pathname.new(@full_path))
 
       take_snapshot("Dry-run started", :dry_run_started, current_directory)
       true
@@ -103,11 +110,11 @@ module Tetra
           @git.revert_whole_directory(".", latest_tag(:dry_run_started))
           @git.delete_tag(latest_tag(:dry_run_started))
         else
-          take_snapshot "Changes during dry-run", :dry_run_changed
+          take_snapshot("Changes during dry-run", :dry_run_changed)
 
           @git.revert_whole_directory("src", latest_tag(:dry_run_started))
 
-          take_snapshot "Dry run finished", :dry_run_finished
+          take_snapshot("Dry run finished", :dry_run_finished)
         end
         return true
       end
@@ -115,16 +122,8 @@ module Tetra
     end
 
     # takes a revertable snapshot of this project
-    def take_snapshot(message, tag_prefix = nil, tag_message = nil)
-      tag = (
-        if tag_prefix
-          "#{tag_prefix}_#{latest_tag_count(tag_prefix) + 1}"
-        else
-          nil
-        end
-      )
-
-      @git.commit_whole_directory(message, tag, tag_message)
+    def take_snapshot(message, tag_prefix, tag_message = nil)
+      @git.commit_whole_directory(message, next_tag(tag_prefix), tag_message)
     end
 
     # replaces content in path with new_content, takes a snapshot using
@@ -144,7 +143,7 @@ module Tetra
 
         File.open(path, "w") { |io| io.write(new_content) }
         log.debug "taking snapshot with new content: #{snapshot_message}"
-        take_snapshot(snapshot_message, tag_prefix)
+        @git.commit_file(path, snapshot_message, next_tag(tag_prefix))
 
         if already_existing
           if previous_tag == ""
@@ -170,6 +169,11 @@ module Tetra
     # returns the maximum tag count for a given tag prefix
     def latest_tag_count(prefix)
       @git.get_tag_maximum_suffix(prefix)
+    end
+
+    # returns the next tag for a given tag prefix
+    def next_tag(prefix)
+      "#{prefix}_#{latest_tag_count(prefix) + 1}"
     end
 
     # runs a block from the project directory or a subdirectory

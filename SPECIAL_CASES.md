@@ -14,11 +14,9 @@ You can do any manual changes to spec and build.sh files and regenerate them lat
 * `tetra generate-package-archive`: (re)generates a package tarball;
 * `tetra generate-package-spec`: (re)generates a package spec;
 
-Note that, by default, `generate-kit-archive` will generate additional "diff" tar.xz files instead of rewriting the whole archive - this will result in faster uploads if you use OBS (see below). You can use the `--whole` option to regenerate a single complete archive.
-
 ## Kit sources
 
-Your kit is basically a binary blob. If its sources are needed for proper packaging, for example to comply with the GPL, some extra steps are needed.
+Your kit packages are basically binary blobs. If its sources are needed for proper packaging, for example to comply with the GPL, some extra steps are needed.
 
 If you use Maven, most (~90%) sources can be automatically downloaded:
 

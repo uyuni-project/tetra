@@ -1,60 +1,56 @@
 # encoding: UTF-8
 
 module Tetra
-  # creates and updates spec files
-  class SpecGenerator
-    include Logging
+  # implements a to_spec method
+  module SpecGenerator
+    # expected attributes:
+    #   project (Tetra::Project)
+    #   package_name (string)
+    #   spec_dir (string)
+    #   template_spec_name (string)
 
-    def initialize(project)
-      @project = project
-    end
+    # saves a specfile for this object in correct directories
+    # returns the spec path and the conflict count with the previously generated
+    # version, if any
+    def to_spec
+      project.from_directory do
+        spec_name = "#{package_name}.spec"
+        spec_path = File.join(spec_dir, spec_name)
 
-    def generate_kit_spec
-      @project.from_directory do
-        spec_name = "#{@project.name}-kit.spec"
-        spec_path = File.join("kit", spec_name)
-        output_dir = File.join("output", "#{@project.name}-kit")
+        new_content = generate(template_spec_name, binding)
+        conflict_count = project.merge_new_content(new_content, spec_path,
+                                                   "Spec generated", "generate_#{package_name}_spec")
+
+        output_dir = File.join("output", package_name)
         FileUtils.mkdir_p(output_dir)
 
-        adapter = Tetra::KitSpecAdapter.new(@project)
-        conflict_count = generate_merging("kit.spec", adapter.public_binding, spec_path, :generate_kit_spec)
-
-        symlink_to_output(spec_path, output_dir)
+        spec_link_path = File.join(output_dir, spec_name)
+        FileUtils.symlink(File.expand_path(spec_path), spec_link_path, force: true)
 
         [spec_path, conflict_count]
       end
     end
 
-    def generate_package_spec(name, pom_path, filter)
-      pom = Tetra::Pom.new(pom_path)
-      @project.from_directory do
-        spec_name = "#{name}.spec"
-        spec_path = File.join("src", name, spec_name)
-        output_dir = File.join("output", name)
-        FileUtils.mkdir_p(output_dir)
-
-        adapter = Tetra::PackageSpecAdapter.new(@project, name, pom, filter)
-        conflict_count = generate_merging("package.spec", adapter.public_binding, spec_path, "generate_#{name}_spec")
-
-        symlink_to_output(spec_path, output_dir)
-
-        [spec_path, conflict_count]
-      end
+    # returns the spec template path, exposed for testing
+    def template_path
+      File.join(File.dirname(__FILE__), "..", "template")
     end
 
     private
 
-    # generates a spec file from a template and 3-way merges it
-    def generate_merging(template, binding, path, tag_prefix)
-      new_content = TemplateManager.new.generate(template, binding)
-      @project.merge_new_content(new_content, path, "Spec generated", tag_prefix)
-    end
+    # generates content from an ERB template and an object binding
+    # if destination_path is given, write it to that file, otherwise just
+    # return it
+    def generate(template_name, object_binding, destination_path = nil)
+      template_path = File.join(File.dirname(__FILE__), "..", "template")
+      erb = ERB.new File.read(File.join(template_path, template_name)), nil, "<>"
+      new_content =  erb.result(object_binding)
 
-    # links a spec file in a subdirectory of output/
-    def symlink_to_output(spec_path, destination_dir)
-      spec_name = Pathname.new(spec_path).basename.to_s
-      destination_spec_path = File.join(destination_dir, spec_name)
-      FileUtils.symlink(File.expand_path(spec_path), destination_spec_path, force: true)
+      unless destination_path.nil?
+        File.open(destination_path, "w") { |io| io.write new_content }
+      end
+
+      new_content
     end
   end
 end
