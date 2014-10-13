@@ -3,7 +3,7 @@
 module Tetra
   # tetra finish
   class FinishCommand < Tetra::BaseCommand
-    option %w(-a --abort), :flag, "build abort, restore files as before dry-run"
+    option %w(-a --abort), :flag, "abort build, restore files as before dry-run"
 
     def execute
       checking_exceptions do
