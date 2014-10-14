@@ -18,8 +18,9 @@ module Tetra
         spec_path = File.join(spec_dir, spec_name)
 
         new_content = generate(template_spec_name, binding)
+        label = "Spec for #{package_name} generated"
         conflict_count = project.merge_new_content(new_content, spec_path,
-                                                   "Spec generated", "generate_#{package_name}_spec")
+                                                   label, "generate_#{package_name}_spec")
 
         output_dir = File.join("output", package_name)
         FileUtils.mkdir_p(output_dir)
