@@ -46,13 +46,13 @@ Requires:       mvn(<%= dependency_id[0] %>:<%= dependency_id[1] %>) <% if depen
 %>
 
 %prep
-%setup -q -c -n src/<%= name %>
+%setup -q -c -n src
 cp -f %{SOURCE1} .
-cp -Rf %{_datadir}/tetra ../../kit
+cp -Rf %{_datadir}/tetra ../kit
 
 %build
-cd ../../
-sh src/<%= name %>/build.sh
+cd ..
+sh src/build.sh
 
 %install
 export NO_BRP_CHECK_BYTECODE_VERSION=true
