@@ -10,9 +10,9 @@ You can do any manual changes to spec and build.sh files and regenerate them lat
 
 * `tetra generate-kit-archive`: (re)generates the kit tarball;
 * `tetra generate-kit-spec`: (re)generates the kit spec;
-* `tetra generate-package-script`: (re)generates the `build.sh` file from the latest bash history (assumes `tetra dry-run` and `tetra finish`have been used). Assumes your current working directory is in a package folder (that is, a subdirectory of `src/<package name>/`);
-* `tetra generate-package-archive`: (re)generates a package tarball;
-* `tetra generate-package-spec`: (re)generates a package spec;
+* `tetra generate-package-script`: (re)generates the `build.sh` file from the latest bash history (assumes `tetra dry-run` and `tetra finish`have been used);
+* `tetra generate-package-archive`: (re)generates the package tarball;
+* `tetra generate-package-spec`: (re)generates the package spec;
 
 ## Kit sources
 

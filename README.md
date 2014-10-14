@@ -35,33 +35,34 @@ With `tetra` you are not building all dependencies from source, just your packag
 
 ## A commons-collections walkthrough
 
-First, ceate a new `tetra` project, in this example named "myproject":
+First, ceate a new `tetra` project named after the package that we want to build:
 
-    mkdir myproject
-    cd myproject
-    tetra init
-
-Second, place commons-collections source files in the `src/` folder. Specifically, every `src/` subfolder will become a separate package named after the folder itself, so you can use the following:
-
-    cd src
     mkdir commons-collections
     cd commons-collections
+    tetra init
+
+Second, place source files in the `src/` folder:
+
+    cd src
     wget http://archive.apache.org/dist/commons/collections/source/commons-collections-3.2.1-src.zip
     unzip commons-collections-3.2.1-src.zip
     rm commons-collections-3.2.1-src.zip
 
 Third, put all non-source files needed for the build in `kit/`. This means all build dependencies and tools excluding the JDK: in this case it is just Maven:
 
-    cd ../../kit
+    cd ../kit
     wget http://www.eu.apache.org/dist/maven/binaries/apache-maven-3.1.1-bin.zip
     unzip apache-maven-3.1.1-bin.zip
     rm apache-maven-3.1.1-bin.zip
 
 Fourth, you need to show `tetra` how to build your package by running appropriate commands between `tetra dry-run` and `tetra finish`. Bash history will be recorded to generate a "starting-point" build script (that will be sufficient in simple cases like this):
 
-    cd ../src/commons-collections/commons-collections-3.2.1-src/
+    cd ../src
     tetra dry-run
+
+    cd commons-collections-3.2.1-src/
     tetra mvn package
+
     tetra finish
 
 Note that we used `tetra mvn package` instead of `mvn package`: this will use of the Maven copy we put in `kit/` and the repository in `kit/m2`.

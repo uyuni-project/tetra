@@ -3,16 +3,13 @@
 module Tetra
   # tetra generate-package-script
   class GeneratePackageScriptCommand < Tetra::BaseCommand
-    parameter "[DIRECTORY]", "path to a package directory (src/<package name>)", default: "."
-
     def execute
       checking_exceptions do
         project = Tetra::Project.new(".")
         ensure_dry_running(false, project) do
-          package_name = project.get_package_name(directory)
           history_file = File.join(Dir.home, ".bash_history")
           result_path, conflict_count = Tetra::ScriptGenerator.new(project, history_file)
-            .generate_build_script(package_name)
+            .generate_build_script
           print_generation_result(project, result_path, conflict_count)
         end
       end

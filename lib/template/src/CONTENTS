@@ -1,6 +1,3 @@
-For each package you want to create, you should create a subdirectory here
-named after the package name itself.
-
-In that directory, place all the source files "verbatim" (as checked out from
-the original source repository, ideally in a different subdirectory)
-plus any additional files you might need for the build.
+All "verbatim" source files should be placed here (as checked out from
+the original source repository), together with any additional files you
+might need for the build.

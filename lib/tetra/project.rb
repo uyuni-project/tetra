@@ -40,22 +40,6 @@ module Tetra
       File.directory?(File.join(dir, ".git"))
     end
 
-    # returns the package name corresponding to the specified dir, if any
-    # raises NoPackageDirectoryError if dir is not a (sub)directory of a package
-    def get_package_name(dir)
-      dir_path = Pathname.new(File.expand_path(dir)).relative_path_from(Pathname.new(@full_path))
-      components = dir_path.to_s.split(File::SEPARATOR)
-      if components.count >= 2 &&
-        components.first == "src" &&
-        Dir.exist?(File.join(@full_path, components[0], components[1]))
-        components[1]
-      else
-        fail NoPackageDirectoryError
-      end
-    rescue ArgumentError, NoProjectDirectoryError
-      raise NoPackageDirectoryError, dir
-    end
-
     # inits a new project directory structure
     def self.init(dir)
       Dir.chdir(dir) do
@@ -188,19 +172,18 @@ module Tetra
       @git.get_message(latest_tag(:dry_run_started))
     end
 
-    # returns a list of files produced during dry-runs in a certain package
-    def get_produced_files(package)
+    # returns a list of files produced during dry-runs
+    def produced_files
       dry_run_count = latest_tag_count(:dry_run_changed)
       log.debug "Getting produced files from #{dry_run_count} dry runs"
       if dry_run_count >= 1
-        package_dir = File.join("src", package)
         (1..dry_run_count).map do |i|
-          @git.changed_files_between("dry_run_started_#{i}", "dry_run_changed_#{i}", package_dir)
+          @git.changed_files_between("dry_run_started_#{i}", "dry_run_changed_#{i}", "src")
         end
           .flatten
           .uniq
           .sort
-          .map { |file| Pathname.new(file).relative_path_from(Pathname.new(package_dir)).to_s }
+          .map { |file| Pathname.new(file).relative_path_from(Pathname.new("src")).to_s }
       else
         []
       end

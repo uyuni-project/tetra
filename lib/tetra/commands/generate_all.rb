@@ -4,7 +4,6 @@ module Tetra
   # tetra generate-all
   class GenerateAllCommand < Tetra::BaseCommand
     option %w(-f --filter), "FILTER", "filter files to be installed by this package spec", default: "*.jar"
-    parameter "[DIRECTORY]", "path to a package directory (src/<package name>)", default: "."
     parameter "[POM]", "a package pom file path", default: "pom.xml"
 
     def execute
@@ -16,16 +15,13 @@ module Tetra
           GenerateKitSpecCommand.new(@invocation_path).execute
 
           script_command = GeneratePackageScriptCommand.new(@invocation_path)
-          script_command.directory = directory
           script_command.execute
 
           archive_command = GeneratePackageArchiveCommand.new(@invocation_path)
-          archive_command.directory = directory
           archive_command.execute
 
           archive_command = GeneratePackageSpecCommand.new(@invocation_path)
           archive_command.filter = filter
-          archive_command.directory = directory
           archive_command.pom = pom
           archive_command.execute
         end

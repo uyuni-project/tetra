@@ -36,9 +36,9 @@ describe Tetra::ScriptGenerator do
   describe "#generate_build_script" do
     it "generates a build script from the history" do
       @project.from_directory do
-        @generator.generate_build_script("test-package")
+        @generator.generate_build_script
 
-        lines = File.readlines(File.join("src", "test-package", "build.sh"))
+        lines = File.readlines(File.join("src", "build.sh"))
 
         expect(lines).to include("#!/bin/bash\n")
         expect(lines).to include("cd somewhere significant\n")

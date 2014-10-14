@@ -1,8 +1,8 @@
-This directory contains all binary files needed to build a tetra project's
-packages.
+This directory contains all binary files needed to build software in src/.
 
-These files should only be used during build and should not be installed
-on users' systems.
+These files will be packaged as binary and will only be used at build time.
+They will not be installed on users' systems.
 
-Some generally useful configuration files are also placed here (eg.
-m2/settings.xml for Maven builds).
+ - jars/ contains simple jars that will be packaged singularly
+ - m2/ contains a Maven repo which artifacts will be packaged singularly
+ - everything else will be packaged in one "glue" package.

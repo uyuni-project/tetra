@@ -3,13 +3,10 @@
 require "spec_helper"
 
 describe Tetra::Package do
+  include Tetra::Mockers
+
   before(:each) do
-    @project_path = File.join("spec", "data", "test-project")
-    Dir.mkdir(@project_path)
-
-    Tetra::Project.init(@project_path)
-    @project = Tetra::Project.new(@project_path)
-
+    create_mock_project
     @project.dry_run
     Dir.chdir(@project_path) do
       FileUtils.touch(File.join("kit", "jars", "test.jar"))
@@ -17,18 +14,18 @@ describe Tetra::Package do
     @project.finish(false)
 
     @project.from_directory do
-      FileUtils.mkdir_p File.join("src", "test", "out")
+      FileUtils.mkdir_p(File.join("src", "out"))
       (1..5).each do |i|
-        `touch src/test/test#{i}.java`
+        FileUtils.touch(File.join("src", "test#{i}.java"))
       end
       @project.dry_run
 
       (1..5).each do |i|
-        `touch src/test/test#{i}.class`
+        FileUtils.touch(File.join("src", "test#{i}.class"))
       end
 
       (1..5).each do |i|
-        `touch src/test/out/test#{i}.jar`
+        FileUtils.touch(File.join("src", "out", "test#{i}.jar"))
       end
 
       @project.finish(false)
@@ -36,11 +33,11 @@ describe Tetra::Package do
 
     FileUtils.copy(File.join("spec", "data", "nailgun", "pom.xml"), @project_path)
 
-    @package = Tetra::Package.new(@project, "test", File.join(@project_path, "pom.xml"), "*.jar")
+    @package = Tetra::Package.new(@project, File.join(@project_path, "pom.xml"), "*.jar")
   end
 
   after(:each) do
-    FileUtils.rm_rf(@project_path)
+    delete_mock_project
   end
 
   describe "#to_spec" do
@@ -48,8 +45,8 @@ describe Tetra::Package do
       @package.to_spec
 
       @project.from_directory do
-        spec_lines = File.readlines(File.join("output", "test", "test.spec"))
-        expect(spec_lines).to include("Name:           test\n")
+        spec_lines = File.readlines(File.join("output", "test-project", "test-project.spec"))
+        expect(spec_lines).to include("Name:           test-project\n")
         expect(spec_lines).to include("License:        The Apache Software License, Version 2.0\n")
         expect(spec_lines).to include("Summary:        Nailgun is a client, protocol, and server for running Java\n")
         expect(spec_lines).to include("Url:            http://martiansoftware.com/nailgun\n")
@@ -65,13 +62,13 @@ da39a3ee5e6b4b0d3255bfef95601890afd80709\n")
   describe "#to_archive" do
     it "generates an archive" do
       @project.from_directory("src") do
-        FileUtils.touch(File.join("test", "src_test"))
+        FileUtils.touch("src_test")
       end
       @project.finish(false)
 
       @package.to_archive
       @project.from_directory do
-        expect(`tar -Jtf output/test/test.tar.xz`.split).to include("src_test")
+        expect(`tar -Jtf output/test-project/test-project.tar.xz`.split).to include("src_test")
       end
     end
   end

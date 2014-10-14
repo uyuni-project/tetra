@@ -78,8 +78,6 @@ module Tetra
       $stderr.puts e
     rescue NoProjectDirectoryError => e
       $stderr.puts "#{e.directory} is not a tetra project directory, see tetra init"
-    rescue NoPackageDirectoryError => e
-      $stderr.puts "#{e.directory} is not a tetra package directory, see README"
     rescue GitAlreadyInitedError
       $stderr.puts "This directory is already a tetra project"
     rescue ExecutableNotFoundError => e

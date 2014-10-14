@@ -35,54 +35,6 @@ describe Tetra::Project do
     end
   end
 
-  describe ".get_package_name"  do
-    it "raises an error with a directory outside a tetra project" do
-      expect do
-        @project.get_package_name("/")
-      end.to raise_error(Tetra::NoPackageDirectoryError)
-    end
-
-    it "raises an error with a tetra project directory" do
-      expect do
-        @project.get_package_name(@project_path)
-      end.to raise_error(Tetra::NoPackageDirectoryError)
-    end
-
-    it "raises an error with a tetra kit directory" do
-      expect do
-        @project.get_package_name(File.join(@project_path, "kit"))
-      end.to raise_error(Tetra::NoPackageDirectoryError)
-    end
-
-    it "raises an error with a tetra src directory" do
-      expect do
-        @project.get_package_name(File.join(@project_path, "src"))
-      end.to raise_error(Tetra::NoPackageDirectoryError)
-    end
-
-    it "raises an error with a nonexisting package directory" do
-      expect do
-        @project.get_package_name(File.join(@project_path, "src", "test_package"))
-      end.to raise_error(Tetra::NoPackageDirectoryError)
-    end
-
-    it "returns the package on an existing package directory" do
-      FileUtils.mkdir_p(File.join(@project_path, "src", "test_package"))
-      expect(@project.get_package_name(File.join(@project_path, "src", "test_package"))).to eq "test_package"
-    end
-
-    it "returns the package on an existing package subdirectory" do
-      FileUtils.mkdir_p(File.join(@project_path, "src", "test_package", "subdir1"))
-      expect(@project.get_package_name(File.join(@project_path, "src", "test_package", "subdir1"))).to eq "test_package"
-    end
-
-    it "returns the package on an existing package subsubdirectory" do
-      FileUtils.mkdir_p(File.join(@project_path, "src", "test_package", "subdir1", "subdir2"))
-      expect(@project.get_package_name(File.join(@project_path, "src", "test_package", "subdir1", "subdir2")))
-        .to eq "test_package"
-    end
-  end
-
   describe "full_path" do
     it "returns the project's full path" do
       expect(@project.full_path).to eq File.expand_path(@project_path)
@@ -114,7 +66,7 @@ describe Tetra::Project do
   describe "#take_snapshot" do
     it "commits the project contents to git for later use" do
       @project.from_directory do
-        `touch kit/test`
+        FileUtils.touch(File.join("kit", "test"))
 
         @project.take_snapshot("test", :revertable)
 
@@ -127,8 +79,7 @@ describe Tetra::Project do
   describe "#finish" do
     it "ends the current dry-run phase after a successful build" do
       @project.from_directory do
-        Dir.mkdir("src/abc")
-        `echo A > src/abc/test`
+        File.open(File.join("src", "test"), "w") { |f| f.write("A") }
       end
 
       expect(@project.finish(true)).to be_falsey
@@ -137,8 +88,8 @@ describe Tetra::Project do
       expect(@project.dry_run).to be_truthy
 
       @project.from_directory do
-        `echo B > src/abc/test`
-        `touch src/abc/test2`
+        File.open(File.join("src", "test"), "w") { |f| f.write("B") }
+        FileUtils.touch(File.join("src", "test2"))
       end
 
       expect(@project.finish(false)).to be_truthy
@@ -146,17 +97,16 @@ describe Tetra::Project do
 
       @project.from_directory do
         expect(`git rev-list --all`.split("\n").length).to eq 4
-        expect(File.read("src/abc/test")).to eq "A\n"
+        expect(File.read("src/test")).to eq "A"
 
-        expect(`git diff-tree --no-commit-id --name-only -r HEAD~`.split("\n")).to include("src/abc/test2")
-        expect(File.exist?("src/abc/test2")).to be_falsey
+        expect(`git diff-tree --no-commit-id --name-only -r HEAD~`.split("\n")).to include("src/test2")
+        expect(File.exist?("src/test2")).to be_falsey
       end
     end
     it "ends the current dry-run phase after a failed build" do
       @project.from_directory do
-        Dir.mkdir("src/abc")
-        `echo A > src/abc/test`
-        `echo A > kit/test`
+        File.open(File.join("src", "test"), "w") { |f| f.write("A") }
+        File.open(File.join("kit", "test"), "w") { |f| f.write("A") }
       end
 
       expect(@project.finish(true)).to be_falsey
@@ -165,10 +115,10 @@ describe Tetra::Project do
       expect(@project.dry_run).to be_truthy
 
       @project.from_directory do
-        `echo B > src/abc/test`
-        `touch src/abc/test2`
-        `echo B > kit/test`
-        `touch kit/test2`
+        File.open(File.join("src", "test"), "w") { |f| f.write("B") }
+        FileUtils.touch(File.join("src", "test2"))
+        File.open(File.join("kit", "test"), "w") { |f| f.write("B") }
+        FileUtils.touch(File.join("kit", "test2"))
       end
 
       expect(@project.finish(true)).to be_truthy
@@ -176,10 +126,10 @@ describe Tetra::Project do
 
       @project.from_directory do
         expect(`git rev-list --all`.split("\n").length).to eq 2
-        expect(File.read("src/abc/test")).to eq "A\n"
-        expect(File.exist?("src/abc/test2")).to be_falsey
+        expect(File.read("src/test")).to eq "A"
+        expect(File.exist?("src/test2")).to be_falsey
 
-        expect(File.read("kit/test")).to eq "A\n"
+        expect(File.read("kit/test")).to eq "A"
         expect(File.exist?("kit/test2")).to be_falsey
       end
     end
@@ -190,7 +140,7 @@ describe Tetra::Project do
       expect(@project.finish(false)).to be_falsey
 
       @project.from_directory do
-        `touch src/test`
+        FileUtils.touch(File.join("src", "test"))
       end
 
       @project.from_directory("src") do
@@ -206,27 +156,26 @@ describe Tetra::Project do
     end
   end
 
-  describe "#get_produced_files" do
+  describe "#produced_files" do
     it "gets a list of produced files" do
       @project.from_directory do
-        Dir.mkdir("src/abc")
-        `echo A > src/abc/added_outside_dry_run`
+        File.open(File.join("src", "added_outside_dry_run"), "w") { |f| f.write("A") }
       end
 
       expect(@project.dry_run).to be_truthy
       @project.from_directory do
-        `echo A > src/abc/added_in_first_dry_run`
-        `echo A > src/added_outside_directory`
+        File.open(File.join("src", "added_in_first_dry_run"), "w") { |f| f.write("A") }
+        File.open("added_outside_directory", "w") { |f| f.write("A") }
       end
       expect(@project.finish(false)).to be_truthy
 
       expect(@project.dry_run).to be_truthy
       @project.from_directory do
-        `echo A > src/abc/added_in_second_dry_run`
+        File.open(File.join("src", "added_in_second_dry_run"), "w") { |f| f.write("A") }
       end
       expect(@project.finish(false)).to be_truthy
 
-      list = @project.get_produced_files("abc")
+      list = @project.produced_files
       expect(list).to include("added_in_first_dry_run")
       expect(list).to include("added_in_second_dry_run")
 
@@ -238,7 +187,7 @@ describe Tetra::Project do
   describe "#purge_jars" do
     it "moves jars in kit/jars" do
       @project.from_directory do
-        `echo "jarring" > src/test.jar`
+        File.open(File.join("src", "test.jar"), "w") { |f| f.write("jarring") }
       end
       expect(@project.finish(false)).to be_falsey
 
@@ -247,7 +196,7 @@ describe Tetra::Project do
       @project.from_directory do
         expect(File.symlink?(File.join("src", "test.jar"))).to be_truthy
         expect(File.readlink(File.join("src", "test.jar"))).to eq "../kit/jars/test.jar"
-        expect(File.readlines(File.join("kit", "jars", "test.jar"))).to include("jarring\n")
+        expect(File.readlines(File.join("kit", "jars", "test.jar"))).to include("jarring")
       end
     end
   end
