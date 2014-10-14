@@ -117,25 +117,24 @@ module Tetra
     def merge_new_content(new_content, path, snapshot_message, tag_prefix)
       from_directory do
         log.debug "merging new content to #{path} with prefix #{tag_prefix}"
-        already_existing = File.exist? path
-        previous_tag = latest_tag(tag_prefix)
+        already_existing = File.exist?(path)
 
         if already_existing
+          if latest_tag_count(tag_prefix) == 0
+            log.debug "saving untagged version"
+            @git.commit_file(path, snapshot_message, next_tag(tag_prefix))
+          end
           log.debug "moving #{path} to #{path}.tetra_user_edited"
           File.rename path, "#{path}.tetra_user_edited"
         end
+
+        previous_tag = latest_tag(tag_prefix)
 
         File.open(path, "w") { |io| io.write(new_content) }
         log.debug "taking snapshot with new content: #{snapshot_message}"
         @git.commit_file(path, snapshot_message, next_tag(tag_prefix))
 
         if already_existing
-          if previous_tag == ""
-            previous_tag = latest_tag(tag_prefix)
-            log.debug "there was no tag with prefix #{tag_prefix} before snapshot"
-            log.debug "defaulting to #{previous_tag} after snapshot"
-          end
-
           # 3-way merge
           conflict_count = @git.merge_with_tag("#{path}", "#{path}.tetra_user_edited", previous_tag)
           File.delete "#{path}.tetra_user_edited"
