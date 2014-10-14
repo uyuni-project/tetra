@@ -25,6 +25,7 @@ module Tetra
 
         script_lines = [
           "#!/bin/bash",
+          "set -xe",
           "PROJECT_PREFIX=`readlink -e .`",
           "cd #{@project.latest_dry_run_directory}"
         ] +
