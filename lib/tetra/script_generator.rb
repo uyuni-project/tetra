@@ -51,7 +51,7 @@ module Tetra
         destination_script_path =  File.join(output_dir, "build.sh")
         FileUtils.symlink(File.expand_path(result_path), destination_script_path, force: true)
 
-        [result_path, conflict_count]
+        [destination_script_path, conflict_count]
       end
     end
   end

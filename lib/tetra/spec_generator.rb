@@ -28,7 +28,7 @@ module Tetra
         spec_link_path = File.join(output_dir, spec_name)
         FileUtils.symlink(File.expand_path(spec_path), spec_link_path, force: true)
 
-        [spec_path, conflict_count]
+        [spec_link_path, conflict_count]
       end
     end
 
