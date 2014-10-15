@@ -219,13 +219,4 @@ module Tetra
       @directory = directory
     end
   end
-
-  # current directory is not a tetra package directory
-  class NoPackageDirectoryError < StandardError
-    attr_reader :directory
-
-    def initialize(directory)
-      @directory = directory
-    end
-  end
 end
