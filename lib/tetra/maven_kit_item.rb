@@ -4,6 +4,8 @@ module Tetra
   # represents a prebuilt package dependency from a Maven local repo
   # in a kit
   class MavenKitItem
+    include Archiver
+
     # implement to_spec
     include SpecGenerator
     attr_reader :project
@@ -12,11 +14,8 @@ module Tetra
     attr_reader :template_spec_name
     attr_reader :conflicts
 
-    # implement to_archive
-    include Archiver
     attr_reader :source_dir
     attr_reader :source_paths
-    attr_reader :destination_dir
 
     # template-specific attributes
     attr_reader :provides_symbol
@@ -41,7 +40,10 @@ module Tetra
 
       @source_dir = File.join("kit", "m2")
       @source_paths = source_paths
-      @destination_dir = @package_name
+    end
+
+    def to_archive
+      _to_archive(@project, @package_name, @source_dir, @source_paths, @package_name)
     end
 
     private

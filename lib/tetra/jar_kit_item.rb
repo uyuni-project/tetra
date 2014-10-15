@@ -4,6 +4,8 @@ module Tetra
   # represents a prebuilt package dependency from a jar file
   # in a kit
   class JarKitItem
+    include Archiver
+
     # implement to_spec
     include SpecGenerator
     attr_reader :project
@@ -12,11 +14,8 @@ module Tetra
     attr_reader :template_spec_name
     attr_reader :conflicts
 
-    # implement to_archive
-    include Archiver
     attr_reader :source_dir
     attr_reader :source_paths
-    attr_reader :destination_dir
 
     # template-specific  attributes
     attr_reader :provides_symbol
@@ -35,11 +34,14 @@ module Tetra
 
       @source_dir = File.join("kit", "jars")
       @source_paths = [path]
-      @destination_dir = @package_name
 
       @provides_symbol = "tetra-jar(#{name})"
       @provides_version = hash
       @install_dir = "jars"
+    end
+
+    def to_archive
+      _to_archive(@project, @package_name, @source_dir, @source_paths, @package_name)
     end
   end
 end

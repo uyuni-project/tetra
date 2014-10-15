@@ -4,6 +4,7 @@ module Tetra
   # represents a Java project packaged in Tetra
   class Package
     extend Forwardable
+    include Archiver
     include SpecGenerator
 
     def_delegator :@project, :name, :name
@@ -20,12 +21,6 @@ module Tetra
     # implement to_spec
     attr_reader :spec_dir
 
-    # implement to_archive
-    include Archiver
-    attr_reader :source_dir
-    attr_reader :source_paths
-    attr_reader :destination_dir
-
     def initialize(project, pom_path = nil, filter = nil)
       @project = project
       @kit = Tetra::Kit.new(project)
@@ -33,10 +28,6 @@ module Tetra
       @filter = filter
 
       @spec_dir = "src"
-
-      @source_dir = "src"
-      @source_paths = ["*"]
-      @destination_dir = name
     end
 
     # a short summary from the POM
@@ -74,6 +65,10 @@ module Tetra
 
     def template_spec_name
       "package.spec"
+    end
+
+    def to_archive
+      _to_archive(@project, name, "src", ["*"], name)
     end
   end
 end
