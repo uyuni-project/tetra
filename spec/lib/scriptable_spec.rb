@@ -2,13 +2,11 @@
 
 require "spec_helper"
 
-describe Tetra::ScriptGenerator do
-  before(:each) do
-    @project_path = File.join("spec", "data", "test-project")
-    Dir.mkdir(@project_path)
+describe Tetra::Scriptable do
+  include Tetra::Mockers
 
-    Tetra::Project.init(@project_path)
-    @project = Tetra::Project.new(@project_path)
+  before(:each) do
+    create_mock_project
 
     @project.from_directory do
       File.open("history", "w") do |io|
@@ -22,21 +20,20 @@ describe Tetra::ScriptGenerator do
 
       FileUtils.mkdir_p(File.join("src", "test-package"))
       @project.dry_run
-
-      @generator = Tetra::ScriptGenerator.new(@project, "history")
     end
 
     mock_maven_executable
   end
 
   after(:each) do
-    FileUtils.rm_rf(@project_path)
+    delete_mock_project
   end
 
   describe "#generate_build_script" do
     it "generates a build script from the history" do
       @project.from_directory do
-        @generator.generate_build_script
+        @package = Tetra::BuiltPackage.new(@project)
+        @package.to_script("history")
 
         lines = File.readlines(File.join("src", "build.sh"))
 

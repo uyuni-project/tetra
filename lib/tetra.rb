@@ -35,9 +35,9 @@ require "tetra/maven_runner"
 require "tetra/kit_checker"
 
 # internal, package related
-require "tetra/packages/script_generator"
 require "tetra/packages/archivable"
 require "tetra/packages/speccable"
+require "tetra/packages/scriptable"
 require "tetra/packages/maven_kit_item"
 require "tetra/packages/jar_kit_item"
 require "tetra/packages/glue_kit_item"
