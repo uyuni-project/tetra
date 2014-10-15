@@ -5,7 +5,7 @@ LineLength:
   Max: 120
 
 MethodLength:
-  Max: 35
+  Max: 40
 
 StringLiterals:
   EnforcedStyle: double_quotes
