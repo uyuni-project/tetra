@@ -10,18 +10,9 @@ describe Tetra::SpecGenerator do
     attr_accessor :world_property
 
     include Tetra::SpecGenerator
-    attr_reader :project
-    attr_reader :package_name
-    attr_reader :spec_dir
-    attr_reader :template_spec_name
 
-    def initialize(project)
+    def initialize
       @world_property = "World!"
-
-      @project = project
-      @package_name = "test-package"
-      @spec_dir = "kit"
-      @template_spec_name = "test.spec"
     end
   end
 
@@ -31,10 +22,10 @@ describe Tetra::SpecGenerator do
     @template_path = File.join(instance.template_path, "test.spec")
     File.open(@template_path, "w") { |io| io.puts "Hello <%= world_property %>\nintentionally blank line\n" }
 
-    @destination_path = File.join("output", instance.package_name, "#{instance.package_name}.spec")
+    @destination_path = File.join("output", "test-package", "test-package.spec")
   end
 
-  let(:instance) { SpecGeneratorTestClass.new(@project) }
+  let(:instance) { SpecGeneratorTestClass.new }
 
   after(:each) do
     delete_mock_project
@@ -43,7 +34,7 @@ describe Tetra::SpecGenerator do
 
   describe "#to_spec" do
     it "generates a first version" do
-      expect(instance.to_spec).to be_truthy
+      expect(instance._to_spec(@project, "test-package", "kit", "test.spec")).to be_truthy
 
       @project.from_directory do
         spec_lines = File.readlines(@destination_path)
@@ -52,7 +43,7 @@ describe Tetra::SpecGenerator do
     end
 
     it "generates a second version" do
-      expect(instance.to_spec).to be_truthy
+      expect(instance._to_spec(@project, "test-package", "kit", "test.spec")).to be_truthy
 
       @project.from_directory do
         File.open(@destination_path, "a") do |io|
@@ -62,7 +53,7 @@ describe Tetra::SpecGenerator do
 
       instance.world_property = "Mario!"
 
-      expect(instance.to_spec).to be_truthy
+      expect(instance._to_spec(@project, "test-package", "kit", "test.spec")).to be_truthy
 
       @project.from_directory do
         spec_lines = File.readlines(@destination_path)
@@ -73,7 +64,7 @@ describe Tetra::SpecGenerator do
     end
 
     it "generates a conflicting version" do
-      expect(instance.to_spec).to be_truthy
+      expect(instance._to_spec(@project, "test-package", "kit", "test.spec")).to be_truthy
 
       @project.from_directory do
         spec_contents = File.read(@destination_path)
@@ -86,7 +77,7 @@ describe Tetra::SpecGenerator do
 
       instance.world_property = "Mario!"
 
-      expect(instance.to_spec).to be_truthy
+      expect(instance._to_spec(@project, "test-package", "kit", "test.spec")).to be_truthy
 
       @project.from_directory do
         spec_lines = File.readlines(@destination_path)

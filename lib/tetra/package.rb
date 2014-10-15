@@ -8,18 +8,13 @@ module Tetra
     include SpecGenerator
 
     def_delegator :@project, :name, :name
-
     def_delegator :@kit, :items, :kit_items
-
     def_delegator :@pom, :license_name, :license
     def_delegator :@pom, :url
     def_delegator :@pom, :group_id
     def_delegator :@pom, :artifact_id
     def_delegator :@pom, :version
     def_delegator :@pom, :runtime_dependency_ids
-
-    # implement to_spec
-    attr_reader :spec_dir
 
     def initialize(project, pom_path = nil, filter = nil)
       @project = project
@@ -56,19 +51,12 @@ module Tetra
         .sub(/\.+$/, "")
     end
 
-    # needed by SpecGenerator
-    attr_reader :project
-
-    def package_name
-      name
-    end
-
-    def template_spec_name
-      "package.spec"
-    end
-
     def to_archive
       _to_archive(@project, name, "src", ["*"])
+    end
+
+    def to_spec
+      _to_spec(@project, name, "kit", "package.spec")
     end
   end
 end

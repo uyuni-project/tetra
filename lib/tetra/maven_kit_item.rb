@@ -5,19 +5,13 @@ module Tetra
   # in a kit
   class MavenKitItem
     include Archiver
-
-    # implement to_spec
     include SpecGenerator
+
     attr_reader :project
     attr_reader :package_name
-    attr_reader :spec_dir
-    attr_reader :template_spec_name
     attr_reader :conflicts
-
     attr_reader :source_dir
     attr_reader :source_paths
-
-    # template-specific attributes
     attr_reader :provides_symbol
     attr_reader :provides_version
     attr_reader :install_dir
@@ -30,8 +24,6 @@ module Tetra
 
       @project = project
       @package_name = "kit-item-#{group_id.gsub(".", "-")}-#{artifact_id}-#{version}"
-      @spec_dir = "kit"
-      @template_spec_name = "kit_item.spec"
       @conflicts = false
 
       @provides_symbol = "tetra-mvn(#{group_id}:#{artifact_id})"
@@ -44,6 +36,10 @@ module Tetra
 
     def to_archive
       _to_archive(@project, @package_name, @source_dir, @source_paths)
+    end
+
+    def to_spec
+      _to_spec(@project, @package_name, "kit", "kit_item.spec")
     end
 
     private

@@ -3,16 +3,10 @@
 module Tetra
   # implements a to_spec method
   module SpecGenerator
-    # expected attributes:
-    #   project (Tetra::Project)
-    #   package_name (string)
-    #   spec_dir (string)
-    #   template_spec_name (string)
-
     # saves a specfile for this object in correct directories
     # returns the spec path and the conflict count with the previously generated
     # version, if any
-    def to_spec
+    def _to_spec(project, package_name, spec_dir, template_spec_name)
       project.from_directory do
         spec_name = "#{package_name}.spec"
         spec_path = File.join(spec_dir, spec_name)
