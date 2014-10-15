@@ -43,7 +43,7 @@ module Tetra
     end
 
     def to_archive
-      _to_archive(@project, @package_name, @source_dir, @source_paths, @package_name)
+      _to_archive(@project, @package_name, @source_dir, @source_paths)
     end
 
     private

@@ -7,9 +7,9 @@ module Tetra
 
     # generates an archive and returns its name
     # this will archive source_paths starting from source_dir in
-    # destination_dir + package_name + extension
-    def _to_archive(project, package_name, source_dir, source_paths, destination_dir)
-      full_destination_dir = File.join(project.full_path, "output", destination_dir)
+    # output/package_name/package_name.extension
+    def _to_archive(project, package_name, source_dir, source_paths)
+      full_destination_dir = File.join(project.full_path, "output", package_name)
       FileUtils.mkdir_p(full_destination_dir)
 
       project.from_directory(source_dir) do

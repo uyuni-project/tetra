@@ -68,7 +68,7 @@ module Tetra
     end
 
     def to_archive
-      _to_archive(@project, name, "src", ["*"], name)
+      _to_archive(@project, name, "src", ["*"])
     end
   end
 end
