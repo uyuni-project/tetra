@@ -2,10 +2,11 @@
 
 module Tetra
   # represents a Java project packaged in Tetra
-  class Package
+  class BuiltPackage
     extend Forwardable
-    include Archiver
-    include SpecGenerator
+    include Archivable
+    include Speccable
+    include Scriptable
 
     def_delegator :@project, :name, :name
     def_delegator :@kit, :items, :kit_items
@@ -57,6 +58,10 @@ module Tetra
 
     def to_spec
       _to_spec(@project, name, "kit", "package.spec")
+    end
+
+    def to_script(history)
+      _to_script(@project, history)
     end
   end
 end

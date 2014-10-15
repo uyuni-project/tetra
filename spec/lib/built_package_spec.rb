@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-describe Tetra::Package do
+describe Tetra::BuiltPackage do
   include Tetra::Mockers
 
   before(:each) do
@@ -33,7 +33,7 @@ describe Tetra::Package do
 
     FileUtils.copy(File.join("spec", "data", "nailgun", "pom.xml"), @project_path)
 
-    @package = Tetra::Package.new(@project, File.join(@project_path, "pom.xml"), "*.jar")
+    @package = Tetra::BuiltPackage.new(@project, File.join(@project_path, "pom.xml"), "*.jar")
   end
 
   after(:each) do

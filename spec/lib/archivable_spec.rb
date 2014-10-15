@@ -2,19 +2,19 @@
 
 require "spec_helper"
 
-describe Tetra::Archiver do
+describe Tetra::Archivable do
   include Tetra::Mockers
 
   # mock
-  class TestArchiverClass
-    include Tetra::Archiver
+  class TestArchivableClass
+    include Tetra::Archivable
   end
 
   before(:each) do
     create_mock_project
   end
 
-  let(:instance) { TestArchiverClass.new }
+  let(:instance) { TestArchivableClass.new }
 
   after(:each) do
     delete_mock_project

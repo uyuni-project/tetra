@@ -2,7 +2,7 @@
 
 module Tetra
   # implements a to_archive method
-  module Archiver
+  module Archivable
     include Logging
 
     # generates an archive and returns its name

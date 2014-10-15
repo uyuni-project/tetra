@@ -3,9 +3,9 @@
 module Tetra
   # represents a prebuilt package dependency from a jar file
   # in a kit
-  class JarKitItem
-    include Archiver
-    include SpecGenerator
+  class GlueKitItem
+    include Archivable
+    include Speccable
 
     attr_reader :project
     attr_reader :package_name
@@ -16,18 +16,16 @@ module Tetra
     attr_reader :provides_version
     attr_reader :install_dir
 
-    def initialize(project, path)
-      _, name = Pathname.new(path).split
-      hash = Digest::SHA1.file(path).hexdigest
-
+    def initialize(project, source_paths)
       @project = project
-      @package_name = "kit-item-#{name.to_s.gsub(".", "-")}"
-      @conflicts = false
-      @source_dir = File.join("kit", "jars")
-      @source_paths = [path]
-      @provides_symbol = "tetra-jar(#{name})"
-      @provides_version = hash
-      @install_dir = "jars"
+      @package_name = "kit-item-glue-#{project.name}"
+      @conflicts = true
+      @source_dir = "kit"
+      @source_paths = source_paths
+
+      @provides_symbol = "tetra-glue"
+      @provides_version = "#{project.name}-#{project.version}"
+      @install_dir = ""
     end
 
     def to_archive

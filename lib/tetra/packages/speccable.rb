@@ -2,7 +2,7 @@
 
 module Tetra
   # implements a to_spec method
-  module SpecGenerator
+  module Speccable
     # saves a specfile for this object in correct directories
     # returns the spec path and the conflict count with the previously generated
     # version, if any
@@ -28,7 +28,7 @@ module Tetra
 
     # returns the spec template path, exposed for testing
     def template_path
-      File.join(File.dirname(__FILE__), "..", "template")
+      File.join(File.dirname(__FILE__), "..", "..", "template")
     end
 
     private
@@ -37,7 +37,6 @@ module Tetra
     # if destination_path is given, write it to that file, otherwise just
     # return it
     def generate(template_name, object_binding, destination_path = nil)
-      template_path = File.join(File.dirname(__FILE__), "..", "template")
       erb = ERB.new File.read(File.join(template_path, template_name)), nil, "<>"
       new_content =  erb.result(object_binding)
 

@@ -4,8 +4,8 @@ module Tetra
   # represents a prebuilt package dependency from a Maven local repo
   # in a kit
   class MavenKitItem
-    include Archiver
-    include SpecGenerator
+    include Archivable
+    include Speccable
 
     attr_reader :project
     attr_reader :package_name

@@ -2,14 +2,14 @@
 
 require "spec_helper"
 
-describe Tetra::SpecGenerator do
+describe Tetra::Speccable do
   include Tetra::Mockers
 
   # mock
-  class SpecGeneratorTestClass
+  class SpeccableTestClass
     attr_accessor :world_property
 
-    include Tetra::SpecGenerator
+    include Tetra::Speccable
 
     def initialize
       @world_property = "World!"
@@ -25,7 +25,7 @@ describe Tetra::SpecGenerator do
     @destination_path = File.join("output", "test-package", "test-package.spec")
   end
 
-  let(:instance) { SpecGeneratorTestClass.new }
+  let(:instance) { SpeccableTestClass.new }
 
   after(:each) do
     delete_mock_project
