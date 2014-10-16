@@ -10,9 +10,8 @@ module Tetra
       checking_exceptions do
         project = Tetra::Project.new(".")
         ensure_dry_running(false, project) do
-          GenerateKitArchiveCommand.new(@invocation_path).execute
+          GenerateKitCommand.new(@invocation_path).execute
 
-          GenerateKitSpecCommand.new(@invocation_path).execute
 
           script_command = GeneratePackageScriptCommand.new(@invocation_path)
           script_command.execute

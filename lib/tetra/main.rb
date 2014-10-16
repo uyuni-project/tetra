@@ -34,15 +34,9 @@ module Tetra
     )
 
     subcommand(
-      "generate-kit-archive",
-      "Create or refresh the kit tarballs",
-      Tetra::GenerateKitArchiveCommand
-    )
-
-    subcommand(
-      "generate-kit-spec",
-      "Create or refresh the kit spec files",
-      Tetra::GenerateKitSpecCommand
+      "generate-kit",
+      "Create or refresh the kit spec and archive files",
+      Tetra::GenerateKitCommand
     )
 
     subcommand(

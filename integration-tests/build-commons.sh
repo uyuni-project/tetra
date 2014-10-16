@@ -20,8 +20,7 @@ cd commons-collections-3.2.1-src/
 tetra mvn package -DskipTests
 tetra finish
 
-tetra generate-kit-archive
-tetra generate-kit-spec
+tetra generate-kit
 tetra generate-package-archive
 tetra generate-package-spec
 # simulate tetra generate-package-script

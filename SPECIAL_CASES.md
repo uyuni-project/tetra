@@ -8,8 +8,7 @@ If your build fails for whatever reason, abort it with `tetra finish --abort`. `
 
 You can do any manual changes to spec and build.sh files and regenerate them later, `tetra` will reconcile changes with a [three-way merge](http://en.wikipedia.org/wiki/Three-way_merge#Three-way_merge) and alert about any conflicts. You can generate single files with the following commands:
 
-* `tetra generate-kit-archive`: (re)generates the kit tarballs;
-* `tetra generate-kit-spec`: (re)generates the kit specs;
+* `tetra generate-kit`: (re)generates the kit tarballs and specs;
 * `tetra generate-package-script`: (re)generates the `build.sh` file from the latest bash history (assumes `tetra dry-run` and `tetra finish` have been used);
 * `tetra generate-package-archive`: (re)generates the package tarball;
 * `tetra generate-package-spec`: (re)generates the package spec;
