@@ -12,17 +12,14 @@ module Tetra
         ensure_dry_running(false, project) do
           GenerateKitCommand.new(@invocation_path).execute
 
+          GeneratePackageScriptCommand.new(@invocation_path).execute
 
-          script_command = GeneratePackageScriptCommand.new(@invocation_path)
-          script_command.execute
+          GeneratePackageArchiveCommand.new(@invocation_path).execute
 
-          archive_command = GeneratePackageArchiveCommand.new(@invocation_path)
-          archive_command.execute
-
-          archive_command = GeneratePackageSpecCommand.new(@invocation_path)
-          archive_command.filter = filter
-          archive_command.pom = pom
-          archive_command.execute
+          command = GeneratePackageSpecCommand.new(@invocation_path)
+          command.filter = filter
+          command.pom = pom
+          command.execute
         end
       end
     end
