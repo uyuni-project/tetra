@@ -26,7 +26,7 @@ tetra generate-package-archive
 tetra generate-package-spec
 # simulate tetra generate-package-script
 cd ../..
-cat >src/build.sh <<"EOF"
+cat >packages/commons-collections/build.sh <<"EOF"
 #!/bin/bash
 PROJECT_PREFIX=`readlink -e .`
 cd .

@@ -26,10 +26,10 @@ describe Tetra::Archivable do
         FileUtils.touch("kit_test")
       end
 
-      instance._to_archive(@project, "test-package", "kit", ["*"])
+      instance._to_archive(@project, "test-package", "kit", ["*"], @project.packages_dir)
 
       @project.from_directory do
-        expect(`tar -Jtf output/test-package/test-package.tar.xz`.split).to include("kit_test")
+        expect(`tar -Jtf packages/test-package/test-package.tar.xz`.split).to include("kit_test")
       end
     end
   end

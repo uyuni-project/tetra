@@ -1,28 +1,24 @@
 # encoding: UTF-8
 
 module Tetra
-  # implements a to_spec method
   module Speccable
     # saves a specfile for this object in correct directories
     # returns the spec path and the conflict count with the previously generated
     # version, if any
-    def _to_spec(project, package_name, spec_dir, template_spec_name)
+    # destination_dir/name/name.spec
+    def _to_spec(project, name, template_spec_name, destination_dir)
       project.from_directory do
-        spec_name = "#{package_name}.spec"
+        spec_name = "#{name}.spec"
+        spec_dir = File.join(destination_dir, name)
+        FileUtils.mkdir_p(spec_dir)
+
         spec_path = File.join(spec_dir, spec_name)
 
         new_content = generate(template_spec_name, binding)
-        label = "Spec for #{package_name} generated"
+        label = "Spec for #{name} generated"
         conflict_count = project.merge_new_content(new_content, spec_path,
-                                                   label, "generate_#{package_name}_spec")
-
-        output_dir = File.join("output", package_name)
-        FileUtils.mkdir_p(output_dir)
-
-        spec_link_path = File.join(output_dir, spec_name)
-        FileUtils.symlink(File.expand_path(spec_path), spec_link_path, force: true)
-
-        [spec_link_path, conflict_count]
+                                                   label, "generate_#{name}_spec")
+        [spec_path, conflict_count]
       end
     end
 

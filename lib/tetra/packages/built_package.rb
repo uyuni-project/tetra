@@ -22,8 +22,6 @@ module Tetra
       @kit = Tetra::Kit.new(project)
       @pom = pom_path.nil? ? nil : Tetra::Pom.new(pom_path)
       @filter = filter
-
-      @spec_dir = "src"
     end
 
     # a short summary from the POM
@@ -53,11 +51,11 @@ module Tetra
     end
 
     def to_archive
-      _to_archive(@project, name, "src", ["*"])
+      _to_archive(@project, name, "src", ["*"], @project.packages_dir)
     end
 
     def to_spec
-      _to_spec(@project, name, "kit", "package.spec")
+      _to_spec(@project, name, "package.spec", @project.packages_dir)
     end
 
     def to_script(history)

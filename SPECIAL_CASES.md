@@ -8,9 +8,9 @@ If your build fails for whatever reason, abort it with `tetra finish --abort`. `
 
 You can do any manual changes to spec and build.sh files and regenerate them later, `tetra` will reconcile changes with a [three-way merge](http://en.wikipedia.org/wiki/Three-way_merge#Three-way_merge) and alert about any conflicts. You can generate single files with the following commands:
 
-* `tetra generate-kit-archive`: (re)generates the kit tarball;
-* `tetra generate-kit-spec`: (re)generates the kit spec;
-* `tetra generate-package-script`: (re)generates the `build.sh` file from the latest bash history (assumes `tetra dry-run` and `tetra finish`have been used);
+* `tetra generate-kit-archive`: (re)generates the kit tarballs;
+* `tetra generate-kit-spec`: (re)generates the kit specs;
+* `tetra generate-package-script`: (re)generates the `build.sh` file from the latest bash history (assumes `tetra dry-run` and `tetra finish` have been used);
 * `tetra generate-package-archive`: (re)generates the package tarball;
 * `tetra generate-package-spec`: (re)generates the package spec;
 
@@ -18,7 +18,7 @@ You can do any manual changes to spec and build.sh files and regenerate them lat
 
 Your kit packages are basically binary blobs. If its sources are needed for proper packaging, for example to comply with the GPL, some extra steps are needed.
 
-If you use Maven, most (~90%) sources can be automatically downloaded:
+If you use Maven, most (~90%) of the sources can be automatically downloaded:
 
     tetra download-maven-source-jars
 
@@ -62,12 +62,13 @@ Other build tools are currently unsupported but will be added in the future. You
 
 ## [OBS](build.opensuse.org) integration
 
-If you want to submit packages to OBS, you can do so by replacing the `output/` directory in your `tetra` project with a symlink to your OBS project directory.
+If you want to submit your package to OBS, you can do so by copying contents of the `packages` and `packages/kit` in proper OBS project directories.
 
 Packages will rebuild cleanly in OBS because no Internet access is needed - all files were already downloaded during dry-run and are included in the kit.
 
-Note that the kit package is needed at build time only by OBS, no end user should ever install it.
+Note that packages in `kit` are only needed at build time only by OBS, no end user should ever install them, so you can place them in non-public repositories.
 
+Also note that you can mix and match packages from `kit` with other `tetra`-built packages, even from other users, as they are designed to be immutable and will not break your builds.
 
 ## Gotchas
 

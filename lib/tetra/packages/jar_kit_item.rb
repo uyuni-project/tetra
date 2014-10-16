@@ -31,11 +31,13 @@ module Tetra
     end
 
     def to_archive
-      _to_archive(@project, @package_name, @source_dir, @source_paths)
+      _to_archive(@project, @package_name, @source_dir,
+                  @source_paths, @project.kit_packages_dir)
     end
 
     def to_spec
-      _to_spec(@project, @package_name, "kit", "kit_item.spec")
+      _to_spec(@project, @package_name, "kit_item.spec",
+               @project.kit_packages_dir)
     end
   end
 end

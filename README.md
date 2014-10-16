@@ -68,11 +68,11 @@ Fourth, you need to show `tetra` how to build your package by running appropriat
 Note that we used `tetra mvn package` instead of `mvn package`: this will use of the Maven copy we put in `kit/` and the repository in `kit/m2`.
 Also note that this being a dry-run build, sources will be brought back to their original state after `tetra finish`, as this ensures build repeatability.
 
-Finally, generate build scripts, spec files and tarballs in the `output/` directory:
+Finally, generate build scripts, spec files and tarballs in the `packages/` directory:
 
     tetra generate-all
 
-Note that `tetra` will generate files for the commons-collections package and all binary-only build-time dependencies (basically, the `kit/` folder). This will be shared among all packages you might add to your `tetra` project.
+Note that `tetra` will generate files for the commons-collections package and all binary-only build-time dependencies in the `kit/` folder.
 
 ## In-depth information
 

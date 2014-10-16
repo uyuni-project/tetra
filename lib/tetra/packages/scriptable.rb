@@ -35,17 +35,13 @@ module Tetra
 
         new_content = script_lines.join("\n") + "\n"
 
-        result_path = File.join("src", "build.sh")
+        result_dir = File.join(project.packages_dir, project.name)
+        FileUtils.mkdir_p(result_dir)
+        result_path = File.join(result_dir, "build.sh")
         conflict_count = project.merge_new_content(new_content, result_path, "Build script generated",
                                                    "generate_build_script")
 
-        output_dir = File.join("output", project.name)
-        FileUtils.mkdir_p(output_dir)
-
-        destination_script_path =  File.join(output_dir, "build.sh")
-        FileUtils.symlink(File.expand_path(result_path), destination_script_path, force: true)
-
-        [destination_script_path, conflict_count]
+        [result_path, conflict_count]
       end
     end
   end

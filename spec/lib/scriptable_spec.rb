@@ -35,7 +35,7 @@ describe Tetra::Scriptable do
         @package = Tetra::BuiltPackage.new(@project)
         @package.to_script("history")
 
-        lines = File.readlines(File.join("src", "build.sh"))
+        lines = File.readlines(File.join("packages", "test-project", "build.sh"))
 
         expect(lines).to include("#!/bin/bash\n")
         expect(lines).to include("cd somewhere significant\n")

@@ -39,7 +39,7 @@ describe Tetra::MavenKitItem do
       expect(maven_kit_item.to_spec).to be_truthy
 
       @project.from_directory do
-        spec_lines = File.readlines(File.join("output", package_name, "#{package_name}.spec"))
+        spec_lines = File.readlines(File.join("packages", "kit", package_name, "#{package_name}.spec"))
 
         expect(spec_lines).to include("# spec file for a build-time dependency of project \"test-project\"\n")
         expect(spec_lines).to include("Name:           kit-item-com-company-project-artifact-1.0\n")
@@ -65,7 +65,7 @@ describe Tetra::MavenKitItem do
       expect(maven_kit_item.to_archive).to end_with(expected_filename)
 
       @project.from_directory do
-        contents = `tar -Jtf output/#{package_name}/#{package_name}.tar.xz`.split
+        contents = `tar -Jtf packages/kit/#{package_name}/#{package_name}.tar.xz`.split
         expect(contents).to include("com/company/project/artifact/1.0/artifact-1.0.pom")
         expect(contents).to include("com/company/project/artifact/1.0/artifact.jar")
       end

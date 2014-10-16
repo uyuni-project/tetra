@@ -1,2 +1,2 @@
 *.tetra_user_edited
-output/
+packages/**/*.tar.xz

@@ -45,7 +45,7 @@ describe Tetra::BuiltPackage do
       @package.to_spec
 
       @project.from_directory do
-        spec_lines = File.readlines(File.join("output", "test-project", "test-project.spec"))
+        spec_lines = File.readlines(File.join("packages", "test-project", "test-project.spec"))
         expect(spec_lines).to include("Name:           test-project\n")
         expect(spec_lines).to include("License:        The Apache Software License, Version 2.0\n")
         expect(spec_lines).to include("Summary:        Nailgun is a client, protocol, and server for running Java\n")
@@ -68,7 +68,7 @@ da39a3ee5e6b4b0d3255bfef95601890afd80709\n")
 
       @package.to_archive
       @project.from_directory do
-        expect(`tar -Jtf output/test-project/test-project.tar.xz`.split).to include("src_test")
+        expect(`tar -Jtf packages/test-project/test-project.tar.xz`.split).to include("src_test")
       end
     end
   end
