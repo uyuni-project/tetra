@@ -115,6 +115,16 @@ module Tetra
 
     # takes a revertable snapshot of this project
     def take_snapshot(message, tag_prefix, tag_message = nil)
+      # rename all .gitignore files by default as
+      # they prevent snapshotting
+      from_directory("src") do
+        Find.find(".") do |file|
+          next unless file =~ /\.gitignore$/
+
+          FileUtils.mv(file, "#{file}_disabled_by_tetra")
+        end
+      end
+
       @git.commit_whole_directory(message, next_tag(tag_prefix), tag_message)
     end
 

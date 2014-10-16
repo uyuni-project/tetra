@@ -30,17 +30,11 @@ describe Tetra::Git do
           file.write "test"
         end
 
-        # check that gitignore files are moved correctly
-        File.open(".gitignore", "w") do |file|
-          file.write "file1o"
-        end
-
         @git.commit_whole_directory("test", :test)
 
         files = `git ls-tree --name-only -r HEAD`.split("\n")
 
         expect(files).to include("file1")
-        expect(files).to include(".gitignore_disabled_by_tetra")
       end
     end
   end

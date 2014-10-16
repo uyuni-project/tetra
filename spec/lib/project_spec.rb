@@ -68,7 +68,15 @@ describe Tetra::Project do
       @project.from_directory do
         FileUtils.touch(File.join("kit", "test"))
 
+        # check that gitignore files are moved correctly
+        File.open(File.join("src", ".gitignore"), "w") do |file|
+          file.write "file"
+        end
+
         @project.take_snapshot("test", :revertable)
+
+        files = `git ls-tree --name-only -r HEAD`.split("\n")
+        expect(files).to include("src/.gitignore_disabled_by_tetra")
 
         expect(`git rev-list --all`.split("\n").length).to eq 2
         expect(@project.latest_tag(:revertable)).to eq "revertable_1"

@@ -53,14 +53,6 @@ module Tetra
       Dir.chdir(@directory) do
         log.debug "committing with message: #{message}"
 
-        # rename all .gitignore files by default as
-        # they prevent snapshotting
-        Find.find(".") do |file|
-          next unless file =~ /\.gitignore$/
-
-          FileUtils.mv(file, "#{file}_disabled_by_tetra")
-        end
-
         `git rm -r --cached --ignore-unmatch .`
         `git add .`
         `git commit -m "#{message}"`
