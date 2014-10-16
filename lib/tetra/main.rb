@@ -40,21 +40,21 @@ module Tetra
     )
 
     subcommand(
-      "generate-package-script",
+      "generate-script",
       "Create or refresh the package build.sh file",
-      Tetra::GeneratePackageScriptCommand
+      Tetra::GenerateScriptCommand
     )
 
     subcommand(
-      "generate-package-archive",
+      "generate-archive",
       "Create or refresh the package tarball",
-      Tetra::GeneratePackageArchiveCommand
+      Tetra::GenerateArchiveCommand
     )
 
     subcommand(
-      "generate-package-spec",
+      "generate-spec",
       "Create or refresh the package spec file",
-      Tetra::GeneratePackageSpecCommand
+      Tetra::GenerateSpecCommand
     )
 
     subcommand(

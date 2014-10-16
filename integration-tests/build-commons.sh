@@ -21,9 +21,9 @@ tetra mvn package -DskipTests
 tetra finish
 
 tetra generate-kit
-tetra generate-package-archive
-tetra generate-package-spec
-# simulate tetra generate-package-script
+tetra generate-archive
+tetra generate-spec
+# simulate tetra generate-script
 cd ../..
 cat >packages/commons-collections/build.sh <<"EOF"
 #!/bin/bash

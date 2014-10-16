@@ -1,8 +1,8 @@
 # encoding: UTF-8
 
 module Tetra
-  # tetra generate-package-archive
-  class GeneratePackageArchiveCommand < Tetra::BaseCommand
+  # tetra generate-archive
+  class GenerateArchiveCommand < Tetra::BaseCommand
     def execute
       checking_exceptions do
         project = Tetra::Project.new(".")

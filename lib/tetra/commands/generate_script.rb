@@ -1,17 +1,15 @@
 # encoding: UTF-8
 
 module Tetra
-  # tetra generate-package-spec
-  class GeneratePackageSpecCommand < Tetra::BaseCommand
-    option %w(-f --filter), "FILTER", "filter files to be installed by this spec", default: "*.jar"
-    parameter "[POM]", "a pom file path", default: "pom.xml"
-
+  # tetra generate-script
+  class GenerateScriptCommand < Tetra::BaseCommand
     def execute
       checking_exceptions do
         project = Tetra::Project.new(".")
         ensure_dry_running(false, project) do
+          history = File.join(Dir.home, ".bash_history")
           result_path, conflict_count =
-            Tetra::BuiltPackage.new(project, pom, filter).to_spec
+            Tetra::BuiltPackage.new(project).to_script(history)
           print_generation_result(project, result_path, conflict_count)
         end
       end
