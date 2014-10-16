@@ -1,7 +1,7 @@
 # encoding: UTF-8
 
 module Tetra
-  # generates build scripts from bash_history
+  # generates a package build script from bash_history
   module Scriptable
     def _to_script(project, history_path)
       ant_runner = Tetra::AntRunner.new(project)

@@ -1,6 +1,7 @@
 # encoding: UTF-8
 
 module Tetra
+  # adds methods to generate a tarball from a package object
   module Archivable
     include Logging
 

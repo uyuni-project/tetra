@@ -1,6 +1,7 @@
 # encoding: UTF-8
 
 module Tetra
+  # adds methods to generate a spec file from a package object
   module Speccable
     # saves a specfile for this object in correct directories
     # returns the spec path and the conflict count with the previously generated
