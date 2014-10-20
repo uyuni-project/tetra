@@ -21,13 +21,14 @@ module Tetra
       rest, version = path_split(path)
       group_directory, artifact_id = path_split(rest)
       group_id = path_to_group(group_directory)
+      hash = Digest::SHA1.hexdigest(source_paths.to_s)
 
       @project = project
       @package_name = "kit-item-#{group_id.gsub(".", "-")}-#{artifact_id}-#{version}"
       @conflicts = false
 
-      @provides_symbol = "tetra-mvn(#{group_id}:#{artifact_id})"
-      @provides_version = version
+      @provides_symbol = "tetra-mvn(#{group_id}:#{artifact_id}:#{version})"
+      @provides_version = hash
       @install_dir = "m2"
 
       @source_dir = File.join("kit", "m2")

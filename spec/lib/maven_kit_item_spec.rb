@@ -21,16 +21,17 @@ describe Tetra::MavenKitItem do
   let(:jar) { File.join(dir, "#{artifact_id}.jar") }
   let(:package_name) { "kit-item-#{group_id.gsub(".", "-")}-#{artifact_id}-#{version}" }
   let(:maven_kit_item) { Tetra::MavenKitItem.new(@project, pom, [pom, jar]) }
+  let(:hash) { Digest::SHA1.hexdigest([pom, jar].to_s) }
 
   describe "#provides_symbol" do
     it "returns the sepec Provides: symbol" do
-      expect(maven_kit_item.provides_symbol).to eq("tetra-mvn(com.company.project:artifact)")
+      expect(maven_kit_item.provides_symbol).to eq("tetra-mvn(com.company.project:artifact:1.0)")
     end
   end
 
   describe "#provides_version" do
     it "returns the spec Provides: version" do
-      expect(maven_kit_item.provides_version).to eq("1.0")
+      expect(maven_kit_item.provides_version).to eq(hash)
     end
   end
 
@@ -44,7 +45,7 @@ describe Tetra::MavenKitItem do
         expect(spec_lines).to include("# spec file for a build-time dependency of project \"test-project\"\n")
         expect(spec_lines).to include("Name:           kit-item-com-company-project-artifact-1.0\n")
         expect(spec_lines).to include("Summary:        Build-time dependency of project \"test-project\"\n")
-        expect(spec_lines).to include("Provides:       tetra-mvn(#{group_id}:#{artifact_id}) == #{version}\n")
+        expect(spec_lines).to include("Provides:       tetra-mvn(#{group_id}:#{artifact_id}:#{version}) == #{hash}\n")
 
         expect(spec_lines).to include("install -d -m 0755 %{buildroot}%{_datadir}/tetra/m2\n")
         expect(spec_lines).to include("cp -a * %{buildroot}%{_datadir}/tetra/m2\n")
