@@ -35,12 +35,6 @@ You can also use:
 
 To get a list of jars that have one or more `.class` file which does not have a corresponding `.java` file in `kit/` (or zip files in `kit/`).
 
-## Replacing kit packages
-
-After you built a package, you might want to use it instead of some binary packages to build other ones.
-
-`tetra` automatically creates some of the needed instructions inside of the spec file, you need to uncomment them and edit them manually to be fully functional.
-
 ## Ant builds
 
 `tetra` is currently optimized for Maven as it is the most common build tool, but it can work with any other. In particular, support for Ant has already been implemented and `tetra ant` works like `tetra mvn`.
