@@ -19,9 +19,10 @@ module Tetra
     def initialize(project, path)
       _, name = Pathname.new(path).split
       hash = Digest::SHA1.file(path).hexdigest
+      short_hash = hash.slice(0, 5)
 
       @project = project
-      @package_name = "kit-item-#{name.to_s.gsub(".", "-")}"
+      @package_name = "kit-item-#{name.to_s.gsub(".", "-")}-#{short_hash}"
       @conflicts = false
       @source_dir = File.join("kit", "jars")
       @source_paths = [path]

@@ -19,9 +19,10 @@ describe Tetra::MavenKitItem do
   let(:dir) { File.join(group_id.gsub(".", File::SEPARATOR), artifact_id, version) }
   let(:pom) { File.join(dir, "#{artifact_id}-#{version}.pom") }
   let(:jar) { File.join(dir, "#{artifact_id}.jar") }
-  let(:package_name) { "kit-item-#{group_id.gsub(".", "-")}-#{artifact_id}-#{version}" }
-  let(:maven_kit_item) { Tetra::MavenKitItem.new(@project, pom, [pom, jar]) }
   let(:hash) { Digest::SHA1.hexdigest([pom, jar].to_s) }
+  let(:short_hash) { hash.slice(0, 5) }
+  let(:package_name) { "kit-item-#{artifact_id}-#{short_hash}" }
+  let(:maven_kit_item) { Tetra::MavenKitItem.new(@project, pom, [pom, jar]) }
 
   describe "#provides_symbol" do
     it "returns the sepec Provides: symbol" do
@@ -43,7 +44,7 @@ describe Tetra::MavenKitItem do
         spec_lines = File.readlines(File.join("packages", "kit", package_name, "#{package_name}.spec"))
 
         expect(spec_lines).to include("# spec file for a build-time dependency of project \"test-project\"\n")
-        expect(spec_lines).to include("Name:           kit-item-com-company-project-artifact-1.0\n")
+        expect(spec_lines).to include("Name:           #{package_name}\n")
         expect(spec_lines).to include("Summary:        Build-time dependency of project \"test-project\"\n")
         expect(spec_lines).to include("Provides:       tetra-mvn(#{group_id}:#{artifact_id}:#{version}) == #{hash}\n")
 
@@ -62,7 +63,7 @@ describe Tetra::MavenKitItem do
         FileUtils.touch(jar)
       end
 
-      expected_filename = File::SEPARATOR + "kit-item-com-company-project-artifact-1.0.tar.xz"
+      expected_filename = File::SEPARATOR + "#{package_name}.tar.xz"
       expect(maven_kit_item.to_archive).to end_with(expected_filename)
 
       @project.from_directory do

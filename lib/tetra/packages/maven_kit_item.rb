@@ -22,9 +22,10 @@ module Tetra
       group_directory, artifact_id = path_split(rest)
       group_id = path_to_group(group_directory)
       hash = Digest::SHA1.hexdigest(source_paths.to_s)
+      short_hash = hash.slice(0, 5)
 
       @project = project
-      @package_name = "kit-item-#{group_id.gsub(".", "-")}-#{artifact_id}-#{version}"
+      @package_name = "kit-item-#{artifact_id}-#{short_hash}"
       @conflicts = false
 
       @provides_symbol = "tetra-mvn(#{group_id}:#{artifact_id}:#{version})"
