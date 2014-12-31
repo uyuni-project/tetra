@@ -20,12 +20,12 @@ module Tetra
 
     def to_archive
       _to_archive(@project, name, "kit",
-                  @project.kit_packages_dir)
+                  @project.packages_dir)
     end
 
     def to_spec
       _to_spec(@project, name, "kit.spec",
-               @project.kit_packages_dir)
+               @project.packages_dir)
     end
   end
 end

@@ -21,7 +21,7 @@ describe Tetra::Kit do
       expect(instance.to_spec).to be_truthy
 
       @project.from_directory do
-        spec_lines = File.readlines(File.join("packages", "kit", package_name, "#{package_name}.spec"))
+        spec_lines = File.readlines(File.join("packages", package_name, "#{package_name}.spec"))
 
         expect(spec_lines).to include("Conflicts:      otherproviders(tetra-kit)\n")
         expect(spec_lines).to include("Provides:       tetra-kit\n")
@@ -39,7 +39,7 @@ describe Tetra::Kit do
       expect(instance.to_archive).to end_with(expected_filename)
 
       @project.from_directory do
-        contents = `tar --list -f packages/kit/#{package_name}/#{package_name}.tar.xz`.split
+        contents = `tar --list -f packages/#{package_name}/#{package_name}.tar.xz`.split
         expect(contents).to include("m2/kit.content")
       end
     end

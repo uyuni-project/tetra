@@ -72,7 +72,7 @@ Finally, generate build scripts, spec files and tarballs in the `packages/` dire
 
     tetra generate-all
 
-Note that `tetra` will generate files for the commons-collections package and all binary-only build-time dependencies in the `kit/` folder.
+Note that `tetra` will generate files for the commons-collections package and all binary-only build-time dependencies in the `packages/` folder.
 
 ## In-depth information
 

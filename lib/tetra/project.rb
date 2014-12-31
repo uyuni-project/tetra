@@ -25,10 +25,6 @@ module Tetra
       "packages"
     end
 
-    def kit_packages_dir
-      File.join(packages_dir, "kit")
-    end
-
     # finds the project directory up in the tree, like git does
     def self.find_project_dir(starting_dir)
       result = starting_dir

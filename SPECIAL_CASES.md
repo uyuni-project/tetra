@@ -11,11 +11,11 @@ You can do any manual changes to spec and build.sh files and regenerate them lat
 * `tetra generate-script`: (re)generates the `build.sh` file from the latest bash history (assumes `tetra dry-run` and `tetra finish` have been used);
 * `tetra generate-archive`: (re)generates the package tarball;
 * `tetra generate-spec`: (re)generates the package spec;
-* `tetra generate-kit`: (re)generates all kit tarballs and specs;
+* `tetra generate-kit`: (re)generates the kit tarball and spec;
 
 ## Kit sources
 
-Your kit packages are basically binary blobs. If its sources are needed for proper packaging, for example to comply with the GPL, some extra steps are needed.
+Your kit package is basically a binary blob. If its sources are needed for proper packaging, for example to comply with the GPL, some extra steps are needed.
 
 If you use Maven, most (~90%) of the sources can be automatically downloaded:
 
@@ -55,13 +55,11 @@ Other build tools are currently unsupported but will be added in the future. You
 
 ## [OBS](build.opensuse.org) integration
 
-If you want to submit your package to OBS, you can do so by copying contents of the `packages` and `packages/kit` in proper OBS project directories.
+If you want to submit your package to OBS, you can do so by copying contents of the `packages` in a proper OBS project directory.
 
 Packages will rebuild cleanly in OBS because no Internet access is needed - all files were already downloaded during dry-run and are included in the kit.
 
-Note that packages in `kit` are only needed at build time only by OBS, no end user should ever install them, so you can place them in non-public repositories.
-
-Also note that you can mix and match packages from `kit` with other `tetra`-built packages, even from other users, as they are designed to be immutable and will not break your builds.
+Note that the kit packages is only needed at build time by OBS, no end user should ever install it, so you can place it in a non-public project/repository if you so wish.
 
 ## Gotchas
 
