@@ -8,7 +8,7 @@ module Tetra
       maven_runner = Tetra::MavenRunner.new(project)
 
       project.from_directory do
-        history_lines = File.readlines(history_path).map { |e| e.strip }
+        history_lines = File.readlines(history_path).map(&:strip)
         relevant_lines =
           history_lines
             .reverse

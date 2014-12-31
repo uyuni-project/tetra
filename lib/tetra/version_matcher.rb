@@ -43,7 +43,7 @@ module Tetra
         end
       ]
 
-      max_chunks_length = ([my_chunks.length] + their_chunks_hash.values.map { |chunk| chunk.length }).max
+      max_chunks_length = ([my_chunks.length] + their_chunks_hash.values.map(&:length)).max
 
       scoreboard = []
       their_versions.each do |their_version|
