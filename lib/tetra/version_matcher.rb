@@ -38,7 +38,8 @@ module Tetra
                                 []
                               end
                             )
-                            their_chunks_for_version += [nil] * [my_chunks.length - their_chunks_for_version.length, 0].max
+                            chunks_count = [my_chunks.length - their_chunks_for_version.length, 0].max
+                            their_chunks_for_version += [nil] * chunks_count
                             [their_version, their_chunks_for_version]
                           end
       ]
