@@ -23,8 +23,6 @@ module Tetra
       success = mvn(["help:effective-pom", "-f#{pom_path}", "-Doutput=#{File.split(effective_pom_path)[1]}"])
       if success
         effective_pom_path
-      else
-        nil
       end
     end
 
