@@ -21,9 +21,7 @@ module Tetra
     def get_effective_pom(pom_path)
       effective_pom_path = "#{pom_path}.effective"
       success = mvn(["help:effective-pom", "-f#{pom_path}", "-Doutput=#{File.split(effective_pom_path)[1]}"])
-      if success
-        effective_pom_path
-      end
+      effective_pom_path if success
     end
 
     # returns a command line for running Maven from the specified
