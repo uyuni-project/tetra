@@ -8,14 +8,12 @@
 set -e
 
 OBS_HOST=obs-client
-OBS_PROJECT_DIR=/home/silvio/obs/home\:SilvioMoioli
+OBS_PROJECT_DIR=/home/silvio/obs/home\:SilvioMoioli\:tetra-test
 
-scp -r commons/output/* $OBS_HOST:/$OBS_PROJECT_DIR
+scp -r commons-collections/packages/* $OBS_HOST:/$OBS_PROJECT_DIR
 ssh -t $OBS_HOST <<EOF
-  cd $OBS_PROJECT_DIR/commons-kit/ &&\
-  osc build -k../rpms -p../rpms &&\
-  cd ../commons-collections/ &&\
-  osc build -k../rpms -p../rpms &&\
-  cd ../commons-fileupload/ &&\
-  osc build -k../rpms -p../rpms
+  cd $OBS_PROJECT_DIR/commons-collections-kit &&\
+  osc build -k../../rpms -p../../rpms &&\
+  cd $OBS_PROJECT_DIR/commons-collections &&\
+  osc build -k../../rpms -p../../rpms
 EOF
