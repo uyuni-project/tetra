@@ -66,13 +66,16 @@ Note that the kit packages is only needed at build time by OBS, no end user shou
 * `tetra` internally uses `git` to keep track of files, any tetra project is actually also a `git` repo. Feel free to navigate it, you can commit, push and pull as long as the `tetra` tags are preserved. You can also delete commits and tags, effectively rewinding tetra history (just make sure to delete all tags pointing to a certain commit when you discard it);
 * some Maven plugins like the Eclipse Project ones ([Tycho](https://www.eclipse.org/tycho/)) will save data in `/tmp` downloaded from the Internet and will produce errors if this data is not there during offline builds. One way to work around that is to force Java to use a kit subdirectory as `/tmp`. Add the following option to `tetra mvn` during your build:
 
-    -DskipTests=true -Djava.io.tmpdir=<full path to project>/kit/tmp
+    -Djava.io.tmpdir=<full path to project>/kit/tmp
 
 Use the following option in `mvn` in your build.sh file to make it reproducible:
 
-    -DskipTests=true -Djava.io.tmpdir=$PROJECT_PREFIX/kit/tmp
+    -Djava.io.tmpdir=$PROJECT_PREFIX/kit/tmp
 
 * Tycho builds may also require NSS, so if you get NSS errors be sure to add `mozilla-nss` or an equivalent package in a BuildRequires: line;
+* some badly designed testsuites might not work in OBS. If you are using `tetra mvn` you can add the following option to disable them:
+
+   -DskipTests=true
 
 * if you want to be 100% sure your package builds without network access, you can use scripts in the `utils/` folder to create a special `nonet` user that cannot use the Internet and retry the build from that user.
 
