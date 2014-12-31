@@ -38,7 +38,7 @@ module Tetra
         repo_path = File.join(prefix, "kit", "m2")
         config_path = File.join(prefix, "kit", "m2", "settings.xml")
 
-        "#{mvn_path} -Dmaven.repo.local=#{repo_path} -s#{config_path} #{options.join(" ")}"
+        "#{mvn_path} -Dmaven.repo.local=#{repo_path} -s#{config_path} #{options.join(' ')}"
       else
         fail ExecutableNotFoundError, "mvn"
       end

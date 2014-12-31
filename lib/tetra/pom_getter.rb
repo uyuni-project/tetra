@@ -45,7 +45,7 @@ module Tetra
           result = results.first
           unless result.nil?
             log.info("pom.xml for #{file} found on search.maven.org for sha1 #{sha1}\
-              (#{result["g"]}:#{result["a"]}:#{result["v"]})"
+              (#{result['g']}:#{result['a']}:#{result['v']})"
             )
             group_id, artifact_id, version = site.get_maven_id_from result
             return site.download_pom(group_id, artifact_id, version), :found_via_sha1

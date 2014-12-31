@@ -12,7 +12,7 @@ module Tetra
           puts "Some source files were not found in these archives:"
           kit_checker.unsourced_archives.each do |archive|
             percentage = 100.0 * archive[:unsourced_class_names].length / archive[:class_names].length
-            puts "#{format_path(archive[:archive], project)} (~#{format("%.2f", percentage)}% missing)"
+            puts "#{format_path(archive[:archive], project)} (~#{format('%.2f', percentage)}% missing)"
           end
         end
       end

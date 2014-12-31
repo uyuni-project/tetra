@@ -25,7 +25,7 @@ module Tetra
           puts "#{format_path(path, project)} written, #{text_status}"
         else
           puts "#{name}'s pom not found. Try:"
-          puts "http://google.com/#q=#{URI.encode(pom_getter.cleanup_name(name) + " pom")}"
+          puts "http://google.com/#q=#{URI.encode(pom_getter.cleanup_name(name) + ' pom')}"
         end
       end
     end
