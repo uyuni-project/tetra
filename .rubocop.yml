@@ -7,6 +7,9 @@ LineLength:
 MethodLength:
   Max: 40
 
+AbcSize:
+  Max: 50
+
 StringLiterals:
   EnforcedStyle: double_quotes
 
