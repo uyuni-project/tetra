@@ -40,8 +40,8 @@ module Tetra
     # returns true if the specified directory is a valid tetra project
     def self.project?(dir)
       File.directory?(File.join(dir, "src")) &&
-      File.directory?(File.join(dir, "kit")) &&
-      File.directory?(File.join(dir, ".git"))
+        File.directory?(File.join(dir, "kit")) &&
+        File.directory?(File.join(dir, ".git"))
     end
 
     # inits a new project directory structure
@@ -213,8 +213,8 @@ module Tetra
           FileUtils.mv(file, new_location)
 
           link_target = Pathname.new(new_location)
-            .relative_path_from(Pathname.new(file).split.first)
-            .to_s
+                        .relative_path_from(Pathname.new(file).split.first)
+                        .to_s
 
           File.symlink(link_target, file)
           result << [file, new_location]

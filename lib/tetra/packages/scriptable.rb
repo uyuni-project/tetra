@@ -11,11 +11,11 @@ module Tetra
         history_lines = File.readlines(history_path).map(&:strip)
         relevant_lines =
           history_lines
-            .reverse
-            .take_while { |e| e.match(/tetra +dry-run/).nil? }
-            .reverse
-            .take_while { |e| e.match(/tetra +finish/).nil? }
-            .select { |e| e.match(/^#/).nil? }
+          .reverse
+          .take_while { |e| e.match(/tetra +dry-run/).nil? }
+          .reverse
+          .take_while { |e| e.match(/tetra +finish/).nil? }
+          .select { |e| e.match(/^#/).nil? }
 
         script_lines = [
           "#!/bin/bash",
@@ -23,15 +23,15 @@ module Tetra
           "PROJECT_PREFIX=`readlink -e .`",
           "cd #{project.latest_dry_run_directory}"
         ] +
-        relevant_lines.map do |line|
-          if line =~ /tetra +mvn/
-            line.gsub(/tetra +mvn/, "#{maven_runner.get_maven_commandline("$PROJECT_PREFIX", ["-o"])}")
-          elsif line =~ /tetra +ant/
-            line.gsub(/tetra +ant/, "#{ant_runner.get_ant_commandline("$PROJECT_PREFIX")}")
-          else
-            line
-          end
-        end
+                       relevant_lines.map do |line|
+                         if line =~ /tetra +mvn/
+                           line.gsub(/tetra +mvn/, "#{maven_runner.get_maven_commandline('$PROJECT_PREFIX', ['-o'])}")
+                         elsif line =~ /tetra +ant/
+                           line.gsub(/tetra +ant/, "#{ant_runner.get_ant_commandline('$PROJECT_PREFIX')}")
+                         else
+                           line
+                         end
+                       end
 
         new_content = script_lines.join("\n") + "\n"
 
