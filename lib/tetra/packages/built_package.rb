@@ -1,7 +1,7 @@
 # encoding: UTF-8
 
 module Tetra
-  # represents a Java project packaged in Tetra
+  # represents a Java project packaged in tetra
   class BuiltPackage
     extend Forwardable
     include Archivable
@@ -9,7 +9,8 @@ module Tetra
     include Scriptable
 
     def_delegator :@project, :name, :name
-    def_delegator :@kit, :items, :kit_items
+    def_delegator :@kit, :name, :kit_name
+    def_delegator :@kit, :version, :kit_version
     def_delegator :@pom, :license_name, :license
     def_delegator :@pom, :url
     def_delegator :@pom, :group_id
@@ -51,7 +52,7 @@ module Tetra
     end
 
     def to_archive
-      _to_archive(@project, name, "src", ["*"], @project.packages_dir)
+      _to_archive(@project, name, "src", @project.packages_dir)
     end
 
     def to_spec

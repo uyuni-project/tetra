@@ -27,9 +27,7 @@ Source1:        build.sh
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 BuildRequires:  xz
 BuildRequires:  java-devel
-<% kit_items.each do |item| %>
-BuildRequires:  <%= item.provides_symbol %> == <%= item.provides_version %>
-<% end %>
+BuildRequires:  <%= kit_name %> == <%= kit_version %>
 BuildArch:      noarch
 Provides:       mvn(<%= group_id %>:<%= artifact_id %>) == <%= version %>
 Requires:       java

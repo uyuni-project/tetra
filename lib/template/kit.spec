@@ -12,21 +12,19 @@
 # license that conforms to the Open Source Definition (Version 1.9)
 # published by the Open Source Initiative.
 
-Name:           <%= package_name %>
-Version:        1
+Name:           <%= name %>
+Version:        <%= version %>
 Release:        1
 License:        SUSE-NonFree
-Summary:        Build-time dependency of project "<%= project.name %>"
+Summary:        Build-time dependency of project "<%= project_name %>"
 Url:            https://github.com/SilvioMoioli/tetra
 Group:          Development/Libraries/Java
 Source0:        %{name}.tar.xz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 BuildArch:      noarch
 BuildRequires:  xz
-Provides:       <%= provides_symbol %> == <%= provides_version %>
-<% if conflicts %>
-Conflicts:      otherproviders(<%= provides_symbol %>)
-<% end %>
+Provides:       tetra-kit
+Conflicts:      otherproviders(tetra-kit)
 
 %description
 This package has been automatically created by tetra in order to
@@ -42,12 +40,11 @@ thus it should never be installed on end users' systems.
 
 %install
 export NO_BRP_CHECK_BYTECODE_VERSION=true
-install -d -m 0755 %{buildroot}%{_datadir}/tetra/<%= install_dir %>
-cp -a * %{buildroot}%{_datadir}/tetra/<%= install_dir %>
+install -d -m 0755 %{buildroot}%{_datadir}/tetra/
+cp -a * %{buildroot}%{_datadir}/tetra/
 
 %files
 %defattr(-,root,root)
-%{_datadir}/tetra
-%{_datadir}/tetra/<%= install_dir %>
+%{_datadir}/tetra/
 
 %changelog
