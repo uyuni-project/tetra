@@ -10,6 +10,12 @@ MethodLength:
 AbcSize:
   Max: 50
 
+CyclomaticComplexity:
+  Max: 10
+
+PerceivedComplexity:
+  Max: 15
+
 StringLiterals:
   EnforcedStyle: double_quotes
 
