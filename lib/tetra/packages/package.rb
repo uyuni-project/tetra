@@ -2,7 +2,7 @@
 
 module Tetra
   # represents a Java project packaged in tetra
-  class BuiltPackage
+  class Package
     extend Forwardable
     include Archivable
     include Speccable
@@ -20,7 +20,7 @@ module Tetra
 
     def initialize(project, pom_path = nil, filter = nil)
       @project = project
-      @kit = Tetra::Kit.new(project)
+      @kit = Tetra::KitPackage.new(project)
       @pom = pom_path.nil? ? nil : Tetra::Pom.new(pom_path)
       @filter = filter
     end

@@ -2,7 +2,7 @@
 
 module Tetra
   # a packaged set of binary build-time dependencies
-  class Kit
+  class KitPackage
     extend Forwardable
     include Archivable
     include Speccable

@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-describe Tetra::Kit do
+describe Tetra::KitPackage do
   include Tetra::Mockers
 
   before(:each) do
@@ -13,7 +13,7 @@ describe Tetra::Kit do
     delete_mock_project
   end
 
-  let(:instance) { Tetra::Kit.new(@project) }
+  let(:instance) { Tetra::KitPackage.new(@project) }
   let(:package_name) { instance.name }
 
   describe "#to_spec" do

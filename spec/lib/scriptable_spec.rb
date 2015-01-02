@@ -32,7 +32,7 @@ describe Tetra::Scriptable do
   describe "#generate_build_script" do
     it "generates a build script from the history" do
       @project.from_directory do
-        @package = Tetra::BuiltPackage.new(@project)
+        @package = Tetra::Package.new(@project)
         @package.to_script("history")
 
         lines = File.readlines(File.join("packages", "test-project", "build.sh"))

@@ -38,8 +38,8 @@ require "tetra/kit_checker"
 require "tetra/packages/archivable"
 require "tetra/packages/speccable"
 require "tetra/packages/scriptable"
-require "tetra/packages/kit"
-require "tetra/packages/built_package"
+require "tetra/packages/kit_package"
+require "tetra/packages/package"
 
 # internal, UI
 require "tetra/commands/base"

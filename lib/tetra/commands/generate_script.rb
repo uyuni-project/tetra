@@ -9,7 +9,7 @@ module Tetra
         ensure_dry_running(false, project) do
           history = File.join(Dir.home, ".bash_history")
           result_path, conflict_count =
-            Tetra::BuiltPackage.new(project).to_script(history)
+            Tetra::Package.new(project).to_script(history)
           print_generation_result(project, result_path, conflict_count)
         end
       end
