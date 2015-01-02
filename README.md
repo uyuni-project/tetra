@@ -24,7 +24,7 @@ Building a package with `tetra` is quite unusual — this is a deliberate choice
 
 * `tetra init` a new project;
 * add sources to `src/<package name>` and anything else needed for the build in `kit/` in binary form (typically a copy of Maven and maybe some other dependency jars);
-* execute `tetra dry-run`, then any command needed to compile your software, then `tetra finish`;
+* execute `tetra dry-run start`, then any command needed to compile your software, then `tetra dry-run finish`;
 * execute `tetra generate-all`: tetra will look at changed files and Bash history to scaffold spec files and tarballs.
 
 Done!
@@ -55,15 +55,15 @@ Third, put all non-source files needed for the build in `kit/`. This means all b
     unzip apache-maven-3.1.1-bin.zip
     rm apache-maven-3.1.1-bin.zip
 
-Fourth, you need to show `tetra` how to build your package by running appropriate commands between `tetra dry-run` and `tetra finish`. Bash history will be recorded to generate a "starting-point" build script (that will be sufficient in simple cases like this):
+Fourth, you need to show `tetra` how to build your package by running appropriate commands between `tetra dry-run start` and `tetra dry-run finish`. Bash history will be recorded to generate a "starting-point" build script (that will be sufficient in simple cases like this):
 
     cd ../src
-    tetra dry-run
+    tetra dry-run start
 
     cd commons-collections-3.2.1-src/
     tetra mvn package
 
-    tetra finish
+    tetra dry-run finish
 
 Note that we used `tetra mvn package` instead of `mvn package`: this will use of the Maven copy we put in `kit/` and the repository in `kit/m2`.
 Also note that this being a dry-run build, sources will be brought back to their original state after `tetra finish`, as this ensures build repeatability.

@@ -11,7 +11,7 @@ module Tetra
 
     subcommand(
       "dry-run",
-      "Starts a dry-run build",
+      "Starts or ends a dry-run build",
       Tetra::DryRunCommand
     )
 
@@ -25,12 +25,6 @@ module Tetra
       "ant",
       "Locates and runs Ant from any directory in kit/",
       Tetra::AntCommand
-    )
-
-    subcommand(
-      "finish",
-      "Ends the current dry-run",
-      Tetra::FinishCommand
     )
 
     subcommand(

@@ -42,9 +42,9 @@ module Tetra
         yield
       else
         if state == true
-          puts "Please start a dry-run first, use \"tetra dry-run\""
+          puts "Please start a dry-run first, use \"tetra dry-run start\""
         else
-          puts "Please finish or abort this dry-run first, use \"tetra finish\" or \"tetra finish --abort\""
+          puts "Please finish or abort this dry-run first, use \"tetra dry-run finish\" or \"tetra dry-run abort\""
         end
       end
     end

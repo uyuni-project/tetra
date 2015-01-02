@@ -89,21 +89,26 @@ module Tetra
       latest_tag_count(:dry_run_started) > latest_tag_count(:dry_run_finished)
     end
 
-    # ends a dry-run.
-    # if abort is true, reverts the whole directory
-    # if abort is false, reverts sources and updates output file lists
-    def finish(abort)
+    # ends a dry-run assuming a successful build
+    # reverts sources and updates output file lists
+    def finish
       if dry_running?
-        if abort
-          @git.revert_whole_directory(".", latest_tag(:dry_run_started))
-          @git.delete_tag(latest_tag(:dry_run_started))
-        else
-          take_snapshot("Changes during dry-run", :dry_run_changed)
+        take_snapshot("Changes during dry-run", :dry_run_changed)
 
-          @git.revert_whole_directory("src", latest_tag(:dry_run_started))
+        @git.revert_whole_directory("src", latest_tag(:dry_run_started))
 
-          take_snapshot("Dry run finished", :dry_run_finished)
-        end
+        take_snapshot("Dry run finished", :dry_run_finished)
+        return true
+      end
+      false
+    end
+
+    # ends a dry-run assuming the built went wrong
+    # reverts the whole project directory
+    def abort
+      if dry_running?
+        @git.revert_whole_directory(".", latest_tag(:dry_run_started))
+        @git.delete_tag(latest_tag(:dry_run_started))
         return true
       end
       false

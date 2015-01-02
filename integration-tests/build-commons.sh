@@ -15,10 +15,10 @@ unzip ../../apache-maven-3.1.1-bin.zip
 cd ../src
 unzip ../../commons-collections-3.2.1-src.zip 
 
-tetra dry-run --very-very-verbose
+tetra dry-run --very-very-verbose start
 cd commons-collections-3.2.1-src/
 tetra mvn package -DskipTests
-tetra finish
+tetra dry-run finish
 
 tetra generate-kit
 tetra generate-archive

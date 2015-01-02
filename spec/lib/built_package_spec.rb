@@ -11,7 +11,7 @@ describe Tetra::BuiltPackage do
     Dir.chdir(@project_path) do
       FileUtils.touch(File.join("kit", "jars", "test.jar"))
     end
-    @project.finish(false)
+    @project.finish
 
     @project.from_directory do
       FileUtils.mkdir_p(File.join("src", "out"))
@@ -28,7 +28,7 @@ describe Tetra::BuiltPackage do
         FileUtils.touch(File.join("src", "out", "test#{i}.jar"))
       end
 
-      @project.finish(false)
+      @project.finish
     end
 
     FileUtils.copy(File.join("spec", "data", "nailgun", "pom.xml"), @project_path)
@@ -62,7 +62,7 @@ describe Tetra::BuiltPackage do
       @project.from_directory("src") do
         FileUtils.touch("src_test")
       end
-      @project.finish(false)
+      @project.finish
 
       @package.to_archive
       @project.from_directory do

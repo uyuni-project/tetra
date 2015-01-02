@@ -57,7 +57,7 @@ describe Tetra::Project do
         expect(@project.dry_running?).to be_falsey
         @project.dry_run
         expect(@project.dry_running?).to be_truthy
-        @project.finish(false)
+        @project.finish
         expect(@project.dry_running?).to be_falsey
       end
     end
@@ -90,8 +90,8 @@ describe Tetra::Project do
         File.open(File.join("src", "test"), "w") { |f| f.write("A") }
       end
 
-      expect(@project.finish(true)).to be_falsey
-      expect(@project.finish(false)).to be_falsey
+      expect(@project.abort).to be_falsey
+      expect(@project.finish).to be_falsey
 
       expect(@project.dry_run).to be_truthy
 
@@ -100,7 +100,7 @@ describe Tetra::Project do
         FileUtils.touch(File.join("src", "test2"))
       end
 
-      expect(@project.finish(false)).to be_truthy
+      expect(@project.finish).to be_truthy
       expect(@project.dry_running?).to be_falsey
 
       @project.from_directory do
@@ -117,8 +117,8 @@ describe Tetra::Project do
         File.open(File.join("kit", "test"), "w") { |f| f.write("A") }
       end
 
-      expect(@project.finish(true)).to be_falsey
-      expect(@project.finish(false)).to be_falsey
+      expect(@project.abort).to be_falsey
+      expect(@project.finish).to be_falsey
 
       expect(@project.dry_run).to be_truthy
 
@@ -129,7 +129,7 @@ describe Tetra::Project do
         FileUtils.touch(File.join("kit", "test2"))
       end
 
-      expect(@project.finish(true)).to be_truthy
+      expect(@project.abort).to be_truthy
       expect(@project.dry_running?).to be_falsey
 
       @project.from_directory do
@@ -145,7 +145,7 @@ describe Tetra::Project do
 
   describe "#dry_run" do
     it "starts a dry running phase" do
-      expect(@project.finish(false)).to be_falsey
+      expect(@project.finish).to be_falsey
 
       @project.from_directory do
         FileUtils.touch(File.join("src", "test"))
@@ -175,13 +175,13 @@ describe Tetra::Project do
         File.open(File.join("src", "added_in_first_dry_run"), "w") { |f| f.write("A") }
         File.open("added_outside_directory", "w") { |f| f.write("A") }
       end
-      expect(@project.finish(false)).to be_truthy
+      expect(@project.finish).to be_truthy
 
       expect(@project.dry_run).to be_truthy
       @project.from_directory do
         File.open(File.join("src", "added_in_second_dry_run"), "w") { |f| f.write("A") }
       end
-      expect(@project.finish(false)).to be_truthy
+      expect(@project.finish).to be_truthy
 
       list = @project.produced_files
       expect(list).to include("added_in_first_dry_run")
@@ -197,7 +197,7 @@ describe Tetra::Project do
       @project.from_directory do
         File.open(File.join("src", "test.jar"), "w") { |f| f.write("jarring") }
       end
-      expect(@project.finish(false)).to be_falsey
+      expect(@project.finish).to be_falsey
 
       @project.purge_jars
 
