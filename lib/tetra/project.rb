@@ -5,8 +5,7 @@ module Tetra
   class Project
     include Logging
 
-    attr_accessor :full_path
-    attr_accessor :git
+    attr_reader :full_path
 
     def initialize(path)
       @full_path = Tetra::Project.find_project_dir(File.expand_path(path))
