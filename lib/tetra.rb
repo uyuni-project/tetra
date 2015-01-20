@@ -19,10 +19,14 @@ require "nokogiri"
 require "rest_client"
 require "zip"
 
+# logging
+require "tetra/logger"
+
+# facades to other programs
+require "tetra/facades/git"
+
 # internal, backend
 require "tetra/version"
-require "tetra/logger"
-require "tetra/git"
 require "tetra/project"
 require "tetra/pom"
 require "tetra/version_matcher"
