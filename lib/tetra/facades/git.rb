@@ -5,6 +5,7 @@ module Tetra
   # prefixes all tags with "tetra_"
   class Git
     include Logging
+    include ProcessRunner
 
     # inits a new git manager object pointing to the specified
     # directory
@@ -16,7 +17,7 @@ module Tetra
     def init
       Dir.chdir(@directory) do
         if Dir.exist?(".git") == false
-          `git init`
+          run("git init")
         else
           fail GitAlreadyInitedError
         end
@@ -41,8 +42,12 @@ module Tetra
             "HEAD"
           end
         )
-        `git diff-tree --no-commit-id --name-only -r #{prefixed_start_tag} #{prefixed_end_tag} -- #{directory}`
-          .split("\n")
+        run("git diff-tree \
+              --no-commit-id \
+              --name-only \
+              -r #{prefixed_start_tag} #{prefixed_end_tag}\
+              -- #{directory}"
+        ).split("\n")
       end
     end
 
@@ -53,14 +58,14 @@ module Tetra
       Dir.chdir(@directory) do
         log.debug "committing with message: #{message}"
 
-        `git rm -r --cached --ignore-unmatch .`
-        `git add .`
-        `git commit -m "#{message}"`
+        run("git rm -r --cached --ignore-unmatch .")
+        run("git add .")
+        run("git commit -m \"#{message}\"", false, false)
 
         if !tag_message.nil?
-          `git tag tetra_#{tag} -m "#{tag_message}"`
+          run("git tag tetra_#{tag} -m \"#{tag_message}\"")
         else
-          `git tag tetra_#{tag}`
+          run("git tag tetra_#{tag}")
         end
       end
     end
@@ -70,16 +75,16 @@ module Tetra
     def commit_file(path, message, tag)
       Dir.chdir(@directory) do
         log.debug "committing path #{path} with message: #{message}"
-        `git add #{path}`
-        `git commit -m "#{message}"`
-        `git tag tetra_#{tag}`
+        run("git add #{path}")
+        run("git commit -m \"#{message}\"")
+        run("git tag tetra_#{tag}")
       end
     end
 
     # returns the highest suffix found in tags with the given prefix
     def get_tag_maximum_suffix(prefix)
       Dir.chdir(@directory) do
-        `git tag`.split.map do |tag|
+        run("git tag").split.map do |tag|
           if tag =~ /^tetra_#{prefix}_([0-9]+)$/
             Regexp.last_match[1].to_i
           else
@@ -93,12 +98,12 @@ module Tetra
     def revert_whole_directory(path, tag)
       Dir.chdir(@directory) do
         # reverts added and modified files, both in index and working tree
-        `git checkout -f tetra_#{tag} -- #{path}`
+        run("git checkout -f tetra_#{tag} -- #{path}")
 
         # compute the list of deleted files
-        files_in_tag = `git ls-tree --name-only -r tetra_#{tag} -- #{path}`.split("\n")
-        files_in_head = `git ls-tree --name-only -r HEAD -- #{path}`.split("\n")
-        files_added_after_head = `git ls-files -o -- #{path}`.split("\n")
+        files_in_tag = run("git ls-tree --name-only -r tetra_#{tag} -- #{path}").split("\n")
+        files_in_head = run("git ls-tree --name-only -r HEAD -- #{path}").split("\n")
+        files_added_after_head = run("git ls-files -o -- #{path}").split("\n")
         files_to_delete = files_in_head - files_in_tag + files_added_after_head
 
         files_to_delete.each do |file|
@@ -112,13 +117,13 @@ module Tetra
     # returns the conflict count
     def merge_with_tag(path, new_path, tag)
       Dir.chdir(@directory) do
-        log.debug "calling git show tetra_#{tag}:#{path} > #{path}.old_version, output follows"
-        `git show tetra_#{tag}:#{path} > #{path}.old_version`
-        log.debug "calling git merge-file #{path} #{path}.old_version #{new_path}, output follows"
-        `git merge-file #{path} #{path}.old_version #{new_path} \
-          -L "newly generated" -L "previously generated" -L "user edited"`
+        run("git show tetra_#{tag}:#{path} > #{path}.old_version")
+        run("git merge-file #{path} #{path}.old_version #{new_path} \
+              -L \"newly generated\" \
+              -L \"previously generated\"
+              -L \"user edited\"")
         conflict_count = $CHILD_STATUS.exitstatus
-        File.delete "#{path}.old_version"
+        File.delete("#{path}.old_version")
         return conflict_count
       end
     end
@@ -126,13 +131,13 @@ module Tetra
     # deletes a tag
     def delete_tag(tag)
       Dir.chdir(@directory) do
-        `git tag -d tetra_#{tag}`
+        run("git tag -d tetra_#{tag}")
       end
     end
 
     # returns the tag message
     def get_message(tag)
-      `git cat-file tag tetra_#{tag}`.split.last
+      run("git cat-file tag tetra_#{tag}").split.last
     end
   end
 

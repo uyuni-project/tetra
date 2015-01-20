@@ -82,6 +82,8 @@ module Tetra
       $stderr.puts "This directory is already a tetra project"
     rescue ExecutableNotFoundError => e
       $stderr.puts "Executable #{e.executable} not found in kit/ or any of its subdirectories"
+    rescue ExecutionFailed => e
+      $stderr.puts "Failed to run `#{e.commandline}` (exit status #{e.status})"
     end
   end
 end

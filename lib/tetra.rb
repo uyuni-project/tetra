@@ -18,11 +18,13 @@ require "json"
 require "nokogiri"
 require "rest_client"
 require "zip"
+require "open4"
 
 # logging
 require "tetra/logger"
 
 # facades to other programs
+require "tetra/facades/process_runner"
 require "tetra/facades/git"
 require "tetra/facades/tar"
 
