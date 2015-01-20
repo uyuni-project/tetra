@@ -66,7 +66,7 @@ describe Tetra::Package do
 
       @package.to_archive
       @project.from_directory do
-        expect(`tar -Jtf packages/test-project/test-project.tar.xz`.split).to include("src_test")
+        expect(`tar -Jtf packages/test-project/test-project.tar.xz`.split).to include("./src_test")
       end
     end
   end

@@ -24,6 +24,7 @@ require "tetra/logger"
 
 # facades to other programs
 require "tetra/facades/git"
+require "tetra/facades/tar"
 
 # internal, backend
 require "tetra/version"

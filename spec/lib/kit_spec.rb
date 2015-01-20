@@ -40,7 +40,7 @@ describe Tetra::KitPackage do
 
       @project.from_directory do
         contents = `tar --list -f packages/#{package_name}/#{package_name}.tar.xz`.split
-        expect(contents).to include("m2/kit.content")
+        expect(contents).to include("./m2/kit.content")
       end
     end
   end

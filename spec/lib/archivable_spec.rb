@@ -29,7 +29,7 @@ describe Tetra::Archivable do
       instance._to_archive(@project, "test-package", "kit", @project.packages_dir)
 
       @project.from_directory do
-        expect(`tar -Jtf packages/test-package/test-package.tar.xz`.split).to include("kit_test")
+        expect(`tar -Jtf packages/test-package/test-package.tar.xz`.split).to include("./kit_test")
       end
     end
   end
