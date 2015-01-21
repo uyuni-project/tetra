@@ -15,7 +15,7 @@ module Tetra
       checking_exceptions do
         project = Tetra::Project.new(".")
         ensure_dry_running(true, project) do
-          Tetra::AntRunner.new(project).ant(@options)
+          Tetra::Ant.new(project).ant(@options)
         end
       end
     end

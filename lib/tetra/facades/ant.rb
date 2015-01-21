@@ -2,7 +2,7 @@
 
 module Tetra
   # runs Ant with tetra-specific options
-  class AntRunner < KitRunner
+  class Ant < KitRunner
     include Logging
     include ProcessRunner
 

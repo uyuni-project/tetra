@@ -27,6 +27,8 @@ require "tetra/logger"
 require "tetra/facades/process_runner"
 require "tetra/facades/git"
 require "tetra/facades/tar"
+require "tetra/facades/kit_runner"
+require "tetra/facades/ant"
 
 # internal, backend
 require "tetra/version"
@@ -36,8 +38,6 @@ require "tetra/version_matcher"
 require "tetra/maven_website"
 require "tetra/pom_getter"
 require "tetra/source_getter"
-require "tetra/kit_runner"
-require "tetra/ant_runner"
 require "tetra/maven_runner"
 require "tetra/kit_checker"
 

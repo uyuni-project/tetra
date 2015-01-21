@@ -4,7 +4,7 @@ module Tetra
   # generates a package build script from bash_history
   module Scriptable
     def _to_script(project, history_path)
-      ant_runner = Tetra::AntRunner.new(project)
+      ant_runner = Tetra::Ant.new(project)
       maven_runner = Tetra::MavenRunner.new(project)
 
       project.from_directory do

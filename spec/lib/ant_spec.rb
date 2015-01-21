@@ -2,13 +2,13 @@
 
 require "spec_helper"
 
-describe Tetra::AntRunner do
+describe Tetra::Ant do
   it_behaves_like Tetra::KitRunner
   include Tetra::Mockers
 
   before(:each) do
     create_mock_project
-    @kit_runner = Tetra::AntRunner.new(@project)
+    @kit_runner = Tetra::Ant.new(@project)
   end
 
   after(:each) do
