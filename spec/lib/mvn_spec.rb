@@ -2,13 +2,13 @@
 
 require "spec_helper"
 
-describe Tetra::MavenRunner do
+describe Tetra::Mvn do
   it_behaves_like Tetra::KitRunner
   include Tetra::Mockers
 
   before(:each) do
     create_mock_project
-    @kit_runner = Tetra::MavenRunner.new(@project)
+    @kit_runner = Tetra::Mvn.new(@project)
   end
 
   after(:each) do

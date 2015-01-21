@@ -15,7 +15,7 @@ module Tetra
       checking_exceptions do
         project = Tetra::Project.new(".")
         ensure_dry_running(true, project) do
-          Tetra::MavenRunner.new(project).mvn(@options)
+          Tetra::Mvn.new(project).mvn(@options)
         end
       end
     end

@@ -5,7 +5,7 @@ module Tetra
   module Scriptable
     def _to_script(project, history_path)
       ant_runner = Tetra::Ant.new(project)
-      maven_runner = Tetra::MavenRunner.new(project)
+      maven_runner = Tetra::Mvn.new(project)
 
       project.from_directory do
         history_lines = File.readlines(history_path).map(&:strip)

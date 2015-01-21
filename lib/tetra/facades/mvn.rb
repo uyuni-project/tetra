@@ -2,7 +2,7 @@
 
 module Tetra
   # runs Maven with tetra-specific options
-  class MavenRunner < KitRunner
+  class Mvn < KitRunner
     include Logging
     include ProcessRunner
 
