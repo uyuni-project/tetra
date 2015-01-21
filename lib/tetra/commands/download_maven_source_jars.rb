@@ -13,7 +13,7 @@ module Tetra
           succeeded, failed = source_getter.get_maven_source_jars(project)
 
           puts "\n**SUMMARY**\n"
-          puts "Sources found for:"
+          puts "Source packages found:"
           succeeded.each do |path|
             puts " #{format_path(path, project)}"
           end
