@@ -84,6 +84,8 @@ module Tetra
       $stderr.puts "Executable #{e.executable} not found in kit/ or any of its subdirectories"
     rescue ExecutionFailed => e
       $stderr.puts "Failed to run `#{e.commandline}` (exit status #{e.status})"
+    rescue Interrupt
+      $stderr.puts "Execution interrupted by the user"
     end
   end
 end
