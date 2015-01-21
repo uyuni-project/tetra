@@ -13,9 +13,9 @@ module Tetra
         relevant_lines =
           history_lines
           .reverse
-          .take_while { |e| e.match(/tetra +dry-run/).nil? }
+          .take_while { |e| e.match(/tetra +dry-run +start/).nil? }
           .reverse
-          .take_while { |e| e.match(/tetra +finish/).nil? }
+          .take_while { |e| e.match(/tetra +dry-run +finish/).nil? }
           .select { |e| e.match(/^#/).nil? }
 
         script_lines = [
