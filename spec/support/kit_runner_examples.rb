@@ -9,7 +9,7 @@ shared_examples_for Tetra::KitRunner do
       expect(@kit_runner.find_executable("any")).to eq executable_path
     end
     it "doesn't find a Maven executable in kit" do
-      expect(@kit_runner.find_executable("any")).to be_nil
+      expect { @kit_runner.find_executable("any") }.to raise_error(Tetra::ExecutableNotFoundError)
     end
   end
 end

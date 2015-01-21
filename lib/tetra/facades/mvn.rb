@@ -28,17 +28,11 @@ module Tetra
     # returns a command line for running Maven from the specified
     # prefix
     def get_maven_commandline(prefix, options)
-      executable = find_executable("mvn")
+      mvn_path = File.join(prefix, find_executable("mvn"))
+      repo_path = File.join(prefix, "kit", "m2")
+      config_path = File.join(prefix, "kit", "m2", "settings.xml")
 
-      if !executable.nil?
-        mvn_path = File.join(prefix, executable)
-        repo_path = File.join(prefix, "kit", "m2")
-        config_path = File.join(prefix, "kit", "m2", "settings.xml")
-
-        "#{mvn_path} -Dmaven.repo.local=#{repo_path} -s#{config_path} #{options.join(' ')}"
-      else
-        fail ExecutableNotFoundError, "mvn"
-      end
+      "#{mvn_path} -Dmaven.repo.local=#{repo_path} -s#{config_path} #{options.join(' ')}"
     end
   end
 end

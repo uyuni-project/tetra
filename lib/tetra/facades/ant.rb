@@ -14,15 +14,7 @@ module Tetra
     # returns a command line for running Ant from the specified
     # prefix
     def get_ant_commandline(prefix)
-      executable = find_executable("ant")
-
-      if !executable.nil?
-        ant_path = File.join(prefix, executable)
-
-        "#{ant_path}"
-      else
-        fail ExecutableNotFoundError, "ant"
-      end
+      File.join(prefix, find_executable("ant"))
     end
   end
 end

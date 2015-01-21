@@ -21,7 +21,7 @@ module Tetra
       end
 
       log.debug("#{name} executable not found")
-      nil
+      fail ExecutableNotFoundError, name
     end
   end
 
