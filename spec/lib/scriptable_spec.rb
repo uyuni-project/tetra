@@ -11,10 +11,10 @@ describe Tetra::Scriptable do
     @project.from_directory do
       File.open("history", "w") do |io|
         io.puts "some earlier command"
-        io.puts "tetra dry-run --unwanted-options"
+        io.puts "tetra dry-run start --unwanted-options"
         io.puts "cd somewhere significant"
         io.puts "tetra mvn --options"
-        io.puts "tetra finish -a"
+        io.puts "tetra dry-run finish -a"
         io.puts "some later command"
       end
 
@@ -22,7 +22,8 @@ describe Tetra::Scriptable do
       @project.dry_run
     end
 
-    mock_maven_executable
+    create_mock_executable("ant")
+    create_mock_executable("mvn")
   end
 
   after(:each) do
@@ -49,16 +50,6 @@ describe Tetra::Scriptable do
         expect(lines).not_to include("tetra finish -a\n")
         expect(lines).not_to include("some later command\n")
       end
-    end
-  end
-
-  def mock_maven_executable
-    Dir.chdir(@project_path) do
-      @bin_dir = File.join("kit", "mvn", "bin")
-      FileUtils.mkdir_p(@bin_dir)
-      @maven_executable = File.join(@bin_dir, "mvn")
-      File.open(@maven_executable, "w") { |io| io.puts "echo $0 $*>test_out" }
-      File.chmod(0777, @maven_executable)
     end
   end
 end
