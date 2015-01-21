@@ -35,16 +35,6 @@ describe Tetra::Mvn do
     end
   end
 
-  describe "#get_source_jar"  do
-    it "runs maven to get a source jar" do
-      @project.from_directory do
-        instance.get_source_jar("test_group", "test_artifact_id", "test_version")
-        expected = /dependency:get -Dartifact=test_group:test_artifact_id:test_version:jar:sources -Dtransitive=false$/
-        expect(File.read("test_out").strip).to match expected
-      end
-    end
-  end
-
   describe "#get_effective_pom"  do
     it "runs maven to get an effective pom" do
       @project.from_directory do

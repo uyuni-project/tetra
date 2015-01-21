@@ -64,27 +64,9 @@ module Tetra
     )
 
     subcommand(
-      "download-maven-source-jars",
-      "Attempts to download Maven kit/ sources",
-      Tetra::DownloadMavenSourceJarsCommand
-    )
-
-    subcommand(
       "get-pom",
       "Retrieves a pom file",
       Tetra::GetPomCommand
-    )
-
-    subcommand(
-      "get-source",
-      "Attempts to retrieve a project's sources",
-      Tetra::GetSourceCommand
-    )
-
-    subcommand(
-      "list-kit-missing-sources",
-      "Locates jars in kit/ that have no source files",
-      Tetra::ListKitMissingSourcesCommand
     )
   end
 end

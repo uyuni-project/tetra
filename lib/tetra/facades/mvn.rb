@@ -18,11 +18,6 @@ module Tetra
       run(get_mvn_commandline(options), true)
     end
 
-    # runs Maven to attempt getting a source jar
-    def get_source_jar(group_id, artifact_id, version)
-      mvn(["dependency:get", "-Dartifact=#{group_id}:#{artifact_id}:#{version}:jar:sources", "-Dtransitive=false"])
-    end
-
     # runs Maven to get the effective POM from an existing POM
     # returns effective pom path or nil if not found
     def get_effective_pom(pom_path)
