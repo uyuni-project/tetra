@@ -76,7 +76,7 @@ module Tetra
       Dir.chdir(@directory) do
         log.debug "committing path #{path} with message: #{message}"
         run("git add #{path}")
-        run("git commit -m \"#{message}\"")
+        run("git commit -m \"#{message}\"", false, false)
         run("git tag tetra_#{tag}")
       end
     end
