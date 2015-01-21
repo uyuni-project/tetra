@@ -23,13 +23,6 @@ module Tetra
       log.debug("#{name} executable not found")
       nil
     end
-
-    # runs an external executable, returns true on success
-    def run_executable(full_commandline)
-      log.debug "running #{full_commandline}"
-      Process.wait(Process.spawn(full_commandline))
-      $CHILD_STATUS.exitstatus == 0
-    end
   end
 
   # an executable from the kit was not found

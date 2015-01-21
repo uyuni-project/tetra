@@ -4,10 +4,11 @@ module Tetra
   # runs Maven with tetra-specific options
   class MavenRunner < KitRunner
     include Logging
+    include ProcessRunner
 
     # runs Maven in a subprocess
     def mvn(options)
-      run_executable(get_maven_commandline(@project.full_path, options))
+      run(get_maven_commandline(@project.full_path, options), true)
     end
 
     # runs Maven to attempt getting a source jar
