@@ -120,7 +120,7 @@ module Tetra
         run("git show tetra_#{tag}:#{path} > #{path}.old_version")
         run("git merge-file #{path} #{path}.old_version #{new_path} \
               -L \"newly generated\" \
-              -L \"previously generated\"
+              -L \"previously generated\" \
               -L \"user edited\"")
         conflict_count = $CHILD_STATUS.exitstatus
         File.delete("#{path}.old_version")
