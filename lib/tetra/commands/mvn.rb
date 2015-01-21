@@ -15,7 +15,8 @@ module Tetra
       checking_exceptions do
         project = Tetra::Project.new(".")
         ensure_dry_running(true, project) do
-          Tetra::Mvn.new(project).mvn(@options)
+          path = Tetra::Kit.new(project).find_executable("mvn")
+          Tetra::Mvn.new(project.full_path, path).mvn(@options)
         end
       end
     end

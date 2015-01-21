@@ -1,8 +1,8 @@
 # encoding: UTF-8
 
 module Tetra
-  # runs programs from a tetra kit with tetra-specific options
-  class KitRunner
+  # encapsulates a Tetra kit directory
+  class Kit
     include Logging
 
     def initialize(project)

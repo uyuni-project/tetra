@@ -14,7 +14,9 @@ module Tetra
         if source_getter.get_maven_source_jar(project, pom)
           puts "Source jar found and added to Maven repository."
         else
-          effective_pom_path = Tetra::Mvn.new(project).get_effective_pom(pom)
+          mvn_path = Tetra::Kit.new(project).find_executable("mvn")
+          mvn = Tetra::Mvn.new(project.full_path, mvn_path)
+          effective_pom_path = mvn.get_effective_pom(pom)
           puts "Source jar not found in Maven. Try looking here:"
           pom = Tetra::Pom.new(effective_pom_path)
           puts "Website: #{pom.url}" unless pom.url.empty?

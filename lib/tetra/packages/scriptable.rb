@@ -5,9 +5,6 @@ module Tetra
   module Scriptable
     # returns a build script for this package
     def _to_script(project, history_path)
-      ant_runner = Tetra::Ant.new(project)
-      maven_runner = Tetra::Mvn.new(project)
-
       project.from_directory do
         history_lines = File.readlines(history_path).map(&:strip)
         relevant_lines =
@@ -23,16 +20,7 @@ module Tetra
           "set -xe",
           "PROJECT_PREFIX=`readlink -e .`",
           "cd #{project.latest_dry_run_directory}"
-        ] +
-                       relevant_lines.map do |line|
-                         if line =~ /tetra +mvn/
-                           line.gsub(/tetra +mvn/, "#{maven_runner.get_maven_commandline('$PROJECT_PREFIX', ['-o'])}")
-                         elsif line =~ /tetra +ant/
-                           line.gsub(/tetra +ant/, "#{ant_runner.get_ant_commandline('$PROJECT_PREFIX')}")
-                         else
-                           line
-                         end
-                       end
+        ] + script_body(project, relevant_lines)
 
         new_content = script_lines.join("\n") + "\n"
 
@@ -43,6 +31,29 @@ module Tetra
                                                    "generate_build_script")
 
         [result_path, conflict_count]
+      end
+    end
+
+    # returns the script body
+    def script_body(project, relevant_lines)
+      ant = if relevant_lines.any? { |e| e.match(/tetra +ant/) }
+              path = Tetra::Kit.new(project).find_executable("ant")
+              Tetra::Ant.new(project.full_path, path).ant(@options)
+            end
+
+      mvn = if relevant_lines.any? { |e| e.match(/tetra +mvn/) }
+              mvn_path = Tetra::Kit.new(project).find_executable("mvn")
+              mvn = Tetra::Mvn.new("$PROJECT_PREFIX", mvn_path)
+            end
+
+      relevant_lines.map do |line|
+        if line =~ /tetra +mvn/
+          line.gsub(/tetra +mvn/, "#{mvn.get_mvn_commandline(['-o'])}")
+        elsif line =~ /tetra +ant/
+          line.gsub(/tetra +ant/, "#{ant.get_ant_commandline([])}")
+        else
+          line
+        end
       end
     end
   end

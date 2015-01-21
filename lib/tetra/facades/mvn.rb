@@ -2,17 +2,23 @@
 
 module Tetra
   # runs Maven with tetra-specific options
-  class Mvn < KitRunner
+  class Mvn
     include Logging
     include ProcessRunner
 
+    # project_path is relative to the current dir
+    # mvn_path is relative to project_path
+    def initialize(project_path, mvn_path)
+      @project_path = project_path
+      @mvn_path = mvn_path
+    end
+
     # runs Maven in a subprocess
     def mvn(options)
-      run(get_maven_commandline(@project.full_path, options), true)
+      run(get_mvn_commandline(options), true)
     end
 
     # runs Maven to attempt getting a source jar
-    # returns true if successful
     def get_source_jar(group_id, artifact_id, version)
       mvn(["dependency:get", "-Dartifact=#{group_id}:#{artifact_id}:#{version}:jar:sources", "-Dtransitive=false"])
     end
@@ -25,14 +31,13 @@ module Tetra
       effective_pom_path if success
     end
 
-    # returns a command line for running Maven from the specified
-    # prefix
-    def get_maven_commandline(prefix, options)
-      mvn_path = File.join(prefix, find_executable("mvn"))
-      repo_path = File.join(prefix, "kit", "m2")
-      config_path = File.join(prefix, "kit", "m2", "settings.xml")
+    # returns a command line for running Maven
+    def get_mvn_commandline(options)
+      full_path = File.join(@project_path, @mvn_path)
+      repo_path = File.join(@project_path, "kit", "m2")
+      config_path = File.join(@project_path, "kit", "m2", "settings.xml")
 
-      "#{mvn_path} -Dmaven.repo.local=#{repo_path} -s#{config_path} #{options.join(' ')}"
+      "#{full_path} -Dmaven.repo.local=#{repo_path} -s#{config_path} #{options.join(' ')}"
     end
   end
 end

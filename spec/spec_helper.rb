@@ -1,7 +1,6 @@
 # encoding: UTF-8
 
 require "tetra"
-Dir["./spec/support/**/*.rb"].sort.each { |f| require f }
 
 module Tetra
   # custom mock methods
@@ -25,13 +24,23 @@ module Tetra
     # full path
     def create_mock_executable(executable_name)
       Dir.chdir(@project_path) do
-        bin_dir = File.join("kit", executable_name, "bin")
-        FileUtils.mkdir_p(bin_dir)
-        executable_path = File.join(bin_dir, executable_name)
+        dir = mock_executable_dir(executable_name)
+        FileUtils.mkdir_p(dir)
+        executable_path = mock_executable_path(executable_name)
         File.open(executable_path, "w") { |io| io.puts "echo $0 $*>test_out" }
         File.chmod(0777, executable_path)
         executable_path
       end
+    end
+
+    # returns the path for a mocked executable's directory
+    def mock_executable_dir(executable_name)
+      File.join("kit", executable_name, "bin")
+    end
+
+    # returns the path for a mocked executable
+    def mock_executable_path(executable_name)
+      File.join(mock_executable_dir(executable_name), executable_name)
     end
   end
 end

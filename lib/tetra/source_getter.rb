@@ -7,15 +7,17 @@ module Tetra
 
     # attempts to download a project's sources
     def get_maven_source_jar(project, pom_path)
-      maven_runner = Tetra::Mvn.new(project)
+      mvn_path = Tetra::Kit.new(project).find_executable("mvn")
+      mvn = Tetra::Mvn.new(project.full_path, mvn_path)
       pom = Pom.new(pom_path)
-      maven_runner.get_source_jar(pom.group_id, pom.artifact_id, pom.version)
+      mvn.get_source_jar(pom.group_id, pom.artifact_id, pom.version)
     end
 
     # looks for jars in maven's local repo and downloads corresponding
     # source jars
     def get_maven_source_jars(project)
-      maven_runner = Tetra::Mvn.new(project)
+      mvn_path = Tetra::Kit.new(project).find_executable("mvn")
+      mvn = Tetra::Mvn.new(project.full_path, mvn_path)
 
       project.from_directory do
         paths = Find.find(".").reject { |path| artifact_from_path(path).nil? }.sort
@@ -24,7 +26,7 @@ module Tetra
           group_id, artifact_id, version = artifact_from_path(path)
           log.info("attempting source download for #{path} (#{group_id}:#{artifact_id}:#{version})")
           begin
-            maven_runner.get_source_jar(group_id, artifact_id, version)
+            mvn.get_source_jar(group_id, artifact_id, version)
             true
           rescue Tetra::ExecutionFailed
             false
