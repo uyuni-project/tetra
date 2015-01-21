@@ -20,11 +20,11 @@ module Tetra
 
       if status != 0
         if fail_on_error
-          log.error("`#{commandline}` failed, status #{status}")
-          log.error("standard output follows")
-          log.error(out_recorder.record)
-          log.error("standard error follows")
-          log.error(err_recorder.record)
+          log.warn("`#{commandline}` failed, status #{status}")
+          log.warn("standard output follows")
+          log.warn(out_recorder.record)
+          log.warn("standard error follows")
+          log.warn(err_recorder.record)
           fail ExecutionFailed.new(commandline, status)
         end
       end
