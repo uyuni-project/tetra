@@ -20,10 +20,15 @@ module Tetra
       project.from_directory do
         paths = Find.find(".").reject { |path| artifact_from_path(path).nil? }.sort
 
-        succeded_paths = paths.each do |path|
+        succeded_paths = paths.select do |path|
           group_id, artifact_id, version = artifact_from_path(path)
           log.info("attempting source download for #{path} (#{group_id}:#{artifact_id}:#{version})")
-          maven_runner.get_source_jar(group_id, artifact_id, version)
+          begin
+            maven_runner.get_source_jar(group_id, artifact_id, version)
+            true
+          rescue Tetra::ExecutionFailed
+            false
+          end
         end
 
         [succeded_paths, (paths - succeded_paths)]
