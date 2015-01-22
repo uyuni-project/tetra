@@ -2,7 +2,7 @@
 
 module Tetra
   # tetra move-jars-to-kit
-  class MoveJarsToKitCommand < Tetra::BaseCommand
+  class MoveJarsToKitSubcommand < Tetra::Subcommand
     def execute
       checking_exceptions do
         project = Tetra::Project.new(".")

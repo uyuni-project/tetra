@@ -2,7 +2,7 @@
 
 module Tetra
   # tetra generate-archive
-  class GenerateArchiveCommand < Tetra::BaseCommand
+  class GenerateArchiveSubcommand < Tetra::Subcommand
     def execute
       checking_exceptions do
         project = Tetra::Project.new(".")

@@ -1,9 +1,9 @@
 # encoding: UTF-8
 
 module Tetra
-  # tetra ant
-  class AntCommand < Tetra::BaseCommand
-    parameter "[ANT OPTIONS] ...", "ant options", attribute_name: "dummy"
+  # tetra mvn
+  class MvnSubcommand < Tetra::Subcommand
+    parameter "[MAVEN OPTIONS] ...", "mvn options", attribute_name: "dummy"
 
     # override parsing in order to pipe everything to mvn
     # rubocop:disable TrivialAccessors
@@ -15,8 +15,8 @@ module Tetra
       checking_exceptions do
         project = Tetra::Project.new(".")
         ensure_dry_running(true, project) do
-          path = Tetra::Kit.new(project).find_executable("ant")
-          Tetra::Ant.new(project.full_path, path).ant(@options)
+          path = Tetra::Kit.new(project).find_executable("mvn")
+          Tetra::Mvn.new(project.full_path, path).mvn(@options)
         end
       end
     end

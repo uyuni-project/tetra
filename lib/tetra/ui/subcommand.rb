@@ -2,7 +2,7 @@
 
 module Tetra
   # implements common options and utility methods
-  class BaseCommand < Clamp::Command
+  class Subcommand < Clamp::Command
     include Logging
 
     # Options available to all tetra commands

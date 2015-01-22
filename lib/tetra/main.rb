@@ -6,67 +6,67 @@ module Tetra
     subcommand(
       "init",
       "Inits a tetra project in the current directory",
-      Tetra::InitCommand
+      Tetra::InitSubcommand
     )
 
     subcommand(
       "dry-run",
       "Starts or ends a dry-run build",
-      Tetra::DryRunCommand
+      Tetra::DryRunSubcommand
     )
 
     subcommand(
       "mvn",
       "Locates and runs Maven from any directory in kit/",
-      Tetra::MavenCommand
+      Tetra::MvnSubcommand
     )
 
     subcommand(
       "ant",
       "Locates and runs Ant from any directory in kit/",
-      Tetra::AntCommand
+      Tetra::AntSubcommand
     )
 
     subcommand(
       "generate-kit",
       "Create or refresh the kit spec and archive files",
-      Tetra::GenerateKitCommand
+      Tetra::GenerateKitSubcommand
     )
 
     subcommand(
       "generate-script",
       "Create or refresh the package build.sh file",
-      Tetra::GenerateScriptCommand
+      Tetra::GenerateScriptSubcommand
     )
 
     subcommand(
       "generate-archive",
       "Create or refresh the package tarball",
-      Tetra::GenerateArchiveCommand
+      Tetra::GenerateArchiveSubcommand
     )
 
     subcommand(
       "generate-spec",
       "Create or refresh the package spec file",
-      Tetra::GenerateSpecCommand
+      Tetra::GenerateSpecSubcommand
     )
 
     subcommand(
       "generate-all",
       "Create or refresh all specs, archives, scripts",
-      Tetra::GenerateAllCommand
+      Tetra::GenerateAllSubcommand
     )
 
     subcommand(
       "move-jars-to-kit",
       "Locates jars in src/ and moves them to kit/",
-      Tetra::MoveJarsToKitCommand
+      Tetra::MoveJarsToKitSubcommand
     )
 
     subcommand(
       "get-pom",
       "Retrieves a pom file",
-      Tetra::GetPomCommand
+      Tetra::GetPomSubcommand
     )
   end
 end

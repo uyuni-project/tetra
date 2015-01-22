@@ -2,7 +2,7 @@
 
 module Tetra
   # tetra init
-  class InitCommand < Tetra::BaseCommand
+  class InitSubcommand < Tetra::Subcommand
     def execute
       checking_exceptions do
         Tetra::Project.init(".")

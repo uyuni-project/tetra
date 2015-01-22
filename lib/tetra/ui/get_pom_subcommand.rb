@@ -2,7 +2,7 @@
 
 module Tetra
   # tetra get-pom
-  class GetPomCommand < Tetra::BaseCommand
+  class GetPomSubcommand < Tetra::Subcommand
     parameter "NAME", "a jar file name or a `name-version` string (heuristic)"
 
     def execute

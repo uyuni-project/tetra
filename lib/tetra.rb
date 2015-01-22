@@ -20,7 +20,7 @@ require "rest_client"
 require "zip"
 require "open4"
 
-# logging
+# base components
 require "tetra/logger"
 
 # facades to other programs
@@ -30,7 +30,7 @@ require "tetra/facades/tar"
 require "tetra/facades/ant"
 require "tetra/facades/mvn"
 
-# internal, backend
+# main internal classes
 require "tetra/version"
 require "tetra/project"
 require "tetra/pom"
@@ -39,25 +39,25 @@ require "tetra/version_matcher"
 require "tetra/maven_website"
 require "tetra/pom_getter"
 
-# internal, package related
+# package building
 require "tetra/packages/archivable"
 require "tetra/packages/speccable"
 require "tetra/packages/scriptable"
 require "tetra/packages/kit_package"
 require "tetra/packages/package"
 
-# internal, UI
-require "tetra/commands/base"
-require "tetra/commands/ant"
-require "tetra/commands/dry_run"
-require "tetra/commands/generate_all"
-require "tetra/commands/generate_kit"
-require "tetra/commands/generate_archive"
-require "tetra/commands/generate_script"
-require "tetra/commands/generate_spec"
-require "tetra/commands/get_pom"
-require "tetra/commands/init"
-require "tetra/commands/move_jars_to_kit"
-require "tetra/commands/mvn"
+# UI
+require "tetra/ui/subcommand"
+require "tetra/ui/ant_subcommand"
+require "tetra/ui/dry_run_subcommand"
+require "tetra/ui/generate_all_subcommand"
+require "tetra/ui/generate_kit_subcommand"
+require "tetra/ui/generate_archive_subcommand"
+require "tetra/ui/generate_script_subcommand"
+require "tetra/ui/generate_spec_subcommand"
+require "tetra/ui/get_pom_subcommand"
+require "tetra/ui/init_subcommand"
+require "tetra/ui/move_jars_to_kit_subcommand"
+require "tetra/ui/mvn_subcommand"
 
 require "tetra/main"

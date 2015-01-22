@@ -2,7 +2,7 @@
 
 module Tetra
   # tetra dry-run
-  class DryRunCommand < Tetra::BaseCommand
+  class DryRunSubcommand < Tetra::Subcommand
     parameter "COMMAND", "\"start\" to begin, \"finish\" to end or \"abort\" to undo changes" do |command|
       if %w(start finish abort).include?(command)
         command

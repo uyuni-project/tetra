@@ -1,18 +1,16 @@
 # encoding: UTF-8
 
 module Tetra
-  # tetra generate-kit
-  class GenerateKitCommand < Tetra::BaseCommand
+  # tetra generate-script
+  class GenerateScriptSubcommand < Tetra::Subcommand
     def execute
       checking_exceptions do
         project = Tetra::Project.new(".")
         ensure_dry_running(false, project) do
-          kit = Tetra::KitPackage.new(project)
-          result_path, conflict_count = kit.to_spec
+          history = File.join(Dir.home, ".bash_history")
+          result_path, conflict_count =
+            Tetra::Package.new(project).to_script(history)
           print_generation_result(project, result_path, conflict_count)
-
-          result_path = kit.to_archive
-          print_generation_result(project, result_path)
         end
       end
     end
