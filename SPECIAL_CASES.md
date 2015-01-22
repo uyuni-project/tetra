@@ -2,7 +2,7 @@
 
 ## Failing builds
 
-If your build fails for whatever reason, abort it with `tetra finish --abort`. `tetra` will restore all project files as they were before build.
+If your build fails for whatever reason, abort it with `tetra finish abort`. `tetra` will restore all project files as they were before build.
 
 ## Manual changes to generated files
 
