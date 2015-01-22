@@ -5,10 +5,9 @@ module Tetra
   class AntSubcommand < Tetra::Subcommand
     parameter "[ANT OPTIONS] ...", "ant options", attribute_name: "dummy"
 
-    # override parsing in order to pipe everything to mvn
-    # rubocop:disable TrivialAccessors
+    # options will be parsed by ant
     def parse(args)
-      @options = args
+      bypass_parsing(args)
     end
 
     def execute

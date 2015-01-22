@@ -6,9 +6,9 @@ module Tetra
     include Logging
 
     # Options available to all tetra commands
-    option %w(-v --verbose), :flag, "verbose output"
-    option ["--very-verbose"], :flag, "very verbose output"
-    option ["--very-very-verbose"], :flag, "very very verbose output"
+    option "--verbose", :flag, "verbose output"
+    option "--very-verbose", :flag, "very verbose output"
+    option "--very-very-verbose", :flag, "very very verbose output"
 
     # verbosity handlers
     def very_very_verbose=(flag)
@@ -34,6 +34,15 @@ module Tetra
       else
         log.level = ::Logger::ERROR
       end
+    end
+
+    # override default option parsing to pass options to other commands
+    def bypass_parsing(args)
+      log.level = ::Logger::WARN if args.delete "--verbose"
+      log.level = ::Logger::INFO if args.delete "--very-verbose"
+      log.level = ::Logger::DEBUG if args.delete "--very-very-verbose"
+
+      @options = args
     end
 
     # prints an error message and exits unless there is a dry-run in progress

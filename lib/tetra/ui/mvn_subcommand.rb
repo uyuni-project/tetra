@@ -5,10 +5,9 @@ module Tetra
   class MvnSubcommand < Tetra::Subcommand
     parameter "[MAVEN OPTIONS] ...", "mvn options", attribute_name: "dummy"
 
-    # override parsing in order to pipe everything to mvn
-    # rubocop:disable TrivialAccessors
+    # options will be parsed by mvn
     def parse(args)
-      @options = args
+      bypass_parsing(args)
     end
 
     def execute
