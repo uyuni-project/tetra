@@ -32,7 +32,13 @@ module Tetra
       repo_path = File.join(@project_path, "kit", "m2")
       config_path = File.join(@project_path, "kit", "m2", "settings.xml")
 
-      "#{full_path} -Dmaven.repo.local=#{repo_path} -s#{config_path} #{options.join(' ')}"
+      full_options = [
+        "-Dmaven.repo.local=#{repo_path}",
+        "--settings #{config_path}",
+        "--strict-checksums"
+      ] + options
+
+      "#{full_path} #{full_options.join(' ')}"
     end
   end
 end

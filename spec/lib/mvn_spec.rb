@@ -20,7 +20,8 @@ describe Tetra::Mvn do
     it "returns commandline options for running maven" do
       @project.from_directory do
         commandline = instance.get_mvn_commandline(["--otheroption"])
-        expected_commandline = "./#{@path} -Dmaven.repo.local=./kit/m2 -s./kit/m2/settings.xml --otheroption"
+        expected_commandline = "./#{@path} -Dmaven.repo.local=./kit/m2 --settings \
+./kit/m2/settings.xml --strict-checksums --otheroption"
         expect(commandline).to eq expected_commandline
       end
     end
