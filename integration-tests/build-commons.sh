@@ -9,10 +9,7 @@ mkdir commons-collections
 cd commons-collections
 tetra init
 
-cd kit
-unzip ../../apache-maven-3.1.1-bin.zip
-
-cd ../src
+cd src
 unzip ../../commons-collections-3.2.1-src.zip 
 
 tetra dry-run --very-very-verbose start
@@ -30,7 +27,7 @@ cat >packages/commons-collections/build.sh <<"EOF"
 PROJECT_PREFIX=`readlink -e .`
 cd .
 cd src/commons-collections-3.2.1-src/
-$PROJECT_PREFIX/kit/apache-maven-3.1.1/bin/mvn -Dmaven.repo.local=$PROJECT_PREFIX/kit/m2 -s$PROJECT_PREFIX/kit/m2/settings.xml -o package -DskipTests
+$PROJECT_PREFIX/kit/apache-maven-3.2.5/bin/mvn -Dmaven.repo.local=$PROJECT_PREFIX/kit/m2 -s$PROJECT_PREFIX/kit/m2/settings.xml -o package -DskipTests
 EOF
 
 echo "**************** All Done ****************"

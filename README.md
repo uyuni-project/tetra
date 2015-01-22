@@ -48,14 +48,7 @@ Second, place source files in the `src/` folder:
     unzip commons-collections-3.2.1-src.zip
     rm commons-collections-3.2.1-src.zip
 
-Third, put all non-source files needed for the build in `kit/`. This means all build dependencies and tools excluding the JDK: in this case it is just Maven:
-
-    cd ../kit
-    wget http://www.eu.apache.org/dist/maven/binaries/apache-maven-3.1.1-bin.zip
-    unzip apache-maven-3.1.1-bin.zip
-    rm apache-maven-3.1.1-bin.zip
-
-Fourth, you need to show `tetra` how to build your package by running appropriate commands between `tetra dry-run start` and `tetra dry-run finish`. Bash history will be recorded to generate a "starting-point" build script (that will be sufficient in simple cases like this):
+Third, you need to show `tetra` how to build your package by running appropriate commands between `tetra dry-run start` and `tetra dry-run finish`. Bash history will be recorded to generate a "starting-point" build script (that will be sufficient in simple cases like this):
 
     cd ../src
     tetra dry-run start
@@ -65,7 +58,7 @@ Fourth, you need to show `tetra` how to build your package by running appropriat
 
     tetra dry-run finish
 
-Note that we used `tetra mvn package` instead of `mvn package`: this will use of the Maven copy we put in `kit/` and the repository in `kit/m2`.
+Note that we used `tetra mvn package` instead of `mvn package`: this will use a preloaded Maven bundled in `kit/` by default and the repository in `kit/m2`.
 Also note that this being a dry-run build, sources will be brought back to their original state after `tetra finish`, as this ensures build repeatability.
 
 Finally, generate build scripts, spec files and tarballs in the `packages/` directory:

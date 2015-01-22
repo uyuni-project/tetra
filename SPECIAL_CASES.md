@@ -15,7 +15,7 @@ You can do any manual changes to spec and build.sh files and regenerate them lat
 
 ## Ant builds
 
-`tetra` is currently optimized for Maven as it is the most common build tool, but it can work with any other. In particular, support for Ant has already been implemented and `tetra ant` works like `tetra mvn`.
+`tetra` is currently optimized for Maven as it is the most common build tool, but it can work with any other. In particular, support for Ant has already been implemented and `tetra ant` works like `tetra mvn`, and a copy of ant is also bundled in `kit/` by default.
 
 Sometimes you will have jar files distributed along with the source archive that will end up in `src/`: you don't want that! Run
 
