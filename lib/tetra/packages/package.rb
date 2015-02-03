@@ -21,7 +21,7 @@ module Tetra
     def initialize(project, pom_path = nil, filter = nil)
       @project = project
       @kit = Tetra::KitPackage.new(project)
-      @pom = pom_path.nil? ? nil : Tetra::Pom.new(pom_path)
+      @pom = Tetra::Pom.new(pom_path)
       @filter = filter
     end
 
