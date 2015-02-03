@@ -93,7 +93,7 @@ and cloned with:
 
 Are you using `tetra` or even just reading this? Let's get in touch!
 
-    smoioli at suse dot de
+    moio at suse dot de
 
 ## License
 
