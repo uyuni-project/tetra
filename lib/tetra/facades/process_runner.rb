@@ -6,9 +6,9 @@ module Tetra
     include Logging
 
     # runs an external executable and returns its output as a string
-    # raises ExecutionFailed if the exit status is not 0 (override with fail_on_error)
+    # raises ExecutionFailed if the exit status is not 0
     # optionally echoes the executable's output/error to standard output/error
-    def run(commandline, echo = false, fail_on_error = true)
+    def run(commandline, echo = false)
       log.debug "running `#{commandline}`"
 
       out_recorder = echo ? RecordingIO.new(STDOUT) : RecordingIO.new
@@ -19,14 +19,11 @@ module Tetra
       log.debug "`#{commandline}` exited with status #{status}"
 
       if status != 0
-        if fail_on_error
-          log.warn("`#{commandline}` failed, status #{status}")
-          log.warn("standard output follows")
-          log.warn(out_recorder.record)
-          log.warn("standard error follows")
-          log.warn(err_recorder.record)
-          fail ExecutionFailed.new(commandline, status)
-        end
+        log.error("`#{commandline}` failed with status #{status}")
+        log.error("Error message follows:")
+        log.error(out_recorder.record)
+        log.error(err_recorder.record)
+        fail ExecutionFailed.new(commandline, status)
       end
 
       out_recorder.record

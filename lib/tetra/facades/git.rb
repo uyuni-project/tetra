@@ -60,7 +60,7 @@ module Tetra
 
         run("git rm -r --cached --ignore-unmatch .")
         run("git add .")
-        run("git commit -m \"#{message}\"", false, false)
+        run("git commit --allow-empty -m \"#{message}\"")
 
         if !tag_message.nil?
           run("git tag tetra_#{tag} -m \"#{tag_message}\"")
@@ -76,7 +76,7 @@ module Tetra
       Dir.chdir(@directory) do
         log.debug "committing path #{path} with message: #{message}"
         run("git add #{path}")
-        run("git commit -m \"#{message}\"", false, false)
+        run("git commit --allow-empty -m \"#{message}\"")
         run("git tag tetra_#{tag}")
       end
     end
