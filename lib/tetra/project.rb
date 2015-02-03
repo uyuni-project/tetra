@@ -5,6 +5,9 @@ module Tetra
   class Project
     include Logging
 
+    # path of the project template files
+    TEMPLATE_PATH = File.join(File.dirname(__FILE__), "..", "template")
+
     attr_reader :full_path
 
     def initialize(path)
@@ -44,7 +47,7 @@ module Tetra
     end
 
     # inits a new project directory structure
-    def self.init(dir)
+    def self.init(dir, include_bundled_software = true)
       Dir.chdir(dir) do
         Tetra::Git.new(".").init
 
@@ -54,21 +57,33 @@ module Tetra
         # populate the project with templates and take a snapshot
         project = Project.new(".")
 
-        template_path = File.join(File.dirname(__FILE__), "..", "template")
-
-        templates = {
-          "kit" => ".",
-          "packages" => ".",
-          "src" => ".",
-          "gitignore" => ".gitignore"
-        }
-
-        templates.each do |source, destination|
-          FileUtils.cp_r(File.join(template_path, source), destination)
+        project.template_files(include_bundled_software).each do |source, destination|
+          FileUtils.cp_r(File.join(TEMPLATE_PATH, source), destination)
         end
 
         project.take_snapshot("Template files added", :init)
       end
+    end
+
+    # returns a hash that maps filenames that should be copied from TEMPLATE_PATH
+    # to the value directory
+    def template_files(include_bundled_software)
+      result = {
+        "kit" => ".",
+        "packages" => ".",
+        "src" => ".",
+        "gitignore" => ".gitignore"
+      }
+
+      if include_bundled_software
+        Dir.chdir(TEMPLATE_PATH) do
+          Dir.glob(File.join("bundled", "*")).each do |file|
+            result[file] = "kit"
+          end
+        end
+      end
+
+      result
     end
 
     # starts a dry running phase: files added to kit/ will be added

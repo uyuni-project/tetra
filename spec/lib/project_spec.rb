@@ -3,16 +3,14 @@
 require "spec_helper"
 
 describe Tetra::Project do
-  before(:each) do
-    @project_path = File.join("spec", "data", "test-project")
-    Dir.mkdir(@project_path)
+  include Tetra::Mockers
 
-    Tetra::Project.init(@project_path)
-    @project = Tetra::Project.new(@project_path)
+  before(:each) do
+    create_mock_project
   end
 
   after(:each) do
-    FileUtils.rm_rf(@project_path)
+    delete_mock_project
   end
 
   describe "#project?"  do
@@ -38,6 +36,16 @@ describe Tetra::Project do
   describe "full_path" do
     it "returns the project's full path" do
       expect(@project.full_path).to eq File.expand_path(@project_path)
+    end
+  end
+
+  describe "#template_files" do
+    it "returns the list of template files without bundles" do
+      expect(@project.template_files(false)).to include({"kit" => "."})
+    end
+
+    it "returns the list of template files with bundles" do
+      expect(@project.template_files(true)).to include({"bundled/apache-ant-1.9.4" => "kit"})
     end
   end
 

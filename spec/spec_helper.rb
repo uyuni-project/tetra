@@ -10,7 +10,7 @@ module Tetra
       @project_path = File.join("spec", "data", "test-project")
       Dir.mkdir(@project_path)
 
-      Tetra::Project.init(@project_path)
+      Tetra::Project.init(@project_path, false)
       @project = Tetra::Project.new(@project_path)
     end
 
