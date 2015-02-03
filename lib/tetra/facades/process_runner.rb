@@ -20,9 +20,13 @@ module Tetra
 
       if status != 0
         log.error("`#{commandline}` failed with status #{status}")
-        log.error("Error message follows:")
-        log.error(out_recorder.record)
-        log.error(err_recorder.record)
+        out = out_recorder.record
+        err = err_recorder.record
+        if out != "" || err != ""
+          log.error("Error message follows:")
+          log.error(out) unless out == ""
+          log.error(err) unless err == ""
+        end
         fail ExecutionFailed.new(commandline, status)
       end
 
