@@ -15,7 +15,7 @@ describe Tetra::Git do
     FileUtils.rm_rf(@git_path)
   end
 
-  describe "#init"  do
+  describe "#init" do
     it "complains if a double initialization is attempted" do
       expect do
         @git.init
