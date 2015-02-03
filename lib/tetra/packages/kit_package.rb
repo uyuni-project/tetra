@@ -8,14 +8,13 @@ module Tetra
     include Speccable
 
     attr_reader :name
-    attr_reader :version
+    def_delegator :@project, :version
     def_delegator :@project, :name, :project_name
 
     def initialize(project)
       @project = project
 
       @name = "#{project.name}-kit"
-      @version = "#{project.version}"
     end
 
     def to_archive
