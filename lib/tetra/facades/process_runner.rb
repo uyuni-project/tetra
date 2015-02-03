@@ -19,13 +19,13 @@ module Tetra
       log.debug "`#{commandline}` exited with status #{status}"
 
       if status != 0
-        log.error("`#{commandline}` failed with status #{status}")
+        log.warn("`#{commandline}` failed with status #{status}")
         out = out_recorder.record
         err = err_recorder.record
         if out != "" || err != ""
-          log.error("Error message follows:")
-          log.error(out) unless out == ""
-          log.error(err) unless err == ""
+          log.warn("Output follows:")
+          log.warn(out) unless out == ""
+          log.warn(err) unless err == ""
         end
         fail ExecutionFailed.new(commandline, status)
       end

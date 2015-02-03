@@ -109,14 +109,23 @@ module Tetra
     # returns the conflict count
     def merge_with_id(path, new_path, id)
       Dir.chdir(@directory) do
-        run("git show tetra_#{id}:#{path} > #{path}.old_version")
-        run("git merge-file #{path} #{path}.old_version #{new_path} \
-              -L \"newly generated\" \
-              -L \"previously generated\" \
-              -L \"user edited\"")
-        conflict_count = $CHILD_STATUS.exitstatus
+        run("git show #{id}:#{path} > #{path}.old_version")
+
+        conflict_count = 0
+        begin
+          run("git merge-file #{path} #{path}.old_version #{new_path} \
+                -L \"newly generated\" \
+                -L \"previously generated\" \
+                -L \"user edited\"")
+        rescue ExecutionFailed => e
+          if e.status > 0
+            conflict_count = e.status
+          else
+            raise e
+          end
+        end
         File.delete("#{path}.old_version")
-        return conflict_count
+        conflict_count
       end
     end
   end
