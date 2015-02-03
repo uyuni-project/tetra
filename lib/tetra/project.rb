@@ -20,7 +20,7 @@ module Tetra
     end
 
     def version
-      latest_tag_count(:dry_run_finished)
+      @git.latest_id("tetra: dry-run-finished")
     end
 
     def packages_dir
@@ -54,14 +54,14 @@ module Tetra
         FileUtils.mkdir_p("src")
         FileUtils.mkdir_p("kit")
 
-        # populate the project with templates and take a snapshot
+        # populate the project with templates and commit it
         project = Project.new(".")
 
         project.template_files(include_bundled_software).each do |source, destination|
           FileUtils.cp_r(File.join(TEMPLATE_PATH, source), destination)
         end
 
-        project.take_snapshot("Template files added", :init)
+        project.commit_whole_project("Template files added")
       end
     end
 
@@ -94,24 +94,25 @@ module Tetra
 
       current_directory = Pathname.new(Dir.pwd).relative_path_from(Pathname.new(@full_path))
 
-      take_snapshot("Dry-run started", :dry_run_started, current_directory)
+      commit_whole_project("Dry-run started", "tetra: dry-run-started: #{current_directory}")
       true
     end
 
     # returns true iff we are currently dry-running
     def dry_running?
-      latest_tag_count(:dry_run_started) > latest_tag_count(:dry_run_finished)
+      latest_comment = @git.latest_comment("tetra: dry-run-")
+      !latest_comment.nil? && !(latest_comment =~ /tetra: dry-run-finished/)
     end
 
     # ends a dry-run assuming a successful build
     # reverts sources and updates output file lists
     def finish
       if dry_running?
-        take_snapshot("Changes during dry-run", :dry_run_changed)
+        commit_whole_project("Changes during dry-run", "tetra: dry-run-changed")
 
-        @git.revert_whole_directory("src", latest_tag(:dry_run_started))
+        @git.revert_whole_directory("src", @git.latest_id("tetra: dry-run-started"))
 
-        take_snapshot("Dry run finished", :dry_run_finished)
+        commit_whole_project("Dry run finished", "tetra: dry-run-finished")
         return true
       end
       false
@@ -121,17 +122,16 @@ module Tetra
     # reverts the whole project directory
     def abort
       if dry_running?
-        @git.revert_whole_directory(".", latest_tag(:dry_run_started))
-        @git.delete_tag(latest_tag(:dry_run_started))
+        @git.revert_whole_directory(".", @git.latest_id("tetra: dry-run-started"))
+        @git.undo_last_commit
         return true
       end
       false
     end
 
-    # takes a revertable snapshot of this project
-    def take_snapshot(message, tag_prefix, tag_message = nil)
-      # rename all .gitignore files by default as
-      # they prevent snapshotting
+    # commits all files in the project
+    def commit_whole_project(*comments)
+      # rename all .gitignore files that might have slipped in
       from_directory("src") do
         Find.find(".") do |file|
           next unless file =~ /\.gitignore$/
@@ -140,56 +140,44 @@ module Tetra
         end
       end
 
-      @git.commit_whole_directory(message, next_tag(tag_prefix), tag_message)
+      @git.commit_whole_directory(comments.join("\n\n"))
     end
 
-    # replaces content in path with new_content, takes a snapshot using
-    # snapshot_message and tag_prefix and 3-way merges new and old content
-    # with a previous snapshotted file same path tag_prefix, if it exists.
+    # replaces content in path with new_content, commits using
+    # comment and 3-way merges new and old content with the previous
+    # version of file of the same kind, if it exists.
     # returns the number of conflicts
-    def merge_new_content(new_content, path, snapshot_message, tag_prefix)
+    def merge_new_content(new_content, path, comment, kind)
       from_directory do
-        log.debug "merging new content to #{path} with prefix #{tag_prefix}"
+        log.debug "merging new content to #{path} of kind #{kind}"
         already_existing = File.exist?(path)
 
+        generated_comment = "tetra: generated-#{kind}"
+        whole_comment = [comment, generated_comment].join("\n\n")
+
         if already_existing
-          if latest_tag_count(tag_prefix) == 0
-            log.debug "saving untagged version"
-            @git.commit_file(path, snapshot_message, next_tag(tag_prefix))
+          unless @git.latest_id(generated_comment)
+            log.debug "committing new file"
+            @git.commit_file(path, whole_comment)
           end
           log.debug "moving #{path} to #{path}.tetra_user_edited"
-          File.rename path, "#{path}.tetra_user_edited"
+          File.rename(path, "#{path}.tetra_user_edited")
         end
 
-        previous_tag = latest_tag(tag_prefix)
+        previous_id = @git.latest_id(generated_comment)
 
         File.open(path, "w") { |io| io.write(new_content) }
-        log.debug "taking snapshot with new content: #{snapshot_message}"
-        @git.commit_file(path, snapshot_message, next_tag(tag_prefix))
+        log.debug "committing new content: #{comment}"
+        @git.commit_file(path, whole_comment)
 
         if already_existing
           # 3-way merge
-          conflict_count = @git.merge_with_tag("#{path}", "#{path}.tetra_user_edited", previous_tag)
-          File.delete "#{path}.tetra_user_edited"
+          conflict_count = @git.merge_with_id("#{path}", "#{path}.tetra_user_edited", previous_id)
+          File.delete("#{path}.tetra_user_edited")
           return conflict_count
         end
         return 0
       end
-    end
-
-    # returns the tag with maximum count for a given tag prefix
-    def latest_tag(prefix)
-      "#{prefix}_#{latest_tag_count(prefix)}"
-    end
-
-    # returns the maximum tag count for a given tag prefix
-    def latest_tag_count(prefix)
-      @git.get_tag_maximum_suffix(prefix)
-    end
-
-    # returns the next tag for a given tag prefix
-    def next_tag(prefix)
-      "#{prefix}_#{latest_tag_count(prefix) + 1}"
     end
 
     # runs a block from the project directory or a subdirectory
@@ -201,19 +189,15 @@ module Tetra
 
     # returns the latest dry run start directory
     def latest_dry_run_directory
-      @git.get_message(latest_tag(:dry_run_started))
+      @git.latest_comment("tetra: dry-run-started")[/tetra: dry-run-started: (.*)$/, 1]
     end
 
-    # returns a list of files produced during dry-runs
+    # returns a list of files produced during the last dry-run
     def produced_files
-      dry_run_count = latest_tag_count(:dry_run_changed)
-      log.debug "Getting produced files from #{dry_run_count} dry runs"
-      if dry_run_count >= 1
-        (1..dry_run_count).map do |i|
-          @git.changed_files_between("dry_run_started_#{i}", "dry_run_changed_#{i}", "src")
-        end
-          .flatten
-          .uniq
+      start_id = @git.latest_id("tetra: dry-run-started")
+      end_id = @git.latest_id("tetra: dry-run-changed")
+      if !start_id.nil? && !end_id.nil?
+        @git.changed_files_between(start_id, end_id, "src")
           .sort
           .map { |file| Pathname.new(file).relative_path_from(Pathname.new("src")).to_s }
       else

@@ -23,6 +23,21 @@ describe Tetra::Git do
     end
   end
 
+  describe "#latest_id" do
+    it "does not find a commit with a non-existing comment" do
+      Dir.chdir(@git_path) do
+        @git.commit_file(".", "initial commit")
+        expect(@git.latest_id("tetra: test")).to be_nil
+      end
+    end
+    it "finds a commit with a certain comment" do
+      Dir.chdir(@git_path) do
+        @git.commit_file(".", "tetra: test")
+        expect(@git.latest_id("tetra: test")).to eq `git rev-parse HEAD`.strip
+      end
+    end
+  end
+
   describe "#commit_whole_directory" do
     it "commits all contents of a directory to git for later use" do
       Dir.chdir(@git_path) do
@@ -30,34 +45,11 @@ describe Tetra::Git do
           file.write "test"
         end
 
-        @git.commit_whole_directory("test", :test)
+        @git.commit_whole_directory("test")
 
         files = `git ls-tree --name-only -r HEAD`.split("\n")
 
         expect(files).to include("file1")
-      end
-    end
-  end
-
-  describe "#changed_files_since"  do
-    it "lists files changed since a tetra tag" do
-      Dir.chdir(@git_path) do
-        File.open("file1", "w") do |file|
-          file.write "test"
-        end
-
-        @git.commit_whole_directory("test", :test_start)
-
-        File.open("file2", "w") do |file|
-          file.write "test"
-        end
-
-        @git.commit_whole_directory("test end", :test_end)
-
-        files = @git.changed_files_since(:test_start)
-
-        expect(files).not_to include("file1")
-        expect(files).to include("file2")
       end
     end
   end
@@ -69,7 +61,7 @@ describe Tetra::Git do
           file.write "test"
         end
 
-        @git.commit_whole_directory("test", :test_start)
+        @git.commit_whole_directory("test\ntetra: test_start")
 
         File.open("file2", "w") do |file|
           file.write "test"
@@ -79,15 +71,18 @@ describe Tetra::Git do
           file.write "test"
         end
 
-        @git.commit_whole_directory("test", :test_end)
+        @git.commit_whole_directory("test\ntetra: test_end")
 
         File.open("file4", "w") do |file|
           file.write "test"
         end
 
-        @git.commit_whole_directory("test", :test_after)
+        @git.commit_whole_directory("test\ntetra: test_after")
 
-        files = @git.changed_files_between(:test_start, :test_end, "subdir")
+        start_id = @git.latest_id("tetra: test_start")
+        end_id = @git.latest_id("tetra: test_end")
+
+        files = @git.changed_files_between(start_id, end_id, "subdir")
 
         expect(files).not_to include("file1")
         expect(files).not_to include("file2")

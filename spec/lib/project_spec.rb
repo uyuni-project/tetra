@@ -13,6 +13,18 @@ describe Tetra::Project do
     delete_mock_project
   end
 
+  describe "version"  do
+    it "returns no project version in case no dry-run happened" do
+      expect(@project.version).to be_nil
+    end
+
+    it "returns a project version after dry-run" do
+      @project.dry_run
+      @project.finish
+      expect(@project.version).to be
+    end
+  end
+
   describe "#project?"  do
     it "checks if a directory is a tetra project or not" do
       expect(Tetra::Project.project?(@project_path)).to be_truthy
@@ -41,11 +53,11 @@ describe Tetra::Project do
 
   describe "#template_files" do
     it "returns the list of template files without bundles" do
-      expect(@project.template_files(false)).to include({"kit" => "."})
+      expect(@project.template_files(false)).to include("kit" => ".")
     end
 
     it "returns the list of template files with bundles" do
-      expect(@project.template_files(true)).to include({"bundled/apache-ant-1.9.4" => "kit"})
+      expect(@project.template_files(true)).to include("bundled/apache-ant-1.9.4" => "kit")
     end
   end
 
@@ -71,7 +83,7 @@ describe Tetra::Project do
     end
   end
 
-  describe "#take_snapshot" do
+  describe "#commit_whole_project" do
     it "commits the project contents to git for later use" do
       @project.from_directory do
         FileUtils.touch(File.join("kit", "test"))
@@ -81,13 +93,12 @@ describe Tetra::Project do
           file.write "file"
         end
 
-        @project.take_snapshot("test", :revertable)
+        @project.commit_whole_project("test")
 
         files = `git ls-tree --name-only -r HEAD`.split("\n")
         expect(files).to include("src/.gitignore_disabled_by_tetra")
 
         expect(`git rev-list --all`.split("\n").length).to eq 2
-        expect(@project.latest_tag(:revertable)).to eq "revertable_1"
       end
     end
   end
@@ -141,7 +152,7 @@ describe Tetra::Project do
       expect(@project.dry_running?).to be_falsey
 
       @project.from_directory do
-        expect(`git rev-list --all`.split("\n").length).to eq 2
+        expect(`git rev-list --all`.split("\n").length).to eq 1
         expect(File.read("src/test")).to eq "A"
         expect(File.exist?("src/test2")).to be_falsey
 
@@ -167,7 +178,6 @@ describe Tetra::Project do
         expect(@project.dry_running?).to be_truthy
         expect(`git rev-list --all`.split("\n").length).to eq 2
         expect(`git diff-tree --no-commit-id --name-only -r HEAD`.split("\n")).to include("src/test")
-        expect(`git cat-file tag tetra_dry_run_started_1 | tail -1`).to include("src")
       end
     end
   end
@@ -192,9 +202,9 @@ describe Tetra::Project do
       expect(@project.finish).to be_truthy
 
       list = @project.produced_files
-      expect(list).to include("added_in_first_dry_run")
       expect(list).to include("added_in_second_dry_run")
 
+      expect(list).not_to include("added_in_first_dry_run")
       expect(list).not_to include("added_outside_dry_run")
       expect(list).not_to include("added_outside_directory")
     end
