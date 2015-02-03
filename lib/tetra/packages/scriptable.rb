@@ -28,7 +28,7 @@ module Tetra
         FileUtils.mkdir_p(result_dir)
         result_path = File.join(result_dir, "build.sh")
         conflict_count = project.merge_new_content(new_content, result_path, "Build script generated",
-                                                   "generate_build_script")
+                                                   "script")
 
         [result_path, conflict_count]
       end

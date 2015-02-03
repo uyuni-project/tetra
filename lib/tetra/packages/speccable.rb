@@ -18,7 +18,7 @@ module Tetra
         new_content = generate(template_spec_name, binding)
         label = "Spec for #{name} generated"
         conflict_count = project.merge_new_content(new_content, spec_path,
-                                                   label, "generate_#{name}_spec")
+                                                   label, "#{name}-spec")
         [spec_path, conflict_count]
       end
     end
