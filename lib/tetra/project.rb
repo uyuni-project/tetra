@@ -86,13 +86,26 @@ module Tetra
       result
     end
 
+    # checks whether there were edits to src/
+    # since last mark
+    def src_patched?
+      from_directory do
+        latest_id = @git.latest_id("tetra: sources-")
+        if latest_id
+          @git.changed?("src", latest_id)
+        else
+          false
+        end
+      end
+    end
+
     # starts a dry running phase: files added to kit/ will be added
     # to the kit package, src/ will be reset at the current state
     # when finished
     def dry_run
       current_directory = Pathname.new(Dir.pwd).relative_path_from(Pathname.new(@full_path))
 
-      commit_whole_directory(".", "Dry-run started", "tetra: dry-run-started: #{current_directory}")
+      commit_whole_directory(".", "Dry-run started\n", "tetra: dry-run-started: #{current_directory}")
     end
 
     # returns true iff we are currently dry-running
@@ -104,14 +117,20 @@ module Tetra
     # ends a dry-run assuming a successful build
     # reverts sources and updates output file lists
     def finish
-      commit_whole_directory(".", "Changes during dry-run", "tetra: dry-run-changed")
+      commit_whole_directory(".", "Changes during dry-run\n", "tetra: dry-run-changed")
 
       @git.revert_whole_directory("src", @git.latest_id("tetra: dry-run-started"))
 
-      commit_whole_directory(".", "Dry run finished", "tetra: dry-run-finished")
+      # if this is the first dry-run, mark sources as tarball
+      comments = ["Dry run finished\n", "tetra: dry-run-finished"]
+      if @git.latest_id("tetra: dry-run-finished").nil?
+        comments << "tetra: sources-tarball"
+      end
+
+      commit_whole_directory(".", *comments)
     end
 
-    # ends a dry-run assuming the built went wrong
+    # ends a dry-run assuming the build went wrong
     # reverts the whole project directory
     def abort
       @git.revert_whole_directory(".", @git.latest_id("tetra: dry-run-started"))
@@ -129,7 +148,16 @@ module Tetra
         end
       end
 
-      @git.commit_whole_directory(directory, comments.join("\n\n"))
+      @git.commit_whole_directory(directory, comments.join("\n"))
+    end
+
+    # commits files in the src/ dir as a patch or tarball update
+    def commit_sources(as_patch, message)
+      from_directory do
+        comments = ["#{message}\n"]
+        comments << (as_patch ? "tetra: sources-patch" : "tetra: sources-tarball")
+        commit_whole_directory("src", comments)
+      end
     end
 
     # replaces content in path with new_content, commits using

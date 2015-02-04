@@ -20,11 +20,18 @@ module Tetra
 
     def start(project)
       if !project.dry_running?
-        project.dry_run
-        puts "Now dry-running, please start your build."
-        puts "To run a Maven installation from the kit, use \"tetra mvn\"."
-        puts "If the build succeedes end this dry run with \"tetra dry-run finish\"."
-        puts "If the build does not succeed use \"tetra dry-run abort\" to undo any change."
+        if project.src_patched?
+          puts "Some files in src/ were changed since last dry-run."
+          puts "If the changes should be put into a patch, use \"tetra commit-source --as-patch message\"."
+          puts "If the changes should be included in the source tarball, use \"tetra commit-source --as-tarball\"."
+          puts "Dry run not started."
+        else
+          project.dry_run
+          puts "Now dry-running, please start your build."
+          puts "To run a Maven installation from the kit, use \"tetra mvn\"."
+          puts "If the build succeedes end this dry run with \"tetra dry-run finish\"."
+          puts "If the build does not succeed use \"tetra dry-run abort\" to undo any change."
+        end
       else
         puts "Dry-run already in progress."
         puts "Use \"tetra dry-run finish\" to end it or \"tetra dry-run abort\" to undo changes."

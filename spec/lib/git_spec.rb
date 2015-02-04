@@ -83,4 +83,23 @@ describe Tetra::Git do
       end
     end
   end
+
+  describe "#changed?" do
+    it "checks if a directory is clean from changes" do
+      Dir.chdir(@git_path) do
+        @git.commit_file(".", "initial commit")
+        Dir.mkdir("subdir")
+        FileUtils.touch(File.join("subdir", "file3"))
+        expect(@git.changed?("subdir", "HEAD")).to be_truthy
+
+        `git add subdir/file3`
+        expect(@git.changed?("subdir", "HEAD")).to be_truthy
+
+        @git.commit_file(File.join("subdir", "file3"), "test")
+        expect(@git.changed?("subdir", "HEAD")).to be_falsey
+
+        expect(@git.changed?("subdir", "HEAD~")).to be_truthy
+      end
+    end
+  end
 end

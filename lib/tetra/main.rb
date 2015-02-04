@@ -58,6 +58,12 @@ module Tetra
     )
 
     subcommand(
+      "commit-source",
+      "Marks changes in source files",
+      Tetra::CommitSourceSubcommand
+    )
+
+    subcommand(
       "move-jars-to-kit",
       "Locates jars in src/ and moves them to kit/",
       Tetra::MoveJarsToKitSubcommand

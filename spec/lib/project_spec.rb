@@ -83,6 +83,19 @@ describe Tetra::Project do
     end
   end
 
+  describe "#src_patched?"  do
+    it "checks whether src is dirty" do
+      @project.from_directory do
+        @project.dry_run
+        @project.finish
+        expect(@project.src_patched?).to be_falsey
+
+        FileUtils.touch(File.join("src", "test"))
+        expect(@project.src_patched?).to be_truthy
+      end
+    end
+  end
+
   describe "#commit_whole_directory" do
     it "commits the project contents to git for later use" do
       @project.from_directory do

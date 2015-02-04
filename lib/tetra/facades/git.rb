@@ -128,6 +128,22 @@ module Tetra
         conflict_count
       end
     end
+
+    # returns true if the directory has changed
+    # wrt the specified commit id
+    def changed?(directory, id)
+      # check for tracked files
+      begin
+        run("git diff-index --quiet #{id} -- #{directory}")
+      rescue ExecutionFailed => e
+        return true if e.status == 1
+        p e.status
+        raise e
+      end
+
+      # check for untracked files
+      run("git ls-files --exclude-standard --others -- #{directory}") != ""
+    end
   end
 
   class GitAlreadyInitedError < StandardError

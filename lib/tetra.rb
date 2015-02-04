@@ -59,5 +59,6 @@ require "tetra/ui/get_pom_subcommand"
 require "tetra/ui/init_subcommand"
 require "tetra/ui/move_jars_to_kit_subcommand"
 require "tetra/ui/mvn_subcommand"
+require "tetra/ui/commit_source_subcommand"
 
 require "tetra/main"
