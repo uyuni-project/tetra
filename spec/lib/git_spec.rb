@@ -41,9 +41,7 @@ describe Tetra::Git do
   describe "#commit_whole_directory" do
     it "commits all contents of a directory to git for later use" do
       Dir.chdir(@git_path) do
-        File.open("file1", "w") do |file|
-          file.write "test"
-        end
+        FileUtils.touch("file1")
 
         @git.commit_whole_directory("test")
 
@@ -57,26 +55,17 @@ describe Tetra::Git do
   describe "#changed_files_between"  do
     it "lists files changed between tetra tags" do
       Dir.chdir(@git_path) do
-        File.open("file1", "w") do |file|
-          file.write "test"
-        end
+        FileUtils.touch("file1")
 
         @git.commit_whole_directory("test\ntetra: test_start")
 
-        File.open("file2", "w") do |file|
-          file.write "test"
-        end
+        FileUtils.touch("file2")
         Dir.mkdir("subdir")
-        File.open(File.join("subdir", "file3"), "w") do |file|
-          file.write "test"
-        end
+        FileUtils.touch(File.join("subdir", "file3"))
 
         @git.commit_whole_directory("test\ntetra: test_end")
 
-        File.open("file4", "w") do |file|
-          file.write "test"
-        end
-
+        FileUtils.touch("file4")
         @git.commit_whole_directory("test\ntetra: test_after")
 
         start_id = @git.latest_id("tetra: test_start")
