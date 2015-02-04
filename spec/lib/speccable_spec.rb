@@ -34,7 +34,7 @@ describe Tetra::Speccable do
 
   describe "#to_spec" do
     it "generates a first version" do
-      expect(instance._to_spec(@project, "test-package", "kit", "test.spec")).to be_truthy
+      expect(instance._to_spec(@project, "test-package", "test.spec", "output")).to be_truthy
 
       @project.from_directory do
         spec_lines = File.readlines(@destination_path)
@@ -43,7 +43,7 @@ describe Tetra::Speccable do
     end
 
     it "generates a second version" do
-      expect(instance._to_spec(@project, "test-package", "kit", "test.spec")).to be_truthy
+      expect(instance._to_spec(@project, "test-package", "test.spec", "output")).to be_truthy
 
       @project.from_directory do
         File.open(@destination_path, "a") do |io|
@@ -53,7 +53,7 @@ describe Tetra::Speccable do
 
       instance.world_property = "Mario!"
 
-      expect(instance._to_spec(@project, "test-package", "kit", "test.spec")).to be_truthy
+      expect(instance._to_spec(@project, "test-package", "test.spec", "output")).to be_truthy
 
       @project.from_directory do
         spec_lines = File.readlines(@destination_path)
@@ -64,7 +64,7 @@ describe Tetra::Speccable do
     end
 
     it "generates a conflicting version" do
-      expect(instance._to_spec(@project, "test-package", "kit", "test.spec")).to be_truthy
+      expect(instance._to_spec(@project, "test-package", "test.spec", "output")).to be_truthy
 
       @project.from_directory do
         spec_contents = File.read(@destination_path)
@@ -77,7 +77,7 @@ describe Tetra::Speccable do
 
       instance.world_property = "Mario!"
 
-      expect(instance._to_spec(@project, "test-package", "kit", "test.spec")).to be_truthy
+      expect(instance._to_spec(@project, "test-package", "test.spec", "output")).to be_truthy
 
       @project.from_directory do
         spec_lines = File.readlines(@destination_path)
