@@ -90,12 +90,9 @@ module Tetra
     # to the kit package, src/ will be reset at the current state
     # when finished
     def dry_run
-      return false if dry_running?
-
       current_directory = Pathname.new(Dir.pwd).relative_path_from(Pathname.new(@full_path))
 
       commit_whole_project("Dry-run started", "tetra: dry-run-started: #{current_directory}")
-      true
     end
 
     # returns true iff we are currently dry-running
@@ -107,26 +104,18 @@ module Tetra
     # ends a dry-run assuming a successful build
     # reverts sources and updates output file lists
     def finish
-      if dry_running?
-        commit_whole_project("Changes during dry-run", "tetra: dry-run-changed")
+      commit_whole_project("Changes during dry-run", "tetra: dry-run-changed")
 
-        @git.revert_whole_directory("src", @git.latest_id("tetra: dry-run-started"))
+      @git.revert_whole_directory("src", @git.latest_id("tetra: dry-run-started"))
 
-        commit_whole_project("Dry run finished", "tetra: dry-run-finished")
-        return true
-      end
-      false
+      commit_whole_project("Dry run finished", "tetra: dry-run-finished")
     end
 
     # ends a dry-run assuming the built went wrong
     # reverts the whole project directory
     def abort
-      if dry_running?
-        @git.revert_whole_directory(".", @git.latest_id("tetra: dry-run-started"))
-        @git.undo_last_commit
-        return true
-      end
-      false
+      @git.revert_whole_directory(".", @git.latest_id("tetra: dry-run-started"))
+      @git.undo_last_commit
     end
 
     # commits all files in the project

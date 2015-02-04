@@ -62,7 +62,6 @@ describe Tetra::Package do
       @project.from_directory("src") do
         FileUtils.touch("src_test")
       end
-      @project.finish
 
       @package.to_archive
       @project.from_directory do

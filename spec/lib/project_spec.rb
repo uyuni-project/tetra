@@ -109,9 +109,6 @@ describe Tetra::Project do
         File.open(File.join("src", "test"), "w") { |f| f.write("A") }
       end
 
-      expect(@project.abort).to be_falsey
-      expect(@project.finish).to be_falsey
-
       expect(@project.dry_run).to be_truthy
 
       @project.from_directory do
@@ -135,9 +132,6 @@ describe Tetra::Project do
         File.open(File.join("src", "test"), "w") { |f| f.write("A") }
         File.open(File.join("kit", "test"), "w") { |f| f.write("A") }
       end
-
-      expect(@project.abort).to be_falsey
-      expect(@project.finish).to be_falsey
 
       expect(@project.dry_run).to be_truthy
 
@@ -164,8 +158,6 @@ describe Tetra::Project do
 
   describe "#dry_run" do
     it "starts a dry running phase" do
-      expect(@project.finish).to be_falsey
-
       @project.from_directory do
         FileUtils.touch(File.join("src", "test"))
       end
@@ -215,7 +207,6 @@ describe Tetra::Project do
       @project.from_directory do
         File.open(File.join("src", "test.jar"), "w") { |f| f.write("jarring") }
       end
-      expect(@project.finish).to be_falsey
 
       @project.purge_jars
 
