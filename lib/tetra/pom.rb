@@ -4,11 +4,8 @@ module Tetra
   # encapsulates a pom.xml file
   class Pom
     def initialize(filename)
-      @doc = Nokogiri::XML(
-        if File.file?(filename)
-          open(filename).read
-        end
-      )
+      content = open(filename).read if filename && File.file?(filename)
+      @doc = Nokogiri::XML(content)
       @doc.remove_namespaces!
     end
 
