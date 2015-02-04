@@ -83,7 +83,7 @@ describe Tetra::Project do
     end
   end
 
-  describe "#commit_whole_project" do
+  describe "#commit_whole_directory" do
     it "commits the project contents to git for later use" do
       @project.from_directory do
         FileUtils.touch(File.join("kit", "test"))
@@ -93,7 +93,7 @@ describe Tetra::Project do
           file.write "file"
         end
 
-        @project.commit_whole_project("test")
+        @project.commit_whole_directory(".", "test")
 
         files = `git ls-tree --name-only -r HEAD`.split("\n")
         expect(files).to include("src/.gitignore_disabled_by_tetra")

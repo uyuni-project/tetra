@@ -59,12 +59,12 @@ module Tetra
     # adds all files in the current directory,
     # removes all files not in the current directory,
     # commits with message
-    def commit_whole_directory(message)
+    def commit_whole_directory(directory, message)
       Dir.chdir(@directory) do
         log.debug "committing with message: #{message}"
 
-        run("git rm -r --cached --ignore-unmatch .")
-        run("git add .")
+        run("git rm -r --cached --ignore-unmatch #{directory}")
+        run("git add #{directory}")
         run("git commit --allow-empty -m \"#{message}\"")
       end
     end

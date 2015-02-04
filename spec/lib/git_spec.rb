@@ -42,12 +42,15 @@ describe Tetra::Git do
     it "commits all contents of a directory to git for later use" do
       Dir.chdir(@git_path) do
         FileUtils.touch("file1")
+        Dir.mkdir("subdir")
+        FileUtils.touch(File.join("subdir", "file2"))
 
-        @git.commit_whole_directory("test")
+        @git.commit_whole_directory("subdir", "test")
 
         files = `git ls-tree --name-only -r HEAD`.split("\n")
 
-        expect(files).to include("file1")
+        expect(files).not_to include("file1")
+        expect(files).to include("subdir/file2")
       end
     end
   end
@@ -57,16 +60,16 @@ describe Tetra::Git do
       Dir.chdir(@git_path) do
         FileUtils.touch("file1")
 
-        @git.commit_whole_directory("test\ntetra: test_start")
+        @git.commit_whole_directory(".", "test\ntetra: test_start")
 
         FileUtils.touch("file2")
         Dir.mkdir("subdir")
         FileUtils.touch(File.join("subdir", "file3"))
 
-        @git.commit_whole_directory("test\ntetra: test_end")
+        @git.commit_whole_directory(".", "test\ntetra: test_end")
 
         FileUtils.touch("file4")
-        @git.commit_whole_directory("test\ntetra: test_after")
+        @git.commit_whole_directory(".", "test\ntetra: test_after")
 
         start_id = @git.latest_id("tetra: test_start")
         end_id = @git.latest_id("tetra: test_end")

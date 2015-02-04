@@ -61,7 +61,7 @@ module Tetra
           FileUtils.cp_r(File.join(TEMPLATE_PATH, source), destination)
         end
 
-        project.commit_whole_project("Template files added")
+        project.commit_whole_directory(".", "Template files added")
       end
     end
 
@@ -92,7 +92,7 @@ module Tetra
     def dry_run
       current_directory = Pathname.new(Dir.pwd).relative_path_from(Pathname.new(@full_path))
 
-      commit_whole_project("Dry-run started", "tetra: dry-run-started: #{current_directory}")
+      commit_whole_directory(".", "Dry-run started", "tetra: dry-run-started: #{current_directory}")
     end
 
     # returns true iff we are currently dry-running
@@ -104,11 +104,11 @@ module Tetra
     # ends a dry-run assuming a successful build
     # reverts sources and updates output file lists
     def finish
-      commit_whole_project("Changes during dry-run", "tetra: dry-run-changed")
+      commit_whole_directory(".", "Changes during dry-run", "tetra: dry-run-changed")
 
       @git.revert_whole_directory("src", @git.latest_id("tetra: dry-run-started"))
 
-      commit_whole_project("Dry run finished", "tetra: dry-run-finished")
+      commit_whole_directory(".", "Dry run finished", "tetra: dry-run-finished")
     end
 
     # ends a dry-run assuming the built went wrong
@@ -118,8 +118,8 @@ module Tetra
       @git.undo_last_commit
     end
 
-    # commits all files in the project
-    def commit_whole_project(*comments)
+    # commits all files in the directory
+    def commit_whole_directory(directory, *comments)
       # rename all .gitignore files that might have slipped in
       from_directory("src") do
         Find.find(".") do |file|
@@ -129,7 +129,7 @@ module Tetra
         end
       end
 
-      @git.commit_whole_directory(comments.join("\n\n"))
+      @git.commit_whole_directory(directory, comments.join("\n\n"))
     end
 
     # replaces content in path with new_content, commits using
