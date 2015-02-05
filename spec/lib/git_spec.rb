@@ -102,4 +102,29 @@ describe Tetra::Git do
       end
     end
   end
+
+  describe "#archive" do
+    it "archives a version of a directory" do
+      Dir.chdir(@git_path) do
+        @git.commit_file(".", "initial commit")
+
+        FileUtils.touch(File.join("outside_not_archived"))
+        Dir.mkdir("directory")
+        FileUtils.touch(File.join("directory", "file"))
+        @git.commit_file("directory", "test")
+
+        FileUtils.touch(File.join("directory", "later_not_archived"))
+
+        @git.commit_file("directory", "later")
+
+        destination_path = @git.archive("directory", @git.latest_id("test"), "../archive.tar.xz")
+        expect(destination_path).to match(/archive.tar.xz$/)
+
+        file_list = `tar --list -f archive.tar.xz`.split
+        expect(file_list).not_to include("outside_not_archived")
+        expect(file_list).to include("file")
+        expect(file_list).not_to include("later_not_archived")
+      end
+    end
+  end
 end

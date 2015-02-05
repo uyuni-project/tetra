@@ -4,7 +4,6 @@ module Tetra
   # a packaged set of binary build-time dependencies
   class KitPackage
     extend Forwardable
-    include Archivable
     include Speccable
 
     attr_reader :name
@@ -15,11 +14,6 @@ module Tetra
       @project = project
 
       @name = "#{project.name}-kit"
-    end
-
-    def to_archive
-      _to_archive(@project, name, "kit",
-                  @project.packages_dir)
     end
 
     def to_spec

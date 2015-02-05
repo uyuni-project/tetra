@@ -215,6 +215,24 @@ describe Tetra::Project do
     end
   end
 
+  describe "#archive_source" do
+    it "archives the latest source version" do
+      @project.from_directory do
+        FileUtils.touch(File.join("src", "Included.java"))
+        @project.commit_sources(false, "first version")
+
+        FileUtils.touch(File.join("src", "Excluded.java"))
+        @project.commit_sources(true, "patched version")
+
+        @project.archive_sources
+
+        file_list = `tar --list -f packages/test-project/test-project.tar.xz`.split
+        expect(file_list).to include("Included.java")
+        expect(file_list).not_to include("Excluded.java")
+      end
+    end
+  end
+
   describe "#purge_jars" do
     it "moves jars in kit/jars" do
       @project.from_directory do

@@ -26,7 +26,6 @@ require "tetra/logger"
 # facades to other programs
 require "tetra/facades/process_runner"
 require "tetra/facades/git"
-require "tetra/facades/tar"
 require "tetra/facades/ant"
 require "tetra/facades/mvn"
 
@@ -40,7 +39,6 @@ require "tetra/maven_website"
 require "tetra/pom_getter"
 
 # package building
-require "tetra/packages/archivable"
 require "tetra/packages/speccable"
 require "tetra/packages/scriptable"
 require "tetra/packages/kit_package"

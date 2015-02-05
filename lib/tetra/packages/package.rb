@@ -4,7 +4,6 @@ module Tetra
   # represents a Java project packaged in tetra
   class Package
     extend Forwardable
-    include Archivable
     include Speccable
     include Scriptable
 
@@ -49,10 +48,6 @@ module Tetra
         .slice(0..max_length - 1)
         .sub(/\s\w+$/, "")
         .sub(/\.+$/, "")
-    end
-
-    def to_archive
-      _to_archive(@project, name, "src", @project.packages_dir)
     end
 
     def to_spec

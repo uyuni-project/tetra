@@ -222,6 +222,26 @@ module Tetra
       end
     end
 
+    # archives a tarball of src/ in packages/
+    # the latest commit marked as tarball is taken as the version
+    def archive_sources
+      from_directory do
+        id = @git.latest_id("tetra: sources-tarball")
+        destination_path = File.join(full_path, packages_dir, name, "#{name}.tar.xz")
+        @git.archive("src", id, destination_path)
+      end
+    end
+
+    # archives a tarball of kit/ in packages/
+    # the latest commit marked as dry-run-finished is taken as the version
+    def archive_kit
+      from_directory do
+        id = @git.latest_id("tetra: dry-run-finished")
+        destination_path = File.join(full_path, packages_dir, "#{name}-kit", "#{name}-kit.tar.xz")
+        @git.archive("kit", id, destination_path)
+      end
+    end
+
     # moves any .jar from src/ to kit/ and links it back
     def purge_jars
       from_directory do

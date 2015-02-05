@@ -56,17 +56,4 @@ describe Tetra::Package do
       end
     end
   end
-
-  describe "#to_archive" do
-    it "generates an archive" do
-      @project.from_directory("src") do
-        FileUtils.touch("src_test")
-      end
-
-      @package.to_archive
-      @project.from_directory do
-        expect(`tar -Jtf packages/test-project/test-project.tar.xz`.split).to include("./src_test")
-      end
-    end
-  end
 end

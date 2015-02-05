@@ -28,20 +28,4 @@ describe Tetra::KitPackage do
       end
     end
   end
-
-  describe "#to_archive" do
-    it "generates an archive" do
-      @project.from_directory(File.join("kit", "m2")) do
-        FileUtils.touch("kit.content")
-      end
-
-      expected_filename = File::SEPARATOR + "#{package_name}.tar.xz"
-      expect(instance.to_archive).to end_with(expected_filename)
-
-      @project.from_directory do
-        contents = `tar --list -f packages/#{package_name}/#{package_name}.tar.xz`.split
-        expect(contents).to include("./m2/kit.content")
-      end
-    end
-  end
 end

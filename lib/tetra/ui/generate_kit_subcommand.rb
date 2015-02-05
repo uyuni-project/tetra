@@ -11,7 +11,7 @@ module Tetra
           result_path, conflict_count = kit.to_spec
           print_generation_result(project, result_path, conflict_count)
 
-          result_path = kit.to_archive
+          result_path = project.archive_kit
           print_generation_result(project, result_path)
         end
       end
