@@ -52,7 +52,7 @@ module Tetra
 
         run("git rm -r --cached --ignore-unmatch #{directory}")
         run("git add #{directory}")
-        run("git commit --allow-empty -m \"#{message}\"")
+        run("git commit --allow-empty -F -", false, message)
       end
     end
 
@@ -61,7 +61,7 @@ module Tetra
       Dir.chdir(@directory) do
         log.debug "committing path #{path} with message: #{message}"
         run("git add #{path}")
-        run("git commit --allow-empty -m \"#{message}\"")
+        run("git commit --allow-empty -F -", false, message)
       end
     end
 
