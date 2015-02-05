@@ -27,7 +27,7 @@ module Tetra
           log.warn(out) unless out == ""
           log.warn(err) unless err == ""
         end
-        fail ExecutionFailed.new(commandline, status)
+        fail ExecutionFailed.new(commandline, status, out, err)
       end
 
       out_recorder.record
@@ -57,10 +57,18 @@ module Tetra
   class ExecutionFailed < Exception
     attr_reader :commandline
     attr_reader :status
+    attr_reader :out
+    attr_reader :err
 
-    def initialize(commandline, status)
+    def initialize(commandline, status, out, err)
       @commandline = commandline
       @status = status
+      @out = out
+      @err = err
+    end
+
+    def to_s
+      "\"#{@commandline}\" failed with status #{@status}\n#{out}\n#{err}"
     end
   end
 end
