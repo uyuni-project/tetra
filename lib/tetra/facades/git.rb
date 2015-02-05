@@ -43,19 +43,6 @@ module Tetra
       end
     end
 
-    # returns a list of filenames that changed in the repo
-    # between specified ids, in a certain directory
-    def changed_files_between(start_id, end_id, directory)
-      Dir.chdir(@directory) do
-        run("git diff-tree \
-              --no-commit-id \
-              --name-only \
-              -r #{start_id} #{end_id}\
-              -- #{directory}"
-        ).split("\n")
-      end
-    end
-
     # adds all files in the current directory,
     # removes all files not in the current directory,
     # commits with message

@@ -55,35 +55,6 @@ describe Tetra::Git do
     end
   end
 
-  describe "#changed_files_between"  do
-    it "lists files changed between tetra tags" do
-      Dir.chdir(@git_path) do
-        FileUtils.touch("file1")
-
-        @git.commit_whole_directory(".", "test\ntetra: test_start")
-
-        FileUtils.touch("file2")
-        Dir.mkdir("subdir")
-        FileUtils.touch(File.join("subdir", "file3"))
-
-        @git.commit_whole_directory(".", "test\ntetra: test_end")
-
-        FileUtils.touch("file4")
-        @git.commit_whole_directory(".", "test\ntetra: test_after")
-
-        start_id = @git.latest_id("tetra: test_start")
-        end_id = @git.latest_id("tetra: test_end")
-
-        files = @git.changed_files_between(start_id, end_id, "subdir")
-
-        expect(files).not_to include("file1")
-        expect(files).not_to include("file2")
-        expect(files).to include("subdir/file3")
-        expect(files).not_to include("file4")
-      end
-    end
-  end
-
   describe "#changed_files" do
     it "checks if a directory is clean from changes" do
       Dir.chdir(@git_path) do
