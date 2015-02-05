@@ -117,16 +117,23 @@ module Tetra
     # ends a dry-run assuming a successful build
     # reverts sources and updates output file lists
     def finish
-      commit_whole_directory(".", "Changes during dry-run\n", "tetra: dry-run-changed")
+      # keep track of changed files
+      start_id = @git.latest_id("tetra: dry-run-started")
+      changed_files = @git.changed_files("src", start_id)
 
-      @git.revert_whole_directory("src", @git.latest_id("tetra: dry-run-started"))
+      # revert to pre-dry-run status
+      @git.revert_whole_directory("src", start_id)
+
+      # prepare commit comments
+      comments = ["Dry run finished\n", "tetra: dry-run-finished"]
+      comments += changed_files.map { |f| "tetra: file-changed: #{f}" }
 
       # if this is the first dry-run, mark sources as tarball
-      comments = ["Dry run finished\n", "tetra: dry-run-finished"]
       if @git.latest_id("tetra: dry-run-finished").nil?
         comments << "tetra: sources-tarball"
       end
 
+      # commit end of dry run
       commit_whole_directory(".", *comments)
     end
 
@@ -211,15 +218,11 @@ module Tetra
 
     # returns a list of files produced during the last dry-run
     def produced_files
-      start_id = @git.latest_id("tetra: dry-run-started")
-      end_id = @git.latest_id("tetra: dry-run-changed")
-      if !start_id.nil? && !end_id.nil?
-        @git.changed_files_between(start_id, end_id, "src")
-          .sort
-          .map { |file| Pathname.new(file).relative_path_from(Pathname.new("src")).to_s }
-      else
-        []
-      end
+      @git.latest_comment("tetra: dry-run-finished")
+        .split("\n")
+        .map { |line| line[/^tetra: file-changed: src\/(.+)$/, 1] }
+        .compact
+        .sort
     end
 
     # archives a tarball of src/ in packages/

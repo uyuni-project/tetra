@@ -133,11 +133,13 @@ describe Tetra::Project do
       expect(@project.dry_running?).to be_falsey
 
       @project.from_directory do
-        expect(`git rev-list --all`.split("\n").length).to eq 4
+        expect(`git rev-list --all`.split("\n").length).to eq 3
         expect(File.read("src/test")).to eq "A"
 
-        expect(`git diff-tree --no-commit-id --name-only -r HEAD~`.split("\n")).to include("src/test2")
+        expect(`git diff-tree --no-commit-id --name-only -r HEAD~`.split("\n")).to include("src/test")
         expect(File.exist?("src/test2")).to be_falsey
+
+        expect(`git show HEAD`.split("\n").map(&:strip)).to include("tetra: file-changed: src/test")
       end
     end
     it "ends the current dry-run phase after a failed build" do
