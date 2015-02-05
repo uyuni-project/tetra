@@ -41,7 +41,7 @@ Requires:       mvn(<%= dependency_id[0] %>:<%= dependency_id[1] %>) <% if depen
 %>
 
 %prep
-%setup -q -c -n src
+%setup -q -n src
 cp -f %{SOURCE1} .
 cp -Rf %{_datadir}/tetra ../kit
 

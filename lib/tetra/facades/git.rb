@@ -135,9 +135,9 @@ module Tetra
 
     # archives version id of directory in destination_path
     def archive(directory, id, destination_path)
-      FileUtils.mkdir_p(File.dirname(destination_path))
-      Dir.chdir(directory) do
-        run("git archive --format=tar #{id} -- . | xz -9e > #{destination_path}")
+      Dir.chdir(@directory) do
+        FileUtils.mkdir_p(File.dirname(destination_path))
+        run("git archive --format=tar #{id} -- #{directory} | xz -9e > #{destination_path}")
       end
       destination_path
     end

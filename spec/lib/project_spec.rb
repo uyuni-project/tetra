@@ -229,8 +229,8 @@ describe Tetra::Project do
         @project.archive_sources
 
         file_list = `tar --list -f packages/test-project/test-project.tar.xz`.split
-        expect(file_list).to include("Included.java")
-        expect(file_list).not_to include("Excluded.java")
+        expect(file_list).to include("src/Included.java")
+        expect(file_list).not_to include("src/Excluded.java")
       end
     end
   end

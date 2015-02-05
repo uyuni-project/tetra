@@ -33,7 +33,7 @@ It should not be used except for rebuilding other packages,
 thus it should never be installed on end users' systems.
 
 %prep
-%setup -q -c
+%setup -q -n kit
 
 %build
 # nothing to do, precompiled by design

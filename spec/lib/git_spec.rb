@@ -88,13 +88,13 @@ describe Tetra::Git do
 
         @git.commit_file("directory", "later")
 
-        destination_path = @git.archive("directory", @git.latest_id("test"), "../archive.tar.xz")
+        destination_path = @git.archive("directory", @git.latest_id("test"), "archive.tar.xz")
         expect(destination_path).to match(/archive.tar.xz$/)
 
         file_list = `tar --list -f archive.tar.xz`.split
         expect(file_list).not_to include("outside_not_archived")
-        expect(file_list).to include("file")
-        expect(file_list).not_to include("later_not_archived")
+        expect(file_list).to include("directory/file")
+        expect(file_list).not_to include("directory/later_not_archived")
       end
     end
   end
