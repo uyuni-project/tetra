@@ -127,4 +127,36 @@ describe Tetra::Git do
       end
     end
   end
+
+  describe "#format_patch" do
+    it "creates patch files from commits" do
+      Dir.chdir(@git_path) do
+        outside_dir_file = File.join("outside_dir")
+        inside_dir_not_patched_file = File.join("directory", "inside_dir_not_patched")
+        inside_dir_patched_file = File.join("directory", "inside_dir_patched")
+
+        Dir.mkdir("directory")
+        FileUtils.touch(outside_dir_file)
+        FileUtils.touch(inside_dir_not_patched_file)
+        FileUtils.touch(inside_dir_patched_file)
+        @git.commit_file(".", "initial")
+
+        File.open(outside_dir_file, "w") { |f| f.write("A") }
+        File.open(inside_dir_patched_file, "w") { |f| f.write("A") }
+        @git.commit_file(".", "patch")
+
+        Dir.mkdir("patches")
+        patch_names = @git.format_patch("directory", "HEAD~", "patches")
+
+        expect(patch_names).to include("patches/0001-patch.patch")
+
+        patch_contents = File.readlines(File.join("patches", "0001-patch.patch"))
+        expect(patch_contents).to include("--- a/#{inside_dir_patched_file}\n")
+        expect(patch_contents).not_to include("--- a/#{outside_dir_file}\n")
+        expect(patch_contents).not_to include("--- a/#{inside_dir_not_patched_file}\n")
+        expect(patch_contents).to include("@@ -0,0 +1 @@\n")
+        expect(patch_contents).to include("+A\n")
+      end
+    end
+  end
 end

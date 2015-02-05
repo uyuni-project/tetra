@@ -153,6 +153,14 @@ module Tetra
       end
       destination_path
     end
+
+    # generates patch files to changes to directory in destination_path
+    # since from_id
+    def format_patch(directory, from_id, destination_path)
+      Dir.chdir(@directory) do
+        run("git format-patch -o #{destination_path} --numbered #{from_id} -- #{directory}").split
+      end
+    end
   end
 
   class GitAlreadyInitedError < StandardError
