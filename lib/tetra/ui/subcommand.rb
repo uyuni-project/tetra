@@ -53,15 +53,15 @@ module Tetra
       has_finished = !project.version.nil?
 
       if (state == :is_in_progress && dry_running) ||
-        (state == :is_not_in_progress && !dry_running) ||
-        (state == :has_finished && !dry_running && has_finished)
+         (state == :is_not_in_progress && !dry_running) ||
+         (state == :has_finished && !dry_running && has_finished)
         yield
       else
         if (state == :is_in_progress) ||
-          (state == :has_finished && !dry_running && !has_finished)
+           (state == :has_finished && !dry_running && !has_finished)
           puts "Please start a dry-run first, use \"tetra dry-run start\""
         elsif (state == :is_not_in_progress) ||
-          (state == :has_finished && dry_running)
+              (state == :has_finished && dry_running)
           puts "Please finish or abort this dry-run first, use \"tetra dry-run finish\" or \"tetra dry-run abort\""
         end
       end
