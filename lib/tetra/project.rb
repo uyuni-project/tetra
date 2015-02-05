@@ -245,6 +245,18 @@ module Tetra
       end
     end
 
+    # generates patches of src/ in packages/
+    # the latest commit marked as tarball is taken as the base version,
+    # other commits are assumed to be patches on top
+    # returns filenames
+    def write_source_patches
+      from_directory do
+        id = @git.latest_id("tetra: sources-tarball")
+        destination_path = File.join(full_path, packages_dir, name)
+        @git.format_patch("src", id, destination_path)
+      end
+    end
+
     # moves any .jar from src/ to kit/ and links it back
     def purge_jars
       from_directory do

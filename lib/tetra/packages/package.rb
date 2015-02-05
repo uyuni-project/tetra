@@ -7,6 +7,8 @@ module Tetra
     include Speccable
     include Scriptable
 
+    attr_reader :patches
+
     def_delegator :@project, :name, :name
     def_delegator :@kit, :name, :kit_name
     def_delegator :@kit, :version, :kit_version
@@ -48,6 +50,10 @@ module Tetra
         .slice(0..max_length - 1)
         .sub(/\s\w+$/, "")
         .sub(/\.+$/, "")
+    end
+
+    def to_patches
+      @patches = @project.write_source_patches.map { |f| File.basename(f) }
     end
 
     def to_spec

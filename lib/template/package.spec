@@ -24,6 +24,9 @@ Url:            <%= url %>
 Group:          Development/Libraries/Java
 Source0:        %{name}.tar.xz
 Source1:        build.sh
+<% patches.to_enum.with_index.each do |patch, i| %>
+Patch<%= i %>:         <%= patch %>
+<% end %>
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 BuildRequires:  xz
 BuildRequires:  java-devel
@@ -42,6 +45,9 @@ Requires:       mvn(<%= dependency_id[0] %>:<%= dependency_id[1] %>) <% if depen
 
 %prep
 %setup -q -n src
+<% (0..(patches.count -1)).each do |i| %>
+%patch<%= i %>
+<% end %>
 cp -f %{SOURCE1} .
 cp -Rf %{_datadir}/tetra ../kit
 

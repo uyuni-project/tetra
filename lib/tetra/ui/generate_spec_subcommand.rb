@@ -10,8 +10,14 @@ module Tetra
       checking_exceptions do
         project = Tetra::Project.new(".")
         ensure_dry_running(:has_finished, project) do
-          result_path, conflict_count =
-            Tetra::Package.new(project, pom, filter).to_spec
+          package = Tetra::Package.new(project, pom, filter)
+          patches = package.to_patches
+
+          patches.each do |patch|
+            print_generation_result(project, patch)
+          end
+
+          result_path, conflict_count = package.to_spec
           print_generation_result(project, result_path, conflict_count)
         end
       end

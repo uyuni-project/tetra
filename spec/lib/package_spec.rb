@@ -42,6 +42,7 @@ describe Tetra::Package do
 
   describe "#to_spec" do
     it "generates the first version" do
+      @package.to_patches
       @package.to_spec
 
       @project.from_directory do
