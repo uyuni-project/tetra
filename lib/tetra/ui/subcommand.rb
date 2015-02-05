@@ -45,14 +45,23 @@ module Tetra
       @options = args
     end
 
-    # prints an error message and exits unless there is a dry-run in progress
+    # prints an error message and exits unless a dry-running
+    # condition is met. Conditions can be: :is_in_progress, :is_not_in_progress
+    # or :has_finished
     def ensure_dry_running(state, project)
-      if project.dry_running? == state
+      dry_running = project.dry_running?
+      has_finished = !project.version.nil?
+
+      if (state == :is_in_progress && dry_running) ||
+        (state == :is_not_in_progress && !dry_running) ||
+        (state == :has_finished && !dry_running && has_finished)
         yield
       else
-        if state == true
+        if (state == :is_in_progress) ||
+          (state == :has_finished && !dry_running && !has_finished)
           puts "Please start a dry-run first, use \"tetra dry-run start\""
-        else
+        elsif (state == :is_not_in_progress) ||
+          (state == :has_finished && dry_running)
           puts "Please finish or abort this dry-run first, use \"tetra dry-run finish\" or \"tetra dry-run abort\""
         end
       end

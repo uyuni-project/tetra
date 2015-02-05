@@ -13,7 +13,7 @@ module Tetra
     def execute
       checking_exceptions do
         project = Tetra::Project.new(".")
-        ensure_dry_running(true, project) do
+        ensure_dry_running(:is_in_progress, project) do
           path = Tetra::Kit.new(project).find_executable("mvn")
           Tetra::Mvn.new(project.full_path, path).mvn(@options)
         end

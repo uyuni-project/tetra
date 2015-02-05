@@ -6,7 +6,7 @@ module Tetra
     def execute
       checking_exceptions do
         project = Tetra::Project.new(".")
-        ensure_dry_running(false, project) do
+        ensure_dry_running(:has_finished, project) do
           history = File.join(Dir.home, ".bash_history")
           result_path, conflict_count =
             Tetra::Package.new(project).to_script(history)

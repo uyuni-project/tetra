@@ -9,7 +9,7 @@ module Tetra
     def execute
       checking_exceptions do
         project = Tetra::Project.new(".")
-        ensure_dry_running(false, project) do
+        ensure_dry_running(:has_finished, project) do
           GenerateKitSubcommand.new(@invocation_path).execute
 
           GenerateScriptSubcommand.new(@invocation_path).execute

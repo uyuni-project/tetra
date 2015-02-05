@@ -8,14 +8,14 @@ module Tetra
     parameter "[MESSAGE]", "a commit message", default: "Sources updated"
 
     def execute
-      if as_patch? == as_tarball?
-        puts "You must specify either --as-patch or --as-tarball exclusively"
-        return
-      end
-
       checking_exceptions do
         project = Tetra::Project.new(".")
-        ensure_dry_running(false, project) do
+        ensure_dry_running(:is_not_in_progress, project) do
+          if as_patch? == as_tarball?
+            puts "You must specify either --as-patch or --as-tarball."
+            return
+          end
+
           project.commit_sources(as_patch?, message)
         end
       end
