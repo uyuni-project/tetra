@@ -11,10 +11,10 @@ AbcSize:
   Max: 50
 
 CyclomaticComplexity:
-  Max: 10
+  Max: 20
 
 PerceivedComplexity:
-  Max: 15
+  Max: 20
 
 StringLiterals:
   EnforcedStyle: double_quotes
