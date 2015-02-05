@@ -84,21 +84,21 @@ describe Tetra::Git do
     end
   end
 
-  describe "#changed?" do
+  describe "#changed_files" do
     it "checks if a directory is clean from changes" do
       Dir.chdir(@git_path) do
         @git.commit_file(".", "initial commit")
-        Dir.mkdir("subdir")
-        FileUtils.touch(File.join("subdir", "file3"))
-        expect(@git.changed?("subdir", "HEAD")).to be_truthy
+        Dir.mkdir("directory")
+        FileUtils.touch(File.join("directory", "file"))
+        expect(@git.changed_files("directory", "HEAD")).to include("directory/file")
 
-        `git add subdir/file3`
-        expect(@git.changed?("subdir", "HEAD")).to be_truthy
+        `git add directory/file`
+        expect(@git.changed_files("directory", "HEAD")).to include("directory/file")
 
-        @git.commit_file(File.join("subdir", "file3"), "test")
-        expect(@git.changed?("subdir", "HEAD")).to be_falsey
+        @git.commit_file(File.join("directory", "file"), "test")
+        expect(@git.changed_files("directory", "HEAD")).to be_empty
 
-        expect(@git.changed?("subdir", "HEAD~")).to be_truthy
+        expect(@git.changed_files("directory", "HEAD~")).to include("directory/file")
       end
     end
   end

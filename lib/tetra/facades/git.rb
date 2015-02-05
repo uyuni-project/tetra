@@ -129,20 +129,21 @@ module Tetra
       end
     end
 
-    # returns true if the directory has changed
-    # wrt the specified commit id
-    def changed?(directory, id)
-      # check for tracked files
-      begin
-        run("git diff-index --quiet #{id} -- #{directory}")
-      rescue ExecutionFailed => e
-        return true if e.status == 1
-        p e.status
-        raise e
-      end
+    # returns the list of files changed from since_id
+    # including changes in the working tree and staging
+    # area
+    def changed_files(directory, id)
+      Dir.chdir(@directory) do
+        tracked_files = []
+        begin
+          tracked_files += run("git diff-index --name-only #{id} -- #{directory}").split
+        rescue ExecutionFailed => e
+          raise e if e.status != 1 # status 1 is normal
+        end
 
-      # check for untracked files
-      run("git ls-files --exclude-standard --others -- #{directory}") != ""
+        untracked_files = run("git ls-files --exclude-standard --others -- #{directory}").split
+        tracked_files + untracked_files
+      end
     end
 
     # archives version id of directory in destination_path
