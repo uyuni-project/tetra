@@ -14,7 +14,8 @@ module Tetra
       out_recorder = echo ? RecordingIO.new(STDOUT) : RecordingIO.new
       err_recorder = echo ? RecordingIO.new(STDERR) : RecordingIO.new
 
-      status = Open4.spawn(commandline, stdin: stdin, stdout: out_recorder, stderr: err_recorder, quiet: true).exitstatus
+      status = Open4.spawn(commandline, stdin: stdin, stdout: out_recorder,
+                                        stderr: err_recorder, quiet: true).exitstatus
 
       log.debug "`#{commandline}` exited with status #{status}"
 
