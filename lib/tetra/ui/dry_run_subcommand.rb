@@ -22,8 +22,8 @@ module Tetra
       if !project.dry_running?
         if project.src_patched?
           puts "Some files in src/ were changed since last dry-run."
-          puts "If the changes should be put into a patch, use \"tetra commit-source --as-patch message\"."
-          puts "If the changes should be included in the source tarball, use \"tetra commit-source --as-tarball\"."
+          puts "If the changes should be put into a patch, use \"tetra commit-sources --as-patch message\"."
+          puts "If the changes should be included in the source tarball, use \"tetra commit-sources --as-tarball\"."
           puts "Dry run not started."
         else
           project.dry_run

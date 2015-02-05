@@ -58,9 +58,9 @@ module Tetra
     )
 
     subcommand(
-      "commit-source",
+      "commit-sources",
       "Marks changes in source files",
-      Tetra::CommitSourceSubcommand
+      Tetra::CommitSourcesSubcommand
     )
 
     subcommand(

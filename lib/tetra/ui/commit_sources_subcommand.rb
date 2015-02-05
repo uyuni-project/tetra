@@ -1,8 +1,8 @@
 # encoding: UTF-8
 
 module Tetra
-  # tetra commit-source
-  class CommitSourceSubcommand < Tetra::Subcommand
+  # tetra commit-sources
+  class CommitSourcesSubcommand < Tetra::Subcommand
     option %w(-p --as-patch), :flag, "put changes in sources in a new patch"
     option %w(-t --as-tarball), :flag, "include all changes so far in the source tarball"
     parameter "[MESSAGE]", "a commit message", default: "Sources updated"
