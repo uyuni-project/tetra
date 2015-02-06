@@ -19,6 +19,7 @@ module Tetra
 
           result_path, conflict_count = package.to_spec
           print_generation_result(project, result_path, conflict_count)
+          puts "Warning: #{pom} not found, some spec fields will be left blank" unless File.file?(pom)
         end
       end
     end
