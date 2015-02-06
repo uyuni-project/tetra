@@ -198,6 +198,9 @@ module Tetra
           # 3-way merge
           conflict_count = @git.merge_with_id(path, "#{path}.tetra_user_edited", previous_id)
           File.delete("#{path}.tetra_user_edited")
+
+          @git.commit_file(path, "User changes merged back") if conflict_count == 0
+
           return conflict_count
         end
         return 0
