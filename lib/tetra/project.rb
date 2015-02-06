@@ -196,7 +196,7 @@ module Tetra
 
         if already_existing
           # 3-way merge
-          conflict_count = @git.merge_with_id("#{path}", "#{path}.tetra_user_edited", previous_id)
+          conflict_count = @git.merge_with_id(path, "#{path}.tetra_user_edited", previous_id)
           File.delete("#{path}.tetra_user_edited")
           return conflict_count
         end
