@@ -41,7 +41,7 @@ You can also ask `tetra` to find one via `tetra get-pom <filename>.jar`.
 
 ## Other build tools
 
-Other build tools are currently unsupported but will be added in the future. You can nevertheless use them - the only rule is that you have to keep all of their files in `kit`.
+Other build tools are currently unsupported but will be added in the future. You can nevertheless use them just make sure all of their files, included automatically downloaded ones, are stored in `kit`.
 
 ## [OBS](build.opensuse.org) integration
 
