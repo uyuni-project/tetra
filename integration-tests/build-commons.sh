@@ -27,4 +27,4 @@ tetra generate-spec
 
 echo "**************** All Done ****************"
 
-ls -lah *
+find ../../packages
