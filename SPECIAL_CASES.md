@@ -17,6 +17,14 @@ You can generate single files with the following commands:
 * `tetra generate-spec`: (re)generates the package spec;
 * `tetra generate-kit`: (re)generates the kit tarball and spec;
 
+## Patches
+
+If you need to modify your project's sources for whatever reason, feel free to do so and then use `tetra patch "my patch message"` to signal your changes.
+
+After that you can retry the dry-run and spec generation: tetra will take care of creating patch files and adding `%patch` instructions for you.
+
+In case you want to swap sources completely and throw away all previous patches use `tetra patch --new-tarball`.
+
 ## Ant builds
 
 `tetra` is currently optimized for Maven as it is the most common build tool, but it can work with any other. In particular, support for Ant has already been implemented and `tetra ant` works like `tetra mvn`, and a copy of ant is also bundled in `kit/` by default.
