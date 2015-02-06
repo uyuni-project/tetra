@@ -27,17 +27,17 @@ In case you want to swap sources completely and throw away all previous patches 
 
 ## Ant builds
 
-`tetra` is currently optimized for Maven as it is the most common build tool, but it can work with any other. In particular, support for Ant has already been implemented and `tetra ant` works like `tetra mvn`, and a copy of ant is also bundled in `kit/` by default.
+`tetra` works best with Maven but supports Ant as well. `tetra ant` works like `tetra mvn`, and a copy of ant is also bundled in `kit/` by default.
 
-Sometimes you will have jar files distributed along with the source archive that will end up in `src/`: you don't want that! Run
+Sometimes you will have jar files distributed along with the source archive that will end up in `src/`: you don't want that! Run:
 
     tetra move-jars-to-kit
 
-to have them moved to `kit/jars`. The command will generate a symlink back to the original, so builds will work as expected.
+to have them moved to `kit/jars`. The command will generate symlinks back to the originals, so builds will work as expected.
 
-When generating spec files, be sure to have a `pom.xml` in your package directory even if you are not using Maven: `tetra` will automatically take advantage of information from it to compile many fields.
+When generating spec files, it helps to have a `pom.xml` in your package directory even if you are not using Maven, as `tetra` will automatically take advantage of information from it to compile many fields, but it's not required.
 
-You can also ask `tetra` to find one via `tetra get-pom <filename>.jar` (be sure to have Maven in your kit).
+You can also ask `tetra` to find one via `tetra get-pom <filename>.jar`.
 
 ## Other build tools
 
