@@ -33,7 +33,8 @@ describe Tetra::Package do
 
     FileUtils.copy(File.join("spec", "data", "nailgun", "pom.xml"), @project_path)
 
-    @package = Tetra::Package.new(@project, File.join(@project_path, "pom.xml"), "*.jar")
+    patches = @project.write_source_patches
+    @package = Tetra::Package.new(@project, File.join(@project_path, "pom.xml"), "*.jar", patches)
   end
 
   after(:each) do
@@ -42,7 +43,6 @@ describe Tetra::Package do
 
   describe "#to_spec" do
     it "generates the first version" do
-      @package.to_patches
       @package.to_spec
 
       @project.from_directory do
