@@ -221,10 +221,10 @@ describe Tetra::Project do
     it "archives the latest source version" do
       @project.from_directory do
         FileUtils.touch(File.join("src", "Included.java"))
-        @project.commit_sources(false, "first version")
+        @project.commit_sources("first version", true)
 
         FileUtils.touch(File.join("src", "Excluded.java"))
-        @project.commit_sources(true, "patched version")
+        @project.commit_sources("patched version")
 
         @project.archive_sources
 
@@ -240,10 +240,10 @@ describe Tetra::Project do
       @project.from_directory do
         test_file = File.join("src", "Test.java")
         FileUtils.touch(test_file)
-        @project.commit_sources(false, "first version")
+        @project.commit_sources("first version", true)
 
         File.open(test_file, "w") { |f| f.write("A") }
-        @project.commit_sources(true, "patched version")
+        @project.commit_sources("patched version")
 
         patches = @project.write_source_patches.map { |f| File.basename(f) }
         expect(patches).to include("0001-patched-version.patch")
