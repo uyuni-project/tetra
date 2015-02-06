@@ -19,11 +19,12 @@ module Tetra
     def_delegator :@pom, :version
     def_delegator :@pom, :runtime_dependency_ids
 
-    def initialize(project, pom_path = nil, filter = nil)
+    def initialize(project, pom_path = nil, filter = nil, patches = [])
       @project = project
       @kit = Tetra::KitPackage.new(project)
       @pom = Tetra::Pom.new(pom_path)
       @filter = filter
+      @patches = patches.map { |f| File.basename(f) }
     end
 
     # a short summary from the POM
@@ -50,10 +51,6 @@ module Tetra
         .slice(0..max_length - 1)
         .sub(/\s\w+$/, "")
         .sub(/\.+$/, "")
-    end
-
-    def to_patches
-      @patches = @project.write_source_patches.map { |f| File.basename(f) }
     end
 
     def to_spec

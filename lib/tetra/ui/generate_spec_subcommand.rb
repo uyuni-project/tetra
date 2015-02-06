@@ -10,8 +10,8 @@ module Tetra
       checking_exceptions do
         project = Tetra::Project.new(".")
         ensure_dry_running(:has_finished, project) do
-          package = Tetra::Package.new(project, pom, filter)
-          patches = package.to_patches
+          patches = project.write_source_patches
+          package = Tetra::Package.new(project, pom, filter, patches)
 
           patches.each do |patch|
             print_generation_result(project, patch)
