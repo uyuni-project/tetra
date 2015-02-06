@@ -21,6 +21,10 @@ tetra generate-kit
 tetra generate-archive
 tetra generate-spec
 
+touch adding_patch_file
+tetra patch "patch file added"
+tetra generate-spec
+
 echo "**************** All Done ****************"
 
 ls -lah *
