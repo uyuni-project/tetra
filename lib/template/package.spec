@@ -45,7 +45,7 @@ Requires:       mvn(<%= dependency_id[0] %>:<%= dependency_id[1] %>) <% if depen
 
 %prep
 %setup -q -n src
-<% (0..(patches.count -1)).each do |i| %>
+<% patches.to_enum.with_index.each do |patch, i| %>
 %patch<%= i %> -p2
 <% end %>
 cp -f %{SOURCE1} .
