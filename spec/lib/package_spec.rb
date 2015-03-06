@@ -11,7 +11,7 @@ describe Tetra::Package do
     Dir.chdir(@project_path) do
       FileUtils.touch(File.join("kit", "jars", "test.jar"))
     end
-    @project.finish
+    @project.finish([])
 
     @project.from_directory do
       FileUtils.mkdir_p(File.join("src", "out"))
@@ -28,7 +28,7 @@ describe Tetra::Package do
         FileUtils.touch(File.join("src", "out", "test#{i}.jar"))
       end
 
-      @project.finish
+      @project.finish([])
     end
 
     FileUtils.copy(File.join("spec", "data", "nailgun", "pom.xml"), @project_path)

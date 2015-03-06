@@ -28,6 +28,7 @@ require "tetra/facades/process_runner"
 require "tetra/facades/git"
 require "tetra/facades/ant"
 require "tetra/facades/mvn"
+require "tetra/facades/bash"
 
 # main internal classes
 require "tetra/version"

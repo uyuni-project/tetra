@@ -57,8 +57,8 @@ module Tetra
       _to_spec(@project, name, "package.spec", @project.packages_dir)
     end
 
-    def to_script(history)
-      _to_script(@project, history)
+    def to_script
+      _to_script(@project)
     end
   end
 end

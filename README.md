@@ -12,6 +12,7 @@ You need:
 
 * [Ruby 1.9](https://www.ruby-lang.org/en/);
 * [git](http://git-scm.com/);
+* bash;
 * a JDK that can compile whatever software you need to package;
 
 Install `tetra` via RubyGems:
@@ -23,15 +24,20 @@ Install `tetra` via RubyGems:
 Building a package with `tetra` is quite unusual — this is a deliberate choice, so don't worry. Basic steps are:
 
 * `tetra init` a new project;
-* add sources to `src/<package name>` and anything else needed for the build in `kit/` in binary form (typically a copy of Maven and maybe some other dependency jars);
-* execute `tetra dry-run start`, then any command needed to compile your software, then `tetra dry-run finish`;
-* execute `tetra generate-all`: tetra will look at changed files and Bash history to scaffold spec files and tarballs.
+* add sources to `src/<package name>` and anything else needed for the build in `kit/` in binary form (Ant and Maven are already included);
+* execute `tetra dry-run`, which will open a bash subshell. In there, build your project, and when you are done conclude quitting it with `Ctrl+D`;
+* execute `tetra generate-all`: tetra will scaffold spec files and tarballs.
 
 Done!
 
 ### How can that possibly work?
 
-With `tetra` you are not building all dependencies from source, just your package. Everything else is shipped already compiled with attached source files, which is much easier to implement and automate. Yet, it is sufficient to fulfill open source licenses and to have a repeatable, networkless build.
+During the dry-run `tetra`:
+ - saves your bash history, so that it can use it later to scaffold a build script;
+ - keeps track of changed files, in particular produced jars, which are included in the spec's `%files` section;
+ - saves files downloaded from the Internet (eg. by Maven) and packs them to later allow networkless builds.
+
+Note that with `tetra` you are not building all dependencies from source - build dependencies are aggregated in a binary-only "blob" package. While this is not ideal it is sufficient to fulfill most open source licenses and to have a repeatable, networkless build, while being a lot easier to automate.
 
 ## A commons-collections walkthrough
 
@@ -48,18 +54,18 @@ Second, place source files in the `src/` folder:
     unzip commons-collections-3.2.1-src.zip
     rm commons-collections-3.2.1-src.zip
 
-Third, you need to show `tetra` how to build your package by running appropriate commands between `tetra dry-run start` and `tetra dry-run finish`. Bash history will be recorded to generate a "starting-point" build script (that will be sufficient in simple cases like this):
+Third, you need to show `tetra` how to build your package. Run `tetra dry-run` a new subshell will open, in there do anything you would normally do to build the package:
 
     cd ../src
-    tetra dry-run start
+    tetra dry-run
 
     cd commons-collections-3.2.1-src/
     tetra mvn package
 
-    tetra dry-run finish
+    ^D
 
 Note that we used `tetra mvn package` instead of `mvn package`: this will use a preloaded Maven bundled in `kit/` by default and the repository in `kit/m2`.
-Also note that this being a dry-run build, sources will be brought back to their original state after `tetra finish`, as this ensures build repeatability.
+Also note that this being a dry-run build, sources will be brought back to their original state after it finishes to ensure repeatability.
 
 Finally, generate build scripts, spec files and tarballs in the `packages/` directory:
 
@@ -75,9 +81,9 @@ An in-depth discussion of this project's motivation is available in the [MOTIVAT
 
 ## Status
 
-`tetra` is a research project currently in beta state. If you are a packager you can try to use it, any feedback would be **very** welcome!
+`tetra` will soon hit 1.0. If you are a packager you can try to use it, any feedback would be **very** welcome!
 
-At the moment `tetra` is tested on openSUSE.
+At the moment `tetra` is tested on openSUSE and Ubuntu.
 
 ## Sources
 

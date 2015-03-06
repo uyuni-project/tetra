@@ -5,7 +5,7 @@ module Tetra
   module ProcessRunner
     include Logging
 
-    # runs an external executable and returns its output as a string
+    # runs a noninteractive executable and returns its output as a string
     # raises ExecutionFailed if the exit status is not 0
     # optionally echoes the executable's output/error to standard output/error
     def run(commandline, echo = false, stdin = nil)
@@ -32,6 +32,13 @@ module Tetra
       end
 
       out_recorder.record
+    end
+
+    # runs an interactive executable in a subshell
+    # changing environment variables
+    def run_interactive(command, env)
+      success = system(env, command)
+      fail ExecutionFailed.new(command, $CHILD_STATUS, nil, nil) unless success
     end
 
     # records bytes sent via "<<" for later use

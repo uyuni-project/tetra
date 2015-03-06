@@ -20,7 +20,7 @@ describe Tetra::Project do
 
     it "returns a project version after dry-run" do
       @project.dry_run
-      @project.finish
+      @project.finish([])
       expect(@project.version).to be
     end
   end
@@ -77,7 +77,7 @@ describe Tetra::Project do
         expect(@project.dry_running?).to be_falsey
         @project.dry_run
         expect(@project.dry_running?).to be_truthy
-        @project.finish
+        @project.finish([])
         expect(@project.dry_running?).to be_falsey
       end
     end
@@ -87,7 +87,7 @@ describe Tetra::Project do
     it "checks whether src is dirty" do
       @project.from_directory do
         @project.dry_run
-        @project.finish
+        @project.finish([])
         expect(@project.src_patched?).to be_falsey
 
         FileUtils.touch(File.join("src", "test"))
@@ -129,7 +129,7 @@ describe Tetra::Project do
         FileUtils.touch(File.join("src", "test2"))
       end
 
-      expect(@project.finish).to be_truthy
+      expect(@project.finish([])).to be_truthy
       expect(@project.dry_running?).to be_falsey
 
       @project.from_directory do
@@ -200,13 +200,13 @@ describe Tetra::Project do
         File.open(File.join("src", "added_in_first_dry_run"), "w") { |f| f.write("A") }
         File.open("added_outside_directory", "w") { |f| f.write("A") }
       end
-      expect(@project.finish).to be_truthy
+      expect(@project.finish([])).to be_truthy
 
       expect(@project.dry_run).to be_truthy
       @project.from_directory do
         File.open(File.join("src", "added_in_second_dry_run"), "w") { |f| f.write("A") }
       end
-      expect(@project.finish).to be_truthy
+      expect(@project.finish([])).to be_truthy
 
       list = @project.produced_files
       expect(list).to include("added_in_second_dry_run")

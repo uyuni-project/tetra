@@ -114,9 +114,11 @@ module Tetra
       !latest_comment.nil? && !(latest_comment =~ /tetra: dry-run-finished/)
     end
 
-    # ends a dry-run assuming a successful build
-    # reverts sources and updates output file lists
-    def finish
+    # ends a dry-run assuming a successful build:
+    #  - reverts sources as before dry-run
+    #  - saves the list of generated files in git comments
+    #  - saves the build script lines in git comments
+    def finish(build_script_lines)
       # keep track of changed files
       start_id = @git.latest_id("tetra: dry-run-started")
       changed_files = @git.changed_files("src", start_id)
@@ -127,6 +129,7 @@ module Tetra
       # prepare commit comments
       comments = ["Dry run finished\n", "tetra: dry-run-finished"]
       comments += changed_files.map { |f| "tetra: file-changed: #{f}" }
+      comments += build_script_lines.map { |l| "tetra: build-script-line: #{l}" }
 
       # if this is the first dry-run, mark sources as tarball
       if @git.latest_id("tetra: dry-run-finished").nil?
@@ -224,6 +227,14 @@ module Tetra
       @git.latest_comment("tetra: dry-run-finished")
         .split("\n")
         .map { |line| line[/^tetra: file-changed: src\/(.+)$/, 1] }
+        .compact
+        .sort
+    end
+
+    def build_script_lines
+      @git.latest_comment("tetra: dry-run-finished")
+        .split("\n")
+        .map { |line| line[/^tetra: build-script-line: (.+)$/, 1] }
         .compact
         .sort
     end

@@ -9,17 +9,16 @@ describe Tetra::Scriptable do
     create_mock_project
 
     @project.from_directory do
-      File.open("history", "w") do |io|
-        io.puts "some earlier command"
-        io.puts "tetra dry-run start --unwanted-options"
-        io.puts "cd somewhere significant"
-        io.puts "tetra mvn --options"
-        io.puts "tetra dry-run finish -a"
-        io.puts "some later command"
-      end
-
       FileUtils.mkdir_p(File.join("src", "test-package"))
       @project.dry_run
+
+      history = ["tetra dry-run start --unwanted-options",
+                 "cd somewhere significant",
+                 "tetra mvn --options",
+                 "tetra dry-run finish -a"
+                ]
+
+      @project.finish(history)
     end
 
     create_mock_executable("ant")
@@ -34,7 +33,7 @@ describe Tetra::Scriptable do
     it "generates a build script from the history" do
       @project.from_directory do
         @package = Tetra::Package.new(@project)
-        @package.to_script("history")
+        @package.to_script
 
         lines = File.readlines(File.join("packages", "test-project", "build.sh"))
 
