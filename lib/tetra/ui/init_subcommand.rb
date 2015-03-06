@@ -8,7 +8,7 @@ module Tetra
         Tetra::Project.init(".")
         puts "Project inited."
         puts "Add sources to src/, binary dependencies to kit/."
-        puts "When you are ready to test a build, use \"tetra dry-run\"."
+        puts "When you are ready to test a build, use \"tetra dry-run\""
       end
     end
   end
