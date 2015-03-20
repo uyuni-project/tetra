@@ -35,13 +35,4 @@ describe Tetra::Mvn do
       end
     end
   end
-
-  describe "#get_effective_pom"  do
-    it "runs maven to get an effective pom" do
-      @project.from_directory do
-        expect(instance.get_effective_pom("test.pom")).to eq "test.pom.effective"
-        expect(File.read("test_out").strip).to match(/help:effective-pom -ftest.pom -Doutput=test.pom.effective$/)
-      end
-    end
-  end
 end
