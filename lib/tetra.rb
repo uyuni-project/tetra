@@ -38,6 +38,7 @@ require "tetra/kit"
 require "tetra/version_matcher"
 require "tetra/maven_website"
 require "tetra/pom_getter"
+require "tetra/generatable"
 
 # package building
 require "tetra/packages/speccable"
