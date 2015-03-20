@@ -10,8 +10,6 @@ describe Tetra::Mvn do
     @path = create_mock_executable("mvn")
   end
 
-  let(:instance) { Tetra::Mvn.new(".", mock_executable_path("mvn")) }
-
   after(:each) do
     delete_mock_project
   end
@@ -19,19 +17,10 @@ describe Tetra::Mvn do
   describe "#get_mvn_commandline"  do
     it "returns commandline options for running maven" do
       @project.from_directory do
-        commandline = instance.get_mvn_commandline(["--otheroption"])
-        expected_commandline = "./#{@path} -Dmaven.repo.local=./kit/m2 --settings \
-./kit/m2/settings.xml --strict-checksums --otheroption"
+        commandline = Tetra::Mvn.commandline(".", mock_executable_dir("mvn"))
+        expected_commandline = "./#{@path} -Dmaven.repo.local=./kit/m2 \
+--settings ./kit/m2/settings.xml --strict-checksums"
         expect(commandline).to eq expected_commandline
-      end
-    end
-  end
-
-  describe "#mvn"  do
-    it "runs maven" do
-      @project.from_directory do
-        instance.mvn(["extra-option"])
-        expect(File.read("test_out").strip).to match(/extra-option$/)
       end
     end
   end

@@ -19,7 +19,7 @@ module Tetra
           puts "if the build does not succeed use ^C^D to abort and undo any change"
 
           begin
-            history = Bash.new.bash
+            history = Tetra::Bash.new(project).bash
             project.finish(history)
             puts "Dry-run finished"
           rescue ExecutionFailed

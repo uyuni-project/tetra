@@ -1,0 +1,21 @@
+# use a temporary file for history
+HISTFILE=<%= history_file %>
+
+# don't limit file size
+HISTFILESIZE=-1
+
+# don't limit history length
+HISTSIZE=-1
+
+# don't keep timestamps in history
+unset HISTTIMEFORMAT
+
+# don't skip any command
+HISTCONTROL=""
+
+# change prompt
+PS1="\e[1;33mdry-running\e[m:\w\$ "
+
+# add default commandline switches
+alias ant='<%= ant_commandline %>'
+alias mvn='<%= mvn_commandline %>'

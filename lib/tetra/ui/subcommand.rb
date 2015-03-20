@@ -98,8 +98,6 @@ module Tetra
       $stderr.puts "#{e.directory} is not a tetra project directory, see tetra init"
     rescue GitAlreadyInitedError
       $stderr.puts "This directory is already a tetra project"
-    rescue ExecutableNotFoundError => e
-      $stderr.puts "Executable #{e.executable} not found in kit/ or any of its subdirectories"
     rescue ExecutionFailed => e
       $stderr.puts "Failed to run `#{e.commandline}` (exit status #{e.status})"
     rescue Interrupt

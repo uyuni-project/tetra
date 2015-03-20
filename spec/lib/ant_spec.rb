@@ -10,8 +10,6 @@ describe Tetra::Ant do
     @path = create_mock_executable("ant")
   end
 
-  let(:instance) { Tetra::Ant.new(".", mock_executable_path("ant")) }
-
   after(:each) do
     delete_mock_project
   end
@@ -19,17 +17,8 @@ describe Tetra::Ant do
   describe "#get_ant_commandline"  do
     it "returns commandline options for running Ant" do
       @project.from_directory do
-        commandline = instance.get_ant_commandline([])
-        expect(commandline).to eq "./#{@path} "
-      end
-    end
-  end
-
-  describe "#ant"  do
-    it "runs Ant" do
-      @project.from_directory do
-        instance.ant(["extra-option"])
-        expect(File.read("test_out").strip).to match(/extra-option$/)
+        commandline = Tetra::Ant.commandline(".", mock_executable_dir("ant"))
+        expect(commandline).to eq "./#{@path}"
       end
     end
   end

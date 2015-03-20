@@ -16,18 +16,6 @@ module Tetra
     )
 
     subcommand(
-      "mvn",
-      "Locates and runs Maven from any directory in kit/",
-      Tetra::MvnSubcommand
-    )
-
-    subcommand(
-      "ant",
-      "Locates and runs Ant from any directory in kit/",
-      Tetra::AntSubcommand
-    )
-
-    subcommand(
       "generate-kit",
       "Create or refresh the kit spec and archive files",
       Tetra::GenerateKitSubcommand

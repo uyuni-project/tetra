@@ -27,7 +27,7 @@ In case you want to swap sources completely and throw away all previous patches 
 
 ## Ant builds
 
-`tetra` works best with Maven but supports Ant as well. `tetra ant` works like `tetra mvn`, and a copy of ant is also bundled in `kit/` by default.
+Ant is supported as well as Maven. You have a prebundled copy in `kit`, and using `ant` from a dry-run will use that by default.
 
 Sometimes you will have jar files distributed along with the source archive that will end up in `src/`: you don't want that! Run:
 
@@ -38,6 +38,12 @@ to have them moved to `kit/jars`. The command will generate symlinks back to the
 When generating spec files, it helps to have a `pom.xml` in your package directory even if you are not using Maven, as `tetra` will automatically take advantage of information from it to compile many fields, but it's not required.
 
 You can also ask `tetra` to find one via `tetra get-pom <filename>.jar`.
+
+## Use different Ant or Maven versions
+
+In case the bundled Ant or Maven versions are not usable in your project for whatever reason and you want to bundle a different one, just remove their directories from `kit` and replace them with your own. `tetra` will look for binaries named `ant` or `mvn` in kit and use them wherever they are found.
+
+You can also use system-provided Ant and Maven by simply deleting their directories from `kit/`. Note that this is not recommended because a different version might be used at build time (for example in OBS), potentially resulting in non-reproducible builds.
 
 ## Other build tools
 
@@ -54,7 +60,7 @@ Note that the kit packages is only needed at build time by OBS, no end user shou
 ## Gotchas
 
 * `tetra` internally uses `git` to keep track of files, any tetra project is actually also a `git` repo. Feel free to use it as any ordinary git repo, including pushing to a remote repo, rebasing, merging or using GitHub's pull requests. Just make sure any `tetra: ` comments are preserved;
-* some Maven plugins like the Eclipse Project ones ([Tycho](https://www.eclipse.org/tycho/)) will save data in `/tmp` downloaded from the Internet and will produce errors if this data is not there during offline builds. One way to work around that is to force Java to use a kit subdirectory as `/tmp`. Add the following option to `tetra mvn` during your build:
+* some Maven plugins like the Eclipse Project ones ([Tycho](https://www.eclipse.org/tycho/)) will save data in `/tmp` downloaded from the Internet and will produce errors if this data is not there during offline builds. One way to work around that is to force Java to use a kit subdirectory as `/tmp`. Add the following option to `mvn` during your build:
 
     -Djava.io.tmpdir=<full path to project>/kit/tmp
 
@@ -63,7 +69,7 @@ Use the following option in `mvn` in your build.sh file to make it reproducible:
     -Djava.io.tmpdir=$PROJECT_PREFIX/kit/tmp
 
 * Tycho builds may also require NSS, so if you get NSS errors be sure to add `mozilla-nss` or an equivalent package in a BuildRequires: line;
-* some badly designed testsuites might not work in OBS. If you are using `tetra mvn` you can add the following option to disable them:
+* some badly designed testsuites might not work in OBS. If you are using `mvn` you can add the following option to disable them:
 
    -DskipTests=true
 

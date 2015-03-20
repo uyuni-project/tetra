@@ -14,7 +14,7 @@ describe Tetra::Scriptable do
 
       history = ["tetra dry-run start --unwanted-options",
                  "cd somewhere significant",
-                 "tetra mvn --options",
+                 "mvn --options",
                  "tetra dry-run finish -a"
                 ]
 

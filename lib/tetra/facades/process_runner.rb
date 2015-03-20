@@ -35,9 +35,8 @@ module Tetra
     end
 
     # runs an interactive executable in a subshell
-    # changing environment variables
-    def run_interactive(command, env)
-      success = system(env, command)
+    def run_interactive(command)
+      success = system({}, command)
       fail ExecutionFailed.new(command, $CHILD_STATUS, nil, nil) unless success
     end
 

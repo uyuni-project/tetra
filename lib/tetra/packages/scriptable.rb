@@ -29,21 +29,19 @@ module Tetra
     # build script lines and adjusting mvn and ant's paths
     def script_body(project)
       lines = project.build_script_lines
-      ant = if lines.any? { |e| e.match(/tetra +ant/) }
-              path = Tetra::Kit.new(project).find_executable("ant")
-              Tetra::Ant.new(project.full_path, path).ant(@options)
-            end
 
-      mvn = if lines.any? { |e| e.match(/tetra +mvn/) }
-              mvn_path = Tetra::Kit.new(project).find_executable("mvn")
-              mvn = Tetra::Mvn.new("$PROJECT_PREFIX", mvn_path)
-            end
+      kit = Tetra::Kit.new(project)
+      ant_path = kit.find_executable("ant")
+      ant_commandline = Tetra::Ant.commandline("$PROJECT_PREFIX", ant_path)
+
+      mvn_path = kit.find_executable("mvn")
+      mvn_commandline = Tetra::Mvn.commandline("$PROJECT_PREFIX", mvn_path)
 
       lines.map do |line|
-        if line =~ /tetra +mvn/
-          line.gsub(/tetra +mvn/, "#{mvn.get_mvn_commandline(['-o'])}")
-        elsif line =~ /tetra +ant/
-          line.gsub(/tetra +ant/, "#{ant.get_ant_commandline([])}")
+        if line =~ /^ant( .*)?$/
+          line.gsub(/^ant/, ant_commandline)
+        elsif line =~ /^mvn( .*)?$/
+          line.gsub(/^mvn/, "#{mvn_commandline} -o")
         else
           line
         end

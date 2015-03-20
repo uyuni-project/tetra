@@ -10,27 +10,19 @@ module Tetra
     end
 
     # finds an executable in a bin/ subdirectory of kit
+    # returns nil if executable cannot be found
     def find_executable(name)
       @project.from_directory do
         Find.find("kit") do |path|
-          next unless path =~ /bin\/#{name}$/
+          next unless path =~ /(.*bin)\/#{name}$/
+          result = Regexp.last_match[1]
 
-          log.debug("found #{name} executable: #{path}")
-          return path
+          log.debug("found #{name} executable in #{result}")
+          return result
         end
       end
 
-      log.debug("#{name} executable not found")
-      fail ExecutableNotFoundError, name
-    end
-  end
-
-  # an executable from the kit was not found
-  class ExecutableNotFoundError < Exception
-    attr_reader :executable
-
-    def initialize(executable)
-      @executable = executable
+      nil
     end
   end
 end

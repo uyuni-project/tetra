@@ -24,7 +24,7 @@ Install `tetra` via RubyGems:
 Building a package with `tetra` is quite unusual — this is a deliberate choice, so don't worry. Basic steps are:
 
 * `tetra init` a new project;
-* add sources to `src/<package name>` and anything else needed for the build in `kit/` in binary form (Ant and Maven are already included);
+* add sources to `src/<package name>` and anything else needed for the build in `kit/` in binary form (Ant and Maven are already pre-bundled);
 * execute `tetra dry-run`, which will open a bash subshell. In there, build your project, and when you are done conclude quitting it with `Ctrl+D`;
 * execute `tetra generate-all`: tetra will scaffold spec files and tarballs.
 
@@ -60,11 +60,11 @@ Third, you need to show `tetra` how to build your package. Run `tetra dry-run` a
     tetra dry-run
 
     cd commons-collections-3.2.1-src/
-    tetra mvn package
+    mvn package
 
     ^D
 
-Note that we used `tetra mvn package` instead of `mvn package`: this will use a preloaded Maven bundled in `kit/` by default and the repository in `kit/m2`.
+Note that you don't even need to install Maven - `tetra` bundles a copy in `kit/` and uses it by default!
 Also note that this being a dry-run build, sources will be brought back to their original state after it finishes to ensure repeatability.
 
 Finally, generate build scripts, spec files and tarballs in the `packages/` directory:

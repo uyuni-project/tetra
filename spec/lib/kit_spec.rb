@@ -17,11 +17,11 @@ describe Tetra::Kit do
 
   describe "#find_executable"  do
     it "finds an executable in kit" do
-      executable_path = create_mock_executable("any")
-      expect(instance.find_executable("any")).to eq executable_path
+      create_mock_executable("any")
+      expect(instance.find_executable("any")).to eq mock_executable_dir("any")
     end
     it "doesn't find an executable in kit" do
-      expect { instance.find_executable("any") }.to raise_error(Tetra::ExecutableNotFoundError)
+      expect(instance.find_executable("any")).to be_nil
     end
   end
 end
