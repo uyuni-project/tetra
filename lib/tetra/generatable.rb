@@ -9,17 +9,9 @@ module Tetra
     end
 
     # generates content from an ERB template and an object binding
-    # if destination_path is given, write it to that file, otherwise just
-    # return it
-    def generate(template_name, object_binding, destination_path = nil)
+    def generate(template_name, object_binding)
       erb = ERB.new(File.read(File.join(template_path, template_name)), nil, "<>")
-      new_content =  erb.result(object_binding)
-
-      unless destination_path.nil?
-        File.open(destination_path, "w") { |io| io.write new_content }
-      end
-
-      new_content
+      erb.result(object_binding)
     end
   end
 end
