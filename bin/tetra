@@ -1,18 +1,9 @@
 #!/usr/bin/env ruby
 # encoding: UTF-8
 #
-# The (open)?SUSE ((Linux Enterprise) (Server|Desktop))?'s
-# packager Swiss Army Knife.
+# tetra is a tool to help you build RPM packages for Java projects.
 #
-# Copyright 2013 Silvio Moioli <smoioli@suse.de>
-#
-# Inspired mainly by pom2spec by:
-#  Pascal Bleser <pascal.bleser@opensuse.org>
-#  Duncan Mac-Vicar Prett <dmacvicar@suse.de>
-#
-# This file is licensed under the
-# GNU Lesser General Public License version 2.1 or later:
-# http://www.gnu.org/licenses/lgpl-2.1.html
+# Copyright 2015 Silvio Moioli <moio@suse.de>
 #
 
 if File.exist?(File.join(File.dirname(__FILE__), "..", ".git"))
