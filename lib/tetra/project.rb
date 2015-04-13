@@ -90,12 +90,7 @@ module Tetra
     # since last mark
     def src_patched?
       from_directory do
-        latest_id = @git.latest_id("tetra: sources-")
-        if latest_id
-          @git.changed_files("src", latest_id).any?
-        else
-          false
-        end
+        @git.changed_files("src", "HEAD").any?
       end
     end
 
