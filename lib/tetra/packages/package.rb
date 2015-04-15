@@ -15,7 +15,6 @@ module Tetra
     def_delegator :@pom, :license_name, :license
     def_delegator :@pom, :url
     def_delegator :@pom, :group_id
-    def_delegator :@pom, :artifact_id
     def_delegator :@pom, :version
     def_delegator :@pom, :runtime_dependency_ids
 
@@ -25,6 +24,10 @@ module Tetra
       @pom = Tetra::Pom.new(pom_path)
       @filter = filter
       @patches = patches.map { |f| File.basename(f) }
+    end
+
+    def artifact_ids
+      @pom.modules.any? ? @pom.modules : [@pom.artifact_id]
     end
 
     # a short summary from the POM

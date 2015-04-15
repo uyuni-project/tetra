@@ -45,6 +45,10 @@ module Tetra
       end
     end
 
+    def modules
+      @doc.xpath("project/modules/module").map { |e| e.text }
+    end
+
     def scm_connection
       @doc.xpath("project/scm/connection").text || ""
     end

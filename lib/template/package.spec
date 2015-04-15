@@ -32,7 +32,9 @@ BuildRequires:  xz
 BuildRequires:  java-devel
 BuildRequires:  <%= kit_name %> == <%= kit_version %>
 BuildArch:      noarch
+<% artifact_ids.each do |artifact_id| %>
 Provides:       mvn(<%= group_id %>:<%= artifact_id %>) == <%= version %>
+<% end %>
 Requires:       java
 <% runtime_dependency_ids.each do |dependency_id| %>
 Requires:       mvn(<%= dependency_id[0] %>:<%= dependency_id[1] %>) <% if dependency_id[3] != nil %>==<%= dependency_id[3] %><% end %>
