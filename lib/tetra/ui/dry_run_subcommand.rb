@@ -14,7 +14,7 @@ module Tetra
         else
           project.dry_run
           puts "Dry-run started in a new bash shell."
-          puts "Build your project now, you can use \"tetra mvn\" and \"tetra ant\"."
+          puts "Build your project now, \"mvn\" and \"ant\" are already bundled by tetra."
           puts "If the build succeedes end this dry run with ^D (Ctrl+D),"
           puts "if the build does not succeed use ^C^D to abort and undo any change"
 
