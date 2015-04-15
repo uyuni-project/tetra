@@ -127,12 +127,17 @@ module Tetra
       comments += build_script_lines.map { |l| "tetra: build-script-line: #{l}" }
 
       # if this is the first dry-run, mark sources as tarball
-      if @git.latest_id("tetra: dry-run-finished").nil?
+      if first_dry_run
         comments << "tetra: sources-tarball"
       end
 
       # commit end of dry run
       commit_whole_directory(".", *comments)
+    end
+
+    # returns true if this is the first dry-run
+    def first_dry_run
+      @git.latest_id("tetra: dry-run-finished").nil?
     end
 
     # ends a dry-run assuming the build went wrong
