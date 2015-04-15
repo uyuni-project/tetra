@@ -64,8 +64,6 @@ cp -a <%= output %> %{buildroot}%{_javadir}/<%= File.basename(output) %>
 
 %files
 %defattr(-,root,root)
-<% outputs.each do |output| %>
-%{_javadir}/<%= File.basename(output) %>
-<% end %>
+%{_javadir}/*
 
 %changelog
