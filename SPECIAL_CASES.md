@@ -47,7 +47,42 @@ You can also use system-provided Ant and Maven by simply deleting their director
 
 ## Other build tools
 
-Other build tools are currently unsupported but will be added in the future. You can nevertheless use them just make sure all of their files, included automatically downloaded ones, are stored in `kit`.
+Other build tools are currently not supported out-of-the-box but you can still use them with some manual tweaking. You should basically make sure that:
+
+ - a copy of their executables and libraries is stored and gets called from `kit/`
+ - all files automatically downloaded during the build are also stored in `kit`.
+
+Tool-specific instructions for most popular tools follow.
+
+### ivy
+
+Assuming ivy is used by ant:
+ * during your dry-run build, add the `-Divy.default.ivy.user.dir=<PATH_TO_PROJECT>/kit/ivy` commandline option to `ant` in order to download files in the `kit` directory;
+ * after your build script is generated, replace the path to your project with `$PROJECT_PREFIX` in `build.sh` to ensure the build will not need Internet access.
+
+### sbt
+
+Instructions:
+ * before starting your dry-run build, copy a binary release to a subdirectory in `kit/`, for example `kit/sbt/`;
+ * during your dry-run build, add the `-Dsbt.global.base=../../kit/sbt-global-base` commandline option to `sbt` in order to download files in the `kit` directory;
+ * if your build also uses Ivy, add `-Dsbt.ivy.home=../../kit/ivy2` as well;
+ * after your build script is generated, add the `"set offline := true"` commandline option to `sbt` to `build.sh` to ensure the build will not need Internet access.
+
+### gradle
+
+Assuming your project uses the [Gradle Wrapper](http://gradle.org/docs/current/userguide/gradle_wrapper.html);
+
+ * during your dry-run build, add the `--gradle-user-home /tmp/gradle --project-cache-dir /tmp/gradle-project` commandline options to `gradlew` in order to download files in the `/tmp` directory instead of your home
+ * after the build has finished but prior ending the dry-run, copy all files to your kit with:
+
+      cp -r /tmp/gradle* kit/
+
+ * after your build script is generated, add the following line to `build.sh` in order to restore files from `kit/` to `/tmp`:
+      cp -r /tmp/gradle* kit/
+
+ * furthermore, add the `--gradle-user-home /tmp/gradle --project-cache-dir /tmp/gradle-project --offline` commandline options to `gradlew` in `build.sh` to ensure the build will not need Internet access.
+
+Note that you cannot put files in `kit/` directly because your build would break on relocation, see [GRADLE-2690](https://issues.gradle.org/browse/GRADLE-2690).
 
 ## [OBS](build.opensuse.org) integration
 
