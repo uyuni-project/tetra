@@ -51,16 +51,15 @@ First, ceate a new `tetra` project named after the package that we want to build
 Second, place source files in the `src/` folder:
 
     cd src
-    wget http://archive.apache.org/dist/commons/collections/source/commons-collections-3.2.1-src.zip
-    unzip commons-collections-3.2.1-src.zip
-    rm commons-collections-3.2.1-src.zip
+    wget http://archive.apache.org/dist/commons/collections/source/commons-collections4-4.0-src.tar.gz
+    tar xf commons-collections4-4.0-src.tar.gz
+    rm commons-collections4-4.0-src.tar.gz
+    cd commons-collections4-4.0-src/
 
 Third, you need to show `tetra` how to build your package. Run `tetra dry-run` a new subshell will open, in there do anything you would normally do to build the package:
 
-    cd ../src
     tetra dry-run
 
-    cd commons-collections-3.2.1-src/
     mvn package
 
     ^D
