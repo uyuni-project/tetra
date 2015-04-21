@@ -14,6 +14,7 @@ You need:
 * [git](http://git-scm.com/);
 * bash;
 * a JDK that can compile whatever software you need to package;
+* Fedora only: packages to compile native gems, use `yum install ruby-devel gcc-c++ zlib-devel`;
 
 Install `tetra` via RubyGems:
 
