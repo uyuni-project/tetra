@@ -21,7 +21,7 @@ module Tetra
       log.debug("Attempting unpack of #{file} to find a POM")
       begin
         Zip::File.foreach(file) do |entry|
-          if entry.name =~ /\/pom.xml$/
+          if entry.name =~ %r{/pom.xml$}
             log.info("pom.xml found in #{file}##{entry.name}")
             return entry.get_input_stream.read, :found_in_jar
           end
@@ -46,7 +46,7 @@ module Tetra
           unless result.nil?
             log.info("pom.xml for #{file} found on search.maven.org for sha1 #{sha1}\
               (#{result['g']}:#{result['a']}:#{result['v']})"
-            )
+                    )
             group_id, artifact_id, version = site.get_maven_id_from result
             return site.download_pom(group_id, artifact_id, version), :found_via_sha1
           end
@@ -70,7 +70,7 @@ module Tetra
         result = site.search_by_name(my_artifact_id).first
         log.debug("Artifact id search result: #{result}")
         unless result.nil?
-          group_id, artifact_id, _ = site.get_maven_id_from result
+          group_id, artifact_id, = site.get_maven_id_from result
           results = site.search_by_group_id_and_artifact_id(group_id, artifact_id)
           log.debug("All versions: #{results}")
           their_versions = results.map { |doc| doc["v"] }
@@ -86,7 +86,7 @@ module Tetra
           group_id, artifact_id, version = site.get_maven_id_from(best_matched_result)
           log.warn("pom.xml for #{filename} found on search.maven.org with heuristic search\
             (#{group_id}:#{artifact_id}:#{version})"
-          )
+                  )
 
           return site.download_pom(group_id, artifact_id, version), :found_via_heuristic
         end

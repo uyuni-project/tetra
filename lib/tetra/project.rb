@@ -127,9 +127,7 @@ module Tetra
       comments += build_script_lines.map { |l| "tetra: build-script-line: #{l}" }
 
       # if this is the first dry-run, mark sources as tarball
-      if first_dry_run
-        comments << "tetra: sources-tarball"
-      end
+      comments << "tetra: sources-tarball" if first_dry_run
 
       # commit end of dry run
       commit_whole_directory(".", *comments)
@@ -226,7 +224,7 @@ module Tetra
     def produced_files
       @git.latest_comment("tetra: dry-run-finished")
         .split("\n")
-        .map { |line| line[/^tetra: file-changed: src\/(.+)$/, 1] }
+        .map { |line| line[%r{^tetra: file-changed: src/(.+)$}, 1] }
         .compact
         .sort
     end

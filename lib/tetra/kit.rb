@@ -14,7 +14,7 @@ module Tetra
     def find_executable(name)
       @project.from_directory do
         Find.find("kit") do |path|
-          next unless path =~ /(.*bin)\/#{name}$/
+          next unless path =~ %r{(.*bin)/#{name}$}
           result = Regexp.last_match[1]
 
           log.debug("found #{name} executable in #{result}")

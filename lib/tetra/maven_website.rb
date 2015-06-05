@@ -38,7 +38,7 @@ module Tetra
     def search(params)
       response = RestClient.get("http://search.maven.org/solrsearch/select",
                                 params: params.merge("rows" => "100", "wt" => "json")
-      )
+                               )
       json = JSON.parse(response.to_s)
       json["response"]["docs"]
     end

@@ -42,7 +42,7 @@ describe Tetra::Scriptable do
         expect(lines).to include("$PROJECT_PREFIX/kit/mvn/bin/mvn \
 -Dmaven.repo.local=$PROJECT_PREFIX/kit/m2 --settings $PROJECT_PREFIX/kit/m2/settings.xml \
 --strict-checksums -o --options\n"
-        )
+                                )
 
         expect(lines).not_to include("some earlier command\n")
         expect(lines).not_to include("tetra dry-run --unwanted-options\n")
