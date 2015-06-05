@@ -10,15 +10,15 @@ require "logger"
 require "open-uri"
 require "pathname"
 require "singleton"
-require "text"
 
 # third party libraries
 require "clamp"
 require "json"
 require "nokogiri"
-require "rest_client"
-require "zip"
 require "open4"
+require "rest_client"
+require "text"
+require "zip"
 
 # base components
 require "tetra/logger"
