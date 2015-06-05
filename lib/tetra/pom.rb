@@ -5,56 +5,55 @@ module Tetra
   class Pom
     def initialize(filename)
       content = open(filename).read if filename && File.file?(filename)
-      @doc = Nokogiri::XML(content)
-      @doc.remove_namespaces!
+      @doc = REXML::Document.new(content)
     end
 
     def group_id
-      @doc.xpath("project/groupId").text || ""
+      @doc.text("project/groupId") || ""
     end
 
     def artifact_id
-      @doc.xpath("project/artifactId").text || ""
+      @doc.text("project/artifactId") || ""
     end
 
     def name
-      @doc.xpath("project/name").text || ""
+      @doc.text("project/name") || ""
     end
 
     def version
-      @doc.xpath("project/version").text || ""
+      @doc.text("project/version") || ""
     end
 
     def description
-      @doc.xpath("project/description").text || ""
+      @doc.text("project/description") || ""
     end
 
     def url
-      @doc.xpath("project/url").text || ""
+      @doc.text("project/url") || ""
     end
 
     def license_name
-      @doc.xpath("project/licenses/license/name").text || ""
+      @doc.text("project/licenses/license/name") || ""
     end
 
     def runtime_dependency_ids
-      @doc.xpath("project/dependencies/dependency[\
+      @doc.get_elements("project/dependencies/dependency[\
         not(optional='true') and not(scope='provided') and not(scope='test') and not(scope='system')\
       ]").map do |element|
-        [element.xpath("groupId").text, element.xpath("artifactId").text, element.xpath("version").text]
+        [element.text("groupId"), element.text("artifactId"), element.text("version")]
       end
     end
 
     def modules
-      @doc.xpath("project/modules/module").map(&:text)
+      @doc.get_elements("project/modules/module").map(&:text)
     end
 
     def scm_connection
-      @doc.xpath("project/scm/connection").text || ""
+      @doc.text("project/scm/connection") || ""
     end
 
     def scm_url
-      @doc.xpath("project/scm/url").text || ""
+      @doc.text("project/scm/url") || ""
     end
   end
 end

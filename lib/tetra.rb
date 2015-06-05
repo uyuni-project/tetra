@@ -10,11 +10,11 @@ require "logger"
 require "open-uri"
 require "pathname"
 require "singleton"
+require "rexml/document"
 
 # third party libraries
 require "clamp"
 require "json"
-require "nokogiri"
 require "open4"
 require "rest_client"
 require "text"
