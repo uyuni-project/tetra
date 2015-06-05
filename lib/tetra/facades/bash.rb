@@ -3,6 +3,7 @@
 module Tetra
   # runs Bash with tetra-specific options
   class Bash
+    include Logging
     include ProcessRunner
 
     def initialize(project)
@@ -21,8 +22,11 @@ module Tetra
           mvn_path = kit.find_executable("mvn")
           mvn_commandline = Tetra::Mvn.commandline(@project.full_path, mvn_path)
 
-          bashrc = Bashrc.new(history_file.path, ant_commandline, mvn_commandline)
-          bashrc_file.write(bashrc.to_s)
+          bashrc_content = Bashrc.new(history_file.path, ant_commandline, mvn_commandline).to_s
+          log.debug "writing bashrc file: #{bashrc_file.path}"
+          log.debug bashrc_content
+
+          bashrc_file.write(bashrc_content)
           bashrc_file.flush
 
           run_interactive("bash --rcfile #{bashrc_file.path}")
