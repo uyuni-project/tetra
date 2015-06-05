@@ -23,7 +23,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency "rspec"
 
   s.add_runtime_dependency "clamp"
-  s.add_runtime_dependency "json"
+  s.add_runtime_dependency "json_pure"
   s.add_runtime_dependency "open4"
   s.add_runtime_dependency "rest-client"
   s.add_runtime_dependency "rubyzip", ">= 1.0"
