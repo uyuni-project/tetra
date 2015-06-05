@@ -52,7 +52,8 @@ describe Tetra::Package do
         expect(spec_lines).to include("Summary:        Nailgun is a client, protocol, and server for running Java\n")
         expect(spec_lines).to include("Url:            http://martiansoftware.com/nailgun\n")
         expect(spec_lines).to include("BuildRequires:  test-project-kit == #{@project.version}\n")
-        expect(spec_lines).to include("Provides:       mvn(com.martiansoftware:nailgun-all) == 0.9.1\n")
+        expect(spec_lines).to include("Provides:       mvn(com.martiansoftware:nailgun-server) == 0.9.1\n")
+        expect(spec_lines).to include("Provides:       mvn(com.martiansoftware:nailgun-examples) == 0.9.1\n")
         expect(spec_lines).to include("cp -a out/test3.jar %{buildroot}%{_javadir}/test3.jar\n")
       end
     end
