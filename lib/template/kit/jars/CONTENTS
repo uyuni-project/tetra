@@ -1,3 +1,0 @@
-This directory contains binary files needed to build software in src/.
-
-Only jar files not in m2/ should be placed here.

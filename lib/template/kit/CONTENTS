@@ -1,9 +1,0 @@
-This directory contains all binary files needed to build software in src/.
-
-These files will be packaged as binary and will only be used at build time.
-They will not be installed on users' systems.
-
- - jars/ contains simple jars (eg. for Ant use)
- - m2/ contains a Maven repo
- - apache-ant-* contains a stable Ant release
- - apache-maven-* contains a stable Maven release
