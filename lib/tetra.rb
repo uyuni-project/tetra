@@ -17,7 +17,6 @@ require "net/http"
 require "clamp"
 require "json"
 require "open4"
-require "rest_client"
 require "text"
 require "zip"
 
