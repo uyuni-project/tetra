@@ -36,9 +36,7 @@ module Tetra
     # returns a search result object from search.maven.com
     # see input and output format at http://search.maven.org/#api
     def search(params)
-      response = RestClient.get("http://search.maven.org/solrsearch/select",
-                                params: params.merge("rows" => "100", "wt" => "json")
-                               )
+      response = get("http://search.maven.org/solrsearch/select?", params.merge("rows" => "100", "wt" => "json"))
       json = JSON.parse(response.to_s)
       json["response"]["docs"]
     end
@@ -53,7 +51,17 @@ module Tetra
     def download_pom(group_id, artifact_id, version)
       path = "#{group_id.gsub('.', '/')}/#{artifact_id}/#{version}/#{artifact_id}-#{version}.pom"
       log.debug("downloading #{path}...")
-      (RestClient.get("http://search.maven.org/remotecontent", params: { filepath: path })).to_s
+      get("http://repo1.maven.org/maven2/#{path}", {}).to_s
     end
+
+    def get(url, params)
+      response = Net::HTTP.get_response(URI.parse(url + URI.encode_www_form(params)))
+      fail NotFoundOnMavenWebsiteError if response.code == "404"
+
+      response.body
+    end
+  end
+
+  class NotFoundOnMavenWebsiteError < StandardError
   end
 end

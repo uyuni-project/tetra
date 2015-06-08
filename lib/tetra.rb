@@ -11,6 +11,7 @@ require "open-uri"
 require "pathname"
 require "singleton"
 require "rexml/document"
+require "net/http"
 
 # third party libraries
 require "clamp"

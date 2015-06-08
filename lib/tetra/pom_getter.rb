@@ -51,7 +51,7 @@ module Tetra
             return site.download_pom(group_id, artifact_id, version), :found_via_sha1
           end
         end
-      rescue RestClient::ResourceNotFound
+      rescue NotFoundOnMavenWebsiteError
         log.warn("Got a 404 error while looking for #{file}'s SHA1 in search.maven.org")
       end
       nil
@@ -90,7 +90,7 @@ module Tetra
 
           return site.download_pom(group_id, artifact_id, version), :found_via_heuristic
         end
-      rescue RestClient::ResourceNotFound
+      rescue NotFoundOnMavenWebsiteError
         log.warn("Got a 404 error while looking for #{filename} heuristically in search.maven.org")
       end
       nil

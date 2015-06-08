@@ -10,7 +10,7 @@ See [MOTIVATION.md](MOTIVATION.md) for further information.
 
 You need:
 
-* [Ruby 1.9](https://www.ruby-lang.org/en/);
+* [Ruby 1.9.2](https://www.ruby-lang.org/en/) or later;
 * [git](http://git-scm.com/);
 * bash;
 * a JDK that can compile whatever software you need to package;

@@ -52,5 +52,10 @@ describe Tetra::MavenWebsite do
       pom_path = File.join(dir_path, "pom.xml")
       expect(site.download_pom("antlr", "antlrall", "2.7.2")).to eq(File.read(pom_path))
     end
+    it "returns an error on file not found" do
+      expect do
+        site.download_pom("does_not_exist", "does_not_exist", "does_not_exist")
+      end.to raise_error(Tetra::NotFoundOnMavenWebsiteError)
+    end
   end
 end
