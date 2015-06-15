@@ -1,6 +1,26 @@
 # encoding: UTF-8
 
+
+require "aruba/api"
+require "aruba/reporting"
+
 require "tetra"
+
+# configure aruba for rspec use
+RSpec.configure do |config|
+  config.include Aruba::Api
+
+  # use tetra executable from the bin path, not the system-installed one
+  config.before(:suite) do
+    ENV['PATH'] = "#{File.join(File.dirname(__FILE__), "..", "bin")}#{File::PATH_SEPARATOR}#{ENV['PATH']}"
+  end
+
+  # set up aruba API
+  config.before(:each) do
+    restore_env
+    clean_current_dir
+  end
+end
 
 module Tetra
   # custom mock methods
