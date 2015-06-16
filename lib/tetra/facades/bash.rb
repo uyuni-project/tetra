@@ -29,7 +29,7 @@ module Tetra
           bashrc_file.write(bashrc_content)
           bashrc_file.flush
 
-          run_interactive("bash --rcfile #{bashrc_file.path}")
+          run_interactive("bash --rcfile #{bashrc_file.path} -i")
           history = File.read(history_file)
           log.debug "history contents:"
           log.debug history
