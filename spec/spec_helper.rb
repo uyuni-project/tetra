@@ -1,6 +1,5 @@
 # encoding: UTF-8
 
-
 require "aruba/api"
 require "aruba/reporting"
 
@@ -12,7 +11,7 @@ RSpec.configure do |config|
 
   # use tetra executable from the bin path, not the system-installed one
   config.before(:suite) do
-    ENV['PATH'] = "#{File.join(File.dirname(__FILE__), "..", "bin")}#{File::PATH_SEPARATOR}#{ENV['PATH']}"
+    ENV["PATH"] = "#{File.join(File.dirname(__FILE__), '..', 'bin')}#{File::PATH_SEPARATOR}#{ENV['PATH']}"
   end
 
   # set up aruba API

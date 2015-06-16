@@ -6,7 +6,7 @@ describe "`tetra generate-all`", type: :aruba do
     cd("commons-collections")
 
     run_simple("tetra init")
-    
+
     archive_contents = File.read(File.join("spec", "data", "commons-collections-3.2.1-src.zip"))
     write_file(File.join("src", "commons-collections.zip"), archive_contents)
 
