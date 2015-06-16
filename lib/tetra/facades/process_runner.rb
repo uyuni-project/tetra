@@ -36,7 +36,9 @@ module Tetra
 
     # runs an interactive executable in a subshell
     def run_interactive(command)
+      log.debug "running `#{command}`"
       success = system({}, command)
+      log.debug "`#{command}` exited with success #{success}"
       fail ExecutionFailed.new(command, $CHILD_STATUS, nil, nil) unless success
     end
 
