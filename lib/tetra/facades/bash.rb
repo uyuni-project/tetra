@@ -30,7 +30,11 @@ module Tetra
           bashrc_file.flush
 
           run_interactive("bash --rcfile #{bashrc_file.path}")
-          File.read(history_file).split("\n").map(&:strip)
+          history = File.read(history_file)
+          log.debug "history contents:"
+          log.debug history
+
+          history.split("\n").map(&:strip)
         end
       end
     end
