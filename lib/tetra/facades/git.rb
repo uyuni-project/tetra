@@ -95,7 +95,7 @@ module Tetra
     def disable_special_files(path)
       Dir.chdir(File.join(@directory, path)) do
         Find.find(".") do |file|
-          next unless file =~ /\.gitignore?$/
+          next unless file =~ /\.git(ignore)?$/
 
           FileUtils.mv(file, "#{file}_disabled_by_tetra")
         end

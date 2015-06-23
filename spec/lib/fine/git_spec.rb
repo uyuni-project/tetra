@@ -60,12 +60,14 @@ describe Tetra::Git do
       Dir.chdir(@git_path) do
         Dir.mkdir("src")
         FileUtils.touch(File.join("src", ".gitignore"))
+        Dir.mkdir(File.join("src", ".git"))
 
         @git.disable_special_files("src")
 
         files = Dir.new("src").to_a
 
         expect(files).not_to include(".gitignore")
+        expect(files).not_to include(".git")
       end
     end
   end
