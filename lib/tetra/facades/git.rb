@@ -91,6 +91,17 @@ module Tetra
       end
     end
 
+    # renames git special files to 'disable' them
+    def disable_special_files(path)
+      Dir.chdir(File.join(@directory, path)) do
+        Find.find(".") do |file|
+          next unless file =~ /\.gitignore?$/
+
+          FileUtils.mv(file, "#{file}_disabled_by_tetra")
+        end
+      end
+    end
+
     # 3-way merges the git file at path with the one in new_path
     # assuming they have a common ancestor at the specified id
     # returns the conflict count

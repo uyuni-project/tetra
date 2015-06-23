@@ -96,26 +96,6 @@ describe Tetra::Project do
     end
   end
 
-  describe "#commit_whole_directory" do
-    it "commits the project contents to git for later use" do
-      @project.from_directory do
-        FileUtils.touch(File.join("kit", "test"))
-
-        # check that gitignore files are moved correctly
-        File.open(File.join("src", ".gitignore"), "w") do |file|
-          file.write "file"
-        end
-
-        @project.commit_whole_directory(".", "test")
-
-        files = `git ls-tree --name-only -r HEAD`.split("\n")
-        expect(files).to include("src/.gitignore_disabled_by_tetra")
-
-        expect(`git rev-list --all`.split("\n").length).to eq 2
-      end
-    end
-  end
-
   describe "#finish" do
     it "ends the current dry-run phase after a successful build" do
       @project.from_directory do

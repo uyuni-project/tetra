@@ -49,7 +49,9 @@ module Tetra
     # inits a new project directory structure
     def self.init(dir, include_bundled_software = true)
       Dir.chdir(dir) do
-        Tetra::Git.new(".").init
+        git = Tetra::Git.new(".")
+
+        git.init
 
         FileUtils.mkdir_p("src")
         FileUtils.mkdir_p("kit")
@@ -61,7 +63,7 @@ module Tetra
           FileUtils.cp_r(File.join(TEMPLATE_PATH, source), destination)
         end
 
-        project.commit_whole_directory(".", "Template files added")
+        git.commit_whole_directory(".", "Template files added")
       end
     end
 
@@ -100,7 +102,8 @@ module Tetra
     def dry_run
       current_directory = Pathname.new(Dir.pwd).relative_path_from(Pathname.new(@full_path))
 
-      commit_whole_directory(".", "Dry-run started\n", "tetra: dry-run-started: #{current_directory}")
+      @git.disable_special_files("src")
+      @git.commit_whole_directory(".", "Dry-run started\n\ntetra: dry-run-started: #{current_directory}")
     end
 
     # returns true iff we are currently dry-running
@@ -130,7 +133,7 @@ module Tetra
       comments << "tetra: sources-tarball" if first_dry_run
 
       # commit end of dry run
-      commit_whole_directory(".", *comments)
+      @git.commit_whole_directory(".", comments.join("\n"))
     end
 
     # returns true if this is the first dry-run
@@ -145,26 +148,13 @@ module Tetra
       @git.undo_last_commit
     end
 
-    # commits all files in the directory
-    def commit_whole_directory(directory, *comments)
-      # rename all .gitignore files that might have slipped in
-      from_directory("src") do
-        Find.find(".") do |file|
-          next unless file =~ /\.gitignore$/
-
-          FileUtils.mv(file, "#{file}_disabled_by_tetra")
-        end
-      end
-
-      @git.commit_whole_directory(directory, comments.join("\n"))
-    end
-
     # commits files in the src/ dir as a patch or tarball update
     def commit_sources(message, new_tarball = false)
       from_directory do
-        comments = ["#{message}\n"]
-        comments << "tetra: sources-tarball" if new_tarball
-        commit_whole_directory("src", comments)
+        comments = "#{message}\n"
+        comments << "\ntetra: sources-tarball" if new_tarball
+        @git.disable_special_files("src")
+        @git.commit_whole_directory("src", comments)
       end
     end
 

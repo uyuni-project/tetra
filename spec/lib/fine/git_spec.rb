@@ -55,6 +55,21 @@ describe Tetra::Git do
     end
   end
 
+  describe "#disable_special_files" do
+    it "renames git special files to 'disable' them" do
+      Dir.chdir(@git_path) do
+        Dir.mkdir("src")
+        FileUtils.touch(File.join("src", ".gitignore"))
+
+        @git.disable_special_files("src")
+
+        files = Dir.new("src").to_a
+
+        expect(files).not_to include(".gitignore")
+      end
+    end
+  end
+
   describe "#changed_files" do
     it "checks if a directory is clean from changes" do
       Dir.chdir(@git_path) do
