@@ -38,19 +38,50 @@ describe Tetra::Git do
     end
   end
 
-  describe "#commit_whole_directory" do
-    it "commits all contents of a directory to git for later use" do
+  describe "#commit_directories" do
+    it "commits contents of multiple directories to git for later use" do
       Dir.chdir(@git_path) do
         FileUtils.touch("file1")
-        Dir.mkdir("subdir")
-        FileUtils.touch(File.join("subdir", "file2"))
+        Dir.mkdir("subdir1")
+        FileUtils.touch(File.join("subdir1", "file2"))
+        Dir.mkdir("subdir2")
+        FileUtils.touch(File.join("subdir2", "file3"))
 
-        @git.commit_whole_directory("subdir", "test")
+        @git.commit_directories(%w(subdir1 subdir2), "test")
 
         files = `git ls-tree --name-only -r HEAD`.split("\n")
 
         expect(files).not_to include("file1")
-        expect(files).to include("subdir/file2")
+        expect(files).to include("subdir1/file2")
+        expect(files).to include("subdir2/file3")
+      end
+    end
+  end
+
+  describe "#revert_directories" do
+    it "reverts contents of multiple directories from git" do
+      Dir.chdir(@git_path) do
+        FileUtils.touch("expected_file")
+        Dir.mkdir("subdir1")
+        FileUtils.touch(File.join("subdir1", "expected_file"))
+        Dir.mkdir("subdir2")
+        FileUtils.touch(File.join("subdir2", "expected_file"))
+        @git.commit_directories(["."], "test-start")
+
+        FileUtils.touch(File.join("subdir1", "unexpected_file"))
+        FileUtils.touch(File.join("subdir2", "unexpected_file"))
+
+        @git.commit_directories(%w(subdir1 subdir2), "test-end")
+
+        @git.revert_directories(%w(subdir1 subdir2), @git.latest_id("test-start"))
+
+        files = Find.find(".").to_a
+
+        expect(files).to include("./expected_file")
+        expect(files).to include("./subdir1/expected_file")
+        expect(files).to include("./subdir2/expected_file")
+        expect(files).not_to include("./subdir1/unexpected_file")
+        expect(files).not_to include("./subdir2/unexpected_file")
       end
     end
   end

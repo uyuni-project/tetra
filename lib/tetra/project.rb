@@ -63,7 +63,7 @@ module Tetra
           FileUtils.cp_r(File.join(TEMPLATE_PATH, source), destination)
         end
 
-        git.commit_whole_directory(".", "Template files added")
+        git.commit_directories(["."], "Template files added")
       end
     end
 
@@ -103,7 +103,7 @@ module Tetra
       current_directory = Pathname.new(Dir.pwd).relative_path_from(Pathname.new(@full_path))
 
       @git.disable_special_files("src")
-      @git.commit_whole_directory(".", "Dry-run started\n\ntetra: dry-run-started: #{current_directory}")
+      @git.commit_directories(%w(src kit), "Dry-run started\n\ntetra: dry-run-started: #{current_directory}")
     end
 
     # returns true iff we are currently dry-running
@@ -122,7 +122,7 @@ module Tetra
       changed_files = @git.changed_files("src", start_id)
 
       # revert to pre-dry-run status
-      @git.revert_whole_directory("src", start_id)
+      @git.revert_directories(["src"], start_id)
 
       # prepare commit comments
       comments = ["Dry run finished\n", "tetra: dry-run-finished"]
@@ -133,7 +133,7 @@ module Tetra
       comments << "tetra: sources-tarball" if first_dry_run
 
       # commit end of dry run
-      @git.commit_whole_directory(".", comments.join("\n"))
+      @git.commit_directories(["kit"], comments.join("\n"))
     end
 
     # returns true if this is the first dry-run
@@ -142,9 +142,9 @@ module Tetra
     end
 
     # ends a dry-run assuming the build went wrong
-    # reverts the whole project directory
+    # reverts src/ and kit/ directories
     def abort
-      @git.revert_whole_directory(".", @git.latest_id("tetra: dry-run-started"))
+      @git.revert_directories(%w(src kit), @git.latest_id("tetra: dry-run-started"))
       @git.undo_last_commit
     end
 
@@ -154,7 +154,7 @@ module Tetra
         comments = "#{message}\n"
         comments << "\ntetra: sources-tarball" if new_tarball
         @git.disable_special_files("src")
-        @git.commit_whole_directory("src", comments)
+        @git.commit_directories(["src"], comments)
       end
     end
 

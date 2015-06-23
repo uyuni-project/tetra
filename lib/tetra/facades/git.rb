@@ -43,15 +43,17 @@ module Tetra
       end
     end
 
-    # adds all files in the current directory,
-    # removes all files not in the current directory,
+    # adds all files in the specified directories,
+    # removes all files not in the specified directories,
     # commits with message
-    def commit_whole_directory(directory, message)
-      Dir.chdir(@directory) do
-        log.debug "committing with message: #{message}"
+    def commit_directories(directories, message)
+      log.debug "committing with message: #{message}"
 
-        run("git rm -r --cached --ignore-unmatch #{directory}")
-        run("git add #{directory}")
+      Dir.chdir(@directory) do
+        directories.each do |directory|
+          run("git rm -r --cached --ignore-unmatch #{directory}")
+          run("git add #{directory}")
+        end
         run("git commit --allow-empty -F -", false, message)
       end
     end
@@ -65,20 +67,22 @@ module Tetra
       end
     end
 
-    # reverts path contents as per specified id
-    def revert_whole_directory(path, id)
+    # reverts multiple directories' contents as per specified id
+    def revert_directories(directories, id)
       Dir.chdir(@directory) do
-        # reverts added and modified files, both in index and working tree
-        run("git checkout -f #{id} -- #{path}")
+        directories.each do |directory|
+          # reverts added and modified files, both in index and working tree
+          run("git checkout -f #{id} -- #{directory}")
 
-        # compute the list of deleted files
-        files_in_commit = run("git ls-tree --name-only -r #{id} -- #{path}").split("\n")
-        files_in_head = run("git ls-tree --name-only -r HEAD -- #{path}").split("\n")
-        files_added_after_head = run("git ls-files -o -- #{path}").split("\n")
-        files_to_delete = files_in_head - files_in_commit + files_added_after_head
+          # compute the list of deleted files
+          files_in_commit = run("git ls-tree --name-only -r #{id} -- #{directory}").split("\n")
+          files_in_head = run("git ls-tree --name-only -r HEAD -- #{directory}").split("\n")
+          files_added_after_head = run("git ls-files -o -- #{directory}").split("\n")
+          files_to_delete = files_in_head - files_in_commit + files_added_after_head
 
-        files_to_delete.each do |file|
-          FileUtils.rm_rf(file)
+          files_to_delete.each do |file|
+            FileUtils.rm_rf(file)
+          end
         end
       end
     end
