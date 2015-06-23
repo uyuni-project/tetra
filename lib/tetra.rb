@@ -30,6 +30,7 @@ require "tetra/facades/git"
 require "tetra/facades/ant"
 require "tetra/facades/mvn"
 require "tetra/facades/bash"
+require "tetra/facades/unzip"
 
 # main internal classes
 require "tetra/version"

@@ -12,7 +12,7 @@ You need:
 
 * [Ruby 1.9.2](https://www.ruby-lang.org/en/) or later;
 * [git](http://git-scm.com/);
-* bash;
+* some basic Unix commands: bash, unzip;
 * a JDK that can compile whatever software you need to package;
 * Fedora only: packages to compile native gems, use `yum install ruby-devel gcc-c++ zlib-devel`;
 
