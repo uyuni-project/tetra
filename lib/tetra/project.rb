@@ -73,8 +73,7 @@ module Tetra
       result = {
         "kit" => ".",
         "packages" => ".",
-        "src" => ".",
-        "gitignore" => ".gitignore"
+        "src" => "."
       }
 
       if include_bundled_software

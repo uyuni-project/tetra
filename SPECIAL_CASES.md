@@ -95,6 +95,7 @@ Note that the kit packages is only needed at build time by OBS, no end user shou
 ## Gotchas
 
 * `tetra` internally uses `git` to keep track of files, any tetra project is actually also a `git` repo. Feel free to use it as any ordinary git repo, including pushing to a remote repo, rebasing, merging or using GitHub's pull requests. Just make sure any `tetra: ` comments are preserved;
+* `tetra` will commit in its `git` repo the `src` and `kit` directories during dry-run and any generated `spec` file. You are free to commit other files but it's not strictly necessary (eg. generated tarballs);
 * some Maven plugins like the Eclipse Project ones ([Tycho](https://www.eclipse.org/tycho/)) will save data in `/tmp` downloaded from the Internet and will produce errors if this data is not there during offline builds. One way to work around that is to force Java to use a kit subdirectory as `/tmp`. Add the following option to `mvn` during your build:
 
     -Djava.io.tmpdir=<full path to project>/kit/tmp
