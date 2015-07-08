@@ -35,6 +35,7 @@ require "tetra/facades/tar"
 
 # main internal classes
 require "tetra/version"
+require "tetra/project_initer"
 require "tetra/project"
 require "tetra/pom"
 require "tetra/kit"
