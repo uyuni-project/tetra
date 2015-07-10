@@ -25,7 +25,7 @@ module Tetra
           project.commit_source_archive(File.expand_path(source_archive), "Inital sources added from archive")
           puts "Sources decompressed in #{package_name}/src/, original archive copied in #{package_name}/packages/."
         else
-          puts "Please add sources to src/."
+          puts "Use \"tetra change-sources\" to add sources to this project."
         end
         puts "Please add any other precompiled build dependency to kit/."
         puts "When you are ready to test a build, use \"tetra dry-run\" from the project directory"

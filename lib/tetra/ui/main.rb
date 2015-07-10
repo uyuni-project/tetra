@@ -46,6 +46,12 @@ module Tetra
     )
 
     subcommand(
+      "change-sources",
+      "Swaps the sources for this package with new ones",
+      Tetra::PatchSubcommand
+    )
+
+    subcommand(
       "move-jars-to-kit",
       "Locates jars in src/ and moves them to kit/",
       Tetra::MoveJarsToKitSubcommand

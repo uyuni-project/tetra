@@ -22,7 +22,7 @@ If you need to modify your project's sources for whatever reason, feel free to d
 
 After that you can retry the dry-run and spec generation: tetra will take care of creating patch files and adding `%patch` instructions for you.
 
-In case you want to swap sources completely and throw away all previous patches use `tetra patch --new-tarball`.
+In case you want to swap sources with a completely new archive, discarding all previous patches use `tetra change-sources <archive> "my message"`.
 
 ## Ant builds
 
@@ -90,6 +90,19 @@ If you want to submit your package to OBS, you can do so by copying contents of 
 Packages will rebuild cleanly in OBS because no Internet access is needed - all files were already downloaded during dry-run and are included in the kit.
 
 Note that the kit packages is only needed at build time by OBS, no end user should ever install it, so you can place it in a non-public project/repository if you so wish.
+
+## Packaging software without a source archive
+
+If your package sources do not ship in a source archive (because it ships in a format other than tar or zip, or it is distributed in multiple files, etc.) you can use `tetra init --no-sources <package_name>` to start a tetra project without sources.
+
+Then you can add sources manually by:
+ * place the archives in the `packages/<project name>` directory;
+ * unpacking them in `src`;
+ * running `tetra change-sources --no-archive`;
+
+`tetra` assumes that sources in `packages/<project name>` and `src` match, except for patches as described above - it is your responsibility to keep them in sync.
+
+Note that most version control systems are able to produce an archive from a specific revision, using that is recommended over checking out raw files for `tetra` use.
 
 ## Gotchas
 
