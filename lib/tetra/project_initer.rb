@@ -8,11 +8,11 @@ module Tetra
     # path of the project template files
     TEMPLATE_PATH = File.join(File.dirname(__FILE__), "..", "template")
 
-    # let includers get class methods in ClassMethods
-    # details: http://www.railstips.org/blog/archives/2009/05/15/include-vs-extend-in-ruby/
+    # includers get class methods defined in ClassMethods
     def self.included(base)
       base.extend(ClassMethods)
     end
+    # class methods container
     module ClassMethods
       # returns true if the specified directory is a valid tetra project
       def project?(dir)
