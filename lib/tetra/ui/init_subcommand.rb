@@ -5,12 +5,12 @@ module Tetra
   class InitSubcommand < Tetra::Subcommand
     parameter "PACKAGE_NAME", "name of the package to create"
     parameter "[SOURCE_ARCHIVE]", "source tarball or zipfile"
-    option %w(-n --no-sources), :flag, "create an empty project (not recommended)", default: false
+    option %w(-n --no-archive), :flag, "create a project without a source archive (see SPECIAL_CASES.md)", default: false
 
     def execute
       checking_exceptions do
-        if source_archive.nil? && no_sources? == false
-          signal_usage_error "please specify a source archive file or use \"--no-sources\" (not recommended)."
+        if source_archive.nil? && no_archive? == false
+          signal_usage_error "please specify a source archive file or use \"--no-sources\" (see SPECIAL_CASES.md)."
         end
         if !source_archive.nil? && !File.readable?(source_archive)
           signal_usage_error "#{source_archive} is not a file or it is not readable."
