@@ -2,14 +2,12 @@ require "spec_helper"
 
 describe "`tetra generate-all`", type: :aruba do
   it "generates specs and tarballs for a sample package" do
-    run_simple("tetra init --no-sources commons-collections")
-    cd("commons-collections")
-
     archive_contents = File.read(File.join("spec", "data", "commons-collections-3.2.1-src.zip"))
-    write_file(File.join("src", "commons-collections.zip"), archive_contents)
+    write_file("commons-collections.zip", archive_contents)
 
+    run_simple("tetra init commons-collections commons-collections.zip")
+    cd("commons-collections")
     cd("src")
-    run_simple("unzip commons-collections.zip")
     cd("commons-collections-3.2.1-src")
 
     @aruba_timeout_seconds = 120
