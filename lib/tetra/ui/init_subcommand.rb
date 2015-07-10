@@ -3,12 +3,32 @@
 module Tetra
   # tetra init
   class InitSubcommand < Tetra::Subcommand
+    parameter "PACKAGE_NAME", "name of the package to create"
+    parameter "[SOURCE_ARCHIVE]", "source tarball or zipfile"
+    option %w(-n --no-sources), :flag, "create an empty project (not recommended)", default: false
+
     def execute
       checking_exceptions do
-        Tetra::Project.init(".")
-        puts "Project inited."
-        puts "Add sources to src/, binary dependencies to kit/."
-        puts "When you are ready to test a build, use \"tetra dry-run\""
+        if source_archive.nil? && no_sources? == false
+          signal_usage_error "please specify a source archive file or use \"--no-sources\" (not recommended)."
+        end
+        if !source_archive.nil? && !File.readable?(source_archive)
+          signal_usage_error "#{source_archive} is not a file or it is not readable."
+        end
+
+        Tetra::Project.init(package_name)
+        project = Tetra::Project.new(package_name)
+        puts "Project inited in #{package_name}/."
+
+        if source_archive
+          puts "Decompressing sources..."
+          project.commit_source_archive(File.expand_path(source_archive))
+          puts "Sources decompressed in #{package_name}/src/, original archive copied in #{package_name}/packages/."
+        else
+          puts "Please add sources to src/."
+        end
+        puts "Please add any other precompiled build dependency to kit/."
+        puts "When you are ready to test a build, use \"tetra dry-run\" from the project directory"
       end
     end
   end

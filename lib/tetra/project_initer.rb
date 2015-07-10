@@ -23,6 +23,7 @@ module Tetra
 
       # inits a new project directory structure
       def init(dir, include_bundled_software = true)
+        Dir.mkdir(dir)
         Dir.chdir(dir) do
           git = Tetra::Git.new(".")
 
@@ -61,6 +62,27 @@ module Tetra
       end
 
       result
+    end
+
+    # adds a source archive at the project, both in original and unpacked forms
+    def commit_source_archive(file)
+      from_directory do
+        result_dir = File.join(packages_dir, name)
+        FileUtils.mkdir_p(result_dir)
+
+        result_path = File.join(result_dir, File.basename(file))
+        FileUtils.cp(file, result_path)
+        @git.commit_file(result_path, "Source archive added")
+        p result_path
+
+        unarchiver = if file =~ /\.zip$/
+                       Tetra::Unzip.new
+                     else
+                       Tetra::Tar.new
+                     end
+
+        unarchiver.decompress(file, "src")
+      end
     end
   end
 end

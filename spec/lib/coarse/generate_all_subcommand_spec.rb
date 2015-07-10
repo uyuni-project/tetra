@@ -2,10 +2,8 @@ require "spec_helper"
 
 describe "`tetra generate-all`", type: :aruba do
   it "generates specs and tarballs for a sample package" do
-    create_dir("commons-collections")
+    run_simple("tetra init --no-sources commons-collections")
     cd("commons-collections")
-
-    run_simple("tetra init")
 
     archive_contents = File.read(File.join("spec", "data", "commons-collections-3.2.1-src.zip"))
     write_file(File.join("src", "commons-collections.zip"), archive_contents)

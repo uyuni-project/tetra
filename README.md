@@ -24,8 +24,8 @@ Install `tetra` via RubyGems:
 
 Building a package with `tetra` is quite unusual — this is a deliberate choice, so don't worry. Basic steps are:
 
-* `tetra init` a new project;
-* add sources to `src/<package name>` and anything else needed for the build in `kit/` in binary form (Ant and Maven are already pre-bundled);
+* `tetra init <package name> package_sources.tar.gz` to initialize the project and unpack original sources;
+* if anything other than `ant` and `mvn` is needed in order to build the project, add it to the `kit/` directory in binary form;
 * execute `tetra dry-run`, which will open a bash subshell. In there, build your project, and when you are done conclude quitting it with `Ctrl+D`;
 * execute `tetra generate-all`: tetra will scaffold spec files and tarballs.
 
@@ -42,21 +42,16 @@ Note that with `tetra` you are not building all dependencies from source - build
 
 ## A commons-collections walkthrough
 
-First, ceate a new `tetra` project named after the package that we want to build:
+First, grab the sources:
 
-    mkdir commons-collections
-    cd commons-collections
-    tetra init
-
-Second, place source files in the `src/` folder:
-
-    cd src
     wget http://archive.apache.org/dist/commons/collections/source/commons-collections4-4.0-src.tar.gz
-    tar xf commons-collections4-4.0-src.tar.gz
-    rm commons-collections4-4.0-src.tar.gz
-    cd commons-collections4-4.0-src/
 
-Third, you need to show `tetra` how to build your package. Run `tetra dry-run` a new subshell will open, in there do anything you would normally do to build the package:
+Second, ceate a new `tetra` project named `commons-collections` based on those sources:
+
+    tetra init commons-collections commons-collections4-4.0-src.tar.gz
+    cd commons-collections
+
+Third, you need to show `tetra` how to build your package. Run `tetra dry-run` and a new subshell will open, in there do anything you would normally do to build the package (in this case, run Maven):
 
     tetra dry-run
 
