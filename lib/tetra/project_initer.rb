@@ -65,7 +65,7 @@ module Tetra
     end
 
     # adds a source archive at the project, both in original and unpacked forms
-    def commit_source_archive(file)
+    def commit_source_archive(file, message)
       from_directory do
         result_dir = File.join(packages_dir, name)
         FileUtils.mkdir_p(result_dir)
@@ -81,6 +81,7 @@ module Tetra
                      end
 
         unarchiver.decompress(file, "src")
+        commit_sources(message, true)
       end
     end
   end

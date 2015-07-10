@@ -22,7 +22,7 @@ module Tetra
 
         if source_archive
           puts "Decompressing sources..."
-          project.commit_source_archive(File.expand_path(source_archive))
+          project.commit_source_archive(File.expand_path(source_archive), "Inital sources added from archive")
           puts "Sources decompressed in #{package_name}/src/, original archive copied in #{package_name}/packages/."
         else
           puts "Please add sources to src/."
