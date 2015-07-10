@@ -101,7 +101,7 @@ module Tetra
     end
 
     # commits files in the src/ dir as a patch or tarball update
-    def commit_sources(message, new_tarball = false)
+    def commit_sources(message, new_tarball)
       from_directory do
         comments = "#{message}\n"
         comments << "\ntetra: sources-tarball" if new_tarball
