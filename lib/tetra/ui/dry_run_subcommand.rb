@@ -7,10 +7,11 @@ module Tetra
       checking_exceptions do
         project = Tetra::Project.new(".")
 
-        if project.src_patched? && !project.first_dry_run
-          puts "Some files in src/ were changed since last dry-run,"
-          puts "use \"tetra patch message\" to include changes in a patch before dry-running."
-          puts "Dry run not started"
+        if project.src_patched?
+          puts "Changes detected in src/, please use:"
+          puts " \"tetra patch\" to include those changes in the package as a patch file"
+          puts " \"tetra change-sources\" to completely swap the source archive."
+          puts "Dry run not started."
         else
           project.dry_run
           puts "Dry-run started in a new bash shell."

@@ -54,7 +54,6 @@ module Tetra
     def dry_run
       current_directory = Pathname.new(Dir.pwd).relative_path_from(Pathname.new(@full_path))
 
-      @git.disable_special_files("src")
       @git.commit_directories(%w(src kit), "Dry-run started\n\ntetra: dry-run-started: #{current_directory}")
     end
 
@@ -81,16 +80,8 @@ module Tetra
       comments += changed_files.map { |f| "tetra: file-changed: #{f}" }
       comments += build_script_lines.map { |l| "tetra: build-script-line: #{l}" }
 
-      # if this is the first dry-run, mark sources as tarball
-      comments << "tetra: sources-tarball" if first_dry_run
-
       # commit end of dry run
       @git.commit_directories(["kit"], comments.join("\n"))
-    end
-
-    # returns true if this is the first dry-run
-    def first_dry_run
-      @git.latest_id("tetra: dry-run-finished").nil?
     end
 
     # ends a dry-run assuming the build went wrong
@@ -104,8 +95,10 @@ module Tetra
     def commit_sources(message, new_tarball)
       from_directory do
         comments = "#{message}\n"
-        comments << "\ntetra: sources-tarball" if new_tarball
-        @git.disable_special_files("src")
+        if new_tarball
+          comments << "\ntetra: sources-tarball"
+          @git.disable_special_files("src")
+        end
         @git.commit_directories(["src"], comments)
       end
     end
