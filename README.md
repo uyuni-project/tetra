@@ -26,7 +26,7 @@ Building a package with `tetra` is quite unusual — this is a deliberate choice
 
 * `tetra init <package name> package_sources.tar.gz` to initialize the project and unpack original sources;
 * if anything other than `ant` and `mvn` is needed in order to build the project, add it to the `kit/` directory in binary form;
-* execute `tetra dry-run`, which will open a bash subshell. In there, build your project, and when you are done conclude quitting it with `Ctrl+D`;
+* execute `tetra dry-run`, which will open a bash subshell. Build your project, and when you are done conclude by exiting the subshell with `Ctrl+D`;
 * execute `tetra generate-all`: tetra will scaffold spec files and tarballs.
 
 Done!
@@ -38,7 +38,7 @@ During the dry-run `tetra`:
  - keeps track of changed files, in particular produced jars, which are included in the spec's `%files` section;
  - saves files downloaded from the Internet (eg. by Maven) and packs them to later allow networkless builds.
 
-Note that with `tetra` you are not building all dependencies from source - build dependencies are aggregated in a binary-only "blob" package. While this is not ideal it is sufficient to fulfill most open source licenses and to have a repeatable, networkless build, while being a lot easier to automate.
+Note that with `tetra` you are not building all dependencies from source - build dependencies are aggregated in a binary-only "kit" package. This is typically sufficient to fulfill open source licenses and to have a repeatable, networkless build.
 
 ## A commons-collections walkthrough
 
