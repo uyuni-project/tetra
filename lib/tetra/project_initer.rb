@@ -73,7 +73,6 @@ module Tetra
         result_path = File.join(result_dir, File.basename(file))
         FileUtils.cp(file, result_path)
         @git.commit_file(result_path, "Source archive added")
-        p result_path
 
         unarchiver = if file =~ /\.zip$/
                        Tetra::Unzip.new
