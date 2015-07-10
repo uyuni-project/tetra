@@ -22,7 +22,7 @@ License:        <%= license %>
 Summary:        <%= summary %>
 Url:            <%= url %>
 Group:          Development/Libraries/Java
-Source0:        %{name}.tar.xz
+Source0:        <%= src_archive %>
 Source1:        build.sh
 <% patches.to_enum.with_index.each do |patch, i| %>
 Patch<%= i %>:         <%= patch %>
@@ -46,7 +46,7 @@ Requires:       mvn(<%= dependency_id[0] %>:<%= dependency_id[1] %>) <% if depen
 %>
 
 %prep
-%setup -q -n src
+%setup -q -c -n src
 <% patches.to_enum.with_index.each do |patch, i| %>
 %patch<%= i %> -p2
 <% end %>

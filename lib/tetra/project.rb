@@ -189,6 +189,18 @@ module Tetra
       end
     end
 
+    # returns the name of the source archive file, if any
+    def src_archive
+      from_directory do
+        Find.find(File.join("packages", name)) do |file|
+          if File.file?(file) && file.match(/\.(spec)|(sh)|(patch)$/).nil?
+            return File.basename(file)
+          end
+        end
+        nil
+      end
+    end
+
     # generates patches of src/ in packages/
     # the latest commit marked as tarball is taken as the base version,
     # other commits are assumed to be patches on top

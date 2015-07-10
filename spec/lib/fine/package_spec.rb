@@ -7,6 +7,12 @@ describe Tetra::Package do
 
   before(:each) do
     create_mock_project
+
+    Dir.chdir(@project_path) do
+      FileUtils.mkdir_p(File.join("packages", "test-project"))
+      FileUtils.touch(File.join("packages", "test-project", "test-project-4.0.tar.gz"))
+    end
+
     @project.dry_run
     Dir.chdir(@project_path) do
       FileUtils.touch(File.join("kit", "jars", "test.jar"))
@@ -51,6 +57,7 @@ describe Tetra::Package do
         expect(spec_lines).to include("License:        The Apache Software License, Version 2.0\n")
         expect(spec_lines).to include("Summary:        Nailgun is a client, protocol, and server for running Java\n")
         expect(spec_lines).to include("Url:            http://martiansoftware.com/nailgun\n")
+        expect(spec_lines).to include("Source0:        test-project-4.0.tar.gz\n")
         expect(spec_lines).to include("BuildRequires:  test-project-kit == #{@project.version}\n")
         expect(spec_lines).to include("Provides:       mvn(com.martiansoftware:nailgun-server) == 0.9.1\n")
         expect(spec_lines).to include("Provides:       mvn(com.martiansoftware:nailgun-examples) == 0.9.1\n")
