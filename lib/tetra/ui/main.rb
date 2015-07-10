@@ -28,12 +28,6 @@ module Tetra
     )
 
     subcommand(
-      "generate-archive",
-      "Create or refresh the package tarball",
-      Tetra::GenerateArchiveSubcommand
-    )
-
-    subcommand(
       "generate-spec",
       "Create or refresh the package spec file",
       Tetra::GenerateSpecSubcommand

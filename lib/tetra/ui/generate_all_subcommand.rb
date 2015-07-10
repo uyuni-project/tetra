@@ -14,8 +14,6 @@ module Tetra
 
           GenerateScriptSubcommand.new(@invocation_path).execute
 
-          GenerateArchiveSubcommand.new(@invocation_path).execute
-
           command = GenerateSpecSubcommand.new(@invocation_path)
           command.filter = filter
           command.pom = pom

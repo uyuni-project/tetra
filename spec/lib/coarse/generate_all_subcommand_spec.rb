@@ -24,7 +24,6 @@ describe "`tetra generate-all`", type: :aruba do
     expect(stdout_from("tetra generate-all")).to include("commons-collections-kit.spec generated")
     expect(stdout_from("tetra generate-all")).to include("commons-collections-kit.tar.xz generated")
     expect(stdout_from("tetra generate-all")).to include("build.sh generated")
-    expect(stdout_from("tetra generate-all")).to include("commons-collections.tar.xz generated")
     expect(stdout_from("tetra generate-all")).to include("commons-collections.spec generated")
   end
 end
