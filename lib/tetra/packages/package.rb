@@ -9,7 +9,7 @@ module Tetra
 
     attr_reader :patches
 
-    def_delegator :@project, :name, :name
+    def_delegator :@project, :name
     def_delegator :@project, :src_archive
     def_delegator :@kit, :name, :kit_name
     def_delegator :@kit, :version, :kit_version
