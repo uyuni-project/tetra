@@ -16,6 +16,7 @@ module Tetra
     module ClassMethods
       # returns true if the specified directory is a valid tetra project
       def project?(dir)
+        Tetra::Logger.instance.debug "Checking for tetra project: #{dir}, contents: #{Dir.new(dir).to_a}"
         File.directory?(File.join(dir, "src")) &&
           File.directory?(File.join(dir, "kit")) &&
           File.directory?(File.join(dir, ".git"))
