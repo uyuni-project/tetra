@@ -2,15 +2,18 @@ require "spec_helper"
 
 describe "`tetra generate-spec`", type: :aruba do
   it "outputs a warning if source files are not found" do
+    archive_contents = File.read(File.join("spec", "data", "commons-collections-3.2.1-src.zip"))
+    write_file("commons-collections.zip", archive_contents)
+
     run_simple("tetra init --no-archive commons-collections")
     cd("commons-collections")
 
-    archive_contents = File.read(File.join("spec", "data", "commons-collections-3.2.1-src.zip"))
-    write_file(File.join("src", "commons-collections.zip"), archive_contents)
-
     cd("src")
-    run_simple("unzip commons-collections.zip")
+    run_simple("unzip ../../commons-collections.zip")
     cd("commons-collections-3.2.1-src")
+
+    run_simple("tetra change-sources --no-archive")
+    expect(output_from("tetra change-sources --no-archive")).to include("New sources committed")
 
     @aruba_timeout_seconds = 120
     run_interactive("tetra dry-run")
