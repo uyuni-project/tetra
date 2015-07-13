@@ -48,7 +48,7 @@ module Tetra
     subcommand(
       "change-sources",
       "Swaps the sources for this package with new ones",
-      Tetra::PatchSubcommand
+      Tetra::ChangeSourcesSubcommand
     )
 
     subcommand(
