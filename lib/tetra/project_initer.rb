@@ -81,7 +81,7 @@ module Tetra
                        Tetra::Tar.new
                      end
 
-        Dir.glob("*").each { |f| FileUtils.rm_rf(f) }
+        Dir.glob(File.join("src", "*")).each { |f| FileUtils.rm_rf(f) }
         unarchiver.decompress(file, "src")
         commit_sources(message, true)
       end
