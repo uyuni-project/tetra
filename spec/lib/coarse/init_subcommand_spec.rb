@@ -22,9 +22,9 @@ describe "`tetra`", type: :aruba do
   end
 
   it "inits a new project without sources" do
-    run_simple("tetra init --no-sources mypackage")
+    run_simple("tetra init --no-archive mypackage")
 
-    expect(output_from("tetra init --no-sources mypackage")).to include("Project inited in mypackage/.")
+    expect(output_from("tetra init --no-archive mypackage")).to include("Project inited in mypackage/.")
 
     check_directory_presence(["mypackage"], true)
     cd("mypackage")

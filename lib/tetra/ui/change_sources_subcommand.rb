@@ -9,14 +9,14 @@ module Tetra
            default: false
 
     def execute
-      if source_archive.nil? && use_current_src_dir? == false
-        signal_usage_error "please specify a source archive file or use \"--use-current-src-dir\" (see SPECIAL_CASES.md)."
+      if source_archive.nil? && no_archive? == false
+        signal_usage_error "please specify a source archive file or use \"--no-archive\" (see SPECIAL_CASES.md)."
       end
 
       checking_exceptions do
         project = Tetra::Project.new(".")
         ensure_dry_running(:is_not_in_progress, project) do
-          if use_current_src_dir? == false
+          if no_archive? == false
             project.commit_source_archive(source_archive, message)
             puts "New sources committed."
             puts "Please delete any stale source archives from packages/ before proceeding."

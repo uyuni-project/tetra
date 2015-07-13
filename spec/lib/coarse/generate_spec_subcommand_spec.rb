@@ -2,7 +2,7 @@ require "spec_helper"
 
 describe "`tetra generate-spec`", type: :aruba do
   it "outputs a warning if source files are not found" do
-    run_simple("tetra init --no-sources commons-collections")
+    run_simple("tetra init --no-archive commons-collections")
     cd("commons-collections")
 
     archive_contents = File.read(File.join("spec", "data", "commons-collections-3.2.1-src.zip"))

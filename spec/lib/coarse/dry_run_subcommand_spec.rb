@@ -8,7 +8,7 @@ describe "`tetra dry-run`", type: :aruba do
   end
 
   it "does a dry-run build" do
-    run_simple("tetra init --no-sources mypackage")
+    run_simple("tetra init --no-archive mypackage")
     cd("mypackage")
 
     run_interactive("tetra dry-run")

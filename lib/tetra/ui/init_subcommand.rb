@@ -10,7 +10,7 @@ module Tetra
     def execute
       checking_exceptions do
         if source_archive.nil? && no_archive? == false
-          signal_usage_error "please specify a source archive file or use \"--no-sources\" (see SPECIAL_CASES.md)."
+          signal_usage_error "please specify a source archive file or use \"--no-archive\" (see SPECIAL_CASES.md)."
         end
         if !source_archive.nil? && !File.readable?(source_archive)
           signal_usage_error "#{source_archive} is not a file or it is not readable."
