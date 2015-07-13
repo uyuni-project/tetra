@@ -11,11 +11,12 @@ describe "`tetra generate-all`", type: :aruba do
     cd("commons-collections-3.2.1-src")
 
     @aruba_timeout_seconds = 120
-    run_interactive("tetra dry-run")
+    run_interactive("tetra dry-run --very-very-verbose")
     type("mvn package -DskipTests")
     type("\u{0004}") # ^D (Ctrl+D), terminates bash with exit status 0
 
     expect(all_output).to include("[INFO] BUILD SUCCESS")
+    expect(all_output).to include("Checking for tetra project")
 
     run_simple("tetra generate-all")
 
