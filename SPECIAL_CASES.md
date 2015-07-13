@@ -93,12 +93,12 @@ Note that the kit packages is only needed at build time by OBS, no end user shou
 
 ## Packaging software without a source archive
 
-If your package sources do not ship in a source archive (because it ships in a format other than tar or zip, or it is distributed in multiple files, etc.) you can use `tetra init --no-sources <package_name>` to start a tetra project without sources.
+If your package sources do not ship in a source archive you can use `tetra init --no-sources <package_name>` to start a tetra project without sources. This is in general not recommended but it might be needed if your package sources are shipped in a format other than tar or zip, or it is distributed in multiple files, etc. Note that most version control systems allow you to export a checkout of a certain version in tarball form - this is recommended in tetra (and RPM in general) over using raw source files.
 
 Then you can add sources manually by:
- * place the archives in the `packages/<project name>` directory;
- * unpacking them in `src`;
- * running `tetra change-sources --no-archive`;
+ * placing the archives in `packages/<project name>`
+ * unpacking them in `src`
+ * running `tetra change-sources --no-archive`.
 
 `tetra` assumes that sources in `packages/<project name>` and `src` match, except for patches as described above - it is your responsibility to keep them in sync.
 
