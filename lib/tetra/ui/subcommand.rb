@@ -95,7 +95,7 @@ module Tetra
     rescue Errno::EEXIST => e
       $stderr.puts e
     rescue NoProjectDirectoryError => e
-      $stderr.puts "#{e.directory} is not a tetra project directory, see tetra init"
+      $stderr.puts "#{e.directory} is not a tetra project directory, see \"tetra init\""
     rescue GitAlreadyInitedError
       $stderr.puts "This directory is already a tetra project"
     rescue ExecutionFailed => e
