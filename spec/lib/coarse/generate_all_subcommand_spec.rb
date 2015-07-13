@@ -6,9 +6,7 @@ describe "`tetra generate-all`", type: :aruba do
     write_file("commons-collections.zip", archive_contents)
 
     run_simple("tetra init commons-collections commons-collections.zip")
-    cd("commons-collections")
-    cd("src")
-    cd("commons-collections-3.2.1-src")
+    cd(File.join("commons-collections", "src", "commons-collections-3.2.1-src"))
 
     @aruba_timeout_seconds = 120
     run_interactive("tetra dry-run --very-very-verbose")
