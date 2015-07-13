@@ -34,7 +34,7 @@ describe "`tetra generate-all`", type: :aruba do
     expect(output_from("tetra dry-run")).to include("Changes detected in src")
     expect(output_from("tetra dry-run")).to include("Dry run not started")
 
-     # run patch
+    # run patch
     run_simple("tetra patch")
 
     # third dry-run succeeds with patch
@@ -103,7 +103,7 @@ describe "`tetra generate-all`", type: :aruba do
     expect(output_from("tetra dry-run")).to include("Changes detected in src")
     expect(output_from("tetra dry-run")).to include("Dry run not started")
 
-     # run patch
+    # run patch
     run_simple("tetra patch")
 
     # third dry-run succeeds with patch
