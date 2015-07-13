@@ -54,7 +54,7 @@ describe "`tetra`", type: :aruba do
     check_file_presence([File.join("packages", "commons-collections", "commons-collections.zip")], true)
 
     run_simple("git rev-list --format=%B --max-count=1 HEAD")
-    expect(stdout_from("git rev-list --format=%B --max-count=1 HEAD")).to include("Source archive added")
+    expect(stdout_from("git rev-list --format=%B --max-count=1 HEAD")).to include("Inital sources added from archive")
   end
 
   it "inits a new project with a tar source file" do
@@ -80,6 +80,6 @@ describe "`tetra`", type: :aruba do
     check_file_presence([File.join("packages", "commons-collections", "commons-collections.tar.gz")], true)
 
     run_simple("git rev-list --format=%B --max-count=1 HEAD")
-    expect(stdout_from("git rev-list --format=%B --max-count=1 HEAD")).to include("Source archive added")
+    expect(stdout_from("git rev-list --format=%B --max-count=1 HEAD")).to include("Inital sources added from archive")
   end
 end
