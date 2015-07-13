@@ -205,7 +205,7 @@ describe Tetra::Project do
         @project.commit_sources("first version", true)
 
         File.open(test_file, "w") { |f| f.write("A") }
-        @project.commit_sources("patched version")
+        @project.commit_sources("patched version", false)
 
         patches = @project.write_source_patches.map { |f| File.basename(f) }
         expect(patches).to include("0001-patched-version.patch")
