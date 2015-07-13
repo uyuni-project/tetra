@@ -17,7 +17,7 @@ module Tetra
         project = Tetra::Project.new(".")
         ensure_dry_running(:is_not_in_progress, project) do
           if no_archive? == false
-            project.commit_source_archive(source_archive, message)
+            project.commit_source_archive(File.expand_path(source_archive), message)
             puts "New sources committed."
             puts "Please delete any stale source archives from packages/ before proceeding."
           else
