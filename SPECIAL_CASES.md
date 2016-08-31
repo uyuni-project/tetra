@@ -38,6 +38,48 @@ When generating spec files, it helps to have a `pom.xml` in your package directo
 
 You can also ask `tetra` to find one via `tetra get-pom <filename>.jar`.
 
+## Maven: only build a subset of a multi-module project
+
+Maven has the ability of treating complex projects as multi-module sub-projects with an independent life cycle and `pom.xml` file (this is called Maven's Reactor).
+
+You might be interested in building only a part of a multi-module project for your package, you can accomplish that by adding:
+```
+--projects project-name1,project-name2
+```
+
+To your `mvn` commandline during dry-runs. Note that any depenedencies between modules are not automatically resolved, so you will have to pass to `--projects` all of the dependend projects manually.
+
+## Maven: add or override repositories
+
+You might want to supply a different set of Maven repositories to a project, for example in case URLs changed since the `pom.xml` file was written. In order to do that, add the following section to `kit/m2/settings.xml`:
+
+```xml
+  <profiles>
+    <profile>
+      <id>repos</id>
+      <repositories>
+        <!-- Add Maven Central -->
+        <repository>
+          <id>central</id>
+          <url>https://repo1.maven.org/maven2/</url>
+          <releases>
+            <enabled>true</enabled>
+          </releases>
+          <snapshots>
+            <enabled>true</enabled>
+          </snapshots>
+        </repository>
+      </repositories>
+    </profile>
+  </profiles>
+
+  <activeProfiles>
+    <activeProfile>repos</activeProfile>
+  </activeProfiles>
+```
+
+Plugin repositories can be added via `<pluginRepositories>` and `<pluginRepository>` tags in `<profile>` as well.
+
 ## Use different Ant or Maven versions
 
 In case the bundled Ant or Maven versions are not usable in your project for whatever reason and you want to bundle a different one, just remove their directories from `kit` and replace them with your own. `tetra` will look for binaries named `ant` or `mvn` in kit and use them wherever they are found.
