@@ -115,13 +115,16 @@ Assuming your project uses the [Gradle Wrapper](http://gradle.org/docs/current/u
 
  * during your dry-run build, add the `--gradle-user-home /tmp/gradle --project-cache-dir /tmp/gradle-project` commandline options to `gradlew` in order to download files in the `/tmp` directory instead of your home
  * after the build has finished but prior ending the dry-run, copy all files to your kit with:
+    ```
+    cp -r /tmp/gradle* kit/
+    ```
 
-      cp -r /tmp/gradle* kit/
+ * after your build script is generated, add the following line to `build.sh` in order to restore files from `kit/` to `/tmp` before `gradlew` is called:
+    ```
+    cp -r kit/* /tmp
+    ```
 
- * after your build script is generated, add the following line to `build.sh` in order to restore files from `kit/` to `/tmp`:
-      cp -r /tmp/gradle* kit/
-
- * furthermore, add the `--gradle-user-home /tmp/gradle --project-cache-dir /tmp/gradle-project --offline` commandline options to `gradlew` in `build.sh` to ensure the build will not need Internet access.
+ * furthermore, add the `--offline` commandline option to `gradlew` in `build.sh` to ensure the build will not need Internet access.
 
 Note that you cannot put files in `kit/` directly because your build would break on relocation, see [GRADLE-2690](https://issues.gradle.org/browse/GRADLE-2690).
 
