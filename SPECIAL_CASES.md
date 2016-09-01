@@ -113,10 +113,19 @@ Instructions:
 
 Assuming your project uses the [Gradle Wrapper](http://gradle.org/docs/current/userguide/gradle_wrapper.html);
 
- * during your dry-run build, add the `--gradle-user-home /tmp/gradle --project-cache-dir /tmp/gradle-project` commandline options to `gradlew` in order to download files in the `/tmp` directory instead of your home
+ * during your dry-run build, add the `--gradle-user-home /tmp/gradle --project-cache-dir /tmp/gradle-project` commandline options to `gradlew` in order to download files in the `/tmp` directory instead of your home. Typically:
+   ```
+   ./gradlew --gradle-user-home /tmp/gradle --project-cache-dir /tmp/gradle-project clean build -x test
+   ```
+   Note that gradle 1.6 has a bug and it will not honor the `--gradle-user-home` flag. Use instead:
+   ```
+   export GRADLE_USER_HOME=/tmp/gradle
+   ./gradlew --project-cache-dir /tmp/gradle-project --offline clean build -x test
+   ```
+   
  * after the build has finished but prior ending the dry-run, copy all files to your kit with:
     ```
-    cp -r /tmp/gradle* kit/
+    cp -r /tmp/gradle* ../../kit/
     ```
 
  * after your build script is generated, add the following line to `build.sh` in order to restore files from `kit/` to `/tmp` before `gradlew` is called:
