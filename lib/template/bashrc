@@ -17,7 +17,7 @@ unset HISTTIMEFORMAT
 HISTCONTROL=""
 
 # change prompt
-PS1="\e[1;33mdry-running\e[m:\w\$ "
+PS1="\[$(tput bold)\]\[\033[38;5;11m\]dry-running\[$(tput sgr0)\]\[$(tput sgr0)\]\[\033[38;5;15m\]:\w\\$ \[$(tput sgr0)\]"
 
 # add default commandline switches
 alias ant='<%= ant_commandline %>'
