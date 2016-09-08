@@ -5,7 +5,7 @@ require "spec_helper"
 describe Tetra::Unzip do
   include Tetra::Mockers
 
-  let(:zipfile) { File.join("spec", "data", "commons-collections-3.2.1-src.zip") }
+  let(:zipfile) { File.join("spec", "data", "commons-collections4-4.1-src.zip") }
   let(:unzip) { Tetra::Unzip.new }
 
   describe "#decompress"  do
@@ -15,7 +15,7 @@ describe Tetra::Unzip do
 
         files = Find.find(dir).to_a
 
-        expect(files).to include("#{dir}/commons-collections-3.2.1-src/DEVELOPERS-GUIDE.html")
+        expect(files).to include("#{dir}/commons-collections4-4.1-src/DEVELOPERS-GUIDE.html")
       end
     end
   end
