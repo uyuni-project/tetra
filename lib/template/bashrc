@@ -20,5 +20,15 @@ HISTCONTROL=""
 PS1="\[$(tput bold)\]\[\033[38;5;11m\]dry-running\[$(tput sgr0)\]\[$(tput sgr0)\]\[\033[38;5;15m\]:\w\\$ \[$(tput sgr0)\]"
 
 # add default commandline switches
+
+<% if !ant_in_kit %>
+echo -e "\e[91mWARNING: ant executable file not found in kit/, please check that it is present and executable."
+echo -e "\e[91mDefaulting to system-provided ant, this could make your builds non-reproducible."
+<% end %>
 alias ant='<%= ant_commandline %>'
+
+<% if !mvn_in_kit %>
+echo -e "\e[91mWARNING: mvn executable file not found in kit/, please check that it is present and executable."
+echo -e "\e[91mDefaulting to system-provided mvn, this could make your builds non-reproducible."
+<% end %>
 alias mvn='<%= mvn_commandline %>'
