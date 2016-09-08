@@ -57,7 +57,7 @@ describe Tetra::Project do
     end
 
     it "returns the list of template files with bundles" do
-      expect(@project.template_files(true)).to include("bundled/apache-ant-1.9.4" => "kit")
+      expect(@project.template_files(true)).to include("bundled/apache-ant-1.9.7" => "kit")
     end
   end
 
