@@ -137,6 +137,12 @@ Assuming your project uses the [Gradle Wrapper](http://gradle.org/docs/current/u
 
 Note that you cannot put files in `kit/` directly because your build would break on relocation, see [GRADLE-2690](https://issues.gradle.org/browse/GRADLE-2690).
 
+Also note that Gradle typically ships with libnative as a platform-dependent binary library. You might want to remove it from the kit for it to be free of platform-dependent files, which among other things is required for OBS on architectures that are not x86_64:
+
+```
+find kit -name "*.so" -delete
+```
+
 ## [OBS](build.opensuse.org) integration
 
 If you want to submit your package to OBS, you can do so by copying contents of the `packages` in a proper OBS project directory.
