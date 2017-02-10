@@ -34,7 +34,7 @@ It should not be used except for rebuilding other packages,
 thus it should never be installed on end users' systems.
 
 %prep
-%setup -q -n kit
+%setup -q -T -D -n .
 
 %build
 # nothing to do, precompiled by design
@@ -42,7 +42,7 @@ thus it should never be installed on end users' systems.
 %install
 export NO_BRP_CHECK_BYTECODE_VERSION=true
 install -d -m 0755 %{buildroot}%{_datadir}/tetra/
-cp -a * %{buildroot}%{_datadir}/tetra/
+tar -C %{buildroot}%{_datadir}/tetra --strip-components=1 -xjf %{S:0}
 %fdupes -s %{buildroot}%{_datadir}/tetra/
 
 %files
