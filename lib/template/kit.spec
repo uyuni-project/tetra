@@ -42,7 +42,7 @@ thus it should never be installed on end users' systems.
 %install
 export NO_BRP_CHECK_BYTECODE_VERSION=true
 install -d -m 0755 %{buildroot}%{_datadir}/tetra/
-tar -C %{buildroot}%{_datadir}/tetra --strip-components=1 -xjf %{S:0}
+tar -C %{buildroot}%{_datadir}/tetra --strip-components=1 -xJf %{S:0}
 %fdupes -s %{buildroot}%{_datadir}/tetra/
 
 %files
