@@ -113,14 +113,14 @@ Instructions:
 
 Assuming your project uses the [Gradle Wrapper](http://gradle.org/docs/current/userguide/gradle_wrapper.html);
 
- * during your dry-run build, add the `--gradle-user-home /tmp/gradle --project-cache-dir /tmp/gradle-project` commandline options to `gradlew` in order to download files in the `/tmp` directory instead of your home. Typically:
+ * during your dry-run build, add the `--gradle-user-home /tmp/gradle --project-cache-dir /tmp/gradle-project` commandline options to `gradlew` in order to download gradle files in the `/tmp` directory instead of your home. Typically:
    ```
    ./gradlew --gradle-user-home /tmp/gradle --project-cache-dir /tmp/gradle-project clean build -x test
    ```
-   Note that gradle 1.6 has a bug and it will not honor the `--gradle-user-home` flag. Use instead:
+   Note that gradle 1.6 has a bug and it will not honor the `--gradle-user-home` flag. Even if you use a fixed gradle, an old gradlew could not honor it. Use instead:
    ```
    export GRADLE_USER_HOME=/tmp/gradle
-   ./gradlew --project-cache-dir /tmp/gradle-project --offline clean build -x test
+   ./gradlew --project-cache-dir /tmp/gradle-project clean build -x test
    ```
    
  * after the build has finished but prior ending the dry-run, copy all files to your kit with:
@@ -128,7 +128,12 @@ Assuming your project uses the [Gradle Wrapper](http://gradle.org/docs/current/u
     cp -r /tmp/gradle* ../../kit/
     ```
 
- * after your build script is generated, add the following line to `build.sh` in order to restore files from `kit/` to `/tmp` before `gradlew` is called:
+ * after your build script is generated, remove from `build.sh` the following line:
+   ```
+    cp -r /tmp/gradle* ../../kit/
+   ```
+
+ * Then add the following line to `build.sh` in order to restore files from `kit/` to `/tmp` before `gradlew` is called:
     ```
     cp -r kit/* /tmp
     ```
@@ -138,6 +143,8 @@ Assuming your project uses the [Gradle Wrapper](http://gradle.org/docs/current/u
 Note that you cannot put files in `kit/` directly because your build would break on relocation, see [GRADLE-2690](https://issues.gradle.org/browse/GRADLE-2690).
 
 Also note that Gradle typically ships with libnative as a platform-dependent binary library. That means you will need to build the RPM package on an x86_64 host.
+
+Finally note that if you want to upgrade gradle and remove the previous versions, you should remove /tmp/gradle* directories, as well as the kit/gradle* directories (use git rm for this). Of course remember to adjust your gradlew call, build.gradle and/or gradle-wrapper.properties files with the new version.
 
 ## [OBS](build.opensuse.org) integration
 
