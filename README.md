@@ -27,7 +27,7 @@ Building a package with `tetra` is quite unusual — this is a deliberate choice
 * `tetra init <package name> package_sources.tar.gz` to initialize the project and unpack original sources;
 * if anything other than `ant` and `mvn` is needed in order to build the project, add it to the `kit/` directory in binary form;
 * execute `tetra dry-run`, which will open a bash subshell. Build your project, and when you are done conclude by exiting the subshell with `Ctrl+D`;
-* move into the directory that contains `pom.xml` and execute `tetra generate-all`: tetra will scaffold spec files and tarballs.
+* `cd` into the directory that contains `pom.xml` and execute `tetra generate-all`: tetra will scaffold spec files and tarballs.
 
 Done!
 
