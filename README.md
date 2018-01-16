@@ -25,7 +25,7 @@ Install `tetra` via RubyGems:
 Building a package with `tetra` is quite unusual — this is a deliberate choice, so don't worry. Basic steps are:
 
 * `tetra init <package name> package_sources.tar.gz` to initialize the project and unpack original sources;
-* cd into the newly created `<package name>` directory
+* `cd` into the newly created `<package name>` directory
 * if anything other than `ant` and `mvn` is needed in order to build the project, add it to the `kit/` directory in binary form;
 * execute `tetra dry-run`, which will open a bash subshell. Build your project, and when you are done conclude by exiting the subshell with `Ctrl+D`;
 * execute `tetra generate-all`: tetra will scaffold spec files and tarballs.
