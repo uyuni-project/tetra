@@ -1,7 +1,7 @@
 # encoding: UTF-8
 
 module Tetra
-  # encapsulates unzip
+  # encapsulates tar
   class Tar
     include ProcessRunner
 
