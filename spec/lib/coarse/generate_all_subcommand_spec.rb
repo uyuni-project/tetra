@@ -80,7 +80,7 @@ describe "`tetra generate-all`", type: :aruba do
 
     # second dry-run, all normal
     cd(File.join("src", "commons-collections4-4.1-src"))
-    @aruba_timeout_seconds = 120
+    @aruba_timeout_seconds = 240
     run_interactive("tetra dry-run")
     type("mvn package -DskipTests")
     type("\u{0004}") # ^D (Ctrl+D), terminates bash with exit status 0
