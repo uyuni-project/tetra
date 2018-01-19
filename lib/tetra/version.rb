@@ -2,5 +2,5 @@
 
 # base module for tetra
 module Tetra
-  VERSION = "2.0.3"
+  VERSION = "2.0.4"
 end
