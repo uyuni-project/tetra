@@ -161,7 +161,7 @@ module Tetra
     # since from_id
     def format_patch(directory, from_id, destination_path)
       Dir.chdir(@directory) do
-        run("git format-patch -o #{destination_path} --numbered #{from_id} -- #{directory}").split
+        run("git format-patch -o #{destination_path} --no-numbered #{from_id} -- #{directory}").split
       end
     end
   end
