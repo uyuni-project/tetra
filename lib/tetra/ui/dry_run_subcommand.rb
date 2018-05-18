@@ -3,6 +3,7 @@
 module Tetra
   # tetra dry-run
   class DryRunSubcommand < Tetra::Subcommand
+    option ["-s", "--script"], "SCRIPT", "Run these commands to build the project instead of the interactive shell"
     def execute
       checking_exceptions do
         project = Tetra::Project.new(".")
@@ -14,13 +15,17 @@ module Tetra
           puts "Dry run not started."
         else
           project.dry_run
-          puts "Dry-run started in a new bash shell."
-          puts "Build your project now, \"mvn\" and \"ant\" are already bundled by tetra."
-          puts "If the build succeedes end this dry run with ^D (Ctrl+D),"
-          puts "if the build does not succeed use ^C^D to abort and undo any change"
+          if script
+            puts "Scripted dry-run started."
+          else
+            puts "Dry-run started in a new bash shell."
+            puts "Build your project now, \"mvn\" and \"ant\" are already bundled by tetra."
+            puts "If the build succeedes end this dry run with ^D (Ctrl+D),"
+            puts "if the build does not succeed use ^C^D to abort and undo any change"
+          end
 
           begin
-            history = Tetra::Bash.new(project).bash
+            history = Tetra::Bash.new(project).bash(script)
             project.finish(history)
             puts "Dry-run finished"
           rescue ExecutionFailed
