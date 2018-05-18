@@ -17,6 +17,7 @@ describe "`tetra dry-run`", type: :aruba do
     type("\u{0004}") # ^D (Ctrl+D), terminates bash with exit status 0
 
     expect(all_output).to include("Dry-run started")
+    expect(all_output).to include("bash shell")
     expect(all_output).to include("ciao")
     expect(all_output).to include("Dry-run finished")
 
@@ -27,5 +28,22 @@ describe "`tetra dry-run`", type: :aruba do
     run_simple("git rev-list --format=%B --max-count=1 HEAD")
     expect(stdout_from("git rev-list --format=%B --max-count=1 HEAD")).to include("tetra: dry-run-finished")
     expect(stdout_from("git rev-list --format=%B --max-count=1 HEAD")).to include("tetra: build-script-line: echo ciao")
+  end
+
+  it "does a scripted dry-run" do
+    run_simple("tetra init --no-archive mypackage")
+    cd("mypackage")
+
+    run_interactive("tetra dry-run -s 'echo ciao > ciao.jar'")
+
+    expect(all_output).to include("Scripted dry-run started")
+
+    # check that markers were written in git repo
+    run_simple("git rev-list --format=%B --max-count=1 HEAD~")
+    expect(stdout_from("git rev-list --format=%B --max-count=1 HEAD~")).to include("tetra: dry-run-started")
+
+    run_simple("git rev-list --format=%B --max-count=1 HEAD")
+    expect(stdout_from("git rev-list --format=%B --max-count=1 HEAD")).to include("tetra: dry-run-finished")
+    expect(stdout_from("git rev-list --format=%B --max-count=1 HEAD")).to include("tetra: build-script-line: echo ciao > ciao.jar")
   end
 end

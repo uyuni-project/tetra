@@ -12,7 +12,7 @@ module Tetra
 
     # runs bash in a subshell, returns list of
     # commands that were run in the session
-    def bash
+    def bash(command = nil)
       Tempfile.open("tetra-history") do |history_file|
         Tempfile.open("tetra-bashrc") do |bashrc_file|
           kit = Tetra::Kit.new(@project)
@@ -31,12 +31,17 @@ module Tetra
           bashrc_file.write(bashrc_content)
           bashrc_file.flush
 
-          run_interactive("bash --rcfile #{bashrc_file.path} -i")
-          history = File.read(history_file)
-          log.debug "history contents:"
-          log.debug history
+          if command
+            run("bash --rcfile #{bashrc_file.path} -i -c '#{command}'")
+            [command]
+          else
+            run_interactive("bash --rcfile #{bashrc_file.path} -i")
+            history = File.read(history_file)
+            log.debug "history contents:"
+            log.debug history
 
-          history.split("\n").map(&:strip)
+            history.split("\n").map(&:strip)
+          end
         end
       end
     end
