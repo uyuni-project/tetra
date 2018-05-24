@@ -39,9 +39,10 @@ describe Tetra::Scriptable do
 
         expect(lines).to include("#!/bin/bash\n")
         expect(lines).to include("cd somewhere significant\n")
-        expect(lines).to include("$PROJECT_PREFIX/kit/mvn/bin/mvn \
+        expect(lines).to include("mvn --options\n")
+        expect(lines).to include("alias mvn='$PROJECT_PREFIX/kit/mvn/bin/mvn \
 -Dmaven.repo.local=$PROJECT_PREFIX/kit/m2 --settings $PROJECT_PREFIX/kit/m2/settings.xml \
---strict-checksums -o --options\n"
+--strict-checksums -o'\n"
                                 )
 
         expect(lines).not_to include("some earlier command\n")
