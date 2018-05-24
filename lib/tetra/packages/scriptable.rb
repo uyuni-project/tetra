@@ -11,7 +11,7 @@ module Tetra
           "set -xe",
           "PROJECT_PREFIX=`readlink -e .`",
           "cd #{project.latest_dry_run_directory}"
-        ] + script_body(project)
+        ] + aliases(project) + project.build_script_lines
 
         new_content = script_lines.join("\n") + "\n"
 
@@ -25,27 +25,20 @@ module Tetra
       end
     end
 
-    # returns the script body by taking the last dry-run's
-    # build script lines and adjusting mvn and ant's paths
-    def script_body(project)
-      lines = project.build_script_lines
-
+    # setup aliases for adjusted versions of the packaging tools
+    def aliases(project)
       kit = Tetra::Kit.new(project)
+
+      aliases = []
       ant_path = kit.find_executable("ant")
       ant_commandline = Tetra::Ant.commandline("$PROJECT_PREFIX", ant_path)
+      aliases << "alias ant='#{ant_commandline}'"
 
       mvn_path = kit.find_executable("mvn")
       mvn_commandline = Tetra::Mvn.commandline("$PROJECT_PREFIX", mvn_path)
+      aliases << "alias mvn='#{mvn_commandline} -o'"
 
-      lines.map do |line|
-        if line =~ /^ant( .*)?$/
-          line.gsub(/^ant/, ant_commandline)
-        elsif line =~ /^mvn( .*)?$/
-          line.gsub(/^mvn/, "#{mvn_commandline} -o")
-        else
-          line
-        end
-      end
+      aliases
     end
   end
 end
