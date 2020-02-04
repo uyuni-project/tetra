@@ -122,7 +122,7 @@ Assuming your project uses the [Gradle Wrapper](http://gradle.org/docs/current/u
    export GRADLE_USER_HOME=/tmp/gradle
    ./gradlew --project-cache-dir /tmp/gradle-project clean build -x test
    ```
-   
+
  * after the build has finished but prior ending the dry-run, copy all files to your kit with:
     ```
     cp -r /tmp/gradle* ../../kit/
@@ -145,6 +145,32 @@ Note that you cannot put files in `kit/` directly because your build would break
 Also note that Gradle typically ships with libnative as a platform-dependent binary library. That means you will need to build the RPM package on an x86_64 host.
 
 Finally note that if you want to upgrade gradle and remove the previous versions, you should remove /tmp/gradle* directories, as well as the kit/gradle* directories (use git rm for this). Of course remember to adjust your gradlew call, build.gradle and/or gradle-wrapper.properties files with the new version.
+
+### Upgrading Gradle
+
+When a newer Gradle is needed (eg. to support a newer JDK) in projects that use the Gradle Wrapper, the following procedure can be followed:
+
+```bash
+# update the Gradle URL to the new version
+sed -i "s#distributionUrl=.*#distributionUrl=https\://services.gradle.org/distributions/gradle-4.10.2-bin.zip#g" gradle/wrapper/gradle-wrapper.properties
+
+# run Gradle Wrapper to download the latest Gradle version
+export GRADLE_USER_HOME=/tmp/gradle
+./gradlew wrapper --gradle-version 4.10.2 --project-cache-dir /tmp/gradle-project
+
+# Patch sources
+git add gradlew* gradle/wrapper/gradle-wrapper.properties
+git commit -m "Update Gradle Wrapper"
+
+# Patch kit
+cp -r /tmp/gradle* ../../kit/
+cp gradle/wrapper/gradle-wrapper.jar ../../kit
+git add ../../kit
+git checkout gradle/wrapper/gradle-wrapper.jar
+git commit -m "Update Gradle"
+```
+
+Now dry-run again as per the above instructions.
 
 ## [OBS](build.opensuse.org) integration
 
