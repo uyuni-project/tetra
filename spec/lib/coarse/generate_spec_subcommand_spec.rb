@@ -15,7 +15,7 @@ describe "`tetra generate-spec`", type: :aruba do
     run_simple("tetra change-sources --no-archive")
     expect(output_from("tetra change-sources --no-archive")).to include("New sources committed")
 
-    @aruba_timeout_seconds = 240
+    @aruba_timeout_seconds = 300
     run_interactive("tetra dry-run")
     type("mvn package -DskipTests")
     type("\u{0004}") # ^D (Ctrl+D), terminates bash with exit status 0
