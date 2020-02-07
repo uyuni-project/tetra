@@ -38,6 +38,9 @@ module Tetra
       mvn_commandline = Tetra::Mvn.commandline("$PROJECT_PREFIX", mvn_path)
       aliases << "alias mvn='#{mvn_commandline} -o'"
 
+      gradle_commandline = Tetra::Gradle.commandline("$PROJECT_PREFIX")
+      aliases << "alias gradlew='#{gradle_commandline} --offline'"
+
       aliases
     end
   end

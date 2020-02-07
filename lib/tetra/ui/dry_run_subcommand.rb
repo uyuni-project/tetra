@@ -18,8 +18,10 @@ module Tetra
           if script
             puts "Scripted dry-run started."
           else
-            puts "Dry-run started in a new bash shell."
-            puts "Build your project now, \"mvn\" and \"ant\" are already bundled by tetra."
+            puts "Dry-run started in a new bash shell. Build your project now!"
+            puts "Note that:"
+            puts " - \"mvn\" and \"ant\" are already bundled by tetra"
+            puts " - you have to use \"gradlew\" instad of \"./gradlew\" to launch a Gradle wrapper"
             puts "If the build succeedes end this dry run with ^D (Ctrl+D),"
             puts "if the build does not succeed use ^C^D to abort and undo any change"
           end

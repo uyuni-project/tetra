@@ -32,3 +32,5 @@ echo -e "\e[91mWARNING: mvn executable file not found in kit/, please check that
 echo -e "\e[91mDefaulting to system-provided mvn, this could make your builds non-reproducible."
 <% end %>
 alias mvn='<%= mvn_commandline %>'
+
+alias gradlew='<%= gradle_commandline %>'
