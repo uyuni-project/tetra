@@ -11,3 +11,8 @@ sudo rake install
 ```
 
 To run tests, simply run `rake`. Please note that tests are divided into fine (more similar to unit tests) and coarse (more similar to integration tests).
+
+# Release
+
+Install gem-release: `gem install gem-release`
+Bump a patch version: `gem bump -v patch -p -t -r`
