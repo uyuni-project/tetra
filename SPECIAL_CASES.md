@@ -26,7 +26,7 @@ In case you want to swap sources with a completely new archive, discarding all p
 
 ## Ant builds
 
-Ant is supported as well as Maven. You have a prebundled copy in `kit`, and using `ant` from a dry-run will use that by default.
+Ant is fully supported. You have a prebundled copy in `kit`, and using `ant` from a dry-run will use that by default.
 
 Sometimes you will have jar files distributed along with the source archive that will end up in `src/`: you don't want that! Run:
 
@@ -86,6 +86,74 @@ In case the bundled Ant or Maven versions are not usable in your project for wha
 
 You can also use system-provided Ant and Maven by simply deleting their directories from `kit/`. Note that this is not recommended because a different version might be used at build time (for example in OBS), potentially resulting in non-reproducible builds.
 
+## Gradle
+
+`tetra` fully supports projects using Gradle from version 6.1.1 on. Previous versions require a different procedure to work around the impossibility to relocate Gradle's cache, see below.
+
+To build a project with a [Gradle Wrapper](http://gradle.org/docs/current/userguide/gradle_wrapper.html), just use `gradlew` instead of `./gradlew` during dry run.
+
+Please note that Gradle typically ships with libnative as a platform-dependent binary library. That means you will need to build the RPM package on an x86_64 host.
+
+### Pre-6.1.1 Gradle
+
+* during your dry-run build, add the `--gradle-user-home /tmp/gradle --project-cache-dir /tmp/gradle-project` commandline options to `gradlew` in order to download gradle files in the `/tmp` directory instead of your home. Typically:
+  ```
+  ./gradlew --gradle-user-home /tmp/gradle --project-cache-dir /tmp/gradle-project clean build -x test
+  ```
+  Note that gradle 1.6 has a bug and it will not honor the `--gradle-user-home` flag. Even if you use a fixed gradle, an old gradlew could not honor it. Use instead:
+  ```
+  export GRADLE_USER_HOME=/tmp/gradle
+  ./gradlew --project-cache-dir /tmp/gradle-project clean build -x test
+  ```
+
+* after the build has finished but prior ending the dry-run, copy all files to your kit with:
+   ```
+   cp -r /tmp/gradle* ../../kit/
+   ```
+
+* after your build script is generated, remove from `build.sh` the following line:
+  ```
+   cp -r /tmp/gradle* ../../kit/
+  ```
+
+* Then add the following line to `build.sh` in order to restore files from `kit/` to `/tmp` before `gradlew` is called:
+   ```
+   cp -r kit/* /tmp
+   ```
+
+* furthermore, add the `--offline` commandline option to `gradlew` in `build.sh` to ensure the build will not need Internet access.
+
+Note that you cannot put files in `kit/` directly because your build would break on relocation, see [GRADLE-2690](https://issues.gradle.org/browse/GRADLE-2690).
+
+Finally note that if you want to upgrade gradle and remove the previous versions, you should remove /tmp/gradle* directories, as well as the kit/gradle* directories (use git rm for this). Of course remember to adjust your gradlew call, build.gradle and/or gradle-wrapper.properties files with the new version.
+
+### Upgrading Gradle
+
+When a newer Gradle is needed (eg. to support a newer JDK) in projects that use the Gradle Wrapper, the following procedure can be followed:
+
+```bash
+# update the Gradle URL to the new version
+sed -i "s#distributionUrl=.*#distributionUrl=https\://services.gradle.org/distributions/gradle-6.1.1-bin.zip#g" gradle/wrapper/gradle-wrapper.properties
+
+# run Gradle Wrapper to download the latest Gradle version
+export GRADLE_USER_HOME=/tmp/gradle
+./gradlew wrapper --gradle-version 6.1.1 --project-cache-dir /tmp/gradle-project
+
+# Patch sources. Depending on the project setup you might need additional steps here, see Gradle upgrade documentation
+# at https://docs.gradle.org/current/userguide/upgrading_version_6.html
+git add gradlew* gradle/wrapper/gradle-wrapper.properties
+git commit -m "Update Gradle Wrapper"
+
+# Patch kit
+cp -r /tmp/gradle* ../../kit/
+cp gradle/wrapper/gradle-wrapper.jar ../../kit
+git add ../../kit
+git checkout gradle/wrapper/gradle-wrapper.jar
+git commit -m "Update Gradle"
+```
+
+Now dry-run again as per the above instructions.
+
 ## Other build tools
 
 Other build tools are currently not supported out-of-the-box but you can still use them with some manual tweaking. You should basically make sure that:
@@ -108,69 +176,6 @@ Instructions:
  * during your dry-run build, add the `-Dsbt.global.base=../../kit/sbt-global-base` commandline option to `sbt` in order to download files in the `kit` directory;
  * if your build also uses Ivy, add `-Dsbt.ivy.home=../../kit/ivy2` as well;
  * after your build script is generated, add the `"set offline := true"` commandline option to `sbt` to `build.sh` to ensure the build will not need Internet access.
-
-### gradle
-
-Assuming your project uses the [Gradle Wrapper](http://gradle.org/docs/current/userguide/gradle_wrapper.html);
-
- * during your dry-run build, add the `--gradle-user-home /tmp/gradle --project-cache-dir /tmp/gradle-project` commandline options to `gradlew` in order to download gradle files in the `/tmp` directory instead of your home. Typically:
-   ```
-   ./gradlew --gradle-user-home /tmp/gradle --project-cache-dir /tmp/gradle-project clean build -x test
-   ```
-   Note that gradle 1.6 has a bug and it will not honor the `--gradle-user-home` flag. Even if you use a fixed gradle, an old gradlew could not honor it. Use instead:
-   ```
-   export GRADLE_USER_HOME=/tmp/gradle
-   ./gradlew --project-cache-dir /tmp/gradle-project clean build -x test
-   ```
-
- * after the build has finished but prior ending the dry-run, copy all files to your kit with:
-    ```
-    cp -r /tmp/gradle* ../../kit/
-    ```
-
- * after your build script is generated, remove from `build.sh` the following line:
-   ```
-    cp -r /tmp/gradle* ../../kit/
-   ```
-
- * Then add the following line to `build.sh` in order to restore files from `kit/` to `/tmp` before `gradlew` is called:
-    ```
-    cp -r kit/* /tmp
-    ```
-
- * furthermore, add the `--offline` commandline option to `gradlew` in `build.sh` to ensure the build will not need Internet access.
-
-Note that you cannot put files in `kit/` directly because your build would break on relocation, see [GRADLE-2690](https://issues.gradle.org/browse/GRADLE-2690).
-
-Also note that Gradle typically ships with libnative as a platform-dependent binary library. That means you will need to build the RPM package on an x86_64 host.
-
-Finally note that if you want to upgrade gradle and remove the previous versions, you should remove /tmp/gradle* directories, as well as the kit/gradle* directories (use git rm for this). Of course remember to adjust your gradlew call, build.gradle and/or gradle-wrapper.properties files with the new version.
-
-### Upgrading Gradle
-
-When a newer Gradle is needed (eg. to support a newer JDK) in projects that use the Gradle Wrapper, the following procedure can be followed:
-
-```bash
-# update the Gradle URL to the new version
-sed -i "s#distributionUrl=.*#distributionUrl=https\://services.gradle.org/distributions/gradle-4.10.2-bin.zip#g" gradle/wrapper/gradle-wrapper.properties
-
-# run Gradle Wrapper to download the latest Gradle version
-export GRADLE_USER_HOME=/tmp/gradle
-./gradlew wrapper --gradle-version 4.10.2 --project-cache-dir /tmp/gradle-project
-
-# Patch sources
-git add gradlew* gradle/wrapper/gradle-wrapper.properties
-git commit -m "Update Gradle Wrapper"
-
-# Patch kit
-cp -r /tmp/gradle* ../../kit/
-cp gradle/wrapper/gradle-wrapper.jar ../../kit
-git add ../../kit
-git checkout gradle/wrapper/gradle-wrapper.jar
-git commit -m "Update Gradle"
-```
-
-Now dry-run again as per the above instructions.
 
 ## [OBS](build.opensuse.org) integration
 

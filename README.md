@@ -77,9 +77,7 @@ An in-depth discussion of this project's motivation is available in the [MOTIVAT
 
 ## Status
 
-`tetra` will soon hit 1.0. If you are a packager you can try to use it, any feedback would be **very** welcome!
-
-At the moment `tetra` is tested on openSUSE and Ubuntu.
+`tetra` is considered stable. At the moment `tetra` is tested on openSUSE and Ubuntu.
 
 ## Sources
 
