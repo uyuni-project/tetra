@@ -84,8 +84,6 @@ Plugin repositories can be added via `<pluginRepositories>` and `<pluginReposito
 
 In case the bundled Ant or Maven versions are not usable in your project for whatever reason and you want to bundle a different one, just remove their directories from `kit` and replace them with your own. `tetra` will look for binaries named `ant` or `mvn` in kit and use them wherever they are found.
 
-You can also use system-provided Ant and Maven by simply deleting their directories from `kit/`. Note that this is not recommended because a different version might be used at build time (for example in OBS), potentially resulting in non-reproducible builds.
-
 ## Gradle
 
 `tetra` fully supports projects using Gradle from version 6.1.1 on. Previous versions require a different procedure to work around the impossibility to relocate Gradle's cache, see below.
