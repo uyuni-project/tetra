@@ -84,15 +84,19 @@ Plugin repositories can be added via `<pluginRepositories>` and `<pluginReposito
 
 In case the bundled Ant or Maven versions are not usable in your project for whatever reason and you want to bundle a different one, just remove their directories from `kit` and replace them with your own. `tetra` will look for binaries named `ant` or `mvn` in kit and use them wherever they are found.
 
-## Gradle
+## Gradle 
 
-`tetra` fully supports projects using Gradle from version 6.1.1 on. Previous versions require a different procedure to work around the impossibility to relocate Gradle's cache, see below.
+### Recent versions (>= 6.1.1)
+
+`tetra` fully supports projects using Gradle from version 6.1.1 on. 
 
 To build a project with a [Gradle Wrapper](http://gradle.org/docs/current/userguide/gradle_wrapper.html), just use `gradlew` instead of `./gradlew` during dry run.
 
 Please note that Gradle typically ships with libnative as a platform-dependent binary library. That means you will need to build the RPM package on an x86_64 host.
 
-### Pre-6.1.1 Gradle
+### Older versions (<6.1.1)
+
+Here are special instructions valid for previous versions only, as they require a different procedure to work around the impossibility to relocate Gradle's cache.
 
 * during your dry-run build, add the `--gradle-user-home /tmp/gradle --project-cache-dir /tmp/gradle-project` commandline options to `gradlew` in order to download gradle files in the `/tmp` directory instead of your home. Typically:
   ```
@@ -125,9 +129,9 @@ Note that you cannot put files in `kit/` directly because your build would break
 
 Finally note that if you want to upgrade gradle and remove the previous versions, you should remove /tmp/gradle* directories, as well as the kit/gradle* directories (use git rm for this). Of course remember to adjust your gradlew call, build.gradle and/or gradle-wrapper.properties files with the new version.
 
-### Upgrading Gradle
+### Upgrading Gradle to versions older than 6.1.1
 
-When a newer Gradle is needed (eg. to support a newer JDK) in projects that use the Gradle Wrapper, the following procedure can be followed:
+In case you need to upgrade Gradle (eg. to support a newer JDK), but still on a version lower than 6.1.1, the following procedure can be followed:
 
 ```bash
 # update the Gradle URL to the new version
