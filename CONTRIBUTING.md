@@ -1,4 +1,6 @@
-# Development environment
+# Contributing
+
+## Development environment
 
 To develop tetra, you will need:
 
