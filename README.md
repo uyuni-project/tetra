@@ -10,8 +10,8 @@ See [MOTIVATION.md](MOTIVATION.md) for further information.
 
 You need:
 
-* [Ruby 1.9.2](https://www.ruby-lang.org/en/) or later;
-* [git](http://git-scm.com/) with your credentials set in ~/.gitconfig (name and email)
+* [Ruby 1.9.2](https://www.ruby-lang.org) or later;
+* [git](https://git-scm.com) with your credentials set in ~/.gitconfig (name and email);
 * some basic Unix commands: bash, unzip, tar;
 * a JDK that can compile whatever software you need to package;
 * Fedora only: packages to compile native gems, use `yum install ruby-devel gcc-c++ zlib-devel`;
@@ -35,9 +35,10 @@ Done!
 ### How can that possibly work?
 
 During the dry-run `tetra`:
- - saves your bash history, so that it can use it later to scaffold a build script;
- - keeps track of changed files, in particular produced jars, which are included in the spec's `%files` section;
- - saves files downloaded from the Internet (eg. by Maven) and packs them to later allow networkless builds.
+
+* saves your bash history, so that it can use it later to scaffold a build script;
+* keeps track of changed files, in particular produced jars, which are included in the spec's `%files` section;
+* saves files downloaded from the Internet (eg. by Maven) and packs them to later allow networkless builds.
 
 Note that with `tetra` you are not building all dependencies from source - build dependencies are aggregated in a binary-only "kit" package. This is typically sufficient to fulfill open source licenses and to have a repeatable, networkless build.
 
@@ -45,9 +46,9 @@ Note that with `tetra` you are not building all dependencies from source - build
 
 First, grab the sources:
 
-    wget http://archive.apache.org/dist/commons/collections/source/commons-collections4-4.0-src.tar.gz
+    wget https://archive.apache.org/dist/commons/collections/source/commons-collections4-4.4-src.tar.gz
 
-Second, ceate a new `tetra` project named `commons-collections` based on those sources:
+Second, create a new `tetra` project named `commons-collections` based on those sources:
 
     tetra init commons-collections commons-collections4-4.0-src.tar.gz
     cd commons-collections/src/commons-collections4-4.0-src
@@ -83,11 +84,11 @@ An in-depth discussion of this project's motivation is available in the [MOTIVAT
 
 `tetra`'s Git repo is available on GitHub, which can be browsed at:
 
-    https://github.com/SilvioMoioli/tetra
+    https://github.com/uyuni-project/tetra
 
 and cloned with:
 
-    git clone git@github.com:SilvioMoioli/tetra.git
+    git clone git@github.com:uyuni-project/tetra.git
 
 ## Contact
 
