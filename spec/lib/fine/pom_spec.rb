@@ -39,7 +39,7 @@ describe Tetra::Pom do
     end
   end
 
-  # rubocop:disable Metrics/LineLength, Style/TrailingWhitespace
+  # rubocop:disable Layout/LineLength, Layout/TrailingWhitespace
   describe "#description" do
     it "reads the description" do
       expect(commons_pom.description).to eq "Commons Logging is a thin adapter allowing configurable bridging to other,
@@ -55,7 +55,7 @@ describe Tetra::Pom do
       expect(struts_apps_pom.description).to eq ""
     end
   end
-  # rubocop:enable Metrics/LineLength, Style/TrailingWhitespace
+  # rubocop:enable Layout/LineLength, Layout/TrailingWhitespace
 
   describe "#url" do
     it "reads the url" do

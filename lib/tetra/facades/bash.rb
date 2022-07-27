@@ -26,7 +26,8 @@ module Tetra
 
           gradle_commandline = Tetra::Gradle.commandline(@project.full_path)
 
-          bashrc_content = Bashrc.new(history_file.path, ant_in_kit, ant_commandline, mvn_in_kit, mvn_commandline, gradle_commandline).to_s
+          bashrc_content = Bashrc.new(history_file.path, ant_in_kit, ant_commandline, mvn_in_kit, mvn_commandline,
+                                      gradle_commandline).to_s
           log.debug "writing bashrc file: #{bashrc_file.path}"
           log.debug bashrc_content
 
