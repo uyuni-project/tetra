@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-source "http://rubygems.org"
+source "https://rubygems.org"
 
 # See tetra.gemspec
 gemspec
