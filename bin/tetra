@@ -6,9 +6,7 @@
 # Copyright 2015 Silvio Moioli <moio@suse.de>
 #
 
-if File.exist?(File.join(File.dirname(__FILE__), "..", ".git"))
-  $LOAD_PATH << File.join(File.dirname(__FILE__), "..", "lib")
-end
+$LOAD_PATH << File.join(File.dirname(__FILE__), "..", "lib") if File.exist?(File.join(File.dirname(__FILE__), "..", ".git"))
 
 begin
   require "tetra"

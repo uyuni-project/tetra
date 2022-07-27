@@ -19,4 +19,8 @@ jobs:
 
     - name: Run RuboCop
       run: |
-        rubocop
+        rubocop 'bin/tetra'
+        rubocop 'lib/tetra.rb'
+        rubocop 'lib/tetra/'
+        rubocop 'spec/spec_helper.rb'
+        rubocop 'spec/lib'
