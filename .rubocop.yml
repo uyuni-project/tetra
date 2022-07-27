@@ -1,23 +1,28 @@
-ClassLength:
-  Max: 200
+inherit_from: .rubocop_todo.yml
 
-LineLength:
+AllCops:
+  NewCops: enable
+
+Layout/LineLength:
   Max: 120
 
-MethodLength:
+Metrics/ClassLength:
+  Max: 200
+
+Metrics/MethodLength:
   Max: 40
 
-AbcSize:
+Metrics/AbcSize:
   Max: 50
 
-CyclomaticComplexity:
+Metrics/CyclomaticComplexity:
   Max: 20
 
-PerceivedComplexity:
+Metrics/PerceivedComplexity:
   Max: 20
 
-StringLiterals:
+Style/StringLiterals:
   EnforcedStyle: double_quotes
 
-MultilineBlockChain:
+Style/MultilineBlockChain:
   Enabled: false
