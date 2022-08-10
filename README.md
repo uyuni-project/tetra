@@ -90,12 +90,6 @@ and cloned with:
 
     git clone git@github.com:uyuni-project/tetra.git
 
-## Contact
-
-Are you using `tetra` or even just reading this? Let's get in touch!
-
-    moio at suse dot de
-
 ## License
 
 MIT license.

@@ -5,9 +5,9 @@ require "tetra/version"
 Gem::Specification.new do |s|
   s.name = "tetra"
   s.version = Tetra::VERSION
-  s.authors = ["Silvio Moioli"]
-  s.email = ["smoioli@suse.de"]
-  s.homepage = "https://github.com/SilvioMoioli/tetra"
+  s.authors = ["Dominik Gedon", "Silvio Moioli"]
+  s.email = ["dgedon@suse.de"]
+  s.homepage = "https://github.com/uyuni-project/tetra"
   s.summary = "A tool to package Java projects"
   s.description = "Tetra simplifies the creation of spec files and archives to distribute Java projects in RPM format"
   s.license = "MIT"
