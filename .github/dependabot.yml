@@ -6,15 +6,11 @@ updates:
     directory: "/"
     schedule:
       interval: "daily"
-    labels:
-      - "ci"
 
   - package-ecosystem: "bundler"
     directory: "/"
     schedule:
       interval: "daily"
-    labels:
-      - "bundler"
 
   - package-ecosystem: "maven"
     # Files stored in `app` directory
@@ -26,6 +22,3 @@ updates:
     # will be extended once more dependabot alerts occur
       - dependency-name: "org.apache.struts:struts2-core "
       - dependency-name: "log4j:log4j"
-    labels:
-      - "maven"
-      - "dependencies"
