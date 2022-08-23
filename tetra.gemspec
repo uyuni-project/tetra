@@ -26,6 +26,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency "clamp"
   s.add_runtime_dependency "json_pure"
   s.add_runtime_dependency "open4"
+  s.add_runtime_dependency "rexml"
   s.add_runtime_dependency "rubyzip", ">= 1.0"
   s.add_runtime_dependency "text"
 end
