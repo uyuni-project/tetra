@@ -12,8 +12,6 @@ Gem::Specification.new do |s|
   s.description = "Tetra simplifies the creation of spec files and archives to distribute Java projects in RPM format"
   s.license = "MIT"
 
-  s.rubyforge_project = "tetra"
-
   s.files = `git ls-files`.split("\n")
   s.test_files = `git ls-files -- {test,spec,features}/*`.split("\n")
   s.executables = `git ls-files -- bin/*`.split("\n").map { |f| File.basename(f) }
