@@ -1,5 +1,7 @@
 # encoding: UTF-8
 
+require "erb"
+
 module Tetra
   # adds methods to generate text files from an ERB template
   module Generatable
@@ -10,7 +12,7 @@ module Tetra
 
     # generates content from an ERB template and an object binding
     def generate(template_name, object_binding)
-      erb = ERB.new(File.read(File.join(template_path, template_name)), nil, "<>")
+      erb = ERB.new(File.read(File.join(template_path, template_name)), trim_mode: "<>")
       erb.result(object_binding)
     end
   end
