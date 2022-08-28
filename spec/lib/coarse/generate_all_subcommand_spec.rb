@@ -148,7 +148,6 @@ describe "`tetra generate-all`", type: :aruba do
     expect(last_command_started).to have_output(/commons-collections.spec generated/)
     expect(last_command_started).to have_output(/0001-Sources-updated.patch generated/)
 
-
     with_file_content("../../packages/commons-collections/commons-collections.spec") do |content|
       expect(content).to include("0001-Sources-updated.patch")
       expect(content).to include("commons-collections.zip")

@@ -1,7 +1,6 @@
 require "spec_helper"
 
 describe "`tetra`" do
-
   it "shows an error if required parameters are not set" do
     run_command("tetra init")
 
