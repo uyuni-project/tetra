@@ -1,27 +1,31 @@
 PATH
   remote: .
   specs:
-    tetra (2.0.6)
-      clamp
+    tetra (2.0.7dev)
+      clamp (~> 1.3.2)
       erb (~> 2.2.3)
-      json_pure
-      open4
-      rexml
-      rubyzip (>= 1.0)
-      text
+      json_pure (~> 2.6.2)
+      open4 (~> 1.3.4)
+      rexml (~> 3.2.5)
+      rubyzip (~> 2.3.2)
+      text (~> 1.3.1)
 
 GEM
   remote: https://rubygems.org/
   specs:
-    aruba (0.6.2)
-      childprocess (>= 0.3.6)
-      cucumber (>= 1.1.1)
-      rspec-expectations (>= 2.7.0)
+    aruba (2.1.0)
+      bundler (>= 1.17, < 3.0)
+      childprocess (>= 2.0, < 5.0)
+      contracts (>= 0.16.0, < 0.18.0)
+      cucumber (>= 4.0, < 9.0)
+      rspec-expectations (~> 3.4)
+      thor (~> 1.0)
     ast (2.4.2)
     builder (3.2.4)
     cgi (0.3.2)
     childprocess (4.1.0)
     clamp (1.3.2)
+    contracts (0.17)
     cucumber (8.0.0)
       builder (~> 3.2, >= 3.2.4)
       cucumber-ci-environment (~> 9.0, >= 9.0.4)
@@ -94,6 +98,7 @@ GEM
     sys-uname (1.2.2)
       ffi (~> 1.1)
     text (1.3.1)
+    thor (1.2.1)
     unicode-display_width (2.3.0)
 
 PLATFORMS
@@ -101,9 +106,9 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
-  aruba (~> 0.6.2)
-  rake
-  rspec
+  aruba (~> 2.1.0)
+  rake (~> 13.0.6)
+  rspec (~> 3.11.0)
   rubocop (~> 1.39.0)
   tetra!
 

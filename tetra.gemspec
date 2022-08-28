@@ -24,16 +24,16 @@ Gem::Specification.new do |s|
   s.executables = `git ls-files -- bin/*`.split("\n").map { |f| File.basename(f) }
   s.require_paths = ["lib"]
 
-  s.add_development_dependency "aruba", "~> 0.6.2"
-  s.add_development_dependency "rake"
-  s.add_development_dependency "rspec"
+  s.add_development_dependency "aruba", "~> 2.1.0"
+  s.add_development_dependency "rake", "~> 13.0.6"
+  s.add_development_dependency "rspec", "~> 3.11.0"
   s.add_development_dependency "rubocop", "~> 1.39.0"
 
-  s.add_runtime_dependency "clamp"
+  s.add_runtime_dependency "clamp", "~> 1.3.2"
   s.add_runtime_dependency "erb", "~> 2.2.3"
-  s.add_runtime_dependency "json_pure"
-  s.add_runtime_dependency "open4"
-  s.add_runtime_dependency "rexml"
-  s.add_runtime_dependency "rubyzip", ">= 1.0"
-  s.add_runtime_dependency "text"
+  s.add_runtime_dependency "json_pure", "~> 2.6.2"
+  s.add_runtime_dependency "open4", "~> 1.3.4"
+  s.add_runtime_dependency "rexml", "~> 3.2.5"
+  s.add_runtime_dependency "rubyzip", "~> 2.3.2"
+  s.add_runtime_dependency "text", "~> 1.3.1"
 end

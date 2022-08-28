@@ -1,7 +1,4 @@
-# encoding: UTF-8
-
 require "aruba/api"
-require "aruba/reporting"
 
 require "tetra"
 
@@ -15,10 +12,7 @@ RSpec.configure do |config|
   end
 
   # set up aruba API
-  config.before(:each) do
-    restore_env
-    clean_current_dir
-  end
+  config.before(:each) { setup_aruba }
 end
 
 module Tetra
