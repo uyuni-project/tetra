@@ -1,7 +1,6 @@
 require "spec_helper"
 
 RSpec.describe "`tetra`" do
-
   it "lists subcommands" do
     run_command("tetra")
     expect(last_command_started).to be_successfully_executed

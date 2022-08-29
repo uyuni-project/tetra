@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe "`tetra dry-run`", type: :aruba do
+describe "`tetra dry-run`" do
   it "does not start a dry-run if init has not run yet" do
     run_command("tetra dry-run")
 

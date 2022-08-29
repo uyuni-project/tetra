@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe "`tetra generate-all`", type: :aruba do
+describe "`tetra generate-all`" do
   it "generates specs and tarballs for a sample package, source archive workflow" do
     archive_contents = File.read(File.join("spec", "data", "commons-collections4-4.4-src.zip"))
     write_file("commons-collections.zip", archive_contents)

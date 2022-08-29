@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe "`tetra generate-spec`", type: :aruba do
+describe "`tetra generate-spec`" do
   it "outputs a warning if source files are not found" do
     archive_contents = File.read(File.join("spec", "data", "commons-collections4-4.4-src.zip"))
     write_file("commons-collections.zip", archive_contents)
