@@ -62,7 +62,7 @@ describe "`tetra`" do
     run_command("git rev-list --format=%B --max-count=1 HEAD")
     expect(last_command_started).to be_successfully_executed
     expect(last_command_started).to have_exit_status(0)
-    expect(last_command_started).to have_output(/Inital sources added from archive/)
+    expect(last_command_started).to have_output(/Initial sources added from archive/)
   end
 
   it "inits a new project with a tar source file" do
@@ -91,6 +91,6 @@ describe "`tetra`" do
     run_command("git rev-list --format=%B --max-count=1 HEAD")
     expect(last_command_started).to be_successfully_executed
     expect(last_command_started).to have_exit_status(0)
-    expect(last_command_started).to have_output(/Inital sources added from archive/)
+    expect(last_command_started).to have_output(/Initial sources added from archive/)
   end
 end
