@@ -27,7 +27,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency "aruba", "~> 0.6.2"
   s.add_development_dependency "rake"
   s.add_development_dependency "rspec"
-  s.add_development_dependency "rubocop", "~> 1.36.0"
+  s.add_development_dependency "rubocop", "~> 1.39.0"
 
   s.add_runtime_dependency "clamp"
   s.add_runtime_dependency "erb", "~> 2.2.3"
