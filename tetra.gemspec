@@ -37,5 +37,5 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency "rubyzip", "~> 2.3.2"
   s.add_runtime_dependency "text", "~> 1.3.1"
 
-  s.required_ruby_version = ">= 2.6.0"
+  s.required_ruby_version = ">= 2.7.0"
 end
