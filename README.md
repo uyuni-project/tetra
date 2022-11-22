@@ -50,8 +50,8 @@ First, grab the sources:
 
 Second, create a new `tetra` project named `commons-collections` based on those sources:
 
-    tetra init commons-collections commons-collections4-4.0-src.tar.gz
-    cd commons-collections/src/commons-collections4-4.0-src
+    tetra init commons-collections commons-collections4-4.4-src.tar.gz
+    cd commons-collections/src/commons-collections4-4.4-src
 
 Third, you need to show `tetra` how to build your package. Run `tetra dry-run` and a new subshell will open, in there do anything you would normally do to build the package (in this case, run Maven):
 
