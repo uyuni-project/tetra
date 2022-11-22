@@ -42,16 +42,16 @@ During the dry-run `tetra`:
 
 Note that with `tetra` you are not building all dependencies from source - build dependencies are aggregated in a binary-only "kit" package. This is typically sufficient to fulfill open source licenses and to have a repeatable, networkless build.
 
-## A commons-collections walkthrough
+## A commons-cli walkthrough
 
 First, grab the sources:
 
-    wget https://archive.apache.org/dist/commons/collections/source/commons-collections4-4.4-src.tar.gz
+    wget https://archive.apache.org/dist/commons/collections/source/commons-cli-1.5.0-src.tar.gz
 
-Second, create a new `tetra` project named `commons-collections` based on those sources:
+Second, create a new `tetra` project named `commons-cli` based on those sources:
 
-    tetra init commons-collections commons-collections4-4.4-src.tar.gz
-    cd commons-collections/src/commons-collections4-4.4-src
+    tetra init commons-cli commons-cli-1.5.0-src.tar.gz
+    cd commons-cli/src/commons-cli-1.5.0-src
 
 Third, you need to show `tetra` how to build your package. Run `tetra dry-run` and a new subshell will open, in there do anything you would normally do to build the package (in this case, run Maven):
 
@@ -68,7 +68,7 @@ Finally, generate build scripts, spec files and tarballs in the `packages/` dire
 
     tetra generate-all
 
-Note that `tetra` will generate files for the commons-collections package and all binary-only build-time dependencies in the `packages/` folder.
+Note that `tetra` will generate files for the commons-cli package and all binary-only build-time dependencies in the `packages/` folder.
 
 ## In-depth information
 

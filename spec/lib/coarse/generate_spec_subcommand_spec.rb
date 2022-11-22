@@ -2,19 +2,19 @@ require "spec_helper"
 
 describe "`tetra generate-spec`" do
   it "outputs a warning if source files are not found" do
-    archive_contents = File.read(File.join("spec", "data", "commons-collections4-4.4-src.zip"))
-    write_file("commons-collections.zip", archive_contents)
+    archive_contents = File.read(File.join("spec", "data", "commons-cli-1.5.0-src.zip"))
+    write_file("commons-cli.zip", archive_contents)
 
-    run_command("tetra init --no-archive commons-collections")
+    run_command("tetra init --no-archive commons-cli")
     expect(last_command_started).to be_successfully_executed
     expect(last_command_started).to have_exit_status(0)
-    cd("commons-collections")
+    cd("commons-cli")
 
     cd("src")
-    run_command("unzip ../../commons-collections.zip")
+    run_command("unzip ../../commons-cli.zip")
     expect(last_command_started).to be_successfully_executed
     expect(last_command_started).to have_exit_status(0)
-    cd("commons-collections4-4.4-src")
+    cd("commons-cli-1.5.0-src")
 
     run_command("tetra change-sources --no-archive")
     expect(last_command_started).to be_successfully_executed

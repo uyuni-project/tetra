@@ -37,27 +37,27 @@ describe "`tetra`" do
   end
 
   it "inits a new project with a zip source file" do
-    archive_contents = File.read(File.join("spec", "data", "commons-collections4-4.4-src.zip"))
-    write_file("commons-collections.zip", archive_contents)
+    archive_contents = File.read(File.join("spec", "data", "commons-cli-1.5.0-src.zip"))
+    write_file("commons-cli.zip", archive_contents)
 
-    run_command("tetra init commons-collections commons-collections.zip")
+    run_command("tetra init commons-cli commons-cli.zip")
 
     expect(last_command_started).to be_successfully_executed
     expect(last_command_started).to have_exit_status(0)
-    expect(last_command_started).to have_output(/Project inited in commons-collections/)
-    expect(last_command_started).to have_output(/Sources decompressed in commons-collections/)
-    expect(last_command_started).to have_output(/original archive copied in commons-collections/)
+    expect(last_command_started).to have_output(/Project inited in commons-cli/)
+    expect(last_command_started).to have_output(/Sources decompressed in commons-cli/)
+    expect(last_command_started).to have_output(/original archive copied in commons-cli/)
     expect(last_command_started).to have_output(/Please add any other precompiled build dependency to kit/)
-    expect(exist?("commons-collections")).to be true
+    expect(exist?("commons-cli")).to be true
 
-    cd("commons-collections")
+    cd("commons-cli")
     expect(exist?(".git")).to be true
     expect(exist?("kit")).to be true
     expect(exist?("src")).to be true
     expect(exist?("packages")).to be true
-    expect(exist?(File.join("src", "commons-collections4-4.4-src"))).to be true
-    expect(exist?(File.join("src", "commons-collections4-4.4-src", "pom.xml"))).to be true
-    expect(exist?(File.join("packages", "commons-collections", "commons-collections.zip"))).to be true
+    expect(exist?(File.join("src", "commons-cli-1.5.0-src"))).to be true
+    expect(exist?(File.join("src", "commons-cli-1.5.0-src", "pom.xml"))).to be true
+    expect(exist?(File.join("packages", "commons-cli", "commons-cli.zip"))).to be true
 
     run_command("git rev-list --format=%B --max-count=1 HEAD")
     expect(last_command_started).to be_successfully_executed
@@ -66,27 +66,27 @@ describe "`tetra`" do
   end
 
   it "inits a new project with a tar source file" do
-    archive_contents = File.read(File.join("spec", "data", "commons-collections4-4.4-src.tar.gz"))
-    write_file("commons-collections.tar.gz", archive_contents)
+    archive_contents = File.read(File.join("spec", "data", "commons-cli-1.5.0-src.tar.gz"))
+    write_file("commons-cli.tar.gz", archive_contents)
 
-    run_command("tetra init commons-collections commons-collections.tar.gz")
+    run_command("tetra init commons-cli commons-cli.tar.gz")
 
     expect(last_command_started).to be_successfully_executed
     expect(last_command_started).to have_exit_status(0)
-    expect(last_command_started).to have_output(/Project inited in commons-collections/)
-    expect(last_command_started).to have_output(/Sources decompressed in commons-collections/)
-    expect(last_command_started).to have_output(/original archive copied in commons-collections/)
+    expect(last_command_started).to have_output(/Project inited in commons-cli/)
+    expect(last_command_started).to have_output(/Sources decompressed in commons-cli/)
+    expect(last_command_started).to have_output(/original archive copied in commons-cli/)
     expect(last_command_started).to have_output(/Please add any other precompiled build dependency to kit/)
-    expect(exist?("commons-collections")).to be true
+    expect(exist?("commons-cli")).to be true
 
-    cd("commons-collections")
+    cd("commons-cli")
     expect(exist?(".git")).to be true
     expect(exist?("kit")).to be true
     expect(exist?("src")).to be true
     expect(exist?("packages")).to be true
-    expect(exist?(File.join("src", "commons-collections4-4.4-src"))).to be true
-    expect(exist?(File.join("src", "commons-collections4-4.4-src", "pom.xml"))).to be true
-    expect(exist?(File.join("packages", "commons-collections", "commons-collections.tar.gz"))).to be true
+    expect(exist?(File.join("src", "commons-cli-1.5.0-src"))).to be true
+    expect(exist?(File.join("src", "commons-cli-1.5.0-src", "pom.xml"))).to be true
+    expect(exist?(File.join("packages", "commons-cli", "commons-cli.tar.gz"))).to be true
 
     run_command("git rev-list --format=%B --max-count=1 HEAD")
     expect(last_command_started).to be_successfully_executed
