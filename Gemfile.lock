@@ -3,7 +3,7 @@ PATH
   specs:
     tetra (2.0.6)
       clamp
-      erb (~> 2.2.3)
+      erb (>= 2.2.3, < 4.1.0)
       json_pure
       open4
       rexml
@@ -19,7 +19,7 @@ GEM
       rspec-expectations (>= 2.7.0)
     ast (2.4.2)
     builder (3.2.4)
-    cgi (0.3.5)
+    cgi (0.3.6)
     childprocess (4.1.0)
     clamp (1.3.2)
     cucumber (7.1.0)
@@ -53,8 +53,8 @@ GEM
       cucumber-core (~> 10.1, >= 10.1.0)
       cucumber-cucumber-expressions (~> 14.0, >= 14.0.0)
     diff-lcs (1.5.0)
-    erb (2.2.3)
-      cgi
+    erb (4.0.1)
+      cgi (>= 0.3.3)
     ffi (1.15.5)
     json_pure (2.6.2)
     mime-types (3.4.1)

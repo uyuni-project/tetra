@@ -30,7 +30,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency "rubocop", "~> 1.28.2"
 
   s.add_runtime_dependency "clamp"
-  s.add_runtime_dependency "erb", "~> 2.2.3"
+  s.add_runtime_dependency "erb", ">= 2.2.3", "< 4.1.0"
   s.add_runtime_dependency "json_pure"
   s.add_runtime_dependency "open4"
   s.add_runtime_dependency "rexml"
