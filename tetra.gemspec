@@ -25,6 +25,7 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
 
   s.add_development_dependency "aruba", "~> 0.6.2"
+  s.add_development_dependency "simplecov", "~> 0.21.2"
   s.add_development_dependency "rake"
   s.add_development_dependency "rspec"
   s.add_development_dependency "rubocop", "~> 1.28.2"

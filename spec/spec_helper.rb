@@ -2,8 +2,11 @@
 
 require "aruba/api"
 require "aruba/reporting"
+require "simplecov"
 
 require "tetra"
+
+SimpleCov.start
 
 # configure aruba for rspec use
 RSpec.configure do |config|
