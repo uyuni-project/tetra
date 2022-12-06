@@ -3,6 +3,15 @@ name: RuboCop
 on:
   push:
     branches: [ master, devel ]
+    paths:
+      - '*.gemspec'
+      - 'bin/tetra'
+      - 'lib/**.rb'
+      - 'spec/**.rb'
+      - '**.rb'
+      - '.github/workflows/rubocop.yml'
+      - '.rubocop_todo.yml'
+      - '.rubocop.yml'
   pull_request:
     branches: [ master, devel ]
     paths:
