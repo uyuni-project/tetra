@@ -1,0 +1,15 @@
+name: 'GitHub Action review'
+
+on:
+  push:
+    branches: [ master, devel ]
+    paths:
+      - '.github/workflows/**'
+  pull_request:
+    branches: [ master, devel ]
+jobs:
+  actionlint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: reviewdog/action-actionlint@v1
