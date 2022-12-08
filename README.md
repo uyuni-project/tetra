@@ -1,3 +1,6 @@
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=uyuni-project_tetra&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=uyuni-project_tetra)
+[![Tests](https://github.com/uyuni-project/tetra/actions/workflows/test.yml/badge.svg?branch=master)](https://github.com/uyuni-project/tetra/actions/workflows/test.yml)
+
 # tetra – builds RPMs for Java software
 
 `tetra` is a tool to help you build RPM packages for Java projects.
