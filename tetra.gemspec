@@ -23,10 +23,9 @@ Gem::Specification.new do |s|
   s.test_files = `git ls-files -- {test,spec,features}/*`.split("\n")
   s.executables = `git ls-files -- bin/*`.split("\n").map { |f| File.basename(f) }
   s.require_paths = ["lib"]
-
   s.required_ruby_version = '>= 2.7.0'
 
-  s.add_development_dependency "aruba", "~> 0.6.2"
+  s.add_development_dependency "aruba", "~> 0.8.0"
   s.add_development_dependency "simplecov", "~> 0.22.0"
   s.add_development_dependency "rake", "~> 13.0.6"
   s.add_development_dependency "rspec", "~> 3.12.0"
