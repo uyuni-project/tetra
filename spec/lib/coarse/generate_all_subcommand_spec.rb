@@ -11,7 +11,7 @@ describe "`tetra generate-all`", type: :aruba do
 
     # first dry-run, all normal
     @aruba_timeout_seconds = 240
-    run_interactive("tetra dry-run --very-very-verbose")
+    run("tetra dry-run --very-very-verbose")
     type("mvn package -DskipTests")
     type("\u{0004}") # ^D (Ctrl+D), terminates bash with exit status 0
 
@@ -38,7 +38,7 @@ describe "`tetra generate-all`", type: :aruba do
     run_simple("tetra patch")
 
     # third dry-run succeeds with patch
-    run_interactive("tetra dry-run")
+    run("tetra dry-run")
     type("mvn package -DskipTests")
     type("\u{0004}") # ^D (Ctrl+D), terminates bash with exit status 0
 
@@ -81,7 +81,7 @@ describe "`tetra generate-all`", type: :aruba do
     # second dry-run, all normal
     cd(File.join("src", Tetra::CCOLLECTIONS))
     @aruba_timeout_seconds = 240
-    run_interactive("tetra dry-run")
+    run("tetra dry-run")
     type("mvn package -DskipTests")
     type("\u{0004}") # ^D (Ctrl+D), terminates bash with exit status 0
 
@@ -107,7 +107,7 @@ describe "`tetra generate-all`", type: :aruba do
     run_simple("tetra patch")
 
     # third dry-run succeeds with patch
-    run_interactive("tetra dry-run")
+    run("tetra dry-run")
     type("mvn package -DskipTests")
     type("\u{0004}") # ^D (Ctrl+D), terminates bash with exit status 0
     expect(all_output).to include("[INFO] BUILD SUCCESS")

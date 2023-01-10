@@ -11,7 +11,7 @@ describe "`tetra dry-run`", type: :aruba do
     run_simple("tetra init --no-archive mypackage")
     cd("mypackage")
 
-    run_interactive("tetra dry-run")
+    run("tetra dry-run")
     type("echo ciao")
     type("echo ciao > ciao.jar")
     type("\u{0004}") # ^D (Ctrl+D), terminates bash with exit status 0
@@ -34,7 +34,7 @@ describe "`tetra dry-run`", type: :aruba do
     run_simple("tetra init --no-archive mypackage")
     cd("mypackage")
 
-    run_interactive("tetra dry-run -s 'echo ciao > ciao.jar'")
+    run("tetra dry-run -s 'echo ciao > ciao.jar'")
 
     expect(all_output).to include("Scripted dry-run started")
 
