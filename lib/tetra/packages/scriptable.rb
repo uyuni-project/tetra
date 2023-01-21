@@ -1,4 +1,4 @@
-# encoding: UTF-8
+# frozen_string_literal: true
 
 module Tetra
   # generates a package build script from bash_history
@@ -13,7 +13,7 @@ module Tetra
           "cd #{project.latest_dry_run_directory}"
         ] + aliases(project) + project.build_script_lines
 
-        new_content = script_lines.join("\n") + "\n"
+        new_content = "#{script_lines.join("\n")}\n"
 
         result_dir = File.join(project.packages_dir, project.name)
         FileUtils.mkdir_p(result_dir)

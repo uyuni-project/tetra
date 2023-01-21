@@ -1,11 +1,11 @@
-# encoding: UTF-8
+# frozen_string_literal: true
 
 module Tetra
   # tetra init
   class InitSubcommand < Tetra::Subcommand
     parameter "PACKAGE_NAME", "name of the package to create"
     parameter "[SOURCE_ARCHIVE]", "source tarball or zipfile"
-    option %w(-n --no-archive), :flag, "create a project without a source archive (see SPECIAL_CASES.md)",
+    option %w[-n --no-archive], :flag, "create a project without a source archive (see SPECIAL_CASES.md)",
            default: false
 
     def execute

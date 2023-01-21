@@ -1,4 +1,4 @@
-# encoding: UTF-8
+# frozen_string_literal: true
 
 module Tetra
   # a packaged set of binary build-time dependencies
@@ -7,6 +7,7 @@ module Tetra
     include Speccable
 
     attr_reader :name
+
     def_delegator :@project, :version
     def_delegator :@project, :name, :project_name
 

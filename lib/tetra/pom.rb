@@ -1,10 +1,10 @@
-# encoding: UTF-8
+# frozen_string_literal: true
 
 module Tetra
   # encapsulates a pom.xml file
   class Pom
     def initialize(filename)
-      content = File.open(filename).read if filename && File.file?(filename)
+      content = File.read(filename) if filename && File.file?(filename)
       @doc = REXML::Document.new(content)
     end
 

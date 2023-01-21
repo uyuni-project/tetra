@@ -1,4 +1,4 @@
-# encoding: UTF-8
+# frozen_string_literal: true
 
 require "spec_helper"
 
@@ -15,8 +15,7 @@ describe Tetra::Scriptable do
       history = ["tetra dry-run start --unwanted-options",
                  "cd somewhere significant",
                  "mvn --options",
-                 "tetra dry-run finish -a"
-                ]
+                 "tetra dry-run finish -a"]
 
       @project.finish(history)
     end
@@ -42,8 +41,7 @@ describe Tetra::Scriptable do
         expect(lines).to include("mvn --options\n")
         expect(lines).to include("alias mvn='$PROJECT_PREFIX/kit/mvn/bin/mvn \
 -Dmaven.repo.local=$PROJECT_PREFIX/kit/m2 --settings $PROJECT_PREFIX/kit/m2/settings.xml \
---strict-checksums -o'\n"
-                                )
+--strict-checksums -o'\n")
 
         expect(lines).not_to include("some earlier command\n")
         expect(lines).not_to include("tetra dry-run --unwanted-options\n")

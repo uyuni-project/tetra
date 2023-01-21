@@ -1,4 +1,4 @@
-# encoding: UTF-8
+# frozen_string_literal: true
 
 module Tetra
   # encapsulates a Tetra kit directory
@@ -15,6 +15,7 @@ module Tetra
       @project.from_directory do
         Find.find("kit") do |path|
           next unless path =~ %r{(.*bin)/#{name}$} && File.executable?(path)
+
           result = Regexp.last_match[1]
 
           log.debug("found #{name} executable in #{result}")

@@ -1,4 +1,6 @@
-$LOAD_PATH.push File.expand_path("../lib", __FILE__)
+# frozen_string_literal: true
+
+$LOAD_PATH.push File.expand_path("lib", __dir__)
 require "tetra/version"
 
 Gem::Specification.new do |s|
@@ -24,13 +26,13 @@ Gem::Specification.new do |s|
   s.executables = `git ls-files -- bin/*`.split("\n").map { |f| File.basename(f) }
   s.require_paths = ["lib"]
 
-  s.required_ruby_version = '>= 2.7.0'
+  s.required_ruby_version = ">= 2.7.0"
 
   s.add_development_dependency "aruba", "~> 0.6.2"
-  s.add_development_dependency "simplecov", "~> 0.22.0"
   s.add_development_dependency "rake", "~> 13.0.6"
   s.add_development_dependency "rspec", "~> 3.12.0"
   s.add_development_dependency "rubocop", "~> 1.43.0"
+  s.add_development_dependency "simplecov", "~> 0.22.0"
 
   s.add_runtime_dependency "clamp", "~> 1.3.2"
   s.add_runtime_dependency "erb", "~> 4.0.2"

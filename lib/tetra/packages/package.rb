@@ -1,4 +1,4 @@
-# encoding: UTF-8
+# frozen_string_literal: true
 
 module Tetra
   # represents a Java project packaged in tetra
@@ -50,7 +50,7 @@ module Tetra
 
     def cleanup_description(raw, max_length)
       raw
-        .gsub(/[\s]+/, " ")
+        .gsub(/\s+/, " ")
         .strip
         .slice(0..max_length - 1)
         .sub(/\s\w+$/, "")

@@ -1,4 +1,4 @@
-# encoding: UTF-8
+# frozen_string_literal: true
 
 module Tetra
   # implements common options and utility methods
@@ -25,15 +25,15 @@ module Tetra
 
     # maps verbosity options to log level
     def configure_log_level(v, vv, vvv)
-      if vvv
-        log.level = ::Logger::DEBUG
-      elsif vv
-        log.level = ::Logger::INFO
-      elsif v
-        log.level = ::Logger::WARN
-      else
-        log.level = ::Logger::ERROR
-      end
+      log.level = if vvv
+                    ::Logger::DEBUG
+                  elsif vv
+                    ::Logger::INFO
+                  elsif v
+                    ::Logger::WARN
+                  else
+                    ::Logger::ERROR
+                  end
     end
 
     # override default option parsing to pass options to other commands
@@ -56,21 +56,19 @@ module Tetra
          (state == :is_not_in_progress && !dry_running) ||
          (state == :has_finished && !dry_running && has_finished)
         yield
-      else
-        if (state == :is_in_progress) ||
-           (state == :has_finished && !dry_running && !has_finished)
-          puts "Please start a dry-run first, use \"tetra dry-run\""
-        elsif (state == :is_not_in_progress) ||
-              (state == :has_finished && dry_running)
-          puts "There is a dry-run in progress, please finish it (^D) or abort it (^C^D)"
-        end
+      elsif (state == :is_in_progress) ||
+            (state == :has_finished && !dry_running && !has_finished)
+        puts "Please start a dry-run first, use \"tetra dry-run\""
+      elsif (state == :is_not_in_progress) ||
+            (state == :has_finished && dry_running)
+        puts "There is a dry-run in progress, please finish it (^D) or abort it (^C^D)"
       end
     end
 
     # outputs output of a file generation
     def print_generation_result(project, result_path, conflict_count = 0)
       puts "#{format_path(result_path, project)} generated"
-      puts "Warning: #{conflict_count} unresolved conflicts, please review and commit" if conflict_count > 0
+      puts "Warning: #{conflict_count} unresolved conflicts, please review and commit" if conflict_count.positive?
     end
 
     # generates a version of path relative to the current directory
@@ -89,19 +87,19 @@ module Tetra
     def checking_exceptions
       yield
     rescue Errno::EACCES => e
-      $stderr.puts e
+      warn e
     rescue Errno::ENOENT => e
-      $stderr.puts e
+      warn e
     rescue Errno::EEXIST => e
-      $stderr.puts e
+      warn e
     rescue NoProjectDirectoryError => e
-      $stderr.puts "#{e.directory} is not a tetra project directory, see \"tetra init\""
+      warn "#{e.directory} is not a tetra project directory, see \"tetra init\""
     rescue GitAlreadyInitedError
-      $stderr.puts "This directory is already a tetra project"
+      warn "This directory is already a tetra project"
     rescue ExecutionFailed => e
-      $stderr.puts "Failed to run `#{e.commandline}` (exit status #{e.status})"
+      warn "Failed to run `#{e.commandline}` (exit status #{e.status})"
     rescue Interrupt
-      $stderr.puts "Execution interrupted by the user"
+      warn "Execution interrupted by the user"
     end
   end
 end

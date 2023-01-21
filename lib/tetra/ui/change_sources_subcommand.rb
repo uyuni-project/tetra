@@ -1,11 +1,11 @@
-# encoding: UTF-8
+# frozen_string_literal: true
 
 module Tetra
   # tetra change-sources
   class ChangeSourcesSubcommand < Tetra::Subcommand
     parameter "[SOURCE_ARCHIVE]", "new source tarball or zipfile"
     parameter "[MESSAGE]", "a short change description", default: "Sources changed"
-    option %w(-n --no-archive), :flag, "use current src/ contents instead of an archive (see SPECIAL_CASES.md)",
+    option %w[-n --no-archive], :flag, "use current src/ contents instead of an archive (see SPECIAL_CASES.md)",
            default: false
 
     def execute

@@ -1,4 +1,4 @@
-# encoding: UTF-8
+# frozen_string_literal: true
 
 require "spec_helper"
 
@@ -61,7 +61,7 @@ describe Tetra::Package do
         expect(spec_lines).to include("BuildRequires:  test-project-kit == #{@project.version}\n")
         expect(spec_lines).to include("Provides:       mvn(com.martiansoftware:nailgun-server) == 0.9.1\n")
         expect(spec_lines).to include("Provides:       mvn(com.martiansoftware:nailgun-examples) == 0.9.1\n")
-        expect(spec_lines).to include("cp -a out/test3.jar %{buildroot}%{_javadir}/test3.jar\n")
+        expect(spec_lines).to include("cp -a out/test3.jar %<buildroot>s%<_javadir>s/test3.jar\n")
       end
     end
   end
