@@ -1,4 +1,4 @@
-# encoding: UTF-8
+# frozen_string_literal: true
 
 require "spec_helper"
 
@@ -47,7 +47,7 @@ describe Tetra::Git do
         Dir.mkdir("subdir2")
         FileUtils.touch(File.join("subdir2", "file3"))
 
-        @git.commit_directories(%w(subdir1 subdir2), "test")
+        @git.commit_directories(%w[subdir1 subdir2], "test")
 
         files = `git ls-tree --name-only -r HEAD`.split("\n")
 
@@ -71,9 +71,9 @@ describe Tetra::Git do
         FileUtils.touch(File.join("subdir1", "unexpected_file"))
         FileUtils.touch(File.join("subdir2", "unexpected_file"))
 
-        @git.commit_directories(%w(subdir1 subdir2), "test-end")
+        @git.commit_directories(%w[subdir1 subdir2], "test-end")
 
-        @git.revert_directories(%w(subdir1 subdir2), @git.latest_id("test-start"))
+        @git.revert_directories(%w[subdir1 subdir2], @git.latest_id("test-start"))
 
         files = Find.find(".").to_a
 
@@ -160,8 +160,8 @@ describe Tetra::Git do
         FileUtils.touch(inside_dir_patched_file)
         @git.commit_file(".", "initial")
 
-        File.open(outside_dir_file, "w") { |f| f.write("A") }
-        File.open(inside_dir_patched_file, "w") { |f| f.write("A") }
+        File.write(outside_dir_file, "A")
+        File.write(inside_dir_patched_file, "A")
         @git.commit_file(".", "patch")
 
         Dir.mkdir("patches")

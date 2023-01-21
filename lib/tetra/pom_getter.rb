@@ -1,4 +1,4 @@
-# encoding: UTF-8
+# frozen_string_literal: true
 
 module Tetra
   # attempts to get java projects' pom file
@@ -12,7 +12,7 @@ module Tetra
       return unless content
 
       pom_filename = filename.sub(/(\.jar)?$/, ".pom")
-      File.open(pom_filename, "w") { |io| io.write(content) }
+      File.write(pom_filename, content)
       [pom_filename, status]
     end
 
@@ -45,8 +45,7 @@ module Tetra
           result = results.first
           unless result.nil?
             log.info("pom.xml for #{file} found on search.maven.org for sha1 #{sha1}\
-              (#{result['g']}:#{result['a']}:#{result['v']})"
-                    )
+              (#{result['g']}:#{result['a']}:#{result['v']})")
             group_id, artifact_id, version = site.get_maven_id_from result
             return site.download_pom(group_id, artifact_id, version), :found_via_sha1
           end
@@ -75,18 +74,17 @@ module Tetra
           log.debug("All versions: #{results}")
           their_versions = results.map { |doc| doc["v"] }
           best_matched_version = (
-            if !my_version.nil?
-              version_matcher.best_match(my_version, their_versions)
-            else
+            if my_version.nil?
               their_versions.max
+            else
+              version_matcher.best_match(my_version, their_versions)
             end
           )
           best_matched_result = (results.select { |r| r["v"] == best_matched_version }).first
 
           group_id, artifact_id, version = site.get_maven_id_from(best_matched_result)
           log.warn("pom.xml for #{filename} found on search.maven.org with heuristic search\
-            (#{group_id}:#{artifact_id}:#{version})"
-                  )
+            (#{group_id}:#{artifact_id}:#{version})")
 
           return site.download_pom(group_id, artifact_id, version), :found_via_heuristic
         end

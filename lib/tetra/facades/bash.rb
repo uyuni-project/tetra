@@ -1,4 +1,4 @@
-# encoding: UTF-8
+# frozen_string_literal: true
 
 module Tetra
   # runs Bash with tetra-specific options
@@ -17,11 +17,11 @@ module Tetra
         Tempfile.open("tetra-bashrc") do |bashrc_file|
           kit = Tetra::Kit.new(@project)
           ant_path = kit.find_executable("ant")
-          ant_in_kit = ant_path != nil
+          ant_in_kit = !ant_path.nil?
           ant_commandline = Tetra::Ant.commandline(@project.full_path, ant_path)
 
           mvn_path = kit.find_executable("mvn")
-          mvn_in_kit = mvn_path != nil
+          mvn_in_kit = !mvn_path.nil?
           mvn_commandline = Tetra::Mvn.commandline(@project.full_path, mvn_path)
 
           gradle_commandline = Tetra::Gradle.commandline(@project.full_path)
@@ -54,12 +54,7 @@ module Tetra
   class Bashrc
     include Tetra::Generatable
 
-    attr_reader :history_file
-    attr_reader :ant_in_kit
-    attr_reader :ant_commandline
-    attr_reader :mvn_in_kit
-    attr_reader :mvn_commandline
-    attr_reader :gradle_commandline
+    attr_reader :history_file, :ant_in_kit, :ant_commandline, :mvn_in_kit, :mvn_commandline, :gradle_commandline
 
     def initialize(history_file, ant_in_kit, ant_commandline, mvn_in_kit, mvn_commandline, gradle_commandline)
       @history_file = history_file

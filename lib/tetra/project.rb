@@ -1,4 +1,4 @@
-# encoding: UTF-8
+# frozen_string_literal: true
 
 module Tetra
   # encapsulates a Tetra project directory
@@ -31,11 +31,9 @@ module Tetra
     # finds the project directory up in the tree, like git does
     def self.find_project_dir(starting_dir)
       result = starting_dir
-      while project?(result) == false && result != "/"
-        result = File.expand_path("..", result)
-      end
+      result = File.expand_path("..", result) while project?(result) == false && result != "/"
 
-      fail NoProjectDirectoryError, starting_dir if result == "/"
+      raise NoProjectDirectoryError, starting_dir if result == "/"
 
       result
     end
@@ -54,13 +52,13 @@ module Tetra
     def dry_run
       current_directory = Pathname.new(Dir.pwd).relative_path_from(Pathname.new(@full_path))
 
-      @git.commit_directories(%w(src kit), "Dry-run started\n\ntetra: dry-run-started: #{current_directory}")
+      @git.commit_directories(%w[src kit], "Dry-run started\n\ntetra: dry-run-started: #{current_directory}")
     end
 
     # returns true iff we are currently dry-running
     def dry_running?
       latest_comment = @git.latest_comment("tetra: dry-run-")
-      !latest_comment.nil? && !(latest_comment =~ /tetra: dry-run-finished/)
+      !latest_comment.nil? && latest_comment !~ /tetra: dry-run-finished/
     end
 
     # ends a dry-run assuming a successful build:
@@ -87,7 +85,7 @@ module Tetra
     # ends a dry-run assuming the build went wrong
     # reverts src/ and kit/ directories
     def abort
-      @git.revert_directories(%w(src kit), @git.latest_id("tetra: dry-run-started"))
+      @git.revert_directories(%w[src kit], @git.latest_id("tetra: dry-run-started"))
       @git.undo_last_commit
     end
 
@@ -126,7 +124,7 @@ module Tetra
 
         previous_id = @git.latest_id(generated_comment)
 
-        File.open(path, "w") { |io| io.write(new_content) }
+        File.write(path, new_content)
         log.debug "committing new content: #{comment}"
         @git.commit_file(path, whole_comment)
 
@@ -135,7 +133,7 @@ module Tetra
           conflict_count = @git.merge_with_id(path, "#{path}.tetra_user_edited", previous_id)
           File.delete("#{path}.tetra_user_edited")
 
-          @git.commit_file(path, "User changes merged back") if conflict_count == 0
+          @git.commit_file(path, "User changes merged back") if conflict_count.zero?
 
           return conflict_count
         end
@@ -144,10 +142,8 @@ module Tetra
     end
 
     # runs a block from the project directory or a subdirectory
-    def from_directory(subdirectory = "")
-      Dir.chdir(File.join(@full_path, subdirectory)) do
-        yield
-      end
+    def from_directory(subdirectory = "", &)
+      Dir.chdir(File.join(@full_path, subdirectory), &)
     end
 
     # returns the latest dry run start directory
@@ -158,18 +154,18 @@ module Tetra
     # returns a list of files produced during the last dry-run
     def produced_files
       @git.latest_comment("tetra: dry-run-finished")
-        .split("\n")
-        .map { |line| line[%r{^tetra: file-changed: src/(.+)$}, 1] }
-        .compact
-        .sort
+          .split("\n")
+          .map { |line| line[%r{^tetra: file-changed: src/(.+)$}, 1] }
+          .compact
+          .sort
     end
 
     def build_script_lines
       @git.latest_comment("tetra: dry-run-finished")
-        .split("\n")
-        .map { |line| line[/^tetra: build-script-line: (.+)$/, 1] }
-        .compact
-        .sort
+          .split("\n")
+          .map { |line| line[/^tetra: build-script-line: (.+)$/, 1] }
+          .compact
+          .sort
     end
 
     # archives a tarball of kit/ in packages/
@@ -186,9 +182,7 @@ module Tetra
     def src_archive
       from_directory do
         Find.find(File.join("packages", name)) do |file|
-          if File.file?(file) && file.match(/\.(spec)|(sh)|(patch)$/).nil?
-            return File.basename(file)
-          end
+          return File.basename(file) if File.file?(file) && file.match(/\.(spec)|(sh)|(patch)$/).nil?
         end
         nil
       end
@@ -217,8 +211,8 @@ module Tetra
           FileUtils.mv(file, new_location)
 
           link_target = Pathname.new(new_location)
-                        .relative_path_from(Pathname.new(file).split.first)
-                        .to_s
+                                .relative_path_from(Pathname.new(file).split.first)
+                                .to_s
 
           File.symlink(link_target, file)
           result << [file, new_location]

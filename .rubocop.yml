@@ -1,10 +1,14 @@
 inherit_from: .rubocop_todo.yml
 
 AllCops:
+  TargetRubyVersion: 3.1
   NewCops: disable
 
 Layout/LineLength:
   Max: 140
+
+Metrics/BlockLength:
+  Max: 200
 
 Metrics/ClassLength:
   Max: 200

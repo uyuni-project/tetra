@@ -1,4 +1,4 @@
-# encoding: UTF-8
+# frozen_string_literal: true
 
 require "aruba/api"
 require "aruba/reporting"
@@ -14,7 +14,7 @@ RSpec.configure do |config|
 
   # use tetra executable from the bin path, not the system-installed one
   config.before(:suite) do
-    ENV["PATH"] = "#{File.join(File.dirname(__FILE__), '..', 'bin')}#{File::PATH_SEPARATOR}#{ENV['PATH']}"
+    ENV["PATH"] = "#{File.join(File.dirname(__FILE__), '..', 'bin')}#{File::PATH_SEPARATOR}#{ENV.fetch('PATH', nil)}"
   end
 
   # set up aruba API
@@ -48,7 +48,7 @@ module Tetra
         FileUtils.mkdir_p(dir)
         executable_path = mock_executable_path(executable_name)
         File.open(executable_path, "w") { |io| io.puts "echo $0 $*>test_out" }
-        File.chmod(0777, executable_path)
+        File.chmod(0o777, executable_path)
         executable_path
       end
     end

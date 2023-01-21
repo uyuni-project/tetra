@@ -1,4 +1,4 @@
-# encoding: UTF-8
+# frozen_string_literal: true
 
 module Tetra
   # Facade to search.maven.org
@@ -56,7 +56,7 @@ module Tetra
 
     def get(url, params)
       response = Net::HTTP.get_response(URI.parse(url + URI.encode_www_form(params)))
-      fail NotFoundOnMavenWebsiteError if response.code == "404"
+      raise NotFoundOnMavenWebsiteError if response.code == "404"
 
       response.body
     end

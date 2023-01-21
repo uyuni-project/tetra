@@ -1,4 +1,4 @@
-# encoding: UTF-8
+# frozen_string_literal: true
 
 module Tetra
   # facade to git, currently implemented with calls to the git command
@@ -15,11 +15,9 @@ module Tetra
     # inits a repo
     def init
       Dir.chdir(@directory) do
-        if Dir.exist?(".git") == false
-          run("git init")
-        else
-          fail GitAlreadyInitedError
-        end
+        raise GitAlreadyInitedError unless Dir.exist?(".git") == false
+
+        run("git init")
       end
     end
 
@@ -120,11 +118,9 @@ module Tetra
                 -L \"previously generated\" \
                 -L \"user edited\"")
         rescue ExecutionFailed => e
-          if e.status > 0
-            conflict_count = e.status
-          else
-            raise e
-          end
+          raise e unless e.status.positive?
+
+          conflict_count = e.status
         end
         File.delete("#{path}.old_version")
         conflict_count

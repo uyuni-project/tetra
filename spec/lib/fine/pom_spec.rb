@@ -1,4 +1,4 @@
-# encoding: UTF-8
+# frozen_string_literal: true
 
 require "spec_helper"
 
@@ -39,7 +39,7 @@ describe Tetra::Pom do
     end
   end
 
-  # rubocop:disable Layout/LineLength, Layout/TrailingWhitespace
+  # rubocop:disable Layout/TrailingWhitespace
   describe "#description" do
     it "reads the description" do
       expect(commons_pom.description).to eq "Commons Logging is a thin adapter allowing configurable bridging to other,
@@ -55,7 +55,7 @@ describe Tetra::Pom do
       expect(struts_apps_pom.description).to eq ""
     end
   end
-  # rubocop:enable Layout/LineLength, Layout/TrailingWhitespace
+  # rubocop:enable Layout/TrailingWhitespace
 
   describe "#url" do
     it "reads the url" do
@@ -84,17 +84,17 @@ describe Tetra::Pom do
   describe "#scm_connection" do
     it "reads the SCM connection address" do
       expect(commons_pom.scm_connection).to eq "scm:svn:http://svn.apache.org/repos/asf/commons/proper/" \
-        "logging/tags/commons-logging-1.1.1"
+                                               "logging/tags/commons-logging-1.1.1"
       expect(nailgun_pom.scm_connection).to eq "scm:git:git@github.com:martylamb/nailgun.git"
       expect(struts_apps_pom.scm_connection).to eq "scm:svn:http://svn.apache.org/repos/asf/struts/struts2/" \
-        "tags/STRUTS_2_3_14/apps"
+                                                   "tags/STRUTS_2_3_14/apps"
     end
   end
 
   describe "#scm_url" do
     it "reads the SCM connection url" do
       expect(commons_pom.scm_url).to eq "http://svn.apache.org/repos/asf/commons/proper/logging/tags/" \
-        "commons-logging-1.1.1"
+                                        "commons-logging-1.1.1"
       expect(nailgun_pom.scm_url).to eq "scm:git:git@github.com:martylamb/nailgun.git"
       expect(struts_apps_pom.scm_url).to eq "http://svn.apache.org/viewcvs.cgi/struts/struts2/tags/STRUTS_2_3_14/apps"
     end

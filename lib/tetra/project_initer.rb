@@ -1,4 +1,4 @@
-# encoding: UTF-8
+# frozen_string_literal: true
 
 module Tetra
   # takes care of intiializing a tetra project
@@ -12,6 +12,7 @@ module Tetra
     def self.included(base)
       base.extend(ClassMethods)
     end
+
     # class methods container
     module ClassMethods
       # returns true if the specified directory is a valid tetra project

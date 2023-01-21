@@ -1,4 +1,4 @@
-# encoding: UTF-8
+# frozen_string_literal: true
 
 require "spec_helper"
 
@@ -8,7 +8,7 @@ describe Tetra::Unzip do
   let(:zipfile) { File.join("spec", "data", "commons-collections4-4.4-src.zip") }
   let(:unzip) { Tetra::Unzip.new }
 
-  describe "#decompress"  do
+  describe "#decompress" do
     it "decompresses a file in a directory" do
       Dir.mktmpdir do |dir|
         unzip.decompress(zipfile, dir)

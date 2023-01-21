@@ -1,4 +1,4 @@
-# encoding: UTF-8
+# frozen_string_literal: true
 
 module Tetra
   # heuristically matches version strings
@@ -10,7 +10,7 @@ module Tetra
     # by a ., -, _, ~ or space
     # returns a [name, version] pair
     def split_version(full_name)
-      matches = full_name.match(/(.*?)(?:[\.\-\_ ~,]?([0-9].*))?$/)
+      matches = full_name.match(/(.*?)(?:[.\-_ ~,]?([0-9].*))?$/)
       if !matches.nil? && matches.length > 1
         [matches[1], matches[2]]
       else
@@ -28,21 +28,19 @@ module Tetra
     def best_match(my_version, their_versions)
       log.debug("version comparison: #{my_version} vs #{their_versions.join(', ')}")
 
-      my_chunks = my_version.split(/[\.\-\_ ~,]/)
-      their_chunks_hash = Hash[
-                          their_versions.map do |their_version|
-                            their_chunks_for_version = (
-                              if !their_version.nil?
-                                their_version.split(/[\.\-\_ ~,]/)
-                              else
-                                []
-                              end
-                            )
-                            chunks_count = [my_chunks.length - their_chunks_for_version.length, 0].max
-                            their_chunks_for_version += [nil] * chunks_count
-                            [their_version, their_chunks_for_version]
-                          end
-      ]
+      my_chunks = my_version.split(/[.\-_ ~,]/)
+      their_chunks_hash = their_versions.to_h do |their_version|
+        their_chunks_for_version = (
+          if their_version.nil?
+            []
+          else
+            their_version.split(/[.\-_ ~,]/)
+          end
+        )
+        chunks_count = [my_chunks.length - their_chunks_for_version.length, 0].max
+        their_chunks_for_version += [nil] * chunks_count
+        [their_version, their_chunks_for_version]
+      end
 
       max_chunks_length = ([my_chunks.length] + their_chunks_hash.values.map(&:length)).max
 
@@ -55,7 +53,7 @@ module Tetra
           my_chunk = my_chunks[i]
           score += chunk_distance(my_chunk, their_chunk) * score_multiplier
         end
-        scoreboard << { version: their_version, score: score }
+        scoreboard << { version: their_version, score: }
       end
 
       scoreboard = scoreboard.sort_by { |element| element[:score] }
@@ -76,11 +74,9 @@ module Tetra
       my_chunk = "0" if my_chunk.nil?
       their_chunk = "0" if their_chunk.nil?
 
-      if i?(my_chunk) && i?(their_chunk)
-        return [(my_chunk.to_i - their_chunk.to_i).abs, 99].min
-      else
-        return [Text::Levenshtein.distance(my_chunk.upcase, their_chunk.upcase), 99].min
-      end
+      return [(my_chunk.to_i - their_chunk.to_i).abs, 99].min if i?(my_chunk) && i?(their_chunk)
+
+      [Text::Levenshtein.distance(my_chunk.upcase, their_chunk.upcase), 99].min
     end
 
     # true for integer strings

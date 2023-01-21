@@ -1,4 +1,4 @@
-# encoding: UTF-8
+# frozen_string_literal: true
 
 require "spec_helper"
 
@@ -70,9 +70,7 @@ describe Tetra::Speccable do
         spec_contents = File.read(@destination_path)
         spec_contents.gsub!(/Hello World/, "CONFLICTING!")
 
-        File.open(@destination_path, "w+") do |io|
-          io.write(spec_contents)
-        end
+        File.write(@destination_path, spec_contents)
       end
 
       instance.world_property = "Mario!"

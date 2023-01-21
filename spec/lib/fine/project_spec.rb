@@ -1,4 +1,4 @@
-# encoding: UTF-8
+# frozen_string_literal: true
 
 require "spec_helper"
 
@@ -13,7 +13,7 @@ describe Tetra::Project do
     delete_mock_project
   end
 
-  describe "version"  do
+  describe "version" do
     it "returns no project version in case no dry-run happened" do
       expect(@project.version).to be_nil
     end
@@ -25,14 +25,14 @@ describe Tetra::Project do
     end
   end
 
-  describe "#project?"  do
+  describe "#project?" do
     it "checks if a directory is a tetra project or not" do
       expect(Tetra::Project.project?(@project_path)).to be_truthy
       expect(Tetra::Project.project?(File.join(@project_path, ".."))).to be_falsey
     end
   end
 
-  describe "#find_project_dir"  do
+  describe "#find_project_dir" do
     it "recursively the parent project directory" do
       expanded_path = File.expand_path(@project_path)
       expect(Tetra::Project.find_project_dir(expanded_path)).to eq expanded_path
@@ -83,7 +83,7 @@ describe Tetra::Project do
     end
   end
 
-  describe "#src_patched?"  do
+  describe "#src_patched?" do
     it "checks whether src is dirty" do
       @project.from_directory do
         @project.dry_run
@@ -99,13 +99,13 @@ describe Tetra::Project do
   describe "#finish" do
     it "ends the current dry-run phase after a successful build" do
       @project.from_directory do
-        File.open(File.join("src", "test"), "w") { |f| f.write("A") }
+        File.write(File.join("src", "test"), "A")
       end
 
       expect(@project.dry_run).to be_truthy
 
       @project.from_directory do
-        File.open(File.join("src", "test"), "w") { |f| f.write("B") }
+        File.write(File.join("src", "test"), "B")
         FileUtils.touch(File.join("src", "test2"))
       end
 
@@ -124,16 +124,16 @@ describe Tetra::Project do
     end
     it "ends the current dry-run phase after a failed build" do
       @project.from_directory do
-        File.open(File.join("src", "test"), "w") { |f| f.write("A") }
-        File.open(File.join("kit", "test"), "w") { |f| f.write("A") }
+        File.write(File.join("src", "test"), "A")
+        File.write(File.join("kit", "test"), "A")
       end
 
       expect(@project.dry_run).to be_truthy
 
       @project.from_directory do
-        File.open(File.join("src", "test"), "w") { |f| f.write("B") }
+        File.write(File.join("src", "test"), "B")
         FileUtils.touch(File.join("src", "test2"))
-        File.open(File.join("kit", "test"), "w") { |f| f.write("B") }
+        File.write(File.join("kit", "test"), "B")
         FileUtils.touch(File.join("kit", "test2"))
       end
 
@@ -172,19 +172,19 @@ describe Tetra::Project do
   describe "#produced_files" do
     it "gets a list of produced files" do
       @project.from_directory do
-        File.open(File.join("src", "added_outside_dry_run"), "w") { |f| f.write("A") }
+        File.write(File.join("src", "added_outside_dry_run"), "A")
       end
 
       expect(@project.dry_run).to be_truthy
       @project.from_directory do
-        File.open(File.join("src", "added_in_first_dry_run"), "w") { |f| f.write("A") }
-        File.open("added_outside_directory", "w") { |f| f.write("A") }
+        File.write(File.join("src", "added_in_first_dry_run"), "A")
+        File.write("added_outside_directory", "A")
       end
       expect(@project.finish([])).to be_truthy
 
       expect(@project.dry_run).to be_truthy
       @project.from_directory do
-        File.open(File.join("src", "added_in_second_dry_run"), "w") { |f| f.write("A") }
+        File.write(File.join("src", "added_in_second_dry_run"), "A")
       end
       expect(@project.finish([])).to be_truthy
 
@@ -204,7 +204,7 @@ describe Tetra::Project do
         FileUtils.touch(test_file)
         @project.commit_sources("first version", true)
 
-        File.open(test_file, "w") { |f| f.write("A") }
+        File.write(test_file, "A")
         @project.commit_sources("patched version", false)
 
         patches = @project.write_source_patches.map { |f| File.basename(f) }
@@ -219,7 +219,7 @@ describe Tetra::Project do
   describe "#purge_jars" do
     it "moves jars in kit/jars" do
       @project.from_directory do
-        File.open(File.join("src", "test.jar"), "w") { |f| f.write("jarring") }
+        File.write(File.join("src", "test.jar"), "jarring")
       end
 
       @project.purge_jars
