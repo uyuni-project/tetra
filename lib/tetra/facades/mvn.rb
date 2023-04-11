@@ -8,7 +8,7 @@ module Tetra
       full_path = if mvn_path
                     File.join(project_path, mvn_path, "mvn")
                   else
-                    "mvn"  # use system-provided executable
+                    "mvn" # use system-provided executable
                   end
       repo_path = File.join(project_path, "kit", "m2")
       config_path = File.join(project_path, "kit", "m2", "settings.xml")
