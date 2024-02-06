@@ -33,7 +33,7 @@ jobs:
       with:
         ruby-version: '3.2'
     - name: Install RuboCop
-      run: gem install rubocop
+      run: gem install -v 1.57.2 rubocop
     - name: Run RuboCop
       run: |
         rubocop 'bin/tetra'
