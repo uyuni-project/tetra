@@ -41,3 +41,4 @@ jobs:
         rubocop 'lib/tetra/'
         rubocop 'spec/spec_helper.rb'
         rubocop 'spec/lib'
+        rubocop 'tetra.gemspec'
