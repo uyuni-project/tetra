@@ -8,7 +8,7 @@ module Tetra
     # saves a jar poms in <jar_filename>.pom
     # returns filename and status if found, else nil
     def get_pom(filename)
-      content, status = (get_pom_from_jar(filename) || get_pom_from_sha1(filename) || get_pom_from_heuristic(filename))
+      content, status = get_pom_from_jar(filename) || get_pom_from_sha1(filename) || get_pom_from_heuristic(filename)
       return unless content
 
       pom_filename = filename.sub(/(\.jar)?$/, ".pom")
