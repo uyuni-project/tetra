@@ -2,9 +2,11 @@ name: RuboCop
 
 on:
   push:
-    branches: [ master, devel ]
+    branches: [ devel ]
     paths:
       - '*.gemspec'
+      - 'Gemfile'
+      - 'Gemfile.lock'
       - 'bin/tetra'
       - 'lib/**.rb'
       - 'spec/**.rb'
@@ -16,6 +18,8 @@ on:
     branches: [ master, devel ]
     paths:
       - '*.gemspec'
+      - 'Gemfile'
+      - 'Gemfile.lock'
       - 'bin/tetra'
       - 'lib/**.rb'
       - 'spec/**.rb'
@@ -31,9 +35,9 @@ jobs:
     - uses: actions/checkout@v4
     - uses: ruby/setup-ruby@v1
       with:
-        ruby-version: '3.2'
-    - name: Install RuboCop
-      run: gem install -v 1.57.2 rubocop
+        ruby-version: '3.3'
+    - name: Install RuboCop via bundle
+      run: bundle install
     - name: Run RuboCop
       run: |
         rubocop 'bin/tetra'
