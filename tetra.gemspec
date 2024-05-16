@@ -36,7 +36,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency "erb", "~> 4.0.3"
   s.add_runtime_dependency "json_pure", ">= 2.6.3", "< 2.8.0"
   s.add_runtime_dependency "open4", "~> 1.3.4"
-  s.add_runtime_dependency "rexml", "~> 3.2.5"
+  s.add_runtime_dependency "rexml", "~> 3.2.8"
   s.add_runtime_dependency "rubyzip", "~> 2.3.2"
   s.add_runtime_dependency "text", "~> 1.3.1"
 end
