@@ -63,7 +63,7 @@ GEM
     parser (3.3.1.0)
       ast (~> 2.4.1)
       racc
-    racc (1.7.3)
+    racc (1.8.0)
     rainbow (3.1.1)
     rake (13.2.1)
     regexp_parser (2.9.2)
@@ -82,7 +82,7 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.13.0)
     rspec-support (3.13.1)
-    rubocop (1.63.5)
+    rubocop (1.64.0)
       json (~> 2.3)
       language_server-protocol (>= 3.17.0)
       parallel (~> 1.10)
@@ -117,7 +117,7 @@ DEPENDENCIES
   aruba (~> 0.6.2)
   rake (~> 13.2.0)
   rspec (~> 3.13.0)
-  rubocop (~> 1.63.5)
+  rubocop (~> 1.64.0)
   simplecov (~> 0.22.0)
   tetra!
 
