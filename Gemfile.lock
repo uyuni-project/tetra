@@ -6,7 +6,7 @@ PATH
       erb (~> 4.0.3)
       json_pure (>= 2.6.3, < 2.8.0)
       open4 (~> 1.3.4)
-      rexml (~> 3.2.8)
+      rexml (~> 3.2.9)
       rubyzip (~> 2.3.2)
       text (~> 1.3.1)
 
@@ -19,7 +19,7 @@ GEM
       rspec-expectations (>= 2.7.0)
     ast (2.4.2)
     bigdecimal (3.1.8)
-    builder (3.2.4)
+    builder (3.3.0)
     cgi (0.4.1)
     childprocess (5.0.0)
     clamp (1.3.2)
@@ -59,7 +59,7 @@ GEM
     mini_mime (1.1.5)
     multi_test (1.1.0)
     open4 (1.3.4)
-    parallel (1.24.0)
+    parallel (1.25.1)
     parser (3.3.2.0)
       ast (~> 2.4.1)
       racc
@@ -67,8 +67,8 @@ GEM
     rainbow (3.1.1)
     rake (13.2.1)
     regexp_parser (2.9.2)
-    rexml (3.2.8)
-      strscan (>= 3.0.9)
+    rexml (3.2.9)
+      strscan
     rspec (3.13.0)
       rspec-core (~> 3.13.0)
       rspec-expectations (~> 3.13.0)
@@ -104,7 +104,7 @@ GEM
     simplecov-html (0.12.3)
     simplecov_json_formatter (0.1.4)
     strscan (3.1.0)
-    sys-uname (1.2.3)
+    sys-uname (1.3.0)
       ffi (~> 1.1)
     text (1.3.1)
     unicode-display_width (2.5.0)
@@ -117,7 +117,7 @@ DEPENDENCIES
   aruba (~> 0.6.2)
   rake (~> 13.2.0)
   rspec (~> 3.13.0)
-  rubocop (~> 1.64.0)
+  rubocop (~> 1.64.1)
   simplecov (~> 0.22.0)
   tetra!
 
