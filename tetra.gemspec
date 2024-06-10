@@ -30,13 +30,13 @@ Gem::Specification.new do |s|
   s.add_development_dependency "simplecov", "~> 0.22.0"
   s.add_development_dependency "rake", "~> 13.2.0"
   s.add_development_dependency "rspec", "~> 3.13.0"
-  s.add_development_dependency "rubocop", "~> 1.64.0"
+  s.add_development_dependency "rubocop", "~> 1.64.1"
 
   s.add_runtime_dependency "clamp", "~> 1.3.2"
   s.add_runtime_dependency "erb", "~> 4.0.3"
   s.add_runtime_dependency "json_pure", ">= 2.6.3", "< 2.8.0"
   s.add_runtime_dependency "open4", "~> 1.3.4"
-  s.add_runtime_dependency "rexml", "~> 3.2.8"
+  s.add_runtime_dependency "rexml", "~> 3.2.9"
   s.add_runtime_dependency "rubyzip", "~> 2.3.2"
   s.add_runtime_dependency "text", "~> 1.3.1"
 end
