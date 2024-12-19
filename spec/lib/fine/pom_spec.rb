@@ -25,7 +25,7 @@ describe Tetra::Pom do
 
   describe "#name" do
     it "reads artifact name" do
-      expect(commons_pom.name).to eq "Commons Logging"
+      expect(commons_pom.name).to eq "Apache Commons Logging"
       expect(nailgun_pom.name).to eq "nailgun-all"
       expect(struts_apps_pom.name).to eq "Webapps"
     end
@@ -33,7 +33,7 @@ describe Tetra::Pom do
 
   describe "#version" do
     it "reads the version" do
-      expect(commons_pom.version).to eq "1.1.1"
+      expect(commons_pom.version).to eq "1.3.4"
       expect(nailgun_pom.version).to eq "0.9.1"
       expect(struts_apps_pom.version).to eq ""
     end
@@ -42,8 +42,7 @@ describe Tetra::Pom do
   # rubocop:disable Layout/LineLength, Layout/TrailingWhitespace
   describe "#description" do
     it "reads the description" do
-      expect(commons_pom.description).to eq "Commons Logging is a thin adapter allowing configurable bridging to other,
-    well known logging systems."
+      expect(commons_pom.description).to eq "Apache Commons Logging is a thin adapter allowing configurable bridging to other,\n    well-known logging systems."
       expect(nailgun_pom.description).to eq "
         Nailgun is a client, protocol, and server for running Java programs 
         from the command line without incurring the JVM startup overhead. 
@@ -59,7 +58,7 @@ describe Tetra::Pom do
 
   describe "#url" do
     it "reads the url" do
-      expect(commons_pom.url).to eq "http://commons.apache.org/logging"
+      expect(commons_pom.url).to eq "https://commons.apache.org/proper/commons-logging/"
       expect(nailgun_pom.url).to eq "http://martiansoftware.com/nailgun"
       expect(struts_apps_pom.url).to eq ""
     end
@@ -83,8 +82,7 @@ describe Tetra::Pom do
 
   describe "#scm_connection" do
     it "reads the SCM connection address" do
-      expect(commons_pom.scm_connection).to eq "scm:svn:http://svn.apache.org/repos/asf/commons/proper/" \
-        "logging/tags/commons-logging-1.1.1"
+      expect(commons_pom.scm_connection).to eq "scm:git:https://gitbox.apache.org/repos/asf/commons-logging"
       expect(nailgun_pom.scm_connection).to eq "scm:git:git@github.com:martylamb/nailgun.git"
       expect(struts_apps_pom.scm_connection).to eq "scm:svn:http://svn.apache.org/repos/asf/struts/struts2/" \
         "tags/STRUTS_2_3_14/apps"
@@ -93,8 +91,7 @@ describe Tetra::Pom do
 
   describe "#scm_url" do
     it "reads the SCM connection url" do
-      expect(commons_pom.scm_url).to eq "http://svn.apache.org/repos/asf/commons/proper/logging/tags/" \
-        "commons-logging-1.1.1"
+      expect(commons_pom.scm_url).to eq "https://gitbox.apache.org/repos/asf/commons-logging"
       expect(nailgun_pom.scm_url).to eq "scm:git:git@github.com:martylamb/nailgun.git"
       expect(struts_apps_pom.scm_url).to eq "http://svn.apache.org/viewcvs.cgi/struts/struts2/tags/STRUTS_2_3_14/apps"
     end
