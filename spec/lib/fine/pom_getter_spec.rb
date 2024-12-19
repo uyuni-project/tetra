@@ -8,7 +8,7 @@ describe Tetra::PomGetter do
   describe "#get_pom" do
     it "gets the pom from a jar" do
       dir_path = File.join("spec", "data", "commons-logging")
-      jar_path = File.join(dir_path, "commons-logging-1.1.1.jar")
+      jar_path = File.join(dir_path, "commons-logging-1.3.4.jar")
       path, status = pom_getter.get_pom(jar_path)
       expect(status).to eq :found_in_jar
       expect(File.exist?(path)).to be_truthy
