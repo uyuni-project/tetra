@@ -32,7 +32,7 @@ describe "`tetra`", type: :aruba do
   end
 
   it "inits a new project with a zip source file" do
-    archive_contents = File.read(File.join("spec", "data", "commons-collections4-4.4-src.zip"))
+    archive_contents = File.read(File.join("spec", "data", "#{Tetra::CCOLLECTIONS}.zip"))
     write_file("commons-collections.zip", archive_contents)
 
     run_simple("tetra init commons-collections commons-collections.zip")
@@ -48,8 +48,8 @@ describe "`tetra`", type: :aruba do
     cd("commons-collections")
     check_directory_presence([".git", "kit", "src", "packages"], true)
 
-    check_directory_presence([File.join("src", "commons-collections4-4.4-src")], true)
-    check_file_presence([File.join("src", "commons-collections4-4.4-src", "pom.xml")], true)
+    check_directory_presence([File.join("src", Tetra::CCOLLECTIONS)], true)
+    check_file_presence([File.join("src", Tetra::CCOLLECTIONS, "pom.xml")], true)
 
     check_file_presence([File.join("packages", "commons-collections", "commons-collections.zip")], true)
 
@@ -58,7 +58,7 @@ describe "`tetra`", type: :aruba do
   end
 
   it "inits a new project with a tar source file" do
-    archive_contents = File.read(File.join("spec", "data", "commons-collections4-4.4-src.tar.gz"))
+    archive_contents = File.read(File.join("spec", "data", "#{Tetra::CCOLLECTIONS}.tar.gz"))
     write_file("commons-collections.tar.gz", archive_contents)
 
     run_simple("tetra init commons-collections commons-collections.tar.gz")
@@ -74,8 +74,8 @@ describe "`tetra`", type: :aruba do
     cd("commons-collections")
     check_directory_presence([".git", "kit", "src", "packages"], true)
 
-    check_directory_presence([File.join("src", "commons-collections4-4.4-src")], true)
-    check_file_presence([File.join("src", "commons-collections4-4.4-src", "pom.xml")], true)
+    check_directory_presence([File.join("src", Tetra::CCOLLECTIONS)], true)
+    check_file_presence([File.join("src", Tetra::CCOLLECTIONS, "pom.xml")], true)
 
     check_file_presence([File.join("packages", "commons-collections", "commons-collections.tar.gz")], true)
 
