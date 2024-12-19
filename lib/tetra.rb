@@ -35,6 +35,7 @@ require "tetra/facades/unzip"
 require "tetra/facades/tar"
 
 # main internal classes
+require "tetra/constants"
 require "tetra/version"
 require "tetra/project_initer"
 require "tetra/project"
