@@ -40,6 +40,8 @@ jobs:
       run: bundle install
     - name: Run RuboCop
       run: |
+        ruby --version
+        rubocop --version
         rubocop 'bin/tetra'
         rubocop 'lib/tetra.rb'
         rubocop 'lib/tetra/'
