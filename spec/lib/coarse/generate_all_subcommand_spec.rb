@@ -2,12 +2,12 @@ require "spec_helper"
 
 describe "`tetra generate-all`", type: :aruba do
   it "generates specs and tarballs for a sample package, source archive workflow" do
-    archive_contents = File.read(File.join("spec", "data", "commons-collections4-4.4-src.zip"))
+    archive_contents = File.read(File.join("spec", "data", "#{Tetra::CCOLLECTIONS}.zip"))
     write_file("commons-collections.zip", archive_contents)
 
     # init project
     run_simple("tetra init commons-collections commons-collections.zip")
-    cd(File.join("commons-collections", "src", "commons-collections4-4.4-src"))
+    cd(File.join("commons-collections", "src", Tetra::CCOLLECTIONS))
 
     # first dry-run, all normal
     @aruba_timeout_seconds = 240
@@ -58,7 +58,7 @@ describe "`tetra generate-all`", type: :aruba do
   end
 
   it "generates specs and tarballs for a sample package, manual source workflow" do
-    archive_contents = File.read(File.join("spec", "data", "commons-collections4-4.4-src.zip"))
+    archive_contents = File.read(File.join("spec", "data", "#{Tetra::CCOLLECTIONS}.zip"))
     write_file("commons-collections.zip", archive_contents)
 
     # init project
@@ -79,7 +79,7 @@ describe "`tetra generate-all`", type: :aruba do
     expect(output_from("tetra change-sources ../commons-collections.zip")).to include("New sources committed")
 
     # second dry-run, all normal
-    cd(File.join("src", "commons-collections4-4.4-src"))
+    cd(File.join("src", Tetra::CCOLLECTIONS))
     @aruba_timeout_seconds = 240
     run_interactive("tetra dry-run")
     type("mvn package -DskipTests")

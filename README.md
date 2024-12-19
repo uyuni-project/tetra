@@ -58,7 +58,7 @@ networkless build.
 First, grab the sources:
 
 ```bash
-wget https://archive.apache.org/dist/commons/collections/source/commons-collections4-4.4-src.tar.gz
+wget https://archive.apache.org/dist/commons/collections/source/commons-collections4-4.5.0-M2-src.tar.gz
 ```
 
 Second, create a new `tetra` project named `commons-collections` based on those sources:
