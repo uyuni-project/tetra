@@ -5,7 +5,7 @@
 To develop tetra, you will need:
 
 * to install Bundler and Ruby development headers. On SUSE distros, use
-  `sudo zypper install ruby2.7-rubygem-bundler ruby-devel`;
+  `sudo zypper install ruby3.1-rubygem-bundler ruby-devel`;
 * to get development dependencies: `bundle install`;
 
 To install a development version of tetra use:

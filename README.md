@@ -14,7 +14,7 @@ See [MOTIVATION.md](MOTIVATION.md) for further information.
 
 You need:
 
-- [Ruby 2.7.0](https://www.ruby-lang.org) or later;
+- [Ruby 3.1](https://www.ruby-lang.org) or later;
 - [git](https://git-scm.com) with your credentials set in ~/.gitconfig (name and email);
 - some basic Unix commands: bash, unzip, tar;
 - a JDK that can compile whatever software you need to package;
