@@ -48,9 +48,9 @@ describe "`tetra`", type: :aruba do
     cd("commons-collections")
     check_directory_presence([".git", "kit", "src", "packages"], true)
 
-    check_directory_presence([File.join("src", Tetra::CCOLLECTIONS))], true)
+    check_directory_presence([File.join("src", Tetra::CCOLLECTIONS)], true)
     # check_file_presence([File.join("src", Tetra::CCOLLECTIONS), "pom.xml")], true)
-    expect([File.join("src", Tetra::CCOLLECTIONS), "pom.xml")]).to be_an_existing_file
+    expect([File.join("src", Tetra::CCOLLECTIONS, "pom.xml")]).to be_an_existing_file
 
     # check_file_presence([File.join("packages", "commons-collections", "commons-collections.zip")], true)
     expect([File.join("packages", "commons-collections", "commons-collections.zip")]).to be_an_existing_file
@@ -76,11 +76,11 @@ describe "`tetra`", type: :aruba do
     cd("commons-collections")
     check_directory_presence([".git", "kit", "src", "packages"], true)
 
-    check_directory_presence([File.join("src", Tetra::CCOLLECTIONS))], true)
+    check_directory_presence([File.join("src", Tetra::CCOLLECTIONS)], true)
     # check_file_presence([File.join("src", Tetra::CCOLLECTIONS), "pom.xml")], true)
 
     # check_file_presence([File.join("packages", "commons-collections", "commons-collections.tar.gz")], true)
-    expect([File.join("src", Tetra::CCOLLECTIONS), "pom.xml")]).to be_an_existing_file
+    expect([File.join("src", Tetra::CCOLLECTIONS, "pom.xml")]).to be_an_existing_file
     expect([File.join("packages", "commons-collections", "commons-collections.tar.gz")]).to be_an_existing_file
 
     run_simple("git rev-list --format=%B --max-count=1 HEAD")
