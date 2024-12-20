@@ -14,9 +14,31 @@ name: "CodeQL"
 on:
   push:
     branches: [ "master" ]
+    paths:
+      - '!*.md'
+      - '*.gemspec'
+      - '**.rb'
+      - 'Rakefile'
+      - 'Gemfile'
+      - 'Gemfile.lock'
+      - 'bin/tetra'
+      - 'spec/'
+      - 'lib/template/bundled/'
+      - '.github/workflows/codeql-analysis.yml'
   pull_request:
     # The branches below must be a subset of the branches above
     branches: [ "master" ]
+    paths:
+      - '!*.md'
+      - '*.gemspec'
+      - '**.rb'
+      - 'Rakefile'
+      - 'Gemfile'
+      - 'Gemfile.lock'
+      - 'bin/tetra'
+      - 'spec/'
+      - 'lib/template/bundled/'
+      - '.github/workflows/codeql-analysis.yml'
   schedule:
     - cron: '32 3 * * 5'
 
