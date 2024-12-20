@@ -1,3 +1,4 @@
+[![OpenSSF Best Practices](https://www.bestpractices.dev/projects/6678/badge)](https://www.bestpractices.dev/projects/6678)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=uyuni-project_tetra&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=uyuni-project_tetra)
 [![Tests](https://github.com/uyuni-project/tetra/actions/workflows/test.yml/badge.svg?branch=master)](https://github.com/uyuni-project/tetra/actions/workflows/test.yml)
 
@@ -10,21 +11,33 @@ like RPM.
 
 See [MOTIVATION.md](MOTIVATION.md) for further information.
 
-## Installation
-
-You need:
+## Prerequisites
 
 - [Ruby 3.1](https://www.ruby-lang.org) or later;
-- [git](https://git-scm.com) with your credentials set in ~/.gitconfig (name and email);
-- some basic Unix commands: bash, unzip, tar;
-- a JDK that can compile whatever software you need to package;
+- [git](https://git-scm.com) with your credentials set in `~/.gitconfig` (name and email);
+- some basic Unix commands: `bash`, `unzip`, `tar`;
+- a JDK > 8 that can compile whatever software you need to package;
 - Fedora only: packages to compile native gems, use `yum install ruby-devel gcc-c++ zlib-devel`;
 
-Install `tetra` via RubyGems:
+## Installation
+
+You can install `tetra` via RubyGems or by building and installing it yourself.
 
 ```bash
+# via RubyGems (currently 2.0.6 from 02/2020)
 gem install tetra
+
+# from source
+rake install
 ```
+
+## Tests
+
+Test can be found in the `spec/` folder and are divided into fine (more similar to unit tests) and coarse
+(more similar to integration tests).
+To run tests manually, simply execute `rake`.
+With every Pull Request against master and consecutive pushes to that PR, several [GitHub Actions tests](https://github.com/uyuni-project/tetra/tree/master/.github/workflows)
+will run automatically.
 
 ## Workflow
 
@@ -64,8 +77,8 @@ wget https://archive.apache.org/dist/commons/collections/source/commons-collecti
 Second, create a new `tetra` project named `commons-collections` based on those sources:
 
 ```bash
-tetra init commons-collections commons-collections4-4.0-src.tar.gz
-cd commons-collections/src/commons-collections4-4.0-src
+tetra init commons-collections commons-collections4-4.5.0-M2-src.tar.gz
+cd commons-collections/src/commons-collections4-4.5.0-M2-src
 ```
 
 Third, you need to show `tetra` how to build your package. Run `tetra dry-run` and a new subshell will open, in there do
@@ -99,7 +112,11 @@ An in-depth discussion of this project's motivation is available in the [MOTIVAT
 
 ## Status
 
-`tetra` is considered stable. At the moment `tetra` is tested on openSUSE.
+`tetra` is considered stable. At the moment `tetra` is tested on openSUSE and on Ubuntu with GitHub Actions.
+
+# Security
+
+Please see [SECURITY.md](SECURITY.md) for more information.
 
 ## Sources
 
