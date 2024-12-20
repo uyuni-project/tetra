@@ -10,8 +10,8 @@ on:
       - 'Gemfile'
       - 'Gemfile.lock'
       - 'bin/tetra'
-      - 'spec/data/'
-      - 'lib/template/bundled'
+      - 'spec/'
+      - 'lib/template/bundled/'
       - '.github/workflows/test.yml'
   pull_request:
     branches: [ master, devel ]
@@ -22,8 +22,8 @@ on:
       - 'Gemfile'
       - 'Gemfile.lock'
       - 'bin/tetra'
-      - 'spec/data/'
-      - 'lib/template/bundled'
+      - 'spec/'
+      - 'lib/template/bundled/'
       - '.github/workflows/test.yml'
 
 jobs:
