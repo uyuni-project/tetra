@@ -110,8 +110,9 @@ GEM
     rubocop-rake (0.7.1)
       lint_roller (~> 1.1)
       rubocop (>= 1.72.1)
-    rubocop-rspec (3.4.0)
-      rubocop (~> 1.61)
+    rubocop-rspec (3.5.0)
+      lint_roller (~> 1.1)
+      rubocop (~> 1.72, >= 1.72.1)
     ruby-progressbar (1.13.0)
     rubyzip (2.4.1)
     simplecov (0.22.0)
@@ -146,7 +147,7 @@ DEPENDENCIES
   rspec (~> 3.13.0)
   rubocop (~> 1.73.0)
   rubocop-rake (~> 0.7.1)
-  rubocop-rspec (~> 3.4.0)
+  rubocop-rspec (~> 3.5.0)
   simplecov (~> 0.22.0)
   tetra!
 
