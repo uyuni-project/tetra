@@ -19,5 +19,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@85e6279cec87321a52edac9c87bce653a07cf6c2  # v4.2.2
-    - uses: DavidAnson/markdownlint-cli2-action@9f58cc3808058007cebc54088fa42da5075ec634  # main branch as there's no release with the fix yet
+    - uses: DavidAnson/markdownlint-cli2-action@96cc31310ccfb4e75a935bffafb6a960b1561249  # main branch as there's no release with the fix yet
 
