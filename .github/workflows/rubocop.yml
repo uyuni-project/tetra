@@ -32,7 +32,7 @@ jobs:
   rubocop:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@85e6279cec87321a52edac9c87bce653a07cf6c2  # v4.2.2
+    - uses: actions/checkout@9f265659d3bb64ab1440b03b12f4d47a24320917  # v4.2.2
     - uses: ruby/setup-ruby@2a7b30092b0caf9c046252510f9273b4875f3db9  # v1.254.0
       with:
         ruby-version: '3.3'
