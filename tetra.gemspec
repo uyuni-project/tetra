@@ -32,7 +32,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency "rspec", "~> 3.13.0"
   s.add_development_dependency "rubocop", "~> 1.79.1"
   s.add_development_dependency "rubocop-rake", "~> 0.7.1"
-  s.add_development_dependency "rubocop-rspec", "~> 3.6.0"
+  s.add_development_dependency "rubocop-rspec", "~> 3.7.0"
 
   s.add_runtime_dependency "clamp", "~> 1.3.2"
   s.add_runtime_dependency "erb", "~> 4.0.3"
