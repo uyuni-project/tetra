@@ -39,6 +39,6 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency "json_pure", ">= 2.6.3", "< 2.9.0"
   s.add_runtime_dependency "open4", "~> 1.3.4"
   s.add_runtime_dependency "rexml", ">= 3.2.9", "< 3.5.0"
-  s.add_runtime_dependency "rubyzip", ">= 2.3.2", "< 2.5.0"
+  s.add_runtime_dependency "rubyzip", ">= 2.3.2", "< 3.2.0"
   s.add_runtime_dependency "text", "~> 1.3.1"
 end
