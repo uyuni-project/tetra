@@ -56,7 +56,7 @@ describe Tetra::Package do
         expect(spec_lines).to include("Name:           test-project\n")
         expect(spec_lines).to include("License:        The Apache Software License, Version 2.0\n")
         expect(spec_lines).to include("Summary:        Nailgun is a client, protocol, and server for running Java\n")
-        expect(spec_lines).to include("Url:            http://martiansoftware.com/nailgun\n")
+        expect(spec_lines).to include("URL:            http://martiansoftware.com/nailgun\n")
         expect(spec_lines).to include("Source0:        test-project-4.0.tar.gz\n")
         expect(spec_lines).to include("BuildRequires:  test-project-kit == #{@project.version}\n")
         expect(spec_lines).to include("Provides:       mvn(com.martiansoftware:nailgun-server) == 0.9.1\n")

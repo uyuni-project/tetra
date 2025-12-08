@@ -1,7 +1,7 @@
 #
 # spec file for a build-time dependency of project "<%= project.name %>"
 #
-# Copyright (c) <%= Time.now.year %> <%= Etc.getlogin %>
+# Copyright (c) <%= Time.now.year %> SUSE LLC and contributors
 #
 # All modifications and additions to the file contributed by third parties
 # remain the property of their copyright owners, unless otherwise agreed
@@ -14,10 +14,10 @@
 
 Name:           <%= name %>
 Version:        <%= version %>
-Release:        1
+Release:        0
 License:        SUSE-NonFree
 Summary:        Build-time dependency of project "<%= project_name %>"
-Url:            https://github.com/SilvioMoioli/tetra
+URL:            https://github.com/uyuni-project/tetra
 Group:          Development/Libraries/Java
 Source0:        %{name}.tar.xz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build

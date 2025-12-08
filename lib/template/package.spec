@@ -1,7 +1,7 @@
 #
 # spec file for "<%= name %>"
 #
-# Copyright (c) <%= Time.now.year %> <%= Etc.getlogin %>
+# Copyright (c) <%= Time.now.year %> SUSE LLC and contributors
 #
 # All modifications and additions to the file contributed by third parties
 # remain the property of their copyright owners, unless otherwise agreed
@@ -17,10 +17,10 @@
 
 Name:           <%= name %>
 Version:        <%= version %>
-Release:        1
+Release:        0
 License:        <%= license %>
 Summary:        <%= summary %>
-Url:            <%= url %>
+URL:            <%= url %>
 Group:          Development/Libraries/Java
 Source0:        <%= src_archive %>
 Source1:        build.sh
