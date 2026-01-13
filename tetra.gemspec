@@ -24,15 +24,15 @@ Gem::Specification.new do |s|
   s.executables = `git ls-files -- bin/*`.split("\n").map { |f| File.basename(f) }
   s.require_paths = ["lib"]
 
-  s.required_ruby_version = '>= 3.1.0'
+  s.required_ruby_version = '>= 3.4.0'
 
   s.add_development_dependency "aruba", "~> 0.6.2"
   s.add_development_dependency "simplecov", "~> 0.22.0"
   s.add_development_dependency "rake", "~> 13.3.0"
   s.add_development_dependency "rspec", "~> 3.13.0"
-  s.add_development_dependency "rubocop", "~> 1.79.1"
+  s.add_development_dependency "rubocop", "~> 1.82.1"
   s.add_development_dependency "rubocop-rake", "~> 0.7.1"
-  s.add_development_dependency "rubocop-rspec", "~> 3.7.0"
+  s.add_development_dependency "rubocop-rspec", "~> 3.9.0"
 
   s.add_runtime_dependency "clamp", "~> 1.3.2"
   s.add_runtime_dependency "erb", "~> 4.0.3"

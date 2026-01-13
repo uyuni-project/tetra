@@ -81,7 +81,7 @@ module Tetra
               their_versions.max
             end
           )
-          best_matched_result = (results.select { |r| r["v"] == best_matched_version }).first
+          best_matched_result = results.select { |r| r["v"] == best_matched_version }.first
 
           group_id, artifact_id, version = site.get_maven_id_from(best_matched_result)
           log.warn("pom.xml for #{filename} found on search.maven.org with heuristic search\
