@@ -20,8 +20,26 @@ end
 RSpec.configure do |config|
   config.include Aruba::Api
 
-  # We use Aruba's helper to prepend the bin path safely for each test.
+  # We use aruba's helper to prepend the bin path safely for each test.
   config.before(:each) do
+    # 1. Configure Git identity for Unit Tests (running in this Ruby process)
+    ENV["GIT_AUTHOR_NAME"] = "Tetra Test"
+    ENV["GIT_AUTHOR_EMAIL"] = "test@example.com"
+    ENV["GIT_COMMITTER_NAME"] = "Tetra Test"
+    ENV["GIT_COMMITTER_EMAIL"] = "test@example.com"
+
+    # 2. Configure Git identity for aruba and CI tests (running in subprocesses)
+    if respond_to?(:set_environment_variable)
+      set_environment_variable("GIT_AUTHOR_NAME", "Tetra Test")
+      set_environment_variable("GIT_AUTHOR_EMAIL", "test@example.com")
+      set_environment_variable("GIT_COMMITTER_NAME", "Tetra Test")
+      set_environment_variable("GIT_COMMITTER_EMAIL", "test@example.com")
+    end
+
+    # 3. Existing PATH setup
+    bin_path = File.expand_path(File.join(File.dirname(__FILE__), "..", "bin"))
+    prepend_environment_variable("PATH", bin_path + File::PATH_SEPARATOR) if respond_to?(:prepend_environment_variable)
+
     bin_path = File.expand_path(File.join(File.dirname(__FILE__), "..", "bin"))
     prepend_environment_variable("PATH", bin_path + File::PATH_SEPARATOR)
   end
