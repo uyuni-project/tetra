@@ -22,7 +22,7 @@ RSpec.configure do |config|
 
   # We use Aruba's helper to prepend the bin path safely for each test.
   config.before(:each) do
-    bin_path = File.expand_path(File.join(File.dirname(__FILE__), '..', 'bin'))
+    bin_path = File.expand_path(File.join(File.dirname(__FILE__), "..", "bin"))
     prepend_environment_variable("PATH", bin_path + File::PATH_SEPARATOR)
   end
 end

@@ -53,7 +53,9 @@ describe "`tetra generate-all`", type: :aruba do
     expect(last_command_started.output).to include("commons-collections.spec generated")
     expect(last_command_started.output).to include("0001-Sources-updated.patch generated")
 
+    # rubocop:disable RSpec/ExpectActual
     expect("../../packages/commons-collections/commons-collections.spec").to have_file_content(/0001-Sources-updated.patch/)
+    # rubocop:enable RSpec/ExpectActual
   end
 
   it "generates specs and tarballs for a sample package, manual source workflow" do
@@ -122,7 +124,9 @@ describe "`tetra generate-all`", type: :aruba do
     expect(last_command_started.output).to include("commons-collections.spec generated")
     expect(last_command_started.output).to include("0001-Sources-updated.patch generated")
 
+    # rubocop:disable RSpec/ExpectActual
     expect("../../packages/commons-collections/commons-collections.spec").to have_file_content(/0001-Sources-updated.patch/)
     expect("../../packages/commons-collections/commons-collections.spec").to have_file_content(/commons-collections.zip/)
+    # rubocop:enable RSpec/ExpectActual
   end
 end

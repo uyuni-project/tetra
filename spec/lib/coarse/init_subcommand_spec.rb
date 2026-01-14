@@ -39,7 +39,7 @@ describe "`tetra`", type: :aruba do
   end
 
   it "inits a new project with a zip source file" do
-    # Note: File.read runs in RSpec process (project root), write_file writes to Aruba tmp dir
+    # NOTE: File.read runs in RSpec process (project root), write_file writes to Aruba tmp dir
     archive_contents = File.read(File.join("spec", "data", "#{Tetra::CCOLLECTIONS}.zip"))
     write_file("commons-collections.zip", archive_contents)
 
