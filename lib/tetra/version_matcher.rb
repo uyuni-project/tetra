@@ -10,7 +10,7 @@ module Tetra
     # by a ., -, _, ~ or space
     # returns a [name, version] pair
     def split_version(full_name)
-      matches = full_name.match(/(.*?)(?:[\.\-\_ ~,]?([0-9].*))?$/)
+      matches = full_name.match(/\A(.*?)(?:[\.\-\_ ~,]?([0-9].*))\z/)
       if !matches.nil? && matches.length > 1
         [matches[1], matches[2]]
       else

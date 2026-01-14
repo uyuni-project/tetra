@@ -49,12 +49,17 @@ module Tetra
     end
 
     def cleanup_description(raw, max_length)
+      # Normalize spaces and strip and truncate to max_length
+      raw = raw.gsub(/[\s]+/, " ").strip
+      raw = raw.slice(0..max_length - 1)
+
+      # Remove the last word if it was cut off (preceded by a space)
+      raw = raw.sub(/\s\w+\z/, "")
+
+      # Safely remove trailing dots linear in O(N)
+      raw = raw[0...-1] while raw.end_with?(".")
+
       raw
-        .gsub(/[\s]+/, " ")
-        .strip
-        .slice(0..max_length - 1)
-        .sub(/\s\w+$/, "")
-        .sub(/\.+$/, "")
     end
 
     def to_spec
