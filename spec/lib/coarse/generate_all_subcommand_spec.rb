@@ -6,55 +6,54 @@ describe "`tetra generate-all`", type: :aruba do
     write_file("commons-collections.zip", archive_contents)
 
     # init project
-    run_simple("tetra init commons-collections commons-collections.zip")
+    run_command_and_stop("tetra init commons-collections commons-collections.zip", exit_timeout: 120)
     cd(File.join("commons-collections", "src", Tetra::CCOLLECTIONS))
 
-    # first dry-run, all normal
-    @aruba_timeout_seconds = 240
-    run_interactive("tetra dry-run --very-very-verbose")
+    # first dry-run, all normal (Interactive & Slow)
+    run_command("tetra dry-run --very-very-verbose", exit_timeout: 240)
     type("mvn package -DskipTests")
-    type("\u{0004}") # ^D (Ctrl+D), terminates bash with exit status 0
+    type("\u{0004}") # ^D (Ctrl+D)
+    stop_all_commands
 
-    expect(all_output).to include("[INFO] BUILD SUCCESS")
-    expect(all_output).to include("Checking for tetra project")
+    expect(last_command_started.output).to include("[INFO] BUILD SUCCESS")
+    expect(last_command_started.output).to include("Checking for tetra project")
 
     # first generate-all, all normal
-    run_simple("tetra generate-all")
+    run_command_and_stop("tetra generate-all", exit_timeout: 120)
 
-    expect(output_from("tetra generate-all")).to include("commons-collections-kit.spec generated")
-    expect(output_from("tetra generate-all")).to include("commons-collections-kit.tar.xz generated")
-    expect(output_from("tetra generate-all")).to include("build.sh generated")
-    expect(output_from("tetra generate-all")).to include("commons-collections.spec generated")
+    expect(last_command_started.output).to include("commons-collections-kit.spec generated")
+    expect(last_command_started.output).to include("commons-collections-kit.tar.xz generated")
+    expect(last_command_started.output).to include("build.sh generated")
+    expect(last_command_started.output).to include("commons-collections.spec generated")
 
     # patch one file
     append_to_file("README.txt", "patched by tetra test")
 
     # second dry-run fails: sources changed
-    run_simple("tetra dry-run")
-    expect(output_from("tetra dry-run")).to include("Changes detected in src")
-    expect(output_from("tetra dry-run")).to include("Dry run not started")
+    run_command_and_stop("tetra dry-run", fail_on_error: false)
+    expect(last_command_started.output).to include("Changes detected in src")
+    expect(last_command_started.output).to include("Dry run not started")
 
     # run patch
-    run_simple("tetra patch")
+    run_command_and_stop("tetra patch")
 
-    # third dry-run succeeds with patch
-    run_interactive("tetra dry-run")
+    # third dry-run succeeds with patch (Interactive & Slow)
+    run_command("tetra dry-run", exit_timeout: 240)
     type("mvn package -DskipTests")
-    type("\u{0004}") # ^D (Ctrl+D), terminates bash with exit status 0
+    type("\u{0004}")
+    stop_all_commands
 
-    expect(all_output).to include("[INFO] BUILD SUCCESS")
+    expect(last_command_started.output).to include("[INFO] BUILD SUCCESS")
 
-    run_simple("tetra generate-all --very-very-verbose")
+    run_command_and_stop("tetra generate-all --very-very-verbose", exit_timeout: 120)
 
-    expect(output_from("tetra generate-all --very-very-verbose")).to include("commons-collections-kit.spec generated")
-    expect(output_from("tetra generate-all --very-very-verbose")).to include("commons-collections-kit.tar.xz generated")
-    expect(output_from("tetra generate-all --very-very-verbose")).to include("build.sh generated")
-    expect(output_from("tetra generate-all --very-very-verbose")).to include("commons-collections.spec generated")
-    expect(output_from("tetra generate-all --very-very-verbose")).to include("0001-Sources-updated.patch generated")
+    expect(last_command_started.output).to include("commons-collections-kit.spec generated")
+    expect(last_command_started.output).to include("commons-collections-kit.tar.xz generated")
+    expect(last_command_started.output).to include("build.sh generated")
+    expect(last_command_started.output).to include("commons-collections.spec generated")
+    expect(last_command_started.output).to include("0001-Sources-updated.patch generated")
 
-    with_file_content("../../packages/commons-collections/commons-collections.spec") do |content|
-      expect(content).to include("0001-Sources-updated.patch")
-    end
+    expect("../../packages/commons-collections/commons-collections.spec").to have_file_content(/0001-Sources-updated.patch/)
   end
 
   it "generates specs and tarballs for a sample package, manual source workflow" do
@@ -62,67 +61,68 @@ describe "`tetra generate-all`", type: :aruba do
     write_file("commons-collections.zip", archive_contents)
 
     # init project
-    run_simple("tetra init -n commons-collections")
+    run_command_and_stop("tetra init -n commons-collections")
 
     # add sources
-    run_simple("unzip commons-collections.zip -d commons-collections/src")
+    run_command_and_stop("unzip commons-collections.zip -d commons-collections/src")
 
     cd("commons-collections")
 
     # first dry-run fails: sources changed
-    run_simple("tetra dry-run")
-    expect(output_from("tetra dry-run")).to include("Changes detected in src")
-    expect(output_from("tetra dry-run")).to include("Dry run not started")
+    run_command_and_stop("tetra dry-run", fail_on_error: false)
+    expect(last_command_started.output).to include("Changes detected in src")
+    expect(last_command_started.output).to include("Dry run not started")
 
     # run change-sources
-    run_simple("tetra change-sources ../commons-collections.zip")
-    expect(output_from("tetra change-sources ../commons-collections.zip")).to include("New sources committed")
+    run_command_and_stop("tetra change-sources ../commons-collections.zip")
+    expect(last_command_started.output).to include("New sources committed")
 
-    # second dry-run, all normal
+    # second dry-run, all normal (Interactive & Slow)
     cd(File.join("src", Tetra::CCOLLECTIONS))
-    @aruba_timeout_seconds = 240
-    run_interactive("tetra dry-run")
-    type("mvn package -DskipTests")
-    type("\u{0004}") # ^D (Ctrl+D), terminates bash with exit status 0
 
-    expect(all_output).to include("[INFO] BUILD SUCCESS")
+    run_command("tetra dry-run", exit_timeout: 240)
+    type("mvn package -DskipTests")
+    type("\u{0004}")
+    stop_all_commands
+
+    expect(last_command_started.output).to include("[INFO] BUILD SUCCESS")
 
     # first generate-all, all normal
-    run_simple("tetra generate-all")
+    run_command_and_stop("tetra generate-all", exit_timeout: 120)
 
-    expect(output_from("tetra generate-all")).to include("commons-collections-kit.spec generated")
-    expect(output_from("tetra generate-all")).to include("commons-collections-kit.tar.xz generated")
-    expect(output_from("tetra generate-all")).to include("build.sh generated")
-    expect(output_from("tetra generate-all")).to include("commons-collections.spec generated")
+    expect(last_command_started.output).to include("commons-collections-kit.spec generated")
+    expect(last_command_started.output).to include("commons-collections-kit.tar.xz generated")
+    expect(last_command_started.output).to include("build.sh generated")
+    expect(last_command_started.output).to include("commons-collections.spec generated")
 
     # patch one file
     append_to_file("README.txt", "patched by tetra test")
 
     # second dry-run fails: sources changed
-    run_simple("tetra dry-run")
-    expect(output_from("tetra dry-run")).to include("Changes detected in src")
-    expect(output_from("tetra dry-run")).to include("Dry run not started")
+    run_command_and_stop("tetra dry-run", fail_on_error: false)
+    expect(last_command_started.output).to include("Changes detected in src")
+    expect(last_command_started.output).to include("Dry run not started")
 
     # run patch
-    run_simple("tetra patch")
+    run_command_and_stop("tetra patch")
 
-    # third dry-run succeeds with patch
-    run_interactive("tetra dry-run")
+    # third dry-run succeeds with patch (Interactive & Slow)
+    run_command("tetra dry-run", exit_timeout: 240)
     type("mvn package -DskipTests")
-    type("\u{0004}") # ^D (Ctrl+D), terminates bash with exit status 0
-    expect(all_output).to include("[INFO] BUILD SUCCESS")
+    type("\u{0004}")
+    stop_all_commands
 
-    run_simple("tetra generate-all")
+    expect(last_command_started.output).to include("[INFO] BUILD SUCCESS")
 
-    expect(output_from("tetra generate-all")).to include("commons-collections-kit.spec generated")
-    expect(output_from("tetra generate-all")).to include("commons-collections-kit.tar.xz generated")
-    expect(output_from("tetra generate-all")).to include("build.sh generated")
-    expect(output_from("tetra generate-all")).to include("commons-collections.spec generated")
-    expect(output_from("tetra generate-all")).to include("0001-Sources-updated.patch generated")
+    run_command_and_stop("tetra generate-all", exit_timeout: 120)
 
-    with_file_content("../../packages/commons-collections/commons-collections.spec") do |content|
-      expect(content).to include("0001-Sources-updated.patch")
-      expect(content).to include("commons-collections.zip")
-    end
+    expect(last_command_started.output).to include("commons-collections-kit.spec generated")
+    expect(last_command_started.output).to include("commons-collections-kit.tar.xz generated")
+    expect(last_command_started.output).to include("build.sh generated")
+    expect(last_command_started.output).to include("commons-collections.spec generated")
+    expect(last_command_started.output).to include("0001-Sources-updated.patch generated")
+
+    expect("../../packages/commons-collections/commons-collections.spec").to have_file_content(/0001-Sources-updated.patch/)
+    expect("../../packages/commons-collections/commons-collections.spec").to have_file_content(/commons-collections.zip/)
   end
 end
