@@ -1,7 +1,6 @@
 # encoding: UTF-8
 
 require "aruba/rspec"
-require "aruba/reporting"
 require "simplecov"
 
 require "tetra"
