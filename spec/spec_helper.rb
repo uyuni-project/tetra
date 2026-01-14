@@ -19,6 +19,9 @@ end
 # configure aruba for rspec use
 RSpec.configure do |config|
   config.include Aruba::Api
+  # If running in a CI environment, use the verbose 'documentation'
+  # formatter so we see progress line-by-line.
+  config.formatter = :documentation if ENV["CI"]
 
   # We use aruba's helper to prepend the bin path safely for each test.
   config.before(:each) do
