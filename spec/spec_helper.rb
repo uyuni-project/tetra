@@ -2,10 +2,17 @@
 
 require "aruba/rspec"
 require "simplecov"
+require "simplecov-cobertura"
 
 require "tetra"
 
-SimpleCov.start
+SimpleCov.start do
+  # Use the Cobertura formatter for CI, but keep HTML for local browsing
+  formatter SimpleCov::Formatter::MultiFormatter.new([
+                                                       SimpleCov::Formatter::HTMLFormatter,
+                                                       SimpleCov::Formatter::CoberturaFormatter
+                                                     ])
+end
 
 Aruba.configure do |config|
   # Increase the default timeout from 3 seconds to 15 seconds.
