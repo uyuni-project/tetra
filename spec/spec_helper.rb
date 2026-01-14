@@ -1,26 +1,50 @@
 # encoding: UTF-8
 
-require "aruba/api"
-require "aruba/reporting"
+require "aruba/rspec"
 require "simplecov"
 
 require "tetra"
 
 SimpleCov.start
 
+Aruba.configure do |config|
+  # Increase the default timeout from 3 seconds to 15 seconds.
+  # This covers standard commands that are just slightly slow.
+  config.exit_timeout = 15
+
+  # Optional: Increase I/O wait time if your tool is slow to output text
+  config.io_wait_timeout = 2
+end
+
 # configure aruba for rspec use
 RSpec.configure do |config|
   config.include Aruba::Api
+  # If running in a CI environment, use the verbose 'documentation'
+  # formatter so we see progress line-by-line.
+  config.formatter = :documentation if ENV["CI"]
 
-  # use tetra executable from the bin path, not the system-installed one
-  config.before(:suite) do
-    ENV["PATH"] = "#{File.join(File.dirname(__FILE__), '..', 'bin')}#{File::PATH_SEPARATOR}#{ENV['PATH']}"
-  end
-
-  # set up aruba API
+  # We use aruba's helper to prepend the bin path safely for each test.
   config.before(:each) do
-    restore_env
-    clean_current_dir
+    # 1. Configure Git identity for Unit Tests (running in this Ruby process)
+    ENV["GIT_AUTHOR_NAME"] = "Tetra Test"
+    ENV["GIT_AUTHOR_EMAIL"] = "test@example.com"
+    ENV["GIT_COMMITTER_NAME"] = "Tetra Test"
+    ENV["GIT_COMMITTER_EMAIL"] = "test@example.com"
+
+    # 2. Configure Git identity for aruba and CI tests (running in subprocesses)
+    if respond_to?(:set_environment_variable)
+      set_environment_variable("GIT_AUTHOR_NAME", "Tetra Test")
+      set_environment_variable("GIT_AUTHOR_EMAIL", "test@example.com")
+      set_environment_variable("GIT_COMMITTER_NAME", "Tetra Test")
+      set_environment_variable("GIT_COMMITTER_EMAIL", "test@example.com")
+    end
+
+    # 3. Existing PATH setup
+    bin_path = File.expand_path(File.join(File.dirname(__FILE__), "..", "bin"))
+    prepend_environment_variable("PATH", bin_path + File::PATH_SEPARATOR) if respond_to?(:prepend_environment_variable)
+
+    bin_path = File.expand_path(File.join(File.dirname(__FILE__), "..", "bin"))
+    prepend_environment_variable("PATH", bin_path + File::PATH_SEPARATOR)
   end
 end
 

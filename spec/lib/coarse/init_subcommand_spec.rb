@@ -2,84 +2,100 @@ require "spec_helper"
 
 describe "`tetra`", type: :aruba do
   it "shows an error if required parameters are not set" do
-    run_simple("tetra init", false)
+    run_command_and_stop("tetra init", fail_on_error: false)
 
-    expect(stderr_from("tetra init")).to include("parameter 'PACKAGE_NAME': no value provided")
+    expect(last_command_started.stderr).to include("parameter 'PACKAGE_NAME': no value provided")
   end
 
   it "shows an error if required parameters are not set, even if options are set" do
-    run_simple("tetra init -n", false)
+    run_command_and_stop("tetra init -n", fail_on_error: false)
 
-    expect(stderr_from("tetra init -n")).to include("parameter 'PACKAGE_NAME': no value provided")
+    expect(last_command_started.stderr).to include("parameter 'PACKAGE_NAME': no value provided")
   end
 
   it "shows an error if no sources are specified and -n is not set" do
-    run_simple("tetra init mypackage", false)
+    run_command_and_stop("tetra init mypackage", fail_on_error: false)
 
-    expect(stderr_from("tetra init mypackage")).to include("please specify a source archive")
+    expect(last_command_started.stderr).to include("please specify a source archive")
 
-    check_directory_presence(["mypackage"], false)
+    # Old: check_directory_presence(["mypackage"], false)
+    expect("mypackage").not_to be_an_existing_directory
   end
 
   it "inits a new project without sources" do
-    run_simple("tetra init --no-archive mypackage")
+    run_command_and_stop("tetra init --no-archive mypackage")
 
-    expect(output_from("tetra init --no-archive mypackage")).to include("Project inited in mypackage/.")
+    expect(last_command_started.output).to include("Project inited in mypackage/.")
 
-    check_directory_presence(["mypackage"], true)
+    # Old: check_directory_presence(["mypackage"], true)
+    expect("mypackage").to be_an_existing_directory
+
     cd("mypackage")
-    check_directory_presence([".git", "kit", "src"], true)
+
+    # Old: check_directory_presence([".git", "kit", "src"], true)
+    expect(".git").to be_an_existing_directory
+    expect("kit").to be_an_existing_directory
+    expect("src").to be_an_existing_directory
   end
 
   it "inits a new project with a zip source file" do
+    # NOTE: File.read runs in RSpec process (project root), write_file writes to Aruba tmp dir
     archive_contents = File.read(File.join("spec", "data", "#{Tetra::CCOLLECTIONS}.zip"))
     write_file("commons-collections.zip", archive_contents)
 
-    run_simple("tetra init commons-collections commons-collections.zip")
+    run_command_and_stop("tetra init commons-collections commons-collections.zip")
 
-    output = output_from("tetra init commons-collections commons-collections.zip")
+    output = last_command_started.output
     expect(output).to include("Project inited in commons-collections/.")
     expect(output).to include("Sources decompressed in commons-collections/src/")
     expect(output).to include("original archive copied in commons-collections/packages/.")
     expect(output).to include("Please add any other precompiled build dependency to kit/.")
 
-    check_directory_presence(["commons-collections"], true)
+    expect("commons-collections").to be_an_existing_directory
 
     cd("commons-collections")
-    check_directory_presence([".git", "kit", "src", "packages"], true)
 
-    check_directory_presence([File.join("src", Tetra::CCOLLECTIONS)], true)
-    check_file_presence([File.join("src", Tetra::CCOLLECTIONS, "pom.xml")], true)
+    expect(".git").to be_an_existing_directory
+    expect("kit").to be_an_existing_directory
+    expect("src").to be_an_existing_directory
+    expect("packages").to be_an_existing_directory
 
-    check_file_presence([File.join("packages", "commons-collections", "commons-collections.zip")], true)
+    expect(File.join("src", Tetra::CCOLLECTIONS)).to be_an_existing_directory
+    expect(File.join("src", Tetra::CCOLLECTIONS, "pom.xml")).to be_an_existing_file
 
-    run_simple("git rev-list --format=%B --max-count=1 HEAD")
-    expect(stdout_from("git rev-list --format=%B --max-count=1 HEAD")).to include("Inital sources added from archive")
+    expect(File.join("packages", "commons-collections", "commons-collections.zip")).to be_an_existing_file
+
+    run_command_and_stop("git rev-list --format=%B --max-count=1 HEAD")
+    expect(last_command_started.stdout).to include("Inital sources added from archive")
   end
 
   it "inits a new project with a tar source file" do
     archive_contents = File.read(File.join("spec", "data", "#{Tetra::CCOLLECTIONS}.tar.gz"))
     write_file("commons-collections.tar.gz", archive_contents)
 
-    run_simple("tetra init commons-collections commons-collections.tar.gz")
+    run_command_and_stop("tetra init commons-collections commons-collections.tar.gz")
 
-    output = output_from("tetra init commons-collections commons-collections.tar.gz")
+    output = last_command_started.output
     expect(output).to include("Project inited in commons-collections/.")
     expect(output).to include("Sources decompressed in commons-collections/src/")
     expect(output).to include("original archive copied in commons-collections/packages/.")
     expect(output).to include("Please add any other precompiled build dependency to kit/.")
 
-    check_directory_presence(["commons-collections"], true)
+    expect("commons-collections").to be_an_existing_directory
 
     cd("commons-collections")
-    check_directory_presence([".git", "kit", "src", "packages"], true)
 
-    check_directory_presence([File.join("src", Tetra::CCOLLECTIONS)], true)
-    check_file_presence([File.join("src", Tetra::CCOLLECTIONS, "pom.xml")], true)
+    expect(".git").to be_an_existing_directory
+    expect("kit").to be_an_existing_directory
+    expect("src").to be_an_existing_directory
+    expect("packages").to be_an_existing_directory
 
-    check_file_presence([File.join("packages", "commons-collections", "commons-collections.tar.gz")], true)
+    expect(File.join("src", Tetra::CCOLLECTIONS)).to be_an_existing_directory
+    expect(File.join("src", Tetra::CCOLLECTIONS, "pom.xml")).to be_an_existing_file
 
-    run_simple("git rev-list --format=%B --max-count=1 HEAD")
-    expect(stdout_from("git rev-list --format=%B --max-count=1 HEAD")).to include("Inital sources added from archive")
+    expect(File.join("packages", "commons-collections", "commons-collections.tar.gz")).to be_an_existing_file
+
+    run_command_and_stop("git rev-list --format=%B --max-count=1 HEAD")
+    expect(last_command_started.stdout).to include("Inital sources added from archive")
   end
 end
