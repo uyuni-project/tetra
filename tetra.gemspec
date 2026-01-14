@@ -26,7 +26,7 @@ Gem::Specification.new do |s|
 
   s.required_ruby_version = '>= 3.4.0'
 
-  s.add_development_dependency "aruba", "~> 1.0.0"
+  s.add_development_dependency "aruba", "~> 2.3.3"
   s.add_development_dependency "simplecov", "~> 0.22.0"
   s.add_development_dependency "rake", "~> 13.3.0"
   s.add_development_dependency "rspec", "~> 3.13.0"

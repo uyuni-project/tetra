@@ -13,69 +13,46 @@ PATH
 GEM
   remote: https://rubygems.org/
   specs:
-    activesupport (8.1.2)
-      base64
-      bigdecimal
-      concurrent-ruby (~> 1.0, >= 1.3.1)
-      connection_pool (>= 2.2.5)
-      drb
-      i18n (>= 1.6, < 2)
-      json
-      logger (>= 1.4.2)
-      minitest (>= 5.1)
-      securerandom (>= 0.3)
-      tzinfo (~> 2.0, >= 2.0.5)
-      uri (>= 0.13.1)
-    aruba (1.0.4)
-      childprocess (>= 2.0, < 5.0)
-      contracts (~> 0.16.0)
-      cucumber (>= 2.4, < 6.0)
-      rspec-expectations (~> 3.4)
+    aruba (2.3.3)
+      bundler (>= 1.17)
+      contracts (>= 0.16.0, < 0.18.0)
+      cucumber (>= 8.0, < 11.0)
+      rspec-expectations (>= 3.4, < 5.0)
       thor (~> 1.0)
     ast (2.4.3)
     base64 (0.3.0)
     bigdecimal (4.0.1)
     builder (3.3.0)
     cgi (0.5.1)
-    childprocess (4.1.0)
     clamp (1.3.2)
-    concurrent-ruby (1.3.6)
-    connection_pool (3.0.2)
-    contracts (0.16.1)
-    cucumber (5.3.0)
-      builder (~> 3.2, >= 3.2.4)
-      cucumber-core (~> 8.0, >= 8.0.1)
-      cucumber-create-meta (~> 2.0, >= 2.0.2)
-      cucumber-cucumber-expressions (~> 10.3, >= 10.3.0)
-      cucumber-gherkin (~> 15.0, >= 15.0.2)
-      cucumber-html-formatter (~> 9.0, >= 9.0.0)
-      cucumber-messages (~> 13.1, >= 13.1.0)
-      cucumber-wire (~> 4.0, >= 4.0.1)
-      diff-lcs (~> 1.4, >= 1.4.4)
-      multi_test (~> 0.1, >= 0.1.2)
-      sys-uname (~> 1.2, >= 1.2.1)
-    cucumber-core (8.0.1)
-      cucumber-gherkin (~> 15.0, >= 15.0.2)
-      cucumber-messages (~> 13.0, >= 13.0.1)
-      cucumber-tag-expressions (~> 2.0, >= 2.0.4)
-    cucumber-create-meta (2.0.4)
-      cucumber-messages (~> 13.1, >= 13.1.0)
-      sys-uname (~> 1.2, >= 1.2.1)
-    cucumber-cucumber-expressions (10.3.0)
-    cucumber-gherkin (15.0.2)
-      cucumber-messages (~> 13.0, >= 13.0.1)
-    cucumber-html-formatter (9.0.0)
-      cucumber-messages (~> 13.0, >= 13.0.1)
-    cucumber-messages (13.2.1)
-      protobuf-cucumber (~> 3.10, >= 3.10.8)
-    cucumber-tag-expressions (2.0.4)
-    cucumber-wire (4.0.1)
-      cucumber-core (~> 8.0, >= 8.0.1)
-      cucumber-cucumber-expressions (~> 10.3, >= 10.3.0)
-      cucumber-messages (~> 13.0, >= 13.0.1)
+    contracts (0.17.3)
+    cucumber (10.2.0)
+      base64 (~> 0.2)
+      builder (~> 3.2)
+      cucumber-ci-environment (> 9, < 12)
+      cucumber-core (> 15, < 17)
+      cucumber-cucumber-expressions (> 17, < 20)
+      cucumber-html-formatter (> 21, < 23)
+      diff-lcs (~> 1.5)
+      logger (~> 1.6)
+      mini_mime (~> 1.1)
+      multi_test (~> 1.1)
+      sys-uname (~> 1.3)
+    cucumber-ci-environment (11.0.0)
+    cucumber-core (16.1.1)
+      cucumber-gherkin (> 36, < 40)
+      cucumber-messages (> 31, < 33)
+      cucumber-tag-expressions (> 6, < 9)
+    cucumber-cucumber-expressions (18.0.1)
+      bigdecimal
+    cucumber-gherkin (37.0.1)
+      cucumber-messages (>= 31, < 32)
+    cucumber-html-formatter (22.3.0)
+      cucumber-messages (> 23, < 33)
+    cucumber-messages (31.2.0)
+    cucumber-tag-expressions (8.1.0)
     diff-lcs (1.6.2)
     docile (1.4.1)
-    drb (2.2.3)
     erb (4.0.4)
       cgi (>= 0.3.3)
     ffi (1.17.3)
@@ -89,29 +66,20 @@ GEM
     ffi (1.17.3-x86_64-darwin)
     ffi (1.17.3-x86_64-linux-gnu)
     ffi (1.17.3-x86_64-linux-musl)
-    i18n (1.14.8)
-      concurrent-ruby (~> 1.0)
     json (2.18.0)
     json_pure (2.8.1)
     language_server-protocol (3.17.0.5)
     lint_roller (1.1.0)
     logger (1.7.0)
     memoist3 (1.0.0)
-    middleware (0.1.0)
-    minitest (6.0.1)
-      prism (~> 1.5)
-    multi_test (0.1.2)
+    mini_mime (1.1.5)
+    multi_test (1.1.0)
     open4 (1.3.4)
     parallel (1.27.0)
     parser (3.3.10.1)
       ast (~> 2.4.1)
       racc
     prism (1.8.0)
-    protobuf-cucumber (3.10.8)
-      activesupport (>= 3.2)
-      middleware
-      thor
-      thread_safe
     racc (1.8.1)
     rainbow (3.1.1)
     rake (13.3.1)
@@ -152,7 +120,6 @@ GEM
       rubocop (~> 1.81)
     ruby-progressbar (1.13.0)
     rubyzip (2.4.1)
-    securerandom (0.4.1)
     simplecov (0.22.0)
       docile (~> 1.1)
       simplecov-html (~> 0.11)
@@ -164,13 +131,9 @@ GEM
       memoist3 (~> 1.0.0)
     text (1.3.1)
     thor (1.5.0)
-    thread_safe (0.3.6)
-    tzinfo (2.0.6)
-      concurrent-ruby (~> 1.0)
     unicode-display_width (3.2.0)
       unicode-emoji (~> 4.1)
     unicode-emoji (4.2.0)
-    uri (1.1.1)
 
 PLATFORMS
   aarch64-linux-gnu
@@ -186,7 +149,7 @@ PLATFORMS
   x86_64-linux-musl
 
 DEPENDENCIES
-  aruba (~> 1.0.0)
+  aruba (~> 2.3.3)
   rake (~> 13.3.0)
   rspec (~> 3.13.0)
   rubocop (~> 1.82.1)
@@ -196,30 +159,24 @@ DEPENDENCIES
   tetra!
 
 CHECKSUMS
-  activesupport (8.1.2) sha256=88842578ccd0d40f658289b0e8c842acfe9af751afee2e0744a7873f50b6fdae
-  aruba (1.0.4) sha256=1261d60fc3513c9ae39c6b5dbbd62764755a083e455f283a24690219cba2fcef
+  aruba (2.3.3) sha256=837a2f023368a75a38ad9be227e9738ab9af7df3b3f35afd8fb5fc5f7a93f1d4
   ast (2.4.3) sha256=954615157c1d6a382bc27d690d973195e79db7f55e9765ac7c481c60bdb4d383
   base64 (0.3.0) sha256=27337aeabad6ffae05c265c450490628ef3ebd4b67be58257393227588f5a97b
   bigdecimal (4.0.1) sha256=8b07d3d065a9f921c80ceaea7c9d4ae596697295b584c296fe599dd0ad01c4a7
   builder (3.3.0) sha256=497918d2f9dca528fdca4b88d84e4ef4387256d984b8154e9d5d3fe5a9c8835f
   cgi (0.5.1) sha256=e93fcafc69b8a934fe1e6146121fa35430efa8b4a4047c4893764067036f18e9
-  childprocess (4.1.0) sha256=3616ce99ccb242361ce7f2b19bf9ff3e6bc1d98b927c7edc29af8ca617ba6cd3
   clamp (1.3.2) sha256=4f6a99a8678d51abbf1650263a74d1ac50939edc11986271431d2e03a0d7a022
-  concurrent-ruby (1.3.6) sha256=6b56837e1e7e5292f9864f34b69c5a2cbc75c0cf5338f1ce9903d10fa762d5ab
-  connection_pool (3.0.2) sha256=33fff5ba71a12d2aa26cb72b1db8bba2a1a01823559fb01d29eb74c286e62e0a
-  contracts (0.16.1) sha256=29fddcd80a3cefbdf57bbeb5bab18adc50fc64e3cea311d7cb35c63489058d66
-  cucumber (5.3.0) sha256=c03105743acdc41227dfea83d121e95b7ea43f1e06eafd6ffc99adcc346c3678
-  cucumber-core (8.0.1) sha256=24c2511a8c51e57435805df1a67d09d3bf7052c1c69bad2bb543b74369525520
-  cucumber-create-meta (2.0.4) sha256=0485c1a7f9dee699752deea927d328bbbf4bc7949636ce091bf52488be6fb0f1
-  cucumber-cucumber-expressions (10.3.0) sha256=6190fa02e2d581f3ee825795f5b689639969a4bc1311b93e07be514501097ebd
-  cucumber-gherkin (15.0.2) sha256=94a6ec77c16628dac2b023d9220e84f96c5d3a3aa1a892b1f3ad790064f5e554
-  cucumber-html-formatter (9.0.0) sha256=ddd356a707dc9da1334f5a3f796c1d252a0db8b355d26f52c2026bdc6ffdf56b
-  cucumber-messages (13.2.1) sha256=951f0475beb508549cb8cb9820c5fe716737e8dbeeb39e4630676911c8d6fe0b
-  cucumber-tag-expressions (2.0.4) sha256=ab49a1994e64b8b0b866be73344e4c8b3b592ad1af7e5a4669daa7dd75471ab8
-  cucumber-wire (4.0.1) sha256=44894e483fec69082bdbcb02cfad5b5930ecad2de7e838f115632f81b9743681
+  contracts (0.17.3) sha256=e72e626413ea47099becb7b5683beb1c2ea902c69f5bad55c9258fe2b48314d7
+  cucumber (10.2.0) sha256=fdedbd31ecf40858b60f04853f2aa15c44f5c30bbac29c6a227fa1e7005a8158
+  cucumber-ci-environment (11.0.0) sha256=0df79a9e1d0b015b3d9def680f989200d96fef206f4d19ccf86a338c4f71d1e2
+  cucumber-core (16.1.1) sha256=d3aaa80a1ee2865f63f1a21ef496129f675af9099993b9af9608c4ef8ae26b89
+  cucumber-cucumber-expressions (18.0.1) sha256=8398a0bf636af33ff3b61e459a309295eb02745b9e21bd7af0eaaa2a1e6be3e5
+  cucumber-gherkin (37.0.1) sha256=06437ba0dca96cdb7f97e85802a694cf4bee9d3984c00947237448871d9b56d9
+  cucumber-html-formatter (22.3.0) sha256=f9768ed05588dbd73a5f3824c2cc648bd86b00206e6972d743af8051281d0729
+  cucumber-messages (31.2.0) sha256=8f835164cab1c3e3363a1295634ce799eedf338496ab4624e2065e8a42ec5fd4
+  cucumber-tag-expressions (8.1.0) sha256=9bd8c4b6654f8e5bf2a9c99329b6f32136a75e50cd39d4cfb3927d0fa9f52e21
   diff-lcs (1.6.2) sha256=9ae0d2cba7d4df3075fe8cd8602a8604993efc0dfa934cff568969efb1909962
   docile (1.4.1) sha256=96159be799bfa73cdb721b840e9802126e4e03dfc26863db73647204c727f21e
-  drb (2.2.3) sha256=0b00d6fdb50995fe4a45dea13663493c841112e4068656854646f418fda13373
   erb (4.0.4) sha256=de116e106205c46bc01918789b611aaad1328dcc6e9f12cf8cd2cc60ef619717
   ffi (1.17.3) sha256=0e9f39f7bb3934f77ad6feab49662be77e87eedcdeb2a3f5c0234c2938563d4c
   ffi (1.17.3-aarch64-linux-gnu) sha256=28ad573df26560f0aedd8a90c3371279a0b2bd0b4e834b16a2baa10bd7a97068
@@ -232,21 +189,18 @@ CHECKSUMS
   ffi (1.17.3-x86_64-darwin) sha256=1f211811eb5cfaa25998322cdd92ab104bfbd26d1c4c08471599c511f2c00bb5
   ffi (1.17.3-x86_64-linux-gnu) sha256=3746b01f677aae7b16dc1acb7cb3cc17b3e35bdae7676a3f568153fb0e2c887f
   ffi (1.17.3-x86_64-linux-musl) sha256=086b221c3a68320b7564066f46fed23449a44f7a1935f1fe5a245bd89d9aea56
-  i18n (1.14.8) sha256=285778639134865c5e0f6269e0b818256017e8cde89993fdfcbfb64d088824a5
   json (2.18.0) sha256=b10506aee4183f5cf49e0efc48073d7b75843ce3782c68dbeb763351c08fd505
   json_pure (2.8.1) sha256=6a877929ba9d4fa0808ccc38656d1b15d138b2aa0aa32037ee05abea13427ace
   language_server-protocol (3.17.0.5) sha256=fd1e39a51a28bf3eec959379985a72e296e9f9acfce46f6a79d31ca8760803cc
   lint_roller (1.1.0) sha256=2c0c845b632a7d172cb849cc90c1bce937a28c5c8ccccb50dfd46a485003cc87
   logger (1.7.0) sha256=196edec7cc44b66cfb40f9755ce11b392f21f7967696af15d274dde7edff0203
   memoist3 (1.0.0) sha256=686e42402cf150a362050c23143dc57b0ef88f8c344943ff8b7845792b50d56f
-  middleware (0.1.0) sha256=b4a79afb58c3c5031eb5706cdc59219c9f1671e904b04032e6e18c2ddcb4031c
-  minitest (6.0.1) sha256=7854c74f48e2e975969062833adc4013f249a4b212f5e7b9d5c040bf838d54bb
-  multi_test (0.1.2) sha256=adfbe09decee22deea2dc7a6b60698766306d3e74e9af0e03199de80b029a3eb
+  mini_mime (1.1.5) sha256=8681b7e2e4215f2a159f9400b5816d85e9d8c6c6b491e96a12797e798f8bccef
+  multi_test (1.1.0) sha256=e9e550cdd863fb72becfe344aefdcd4cbd26ebf307847f4a6c039a4082324d10
   open4 (1.3.4) sha256=a1df037310624ecc1ea1d81264b11c83e96d0c3c1c6043108d37d396dcd0f4b1
   parallel (1.27.0) sha256=4ac151e1806b755fb4e2dc2332cbf0e54f2e24ba821ff2d3dcf86bf6dc4ae130
   parser (3.3.10.1) sha256=06f6a725d2cd91e5e7f2b7c32ba143631e1f7c8ae2fb918fc4cebec187e6a688
   prism (1.8.0) sha256=84453a16ef5530ea62c5f03ec16b52a459575ad4e7b9c2b360fd8ce2c39c1254
-  protobuf-cucumber (3.10.8) sha256=e2a0a8850d75bdc9992f709c8a2be89a2bc5712dd799dc4a0ccb5db894b2a6e5
   racc (1.8.1) sha256=4a7f6929691dbec8b5209a0b373bc2614882b55fc5d2e447a21aaa691303d62f
   rainbow (3.1.1) sha256=039491aa3a89f42efa1d6dec2fc4e62ede96eb6acd95e52f1ad581182b79bc6a
   rake (13.3.1) sha256=8c9e89d09f66a26a01264e7e3480ec0607f0c497a861ef16063604b1b08eb19c
@@ -263,7 +217,6 @@ CHECKSUMS
   rubocop-rspec (3.9.0) sha256=8fa70a3619408237d789aeecfb9beef40576acc855173e60939d63332fdb55e2
   ruby-progressbar (1.13.0) sha256=80fc9c47a9b640d6834e0dc7b3c94c9df37f08cb072b7761e4a71e22cff29b33
   rubyzip (2.4.1) sha256=8577c88edc1fde8935eb91064c5cb1aef9ad5494b940cf19c775ee833e075615
-  securerandom (0.4.1) sha256=cc5193d414a4341b6e225f0cb4446aceca8e50d5e1888743fac16987638ea0b1
   simplecov (0.22.0) sha256=fe2622c7834ff23b98066bb0a854284b2729a569ac659f82621fc22ef36213a5
   simplecov-html (0.13.2) sha256=bd0b8e54e7c2d7685927e8d6286466359b6f16b18cb0df47b508e8d73c777246
   simplecov_json_formatter (0.1.4) sha256=529418fbe8de1713ac2b2d612aa3daa56d316975d307244399fa4838c601b428
@@ -271,11 +224,8 @@ CHECKSUMS
   tetra (2.0.7)
   text (1.3.1) sha256=2fbbbc82c1ce79c4195b13018a87cbb00d762bda39241bb3cdc32792759dd3f4
   thor (1.5.0) sha256=e3a9e55fe857e44859ce104a84675ab6e8cd59c650a49106a05f55f136425e73
-  thread_safe (0.3.6) sha256=9ed7072821b51c57e8d6b7011a8e282e25aeea3a4065eab326e43f66f063b05a
-  tzinfo (2.0.6) sha256=8daf828cc77bcf7d63b0e3bdb6caa47e2272dcfaf4fbfe46f8c3a9df087a829b
   unicode-display_width (3.2.0) sha256=0cdd96b5681a5949cdbc2c55e7b420facae74c4aaf9a9815eee1087cb1853c42
   unicode-emoji (4.2.0) sha256=519e69150f75652e40bf736106cfbc8f0f73aa3fb6a65afe62fefa7f80b0f80f
-  uri (1.1.1) sha256=379fa58d27ffb1387eaada68c749d1426738bd0f654d812fcc07e7568f5c57c6
 
 BUNDLED WITH
   4.0.3
