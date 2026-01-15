@@ -36,7 +36,7 @@ rake install
 
 Test can be found in the `spec/` folder and are divided into fine (more similar to unit tests) and coarse
 (more similar to integration tests).
-To run tests manually, simply execute `rake`.
+To run tests manually, simply execute `rake` or `bundle exec rake`.
 With every Pull Request against master and consecutive pushes to that PR, several [GitHub Actions tests](https://github.com/uyuni-project/tetra/tree/master/.github/workflows)
 will run automatically.
 
