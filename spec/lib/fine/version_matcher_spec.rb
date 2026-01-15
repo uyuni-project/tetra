@@ -17,6 +17,12 @@ describe Tetra::VersionMatcher do
       expect(v_matcher.split_version("simple-package-name")).to eq(["simple-package-name", nil])
       expect(v_matcher.split_version("mypackage")).to eq(["mypackage", nil])
     end
+
+    it "handles version strings with different separators" do
+      expect(v_matcher.split_version("package_name-1.0")).to eq(["package_name", "1.0"])
+      expect(v_matcher.split_version("package.name.1.0")).to eq(["package.name", "1.0"])
+      expect(v_matcher.split_version("package name 1.0")).to eq(["package name", "1.0"])
+    end
   end
 
   describe "#chunk_distance" do
