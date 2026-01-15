@@ -14,7 +14,7 @@ module Tetra
       if !matches.nil? && matches.length > 1
         [matches[1], matches[2]]
       else
-        [full_string, nil]
+        [full_name, nil]
       end
     end
 
