@@ -1,4 +1,4 @@
-# encoding: UTF-8
+# frozen_string_literal: true
 
 module Tetra
   # runs programs in subprocesses
@@ -8,62 +8,82 @@ module Tetra
     # runs a noninteractive executable and returns its output as a string
     # raises ExecutionFailed if the exit status is not 0
     # optionally echoes the executable's output/error to standard output/error
-    def run(commandline, echo = false, stdin = nil)
+    def run(commandline, echo = false, stdin_data = nil)
       log.debug "running `#{commandline}`"
 
-      out_recorder = echo ? RecordingIO.new(STDOUT) : RecordingIO.new
-      err_recorder = echo ? RecordingIO.new(STDERR) : RecordingIO.new
+      # Prepare buffers to capture output
+      out_buffer = StringIO.new
+      err_buffer = StringIO.new
+      exit_status = nil
+      # Flatten handles nested arrays, Compact removes nils
+      cmd_args = Array(commandline).flatten.compact.map(&:to_s)
 
-      status = Open4.spawn(commandline, stdin: stdin, stdout: out_recorder,
-                                        stderr: err_recorder, quiet: true).exitstatus
+      Open3.popen3(*cmd_args) do |stdin, stdout, stderr, wait_thr|
+        # 1. Handle Input (if any)
+        stdin.write(stdin_data) if stdin_data
+        stdin.close # Close stdin so the process knows input is finished
 
-      log.debug "`#{commandline}` exited with status #{status}"
+        # Use threads to read stdout and stderr simultaneously.
+        readers = []
 
-      if status != 0
-        log.warn("`#{commandline}` failed with status #{status}")
-        out = out_recorder.record
-        err = err_recorder.record
-        if out != "" || err != ""
-          log.warn("Output follows:")
-          log.warn(out) unless out == ""
-          log.warn(err) unless err == ""
+        readers << Thread.new do
+          stdout.each_line do |line|
+            print line if echo       # Echo to real STDOUT if requested
+            out_buffer << line       # Capture to memory
+          end
         end
-        fail ExecutionFailed.new(commandline, status, out, err)
+
+        readers << Thread.new do
+          stderr.each_line do |line|
+            $stderr.print line if echo # Echo to real STDERR if requested
+            err_buffer << line         # Capture to memory
+          end
+        end
+
+        # Wait for reading to finish
+        readers.each(&:join)
+
+        # Get the exit code
+        exit_status = wait_thr.value
       end
 
-      out_recorder.record
+      # Check for failure
+      unless exit_status.success?
+        # Extract strings from buffers
+        out = out_buffer.string
+        err = err_buffer.string
+
+        log.warn("`#{commandline}` failed with status #{exit_status.exitstatus}")
+
+        if !out.empty? || !err.empty?
+          log.warn("Output follows:")
+          log.warn(out) unless out.empty?
+          log.warn(err) unless err.empty?
+        end
+
+        fail ExecutionFailed.new(commandline, exit_status.exitstatus, out, err)
+      end
+
+      # Return the standard output
+      out_buffer.string
     end
 
     # runs an interactive executable in a subshell
     def run_interactive(command)
-      log.debug "running `#{command}`"
-      success = system({}, command)
+      log.debug "running interactive `#{command}`"
+
+      # system() passes control to the subprocess
+      cmd_args = Array(command).flatten.compact.map(&:to_s)
+      success = system(*cmd_args)
+
       log.debug "`#{command}` exited with success #{success}"
-      fail ExecutionFailed.new(command, $CHILD_STATUS, nil, nil) unless success
-    end
 
-    # records bytes sent via "<<" for later use
-    # optionally echoes to another IO object
-    class RecordingIO
-      attr_reader :record
-
-      def initialize(io = nil)
-        @io = io
-        @record = ""
-      end
-
-      def <<(*args)
-        if @io
-          @io.<<(*args)
-          @io.flush
-        end
-        @record.<<(*args)
-      end
+      fail ExecutionFailed.new(command, $CHILD_STATUS.exitstatus, nil, nil) unless success
     end
   end
 
   # raised when a command returns a non-zero status
-  class ExecutionFailed < Exception
+  class ExecutionFailed < StandardError
     attr_reader :commandline
     attr_reader :status
     attr_reader :out
@@ -74,6 +94,7 @@ module Tetra
       @status = status
       @out = out
       @err = err
+      super("Command failed: #{commandline} (status: #{status})")
     end
 
     def to_s

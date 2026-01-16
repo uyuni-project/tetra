@@ -5,32 +5,37 @@ HISTFILE=<%= history_file %>
 HISTFILESIZE=-1
 
 # keep a very long history in memory, that will
-# be copied to HISTFILE on exit
-# Negative values (do not limit) will not work
-# in some Bash versions
-HISTSIZE=10000
+# be copied to HISTFILE on exit.
+# Note: 100000 is usually safe enough for a build session.
+HISTSIZE=100000
 
 # don't keep timestamps in history
 unset HISTTIMEFORMAT
 
-# don't skip any command
+# don't skip any command (record duplicates and spaces)
 HISTCONTROL=""
 
-# change prompt
-PS1="\[$(tput bold)\]\[\033[38;5;11m\]dry-running\[$(tput sgr0)\]\[$(tput sgr0)\]\[\033[38;5;15m\]:\w\\$ \[$(tput sgr0)\]"
+# change prompt to indicate dry-run mode
+# Check if tput exists to avoid errors in minimal environments
+if command -v tput >/dev/null 2>&1; then
+  PS1="\[$(tput bold)\]\[\033[38;5;11m\]dry-running\[$(tput sgr0)\]\[\033[38;5;15m\]:\w\\$ \[$(tput sgr0)\]"
+else
+  PS1="dry-running:\w\$ "
+fi
 
 # add default commandline switches
 
-<% if !ant_in_kit %>
-echo -e "\e[91mWARNING: ant executable file not found in kit/, please check that it is present and executable."
-echo -e "\e[91mDefaulting to system-provided ant, this could make your builds non-reproducible."
+<% unless ant_in_kit %>
+echo -e "\033[0;31mWARNING: ant executable file not found in kit/, please check that it is present and executable."
+echo -e "Defaulting to system-provided ant, this could make your builds non-reproducible.\033[0m"
 <% end %>
 alias ant='<%= ant_commandline %>'
 
-<% if !mvn_in_kit %>
-echo -e "\e[91mWARNING: mvn executable file not found in kit/, please check that it is present and executable."
-echo -e "\e[91mDefaulting to system-provided mvn, this could make your builds non-reproducible."
+<% unless mvn_in_kit %>
+echo -e "\033[0;31mWARNING: mvn executable file not found in kit/, please check that it is present and executable."
+echo -e "Defaulting to system-provided mvn, this could make your builds non-reproducible.\033[0m"
 <% end %>
 alias mvn='<%= mvn_commandline %>'
 
+# Gradle wrapper alias
 alias gradlew='<%= gradle_commandline %>'

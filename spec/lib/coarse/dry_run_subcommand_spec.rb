@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "spec_helper"
 
 describe "`tetra dry-run`", type: :aruba do
@@ -13,15 +15,18 @@ describe "`tetra dry-run`", type: :aruba do
     cd("mypackage")
 
     # Interactive Step:
-    # 1. Start the command asynchronously (don't wait yet)
+    # 1. Start the command asynchronously (don't wait for it to exit yet)
     run_command("tetra dry-run")
 
     # 2. Send input to the running process
+    # Aruba's `type` simulates typing followed by a newline
     type("echo ciao")
     type("echo ciao > ciao.jar")
-    type("\u{0004}") # ^D (Ctrl+D) to exit the shell
 
-    # 3. Wait for the command to finish processing input and exit
+    # 3. Send Ctrl+D (\u{0004}) to signal EOF and exit the subshell
+    type("\u{0004}")
+
+    # 4. Wait for the command to finish processing input and exit
     stop_all_commands
 
     # Check output of the interactive session
@@ -31,10 +36,13 @@ describe "`tetra dry-run`", type: :aruba do
     expect(output).to include("ciao")
     expect(output).to include("Dry-run finished")
 
-    # check that markers were written in git repo
+    # Check that markers were written in git repo
+
+    # HEAD~ is the commit before the last one (dry-run start)
     run_command_and_stop("git rev-list --format=%B --max-count=1 HEAD~")
     expect(last_command_started.stdout).to include("tetra: dry-run-started")
 
+    # HEAD is the last commit (dry-run finish)
     run_command_and_stop("git rev-list --format=%B --max-count=1 HEAD")
     expect(last_command_started.stdout).to include("tetra: dry-run-finished")
     expect(last_command_started.stdout).to include("tetra: build-script-line: echo ciao")
@@ -48,7 +56,7 @@ describe "`tetra dry-run`", type: :aruba do
 
     expect(last_command_started.output).to include("Scripted dry-run started")
 
-    # check that markers were written in git repo
+    # Check that markers were written in git repo
     run_command_and_stop("git rev-list --format=%B --max-count=1 HEAD~")
     expect(last_command_started.stdout).to include("tetra: dry-run-started")
 

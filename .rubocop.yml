@@ -1,14 +1,21 @@
 inherit_from: .rubocop_todo.yml
 
 plugins:
+  - rubocop-performance
   - rubocop-rake
   - rubocop-rspec
 
 AllCops:
-  NewCops: disable
+  NewCops: enable
   TargetRubyVersion: 3.4
   Exclude:
-    - 'lib/template/*.spec'
+    - "lib/template/*.spec"
+    - "vendor/**/*"
+    - "tmp/**/*"
+
+Style/FrozenStringLiteralComment:
+  Enabled: true
+  EnforcedStyle: always
 
 Layout/LineLength:
   Max: 140
@@ -31,5 +38,11 @@ Metrics/PerceivedComplexity:
 Style/StringLiterals:
   EnforcedStyle: double_quotes
 
+Style/StringLiteralsInInterpolation:
+  EnforcedStyle: double_quotes
+
 Style/MultilineBlockChain:
   Enabled: false
+
+RSpec/MultipleExpectations:
+  Max: 10

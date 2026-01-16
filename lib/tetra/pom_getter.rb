@@ -1,4 +1,4 @@
-# encoding: UTF-8
+# frozen_string_literal: true
 
 module Tetra
   # attempts to get java projects' pom file
@@ -8,11 +8,13 @@ module Tetra
     # saves a jar poms in <jar_filename>.pom
     # returns filename and status if found, else nil
     def get_pom(filename)
-      content, status = get_pom_from_jar(filename) || get_pom_from_sha1(filename) || get_pom_from_heuristic(filename)
+      content, status = get_pom_from_jar(filename) ||
+                        get_pom_from_sha1(filename) ||
+                        get_pom_from_heuristic(filename)
       return unless content
 
       pom_filename = filename.sub(/(\.jar)?$/, ".pom")
-      File.open(pom_filename, "w") { |io| io.write(content) }
+      File.binwrite(pom_filename, content)
       [pom_filename, status]
     end
 
@@ -21,7 +23,11 @@ module Tetra
       log.debug("Attempting unpack of #{file} to find a POM")
       begin
         Zip::File.foreach(file) do |entry|
-          if entry.name =~ %r{/pom.xml$}
+          # Security check (Zip Slip)
+          next if entry.name.include?("..") || entry.name.start_with?("/")
+
+          # PERFORMANCE: end_with? is much faster than Regexp for simple suffixes
+          if entry.name.end_with?("/pom.xml") || entry.name == "pom.xml"
             log.info("pom.xml found in #{file}##{entry.name}")
             return entry.get_input_stream.read, :found_in_jar
           end
@@ -37,19 +43,22 @@ module Tetra
     # returns a pom from search.maven.org with a jar sha1 search
     def get_pom_from_sha1(file)
       log.debug("Attempting SHA1 POM lookup for #{file}")
+      return unless File.file?(file)
+
       begin
-        if File.file?(file)
-          site = MavenWebsite.new
-          sha1 = Digest::SHA1.hexdigest File.read(file)
-          results = site.search_by_sha1(sha1).select { |result| result["ec"].include?(".pom") }
-          result = results.first
-          unless result.nil?
-            log.info("pom.xml for #{file} found on search.maven.org for sha1 #{sha1}\
-              (#{result['g']}:#{result['a']}:#{result['v']})"
-                    )
-            group_id, artifact_id, version = site.get_maven_id_from result
-            return site.download_pom(group_id, artifact_id, version), :found_via_sha1
-          end
+        site = MavenWebsite.new
+        # PERFORMANCE: Streams the file calculation instead of loading entire file into RAM
+        sha1 = Digest::SHA1.file(file).hexdigest
+
+        results = site.search_by_sha1(sha1)
+        found_doc = results.find { |doc| doc["ec"].include?(".pom") }
+
+        if found_doc
+          log.info("pom.xml for #{file} found on search.maven.org for sha1 #{sha1} " \
+                   "(#{found_doc['g']}:#{found_doc['a']}:#{found_doc['v']})")
+
+          group_id, artifact_id, version = site.get_maven_id_from(found_doc)
+          return site.download_pom(group_id, artifact_id, version), :found_via_sha1
         end
       rescue NotFoundOnMavenWebsiteError
         log.warn("Got a 404 error while looking for #{file}'s SHA1 in search.maven.org")
@@ -59,37 +68,40 @@ module Tetra
 
     # returns a pom from search.maven.org with a heuristic name search
     def get_pom_from_heuristic(filename)
+      log.debug("Attempting heuristic POM search for #{filename}")
       begin
-        log.debug("Attempting heuristic POM search for #{filename}")
         site = MavenWebsite.new
-        filename = cleanup_name(filename)
+        clean_name = cleanup_name(filename)
+
         version_matcher = VersionMatcher.new
-        my_artifact_id, my_version = version_matcher.split_version(filename)
+        my_artifact_id, my_version = version_matcher.split_version(clean_name)
         log.debug("Guessed artifact id: #{my_artifact_id}, version: #{my_version}")
 
-        result = site.search_by_name(my_artifact_id).first
-        log.debug("Artifact id search result: #{result}")
-        unless result.nil?
-          group_id, artifact_id, = site.get_maven_id_from result
-          results = site.search_by_group_id_and_artifact_id(group_id, artifact_id)
-          log.debug("All versions: #{results}")
-          their_versions = results.map { |doc| doc["v"] }
-          best_matched_version = (
-            if !my_version.nil?
-              version_matcher.best_match(my_version, their_versions)
-            else
-              their_versions.max
-            end
-          )
-          best_matched_result = results.select { |r| r["v"] == best_matched_version }.first
+        first_result = site.search_by_name(my_artifact_id).first
+        log.debug("Artifact id search result: #{first_result}")
 
-          group_id, artifact_id, version = site.get_maven_id_from(best_matched_result)
-          log.warn("pom.xml for #{filename} found on search.maven.org with heuristic search\
-            (#{group_id}:#{artifact_id}:#{version})"
-                  )
+        return unless first_result
 
-          return site.download_pom(group_id, artifact_id, version), :found_via_heuristic
-        end
+        group_id, artifact_id, = site.get_maven_id_from(first_result)
+        results = site.search_by_group_id_and_artifact_id(group_id, artifact_id)
+        log.debug("All versions: #{results}")
+
+        their_versions = results.map { |doc| doc["v"] }
+
+        best_matched_version = if my_version
+                                 version_matcher.best_match(my_version, their_versions)
+                               else
+                                 their_versions.max
+                               end
+
+        best_matched_doc = results.find { |r| r["v"] == best_matched_version }
+        return unless best_matched_doc
+
+        group_id, artifact_id, version = site.get_maven_id_from(best_matched_doc)
+        log.warn("pom.xml for #{filename} found on search.maven.org with heuristic search " \
+                 "(#{group_id}:#{artifact_id}:#{version})")
+
+        return site.download_pom(group_id, artifact_id, version), :found_via_heuristic
       rescue NotFoundOnMavenWebsiteError
         log.warn("Got a 404 error while looking for #{filename} heuristically in search.maven.org")
       end
@@ -98,7 +110,7 @@ module Tetra
 
     # get a heuristic name from a path
     def cleanup_name(path)
-      Pathname.new(path).basename.to_s.sub(/.jar$/, "")
+      Pathname.new(path).basename.to_s.sub(/\.jar$/, "")
     end
   end
 end

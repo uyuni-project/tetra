@@ -1,4 +1,4 @@
-# encoding: UTF-8
+# frozen_string_literal: true
 
 module Tetra
   # tetra generate-script
@@ -7,8 +7,7 @@ module Tetra
       checking_exceptions do
         project = Tetra::Project.new(".")
         ensure_dry_running(:has_finished, project) do
-          result_path, conflict_count =
-            Tetra::Package.new(project).to_script
+          result_path, conflict_count = Tetra::Package.new(project).to_script
           print_generation_result(project, result_path, conflict_count)
         end
       end

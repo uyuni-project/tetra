@@ -1,4 +1,4 @@
-# encoding: UTF-8
+# frozen_string_literal: true
 
 module Tetra
   # implements common options and utility methods
@@ -24,12 +24,12 @@ module Tetra
     end
 
     # maps verbosity options to log level
-    def configure_log_level(v, vv, vvv)
-      if vvv
+    def configure_log_level(verbose, very_verbose, very_very_verbose)
+      if very_very_verbose
         log.level = ::Logger::DEBUG
-      elsif vv
+      elsif very_verbose
         log.level = ::Logger::INFO
-      elsif v
+      elsif verbose
         log.level = ::Logger::WARN
       else
         log.level = ::Logger::ERROR
@@ -52,56 +52,62 @@ module Tetra
       dry_running = project.dry_running?
       has_finished = !project.version.nil?
 
-      if (state == :is_in_progress && dry_running) ||
-         (state == :is_not_in_progress && !dry_running) ||
-         (state == :has_finished && !dry_running && has_finished)
+      condition_met = case state
+                      when :is_in_progress
+                        dry_running
+                      when :is_not_in_progress
+                        !dry_running
+                      when :has_finished
+                        !dry_running && has_finished
+                      end
+
+      if condition_met
         yield
       else
-        if (state == :is_in_progress) ||
-           (state == :has_finished && !dry_running && !has_finished)
-          puts "Please start a dry-run first, use \"tetra dry-run\""
-        elsif (state == :is_not_in_progress) ||
-              (state == :has_finished && dry_running)
-          puts "There is a dry-run in progress, please finish it (^D) or abort it (^C^D)"
-        end
+        handle_dry_run_error(state, dry_running, has_finished)
       end
     end
 
     # outputs output of a file generation
     def print_generation_result(project, result_path, conflict_count = 0)
       puts "#{format_path(result_path, project)} generated"
-      puts "Warning: #{conflict_count} unresolved conflicts, please review and commit" if conflict_count > 0
+      puts "Warning: #{conflict_count} unresolved conflicts, please review and commit" if conflict_count.positive?
     end
 
     # generates a version of path relative to the current directory
     def format_path(path, project)
-      full_path = (
-        if Pathname.new(path).relative?
-          File.join(project.full_path, path)
-        else
-          path
-        end
-      )
+      path_obj = Pathname.new(path)
+      full_path = if path_obj.relative?
+                    File.join(project.full_path, path)
+                  else
+                    path
+                  end
       Pathname.new(full_path).relative_path_from(Pathname.new(Dir.pwd))
     end
 
     # handles most fatal exceptions
     def checking_exceptions
       yield
-    rescue Errno::EACCES => e
+    rescue Errno::EACCES, Errno::ENOENT, Errno::EEXIST => e
       $stderr.puts e
-    rescue Errno::ENOENT => e
-      $stderr.puts e
-    rescue Errno::EEXIST => e
-      $stderr.puts e
-    rescue NoProjectDirectoryError => e
+    rescue Tetra::NoProjectDirectoryError => e
       $stderr.puts "#{e.directory} is not a tetra project directory, see \"tetra init\""
-    rescue GitAlreadyInitedError
+    rescue Tetra::GitAlreadyInitedError
       $stderr.puts "This directory is already a tetra project"
-    rescue ExecutionFailed => e
+    rescue Tetra::ExecutionFailed => e
       $stderr.puts "Failed to run `#{e.commandline}` (exit status #{e.status})"
     rescue Interrupt
       $stderr.puts "Execution interrupted by the user"
+    end
+
+    private
+
+    def handle_dry_run_error(state, dry_running, has_finished)
+      if (state == :is_in_progress) || (state == :has_finished && !dry_running && !has_finished)
+        puts "Please start a dry-run first, use \"tetra dry-run\""
+      elsif (state == :is_not_in_progress) || (state == :has_finished && dry_running)
+        puts "There is a dry-run in progress, please finish it (^D) or abort it (^C^D)"
+      end
     end
   end
 end

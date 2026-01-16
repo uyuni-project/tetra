@@ -1,5 +1,4 @@
-# encoding: UTF-8
-
+# frozen_string_literal: true
 module Tetra
   # encapsulates unzip
   class Unzip
@@ -7,8 +6,10 @@ module Tetra
 
     # decompresses a file in a target directory
     def decompress(zipfile, directory)
-      result = run("unzip #{zipfile} -d #{directory}")
-      result.strip if result != ""
+      # Use Array execution to prevent shell injection
+      result = run(["unzip", zipfile, "-d", directory])
+
+      result&.strip
     end
   end
 end

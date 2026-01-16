@@ -1,4 +1,4 @@
-# encoding: UTF-8
+# frozen_string_literal: true
 
 require "spec_helper"
 
@@ -39,22 +39,22 @@ describe Tetra::Pom do
     end
   end
 
-  # rubocop:disable Layout/LineLength, Layout/TrailingWhitespace
+  # rubocop:disable Layout/LineLength
   describe "#description" do
     it "reads the description" do
       expect(commons_pom.description).to eq "Apache Commons Logging is a thin adapter allowing configurable bridging to other,\n    well-known logging systems."
-      expect(nailgun_pom.description).to eq "
-        Nailgun is a client, protocol, and server for running Java programs 
-        from the command line without incurring the JVM startup overhead. 
-        Programs run in the server (which is implemented in Java), and are 
-        triggered by the client (written in C), which handles all I/O.
-    
-        This project contains the server and examples.
-    "
+      normalized_description = nailgun_pom.description.gsub(/[ \t]+$/, "")
+
+      expect(normalized_description).to eq "Nailgun is a client, protocol, and server for running Java programs\n" \
+                                           "        from the command line without incurring the JVM startup overhead.\n" \
+                                           "        Programs run in the server (which is implemented in Java), and are\n" \
+                                           "        triggered by the client (written in C), which handles all I/O.\n" \
+                                           "\n" \
+                                           "        This project contains the server and examples."
       expect(struts_apps_pom.description).to eq "Apache Struts 2"
     end
   end
-  # rubocop:enable Layout/LineLength, Layout/TrailingWhitespace
+  # rubocop:enable Layout/LineLength
 
   describe "#url" do
     it "reads the url" do

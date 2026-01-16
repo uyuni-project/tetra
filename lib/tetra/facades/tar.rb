@@ -1,5 +1,4 @@
-# encoding: UTF-8
-
+# frozen_string_literal: true
 module Tetra
   # encapsulates tar
   class Tar
@@ -7,8 +6,10 @@ module Tetra
 
     # decompresses a file in a target directory
     def decompress(tarfile, directory)
-      result = run("tar xvf #{tarfile} --directory #{directory}")
-      result.strip if result != ""
+      # Use Array format to prevent shell injection.
+      result = run(["tar", "xvf", tarfile, "--directory", directory])
+
+      result&.strip
     end
   end
 end

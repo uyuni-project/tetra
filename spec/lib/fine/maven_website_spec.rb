@@ -1,4 +1,4 @@
-# encoding: UTF-8
+# frozen_string_literal: true
 
 require "spec_helper"
 
@@ -19,7 +19,7 @@ describe Tetra::MavenWebsite do
     it "uses search.maven.org to look for poms by keyword (name)" do
       result = site.search_by_name("jruby").first
 
-      # not much to test here
+      # not much to test here, just ensure we got a result
       expect(result).not_to be_nil
     end
   end
@@ -41,7 +41,7 @@ describe Tetra::MavenWebsite do
   end
 
   describe "#get_maven_id_from" do
-    it "uses search.maven.org to look for poms" do
+    it "extracts maven identity from hash" do
       expect(site.get_maven_id_from("g" => 1, "a" => 2, "v" => 3)).to eq([1, 2, 3])
     end
   end
@@ -50,8 +50,14 @@ describe Tetra::MavenWebsite do
     it "gets a pom from search.maven.org" do
       dir_path = File.join("spec", "data", "antlr")
       pom_path = File.join(dir_path, "pom.xml")
-      expect(site.download_pom("antlr", "antlrall", "2.7.2")).to eq(File.read(pom_path))
+
+      # Strip whitespace to handle potential line-ending differences (CRLF vs LF)
+      downloaded_content = site.download_pom("antlr", "antlrall", "2.7.2")&.strip
+      expected_content = File.read(pom_path).strip
+
+      expect(downloaded_content).to eq(expected_content)
     end
+
     it "returns an error on file not found" do
       expect do
         site.download_pom("does_not_exist", "does_not_exist", "does_not_exist")

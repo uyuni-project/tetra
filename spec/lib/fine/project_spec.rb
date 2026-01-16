@@ -1,4 +1,4 @@
-# encoding: UTF-8
+# frozen_string_literal: true
 
 require "spec_helper"
 
@@ -13,7 +13,7 @@ describe Tetra::Project do
     delete_mock_project
   end
 
-  describe "version"  do
+  describe "version" do
     it "returns no project version in case no dry-run happened" do
       expect(@project.version).to be_nil
     end
@@ -21,26 +21,26 @@ describe Tetra::Project do
     it "returns a project version after dry-run" do
       @project.dry_run
       @project.finish([])
-      expect(@project.version).to be
+      expect(@project.version).not_to be_nil
     end
   end
 
-  describe "#project?"  do
+  describe "#project?" do
     it "checks if a directory is a tetra project or not" do
       expect(Tetra::Project.project?(@project_path)).to be_truthy
       expect(Tetra::Project.project?(File.join(@project_path, ".."))).to be_falsey
     end
   end
 
-  describe "#find_project_dir"  do
-    it "recursively the parent project directory" do
+  describe "#find_project_dir" do
+    it "recursively finds the parent project directory" do
       expanded_path = File.expand_path(@project_path)
       expect(Tetra::Project.find_project_dir(expanded_path)).to eq expanded_path
       expect(Tetra::Project.find_project_dir(File.expand_path("src", @project_path))).to eq expanded_path
       expect(Tetra::Project.find_project_dir(File.expand_path("kit", @project_path))).to eq expanded_path
 
       expect do
-        expect(Tetra::Project.find_project_dir(File.expand_path("..", @project_path))).to raise_error
+        Tetra::Project.find_project_dir(File.expand_path("..", @project_path))
       end.to raise_error(Tetra::NoProjectDirectoryError)
     end
   end
@@ -57,7 +57,9 @@ describe Tetra::Project do
     end
 
     it "returns the list of template files with bundles" do
-      expect(@project.template_files(true)).to include("bundled/apache-ant-1.10.15" => "kit")
+      # NOTE: Adjust the version string if your bundled ant version differs
+      expect(@project.template_files(true)).to have_key("bundled/apache-ant-1.10.15")
+      expect(@project.template_files(true)["bundled/apache-ant-1.10.15"]).to eq "kit"
     end
   end
 
@@ -83,7 +85,7 @@ describe Tetra::Project do
     end
   end
 
-  describe "#src_patched?"  do
+  describe "#src_patched?" do
     it "checks whether src is dirty" do
       @project.from_directory do
         @project.dry_run
@@ -99,13 +101,13 @@ describe Tetra::Project do
   describe "#finish" do
     it "ends the current dry-run phase after a successful build" do
       @project.from_directory do
-        File.open(File.join("src", "test"), "w") { |f| f.write("A") }
+        File.write(File.join("src", "test"), "A")
       end
 
       expect(@project.dry_run).to be_truthy
 
       @project.from_directory do
-        File.open(File.join("src", "test"), "w") { |f| f.write("B") }
+        File.write(File.join("src", "test"), "B")
         FileUtils.touch(File.join("src", "test2"))
       end
 
@@ -122,18 +124,19 @@ describe Tetra::Project do
         expect(`git show HEAD`.split("\n").map(&:strip)).to include("tetra: file-changed: src/test")
       end
     end
+
     it "ends the current dry-run phase after a failed build" do
       @project.from_directory do
-        File.open(File.join("src", "test"), "w") { |f| f.write("A") }
-        File.open(File.join("kit", "test"), "w") { |f| f.write("A") }
+        File.write(File.join("src", "test"), "A")
+        File.write(File.join("kit", "test"), "A")
       end
 
       expect(@project.dry_run).to be_truthy
 
       @project.from_directory do
-        File.open(File.join("src", "test"), "w") { |f| f.write("B") }
+        File.write(File.join("src", "test"), "B")
         FileUtils.touch(File.join("src", "test2"))
-        File.open(File.join("kit", "test"), "w") { |f| f.write("B") }
+        File.write(File.join("kit", "test"), "B")
         FileUtils.touch(File.join("kit", "test2"))
       end
 
@@ -172,19 +175,19 @@ describe Tetra::Project do
   describe "#produced_files" do
     it "gets a list of produced files" do
       @project.from_directory do
-        File.open(File.join("src", "added_outside_dry_run"), "w") { |f| f.write("A") }
+        File.write(File.join("src", "added_outside_dry_run"), "A")
       end
 
       expect(@project.dry_run).to be_truthy
       @project.from_directory do
-        File.open(File.join("src", "added_in_first_dry_run"), "w") { |f| f.write("A") }
-        File.open("added_outside_directory", "w") { |f| f.write("A") }
+        File.write(File.join("src", "added_in_first_dry_run"), "A")
+        File.write("added_outside_directory", "A")
       end
       expect(@project.finish([])).to be_truthy
 
       expect(@project.dry_run).to be_truthy
       @project.from_directory do
-        File.open(File.join("src", "added_in_second_dry_run"), "w") { |f| f.write("A") }
+        File.write(File.join("src", "added_in_second_dry_run"), "A")
       end
       expect(@project.finish([])).to be_truthy
 
@@ -204,7 +207,7 @@ describe Tetra::Project do
         FileUtils.touch(test_file)
         @project.commit_sources("first version", true)
 
-        File.open(test_file, "w") { |f| f.write("A") }
+        File.write(test_file, "A")
         @project.commit_sources("patched version", false)
 
         patches = @project.write_source_patches.map { |f| File.basename(f) }
@@ -219,7 +222,7 @@ describe Tetra::Project do
   describe "#purge_jars" do
     it "moves jars in kit/jars" do
       @project.from_directory do
-        File.open(File.join("src", "test.jar"), "w") { |f| f.write("jarring") }
+        File.write(File.join("src", "test.jar"), "jarring")
       end
 
       @project.purge_jars
