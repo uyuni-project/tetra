@@ -66,6 +66,9 @@ cp -a <%= output %> %{buildroot}%{_javadir}/<%= File.basename(output) %>
 
 %files
 %defattr(-,root,root)
+<% license_files.each do |file| %>
+%doc <%= file %>
+<% end %>
 %{_javadir}/*
 
 %changelog

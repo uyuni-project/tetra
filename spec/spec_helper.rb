@@ -51,7 +51,12 @@ RSpec.configure do |config|
     prepend_environment_variable("PATH", bin_path + File::PATH_SEPARATOR) if respond_to?(:prepend_environment_variable)
 
     bin_path = File.expand_path(File.join(__dir__, "..", "bin"))
-    prepend_environment_variable("PATH", bin_path + File::PATH_SEPARATOR)
+    if respond_to?(:prepend_environment_variable)
+      prepend_environment_variable("PATH", bin_path + File::PATH_SEPARATOR)
+    else
+      # Fallback for contexts where Aruba API might not be fully mixed in
+      ENV["PATH"] = "#{bin_path}#{File::PATH_SEPARATOR}#{ENV.fetch("PATH", nil)}"
+    end
   end
 end
 

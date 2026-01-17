@@ -1,0 +1,124 @@
+# Mappings of Raw Maven License Names -> SPDX Identifiers
+# Based on https://spdx.org/licenses/ and openSUSE/Fedora standards
+
+# --- Apache Licenses ---
+"The Apache Software License, Version 2.0": "Apache-2.0"
+"Apache License, Version 2.0": "Apache-2.0"
+"Apache License Version 2.0": "Apache-2.0"
+"Apache 2.0": "Apache-2.0"
+"Apache License 2.0": "Apache-2.0"
+"AL 2.0": "Apache-2.0"
+"Apache Software License - Version 2.0": "Apache-2.0"
+"The Apache License, Version 2.0": "Apache-2.0"
+"Apache-2.0": "Apache-2.0"
+
+"Apache License, Version 1.1": "Apache-1.1"
+"The Apache Software License, Version 1.1": "Apache-1.1"
+"Apache 1.1": "Apache-1.1"
+
+"Apache License, Version 1.0": "Apache-1.0"
+
+# --- MIT Licenses ---
+"The MIT License": "MIT"
+"MIT License": "MIT"
+"MIT": "MIT"
+"MIT license": "MIT"
+"The MIT License (MIT)": "MIT"
+
+# --- Eclipse Public Licenses ---
+"Eclipse Public License 1.0": "EPL-1.0"
+"Eclipse Public License - v 1.0": "EPL-1.0"
+"Eclipse Public License, Version 1.0": "EPL-1.0"
+"EPL 1.0": "EPL-1.0"
+
+"Eclipse Public License 2.0": "EPL-2.0"
+"Eclipse Public License - v 2.0": "EPL-2.0"
+"EPL 2.0": "EPL-2.0"
+
+# --- GPL (General Public License) ---
+"GNU General Public License, version 2": "GPL-2.0-only"
+"GNU General Public License, Version 2": "GPL-2.0-only"
+"GPL 2.0": "GPL-2.0-only"
+"GPLv2": "GPL-2.0-only"
+"The GNU General Public License, Version 2": "GPL-2.0-only"
+
+"GNU General Public License, version 2 (GPLv2)": "GPL-2.0-only"
+"GNU General Public License, version 3": "GPL-3.0-only"
+"GPL 3.0": "GPL-3.0-only"
+"GPLv3": "GPL-3.0-only"
+
+# --- LGPL (Lesser General Public License) ---
+"GNU Lesser General Public License": "LGPL-2.1-only"
+"GNU Lesser General Public License, version 2.1": "LGPL-2.1-only"
+"LGPL 2.1": "LGPL-2.1-only"
+"LGPLv2.1": "LGPL-2.1-only"
+"The GNU Lesser General Public License, Version 2.1": "LGPL-2.1-only"
+
+"GNU Lesser General Public License, version 3": "LGPL-3.0-only"
+"LGPL 3.0": "LGPL-3.0-only"
+"LGPLv3": "LGPL-3.0-only"
+
+# --- BSD Licenses ---
+"The BSD License": "BSD-2-Clause" # Ambiguous, but often 2-clause in modern Java
+"BSD License": "BSD-2-Clause"
+"BSD-2-Clause": "BSD-2-Clause"
+"Two-clause BSD license": "BSD-2-Clause"
+"The BSD 2-Clause License": "BSD-2-Clause"
+
+"New BSD License": "BSD-3-Clause"
+"BSD 3-Clause": "BSD-3-Clause"
+"BSD 3-Clause License": "BSD-3-Clause"
+"The BSD 3-Clause License": "BSD-3-Clause"
+"Revised BSD License": "BSD-3-Clause"
+"Modified BSD License": "BSD-3-Clause"
+
+"BSD 0-Clause": "0BSD"
+"0BSD": "0BSD"
+
+# --- CDDL (Common Development and Distribution License) ---
+"Common Development and Distribution License": "CDDL-1.0"
+"CDDL 1.0": "CDDL-1.0"
+"CDDL-1.0": "CDDL-1.0"
+"COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Version 1.0": "CDDL-1.0"
+
+"Common Development and Distribution License 1.1": "CDDL-1.1"
+"CDDL 1.1": "CDDL-1.1"
+
+# --- MPL (Mozilla Public License) ---
+"Mozilla Public License Version 1.1": "MPL-1.1"
+"MPL 1.1": "MPL-1.1"
+
+"Mozilla Public License Version 2.0": "MPL-2.0"
+"MPL 2.0": "MPL-2.0"
+"The Mozilla Public License, Version 2.0": "MPL-2.0"
+
+# --- ISC License ---
+"ISC License": "ISC"
+"The ISC License": "ISC"
+
+# --- Creative Commons ---
+"Creative Commons Zero v1.0 Universal": "CC0-1.0"
+"CC0 1.0 Universal": "CC0-1.0"
+"Public Domain": "CC0-1.0" # Approximation for Public Domain in SPDX
+
+"Creative Commons Attribution 3.0": "CC-BY-3.0"
+"CC BY 3.0": "CC-BY-3.0"
+
+"Creative Commons Attribution 4.0": "CC-BY-4.0"
+"CC BY 4.0": "CC-BY-4.0"
+
+# --- Other Common Java Licenses ---
+"The JSON License": "JSON"
+"JSON": "JSON"
+
+"Unlicense": "Unlicense"
+"The Unlicense": "Unlicense"
+
+"WTFPL": "WTFPL"
+"Do What The F*ck You Want To Public License": "WTFPL"
+
+"PostgreSQL License": "PostgreSQL"
+"The PostgreSQL License": "PostgreSQL"
+
+"Zlib License": "Zlib"
+"The zlib/libpng License": "Zlib"
