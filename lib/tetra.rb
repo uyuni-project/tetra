@@ -20,6 +20,7 @@ require "uri"
 # third party libraries
 require "clamp"
 require "text"
+require "yaml"
 require "zip"
 
 # base components
@@ -48,6 +49,7 @@ require "tetra/maven_website"
 require "tetra/pom_getter"
 
 # package building
+require "tetra/license_mapper"
 require "tetra/packages/speccable"
 require "tetra/packages/scriptable"
 require "tetra/packages/kit_package"

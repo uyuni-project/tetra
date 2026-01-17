@@ -16,7 +16,6 @@ end
 
 Aruba.configure do |config|
   # Increase the default timeout from 3 seconds to 15 seconds.
-  # This covers standard commands that are just slightly slow.
   config.exit_timeout = 15
 
   # Optional: Increase I/O wait time if your tool is slow to output text
@@ -26,19 +25,23 @@ end
 # configure aruba for rspec use
 RSpec.configure do |config|
   config.include Aruba::Api
-  # If running in a CI environment, use the verbose 'documentation'
-  # formatter so we see progress line-by-line.
+  # If running in a CI environment, use the verbose 'documentation' formatter
   config.formatter = :documentation if ENV["CI"]
 
-  # We use aruba's helper to prepend the bin path safely for each test.
-  config.before(:each) do
-    # 1. Configure Git identity for Unit Tests (running in this Ruby process)
+  config.around(:each) do |example|
+    original_env = {
+      "GIT_AUTHOR_NAME" => ENV.fetch("GIT_AUTHOR_NAME", nil),
+      "GIT_AUTHOR_EMAIL" => ENV.fetch("GIT_AUTHOR_EMAIL", nil),
+      "GIT_COMMITTER_NAME" => ENV.fetch("GIT_COMMITTER_NAME", nil),
+      "GIT_COMMITTER_EMAIL" => ENV.fetch("GIT_COMMITTER_EMAIL", nil)
+    }
+
     ENV["GIT_AUTHOR_NAME"] = "Tetra Test"
     ENV["GIT_AUTHOR_EMAIL"] = "test@example.com"
     ENV["GIT_COMMITTER_NAME"] = "Tetra Test"
     ENV["GIT_COMMITTER_EMAIL"] = "test@example.com"
 
-    # 2. Configure Git identity for aruba and CI tests (running in subprocesses)
+    # Configure Aruba (for subprocesses)
     if respond_to?(:set_environment_variable)
       set_environment_variable("GIT_AUTHOR_NAME", "Tetra Test")
       set_environment_variable("GIT_AUTHOR_EMAIL", "test@example.com")
@@ -46,12 +49,27 @@ RSpec.configure do |config|
       set_environment_variable("GIT_COMMITTER_EMAIL", "test@example.com")
     end
 
-    # 3. Existing PATH setup
-    bin_path = File.expand_path(File.join(__dir__, "..", "bin"))
-    prepend_environment_variable("PATH", bin_path + File::PATH_SEPARATOR) if respond_to?(:prepend_environment_variable)
+    example.run
+  ensure
+    # Restore the original environment state
+    original_env.each do |key, value|
+      if value.nil?
+        ENV.delete(key)
+      else
+        ENV[key] = value
+      end
+    end
+  end
 
+  config.before(:each) do
+    # Add bin path to environment
     bin_path = File.expand_path(File.join(__dir__, "..", "bin"))
-    prepend_environment_variable("PATH", bin_path + File::PATH_SEPARATOR)
+    if respond_to?(:prepend_environment_variable)
+      prepend_environment_variable("PATH", bin_path + File::PATH_SEPARATOR)
+    else
+      # Fallback for contexts where Aruba API might not be fully mixed in
+      ENV["PATH"] = "#{bin_path}#{File::PATH_SEPARATOR}#{ENV.fetch("PATH", nil)}"
+    end
   end
 end
 
@@ -61,11 +79,12 @@ module Tetra
     # creates a minimal tetra project
     def create_mock_project
       @project_path = File.join("spec", "data", "test-project")
+
       Tetra::Project.init(@project_path, false)
+
       @project = Tetra::Project.new(@project_path)
     end
 
-    # deletes the mock project and all contents
     def delete_mock_project
       FileUtils.rm_rf(@project_path)
     end
