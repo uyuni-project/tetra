@@ -3,6 +3,11 @@
 module Tetra
   # program entry point
   class MainCommand < Clamp::Command
+    option ["-v", "--version"], :flag, "print the version and exit" do
+      puts Tetra::VERSION
+      exit(0)
+    end
+
     subcommand(
       "init",
       "Inits a tetra project in the current directory",
