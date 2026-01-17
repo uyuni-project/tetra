@@ -1,4 +1,4 @@
-# encoding: UTF-8
+# frozen_string_literal: true
 
 require "aruba/rspec"
 require "simplecov"
@@ -47,10 +47,10 @@ RSpec.configure do |config|
     end
 
     # 3. Existing PATH setup
-    bin_path = File.expand_path(File.join(File.dirname(__FILE__), "..", "bin"))
+    bin_path = File.expand_path(File.join(__dir__, "..", "bin"))
     prepend_environment_variable("PATH", bin_path + File::PATH_SEPARATOR) if respond_to?(:prepend_environment_variable)
 
-    bin_path = File.expand_path(File.join(File.dirname(__FILE__), "..", "bin"))
+    bin_path = File.expand_path(File.join(__dir__, "..", "bin"))
     prepend_environment_variable("PATH", bin_path + File::PATH_SEPARATOR)
   end
 end

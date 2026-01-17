@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "spec_helper"
 
 describe "`tetra`", type: :aruba do
@@ -5,17 +7,25 @@ describe "`tetra`", type: :aruba do
     # Run the command and wait for it to finish
     run_command_and_stop("tetra")
 
-    # Check the output of the command that just finished
-    expect(last_command_started.stdout).to include("Usage:")
+    # Check the output
+    output = last_command_started.stdout
+    expect(output).to include("Usage:")
 
-    expect(last_command_started.stdout).to include("init")
-    expect(last_command_started.stdout).to include("dry-run")
-    expect(last_command_started.stdout).to include("generate-kit")
-    expect(last_command_started.stdout).to include("generate-script")
-    expect(last_command_started.stdout).to include("generate-spec")
-    expect(last_command_started.stdout).to include("generate-all")
-    expect(last_command_started.stdout).to include("patch")
-    expect(last_command_started.stdout).to include("move-jars-to-kit")
-    expect(last_command_started.stdout).to include("get-pom")
+    # Define expected subcommands in a list for cleaner verification
+    expected_subcommands = %w[
+      init
+      dry-run
+      generate-kit
+      generate-script
+      generate-spec
+      generate-all
+      patch
+      move-jars-to-kit
+      get-pom
+    ]
+
+    expected_subcommands.each do |subcommand|
+      expect(output).to include(subcommand)
+    end
   end
 end

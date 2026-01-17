@@ -1,12 +1,17 @@
+# frozen_string_literal: true
+
 require "spec_helper"
 
 describe "`tetra generate-all`", type: :aruba do
   it "generates specs and tarballs for a sample package, source archive workflow" do
-    archive_contents = File.read(File.join("spec", "data", "#{Tetra::CCOLLECTIONS}.zip"))
+    # Use binread for binary files
+    archive_source = File.join("spec", "data", "#{Tetra::CCOLLECTIONS}.zip")
+    archive_contents = File.binread(archive_source)
     write_file("commons-collections.zip", archive_contents)
 
     # init project
     run_command_and_stop("tetra init commons-collections commons-collections.zip", exit_timeout: 120)
+
     cd(File.join("commons-collections", "src", Tetra::CCOLLECTIONS))
 
     # first dry-run, all normal (Interactive & Slow)
@@ -54,12 +59,15 @@ describe "`tetra generate-all`", type: :aruba do
     expect(last_command_started.output).to include("0001-Sources-updated.patch generated")
 
     # rubocop:disable RSpec/ExpectActual
-    expect("../../packages/commons-collections/commons-collections.spec").to have_file_content(/0001-Sources-updated.patch/)
+    spec_path = "../../packages/commons-collections/commons-collections.spec"
+    expect(spec_path).to have_file_content(/0001-Sources-updated.patch/)
     # rubocop:enable RSpec/ExpectActual
   end
 
   it "generates specs and tarballs for a sample package, manual source workflow" do
-    archive_contents = File.read(File.join("spec", "data", "#{Tetra::CCOLLECTIONS}.zip"))
+    # Use binread
+    archive_source = File.join("spec", "data", "#{Tetra::CCOLLECTIONS}.zip")
+    archive_contents = File.binread(archive_source)
     write_file("commons-collections.zip", archive_contents)
 
     # init project
@@ -125,8 +133,9 @@ describe "`tetra generate-all`", type: :aruba do
     expect(last_command_started.output).to include("0001-Sources-updated.patch generated")
 
     # rubocop:disable RSpec/ExpectActual
-    expect("../../packages/commons-collections/commons-collections.spec").to have_file_content(/0001-Sources-updated.patch/)
-    expect("../../packages/commons-collections/commons-collections.spec").to have_file_content(/commons-collections.zip/)
+    spec_path = "../../packages/commons-collections/commons-collections.spec"
+    expect(spec_path).to have_file_content(/0001-Sources-updated.patch/)
+    expect(spec_path).to have_file_content(/commons-collections.zip/)
     # rubocop:enable RSpec/ExpectActual
   end
 end

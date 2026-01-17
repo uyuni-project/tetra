@@ -1,21 +1,29 @@
+# frozen_string_literal: true
+
 require "spec_helper"
 
 describe "`tetra generate-spec`", type: :aruba do
   it "outputs a warning if source files are not found" do
-    archive_contents = File.read(File.join("spec", "data", "#{Tetra::CCOLLECTIONS}.zip"))
+    # Use binread for binary files
+    archive_source = File.join("spec", "data", "#{Tetra::CCOLLECTIONS}.zip")
+    archive_contents = File.binread(archive_source)
     write_file("commons-collections.zip", archive_contents)
 
     run_command_and_stop("tetra init --no-archive commons-collections")
     cd("commons-collections")
 
+    # Manually unpack sources to simulate a project started without an archive
+    # (e.g., source code checked out from git directly)
     cd("src")
     run_command_and_stop("unzip ../../commons-collections.zip")
     cd(Tetra::CCOLLECTIONS)
 
+    # Commit these manual sources
     run_command_and_stop("tetra change-sources --no-archive")
     expect(last_command_started.output).to include("New sources committed")
 
-    # Interactive dry-run with increased timeout
+    # Interactive dry-run to generate build artifacts
+    # Note: increased timeout because 'mvn package' downloads dependencies
     run_command("tetra dry-run", exit_timeout: 300)
     type("mvn package -DskipTests")
     type("\u{0004}") # ^D (Ctrl+D)

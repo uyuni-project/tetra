@@ -1,4 +1,4 @@
-# encoding: UTF-8
+# frozen_string_literal: true
 
 module Tetra
   # configures logging for this application
@@ -6,14 +6,17 @@ module Tetra
     include Singleton
     extend Forwardable
 
-    def_delegators :@logger, :debug, :info, :warn, :error, :fatal, :level=
+    def_delegators :@logger, :debug, :info, :warn, :error, :fatal, :level, :level=, :formatter=
 
     def initialize
-      @logger = ::Logger.new(STDERR)
+      @logger = ::Logger.new($stderr)
+
       @logger.datetime_format = "%Y-%m-%d %H:%M "
       @logger.level = ::Logger::ERROR
+
       @logger.formatter = proc do |severity, _datetime, _progname, msg|
-        "#{severity.chars.first}: #{msg}\n"
+        # PERFORMANCE: severity[0] is faster than severity.chars.first (no array allocation)
+        "#{severity[0]}: #{msg}\n"
       end
     end
   end

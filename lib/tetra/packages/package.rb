@@ -1,4 +1,6 @@
-# encoding: UTF-8
+# frozen_string_literal: true
+
+require "forwardable"
 
 module Tetra
   # represents a Java project packaged in tetra
@@ -49,17 +51,21 @@ module Tetra
     end
 
     def cleanup_description(raw, max_length)
-      # Normalize spaces and strip and truncate to max_length
-      raw = raw.gsub(/[\s]+/, " ").strip
-      raw = raw.slice(0..max_length - 1)
+      # Normalize spaces (collapse multiple spaces/newlines to single space)
+      clean = raw.gsub(/\s+/, " ").strip
 
-      # Remove the last word if it was cut off (preceded by a space)
-      raw = raw.sub(/\s\w+\z/, "")
+      # Truncate to max_length
+      clean = clean[0, max_length]
 
-      # Safely remove trailing dots linear in O(N)
-      raw = raw[0...-1] while raw.end_with?(".")
+      # Remove the last word if it looks cut off (ends in letters, not punctuation)
+      # Note: This assumes descriptions usually end with punctuation.
+      clean = clean.sub(/\s\w+\z/, "")
 
-      raw
+      # Remove ALL trailing dots efficiently (Security Fix for ReDoS)
+      # Replaces clean.sub(/\.+\z/, "")
+      clean = clean.chomp(".") while clean.end_with?(".")
+
+      clean
     end
 
     def to_spec

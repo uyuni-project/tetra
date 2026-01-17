@@ -1,4 +1,4 @@
-# encoding: UTF-8
+# frozen_string_literal: true
 
 module Tetra
   # tetra generate-kit
@@ -8,6 +8,7 @@ module Tetra
         project = Tetra::Project.new(".")
         ensure_dry_running(:has_finished, project) do
           kit = Tetra::KitPackage.new(project)
+
           result_path, conflict_count = kit.to_spec
           print_generation_result(project, result_path, conflict_count)
 

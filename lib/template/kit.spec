@@ -18,9 +18,7 @@ Release:        0
 License:        SUSE-NonFree
 Summary:        Build-time dependency of project "<%= project_name %>"
 URL:            https://github.com/uyuni-project/tetra
-Group:          Development/Libraries/Java
 Source0:        %{name}.tar.xz
-BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 BuildArch:      noarch
 BuildRequires:  xz
 BuildRequires:  fdupes
@@ -43,7 +41,9 @@ thus it should never be installed on end users' systems.
 export NO_BRP_CHECK_BYTECODE_VERSION=true
 install -d -m 0755 %{buildroot}%{_datadir}/tetra/
 tar -C %{buildroot}%{_datadir}/tetra --strip-components=1 -xJf %{S:0}
-find %{buildroot} -type f -name *.py -exec sed -i '1s/python\b/python2/' {} \;
+
+# Ensure python scripts use explicitly versioned python shebangs
+find %{buildroot} -type f -name "*.py" -exec sed -i '1s/python\b/python3/' {} \;
 %fdupes -s %{buildroot}%{_datadir}/tetra/
 
 %files

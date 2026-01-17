@@ -1,4 +1,6 @@
-# encoding: UTF-8
+# frozen_string_literal: true
+
+require "fileutils"
 
 module Tetra
   # facade to git, currently implemented with calls to the git command
@@ -15,10 +17,10 @@ module Tetra
     # inits a repo
     def init
       Dir.chdir(@directory) do
-        if Dir.exist?(".git") == false
-          run("git init")
-        else
+        if Dir.exist?(".git")
           fail GitAlreadyInitedError
+        else
+          git_cmd("init")
         end
       end
     end
@@ -28,8 +30,8 @@ module Tetra
     # returns nil if such commit does not exist
     def latest_id(comment_prefix)
       Dir.chdir(@directory) do
-        result = run("git rev-list --max-count=1 --grep=\"#{comment_prefix}\" --fixed-strings HEAD")
-        result.strip if result != ""
+        result = git_cmd("rev-list", "--max-count=1", "--grep", comment_prefix, "--fixed-strings", "HEAD")
+        result.strip unless result.empty?
       end
     end
 
@@ -39,7 +41,7 @@ module Tetra
     def latest_comment(comment_prefix)
       Dir.chdir(@directory) do
         id = latest_id(comment_prefix)
-        run("git rev-list --max-count=1 --format=%B #{id}") unless id.nil?
+        git_cmd("log", "-1", "--format=%B", id) if id
       end
     end
 
@@ -50,11 +52,11 @@ module Tetra
       log.debug "committing with message: #{message}"
 
       Dir.chdir(@directory) do
-        directories.each do |directory|
-          run("git rm -r --cached --ignore-unmatch #{directory}")
-          run("git add #{directory}")
+        if directories.any?
+          git_cmd("rm", "-r", "--cached", "--ignore-unmatch", *directories)
+          git_cmd("add", *directories)
         end
-        run("git commit --allow-empty -F -", false, message)
+        git_cmd_with_stdin(message, "commit", "--allow-empty", "-F", "-")
       end
     end
 
@@ -62,8 +64,8 @@ module Tetra
     def commit_file(path, message)
       Dir.chdir(@directory) do
         log.debug "committing path #{path} with message: #{message}"
-        run("git add #{path}")
-        run("git commit --allow-empty -F -", false, message)
+        git_cmd("add", path)
+        git_cmd_with_stdin(message, "commit", "--allow-empty", "-F", "-")
       end
     end
 
@@ -71,14 +73,14 @@ module Tetra
     def revert_directories(directories, id)
       Dir.chdir(@directory) do
         directories.each do |directory|
-          # reverts added and modified files, both in index and working tree
-          run("git checkout -f #{id} -- #{directory}")
+          git_cmd("checkout", "-f", id, "--", directory)
 
-          # compute the list of deleted files
-          files_in_commit = run("git ls-tree --name-only -r #{id} -- #{directory}").split("\n")
-          files_in_head = run("git ls-tree --name-only -r HEAD -- #{directory}").split("\n")
-          files_added_after_head = run("git ls-files -o -- #{directory}").split("\n")
-          files_to_delete = files_in_head - files_in_commit + files_added_after_head
+          # Returns list of files relative to current dir
+          files_in_commit = git_cmd("ls-tree", "--name-only", "-r", id, "--", directory).split("\n")
+          files_in_head   = git_cmd("ls-tree", "--name-only", "-r", "HEAD", "--", directory).split("\n")
+          files_added     = git_cmd("ls-files", "-o", "--", directory).split("\n")
+
+          files_to_delete = (files_in_head - files_in_commit) + files_added
 
           files_to_delete.each do |file|
             FileUtils.rm_rf(file)
@@ -91,15 +93,16 @@ module Tetra
     # leaving changes in the working directory
     def undo_last_commit
       Dir.chdir(@directory) do
-        run("git reset HEAD~")
+        git_cmd("reset", "HEAD~")
       end
     end
 
     # renames git special files to 'disable' them
     def disable_special_files(path)
       Dir.chdir(File.join(@directory, path)) do
-        Find.find(".") do |file|
-          next unless file =~ /\.git(ignore)?$/
+        # We look for .git directories or .gitignore files recursively
+        Dir.glob("**/.git*", File::FNM_DOTMATCH).each do |file|
+          next unless file.match?(/\.git(ignore)?$/)
 
           FileUtils.mv(file, "#{file}_disabled_by_tetra")
         end
@@ -111,22 +114,28 @@ module Tetra
     # returns the conflict count
     def merge_with_id(path, new_path, id)
       Dir.chdir(@directory) do
-        run("git show #{id}:#{path} > #{path}.old_version")
+        content = git_cmd("show", "#{id}:#{path}")
+
+        # Write the old version file manually using Ruby
+        temp_old_version = "#{path}.old_version"
+        File.write(temp_old_version, content)
 
         conflict_count = 0
         begin
-          run("git merge-file #{path} #{path}.old_version #{new_path} \
-                -L \"newly generated\" \
-                -L \"previously generated\" \
-                -L \"user edited\"")
+          git_cmd("merge-file", path, temp_old_version, new_path,
+                  "-L", "newly generated",
+                  "-L", "previously generated",
+                  "-L", "user edited")
         rescue ExecutionFailed => e
           if e.status > 0
             conflict_count = e.status
           else
             raise e
           end
+        ensure
+          # Clean up the temporary file
+          File.delete(temp_old_version) if File.exist?(temp_old_version)
         end
-        File.delete("#{path}.old_version")
         conflict_count
       end
     end
@@ -138,12 +147,12 @@ module Tetra
       Dir.chdir(@directory) do
         tracked_files = []
         begin
-          tracked_files += run("git diff-index --name-only #{id} -- #{directory}").split
+          tracked_files += git_cmd("diff-index", "--name-only", id, "--", directory).split
         rescue ExecutionFailed => e
-          raise e if e.status != 1 # status 1 is normal
+          raise e if e.status != 1
         end
 
-        untracked_files = run("git ls-files --exclude-standard --others -- #{directory}").split
+        untracked_files = git_cmd("ls-files", "--exclude-standard", "--others", "--", directory).split
         tracked_files + untracked_files
       end
     end
@@ -152,7 +161,22 @@ module Tetra
     def archive(directory, id, destination_path)
       Dir.chdir(@directory) do
         FileUtils.mkdir_p(File.dirname(destination_path))
-        run("git archive --format=tar #{id} -- #{directory} | xz -9e > #{destination_path}")
+
+        log.debug "archiving #{directory} from #{id} to #{destination_path}"
+
+        # This streams stdout from git directly to stdin of xz without loading
+        # data into Ruby memory (which could be big).
+        git_command = ["git", "archive", "--format=tar", id, "--", directory]
+        xz_command  = ["xz", "-9e"]
+
+        statuses = Open3.pipeline(git_command, xz_command, out: destination_path)
+
+        unless statuses.all?(&:success?)
+          fail ExecutionFailed.new(
+            "git archive pipeline failed (exit codes: #{statuses.map(&:exitstatus)})",
+            statuses.last.exitstatus
+          )
+        end
       end
       destination_path
     end
@@ -161,8 +185,19 @@ module Tetra
     # since from_id
     def format_patch(directory, from_id, destination_path)
       Dir.chdir(@directory) do
-        run("git format-patch -o #{destination_path} --no-numbered #{from_id} -- #{directory}").split
+        git_cmd("format-patch", "-o", destination_path, "--no-numbered", from_id, "--", directory).split
       end
+    end
+
+    private
+
+    # Automatically passes "git" as the first argument in an Array.
+    def git_cmd(*args)
+      run(["git"] + args)
+    end
+
+    def git_cmd_with_stdin(stdin_data, *args)
+      run(["git"] + args, false, stdin_data)
     end
   end
 

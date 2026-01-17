@@ -1,4 +1,4 @@
-# encoding: UTF-8
+# frozen_string_literal: true
 
 require "spec_helper"
 
@@ -13,7 +13,7 @@ describe Tetra::Tar do
       Dir.mktmpdir do |dir|
         tar.decompress(zipfile, dir)
 
-        files = Find.find(dir).to_a
+        files = Dir.glob(File.join(dir, "**", "*"), File::FNM_DOTMATCH)
 
         expect(files).to include("#{dir}/#{Tetra::CCOLLECTIONS}/DEVELOPERS-GUIDE.html")
       end

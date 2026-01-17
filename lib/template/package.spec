@@ -21,14 +21,15 @@ Release:        0
 License:        <%= license %>
 Summary:        <%= summary %>
 URL:            <%= url %>
-Group:          Development/Libraries/Java
 Source0:        <%= src_archive %>
 Source1:        build.sh
-<% patches.to_enum.with_index.each do |patch, i| %>
+<% patches.each_with_index do |patch, i| %>
 Patch<%= i %>:         <%= patch %>
 <% end %>
-BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 BuildRequires:  xz
+<% if src_archive&.downcase&.end_with?(".zip") %>
+BuildRequires:  unzip
+<% end %>
 BuildRequires:  java-devel
 BuildRequires:  <%= kit_name %> == <%= kit_version %>
 BuildArch:      noarch
@@ -37,25 +38,24 @@ Provides:       mvn(<%= group_id %>:<%= artifact_id %>) == <%= version %>
 <% end %>
 Requires:       java
 <% runtime_dependency_ids.each do |dependency_id| %>
-Requires:       mvn(<%= dependency_id[0] %>:<%= dependency_id[1] %>) <% if dependency_id[3] != nil %>==<%= dependency_id[3] %><% end %>
+Requires:       mvn(<%= dependency_id[0] %>:<%= dependency_id[1] %>) <% if dependency_id[3] %>== <%= dependency_id[3] %><% end %>
 <% end %>
 
 %description
-<%=
-  description
-%>
+<%= description %>
 
 %prep
 %setup -q -c -n src
-<% patches.to_enum.with_index.each do |patch, i| %>
-%patch<%= i %> -p2
+<% patches.each_with_index do |patch, i| %>
+%patch -P <%= i %> -p2
 <% end %>
 cp -f %{SOURCE1} .
 cp -Rf %{_datadir}/tetra ../kit
 
 %build
+# Use /bin/bash explicitly to ensure environment consistency
 cd ..
-sh src/build.sh
+/bin/bash src/build.sh
 
 %install
 export NO_BRP_CHECK_BYTECODE_VERSION=true

@@ -1,4 +1,4 @@
-# encoding: UTF-8
+# frozen_string_literal: true
 
 require "spec_helper"
 
@@ -18,7 +18,7 @@ describe Tetra::Ant do
     it "returns commandline options for running Ant" do
       @project.from_directory do
         commandline = Tetra::Ant.commandline(".", mock_executable_dir("ant"))
-        expect(commandline).to eq "./#{@path}"
+        expect(commandline).to eq File.join(".", @path)
       end
     end
   end

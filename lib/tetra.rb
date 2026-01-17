@@ -1,22 +1,24 @@
-# encoding: UTF-8
+# frozen_string_literal: true
 
 # ruby standard library
 require "digest/sha1"
 require "English"
 require "erb"
-require "find"
 require "forwardable"
+require "json"
 require "logger"
+require "net/http"
+require "open3"
 require "open-uri"
 require "pathname"
-require "singleton"
 require "rexml/document"
-require "net/http"
+require "singleton"
+require "stringio"
+require "tempfile"
+require "uri"
 
 # third party libraries
 require "clamp"
-require "json"
-require "open4"
 require "text"
 require "zip"
 

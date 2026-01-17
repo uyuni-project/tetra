@@ -1,4 +1,4 @@
-# encoding: UTF-8
+# frozen_string_literal: true
 
 module Tetra
   # adds methods to generate a spec file from a package object
@@ -13,14 +13,20 @@ module Tetra
       project.from_directory do
         spec_name = "#{name}.spec"
         spec_dir = File.join(destination_dir, name)
+
         FileUtils.mkdir_p(spec_dir)
 
         spec_path = File.join(spec_dir, spec_name)
 
+        # Generate content using the template and current binding
         new_content = generate(template_spec_name, binding)
+
         label = "Spec for #{name} generated"
+
+        # Merge content (handles git operations for conflict resolution)
         conflict_count = project.merge_new_content(new_content, spec_path,
                                                    label, "#{name}-spec")
+
         [spec_path, conflict_count]
       end
     end

@@ -1,4 +1,4 @@
-# encoding: UTF-8
+# frozen_string_literal: true
 
 module Tetra
   # encapsulates a Tetra project directory
@@ -7,7 +7,7 @@ module Tetra
     include Logging
 
     # path of the project template files
-    TEMPLATE_PATH = File.join(File.dirname(__FILE__), "..", "template")
+    TEMPLATE_PATH = File.join(__dir__, "..", "template")
 
     attr_reader :full_path
 
@@ -54,13 +54,14 @@ module Tetra
     def dry_run
       current_directory = Pathname.new(Dir.pwd).relative_path_from(Pathname.new(@full_path))
 
-      @git.commit_directories(%w(src kit), "Dry-run started\n\ntetra: dry-run-started: #{current_directory}")
+      @git.commit_directories(%w[src kit], "Dry-run started\n\ntetra: dry-run-started: #{current_directory}")
     end
 
     # returns true iff we are currently dry-running
     def dry_running?
       latest_comment = @git.latest_comment("tetra: dry-run-")
-      !latest_comment.nil? && !(latest_comment =~ /tetra: dry-run-finished/)
+      # MODERNIZATION: Use match? instead of =~
+      !latest_comment.nil? && !latest_comment.match?(/tetra: dry-run-finished/)
     end
 
     # ends a dry-run assuming a successful build:
@@ -87,7 +88,7 @@ module Tetra
     # ends a dry-run assuming the build went wrong
     # reverts src/ and kit/ directories
     def abort
-      @git.revert_directories(%w(src kit), @git.latest_id("tetra: dry-run-started"))
+      @git.revert_directories(%w[src kit], @git.latest_id("tetra: dry-run-started"))
       @git.undo_last_commit
     end
 
@@ -185,12 +186,9 @@ module Tetra
     # returns the name of the source archive file, if any
     def src_archive
       from_directory do
-        Find.find(File.join("packages", name)) do |file|
-          if File.file?(file) && file.match(/\.(spec)|(sh)|(patch)$/).nil?
-            return File.basename(file)
-          end
-        end
-        nil
+        Dir.glob(File.join("packages", name, "*")).find do |file|
+          File.file?(file) && !file.match?(/\.(spec|sh|patch)$/)
+        end&.then { |f| File.basename(f) }
       end
     end
 
@@ -210,14 +208,15 @@ module Tetra
     def purge_jars
       from_directory do
         result = []
-        Find.find("src") do |file|
-          next unless file =~ /.jar$/ && !File.symlink?(file)
+        Dir.glob("src/**/*.jar").each do |file|
+          next if File.symlink?(file)
 
-          new_location = File.join("kit", "jars", Pathname.new(file).split[1])
+          new_location = File.join("kit", "jars", File.basename(file))
           FileUtils.mv(file, new_location)
 
+          # Calculate relative path for symlink
           link_target = Pathname.new(new_location)
-                        .relative_path_from(Pathname.new(file).split.first)
+                        .relative_path_from(Pathname.new(file).dirname)
                         .to_s
 
           File.symlink(link_target, file)

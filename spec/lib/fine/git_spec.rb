@@ -1,4 +1,4 @@
-# encoding: UTF-8
+# frozen_string_literal: true
 
 require "spec_helper"
 
@@ -75,13 +75,13 @@ describe Tetra::Git do
 
         @git.revert_directories(%w(subdir1 subdir2), @git.latest_id("test-start"))
 
-        files = Find.find(".").to_a
+        files = Dir.glob("**/*", File::FNM_DOTMATCH)
 
-        expect(files).to include("./expected_file")
-        expect(files).to include("./subdir1/expected_file")
-        expect(files).to include("./subdir2/expected_file")
-        expect(files).not_to include("./subdir1/unexpected_file")
-        expect(files).not_to include("./subdir2/unexpected_file")
+        expect(files).to include("expected_file")
+        expect(files).to include("subdir1/expected_file")
+        expect(files).to include("subdir2/expected_file")
+        expect(files).not_to include("subdir1/unexpected_file")
+        expect(files).not_to include("subdir2/unexpected_file")
       end
     end
   end
@@ -123,25 +123,35 @@ describe Tetra::Git do
   end
 
   describe "#archive" do
-    it "archives a version of a directory" do
+    it "archives a version of a directory using the secure pipeline" do
       Dir.chdir(@git_path) do
         @git.commit_file(".", "initial commit")
 
+        # Create structure:
+        #    - outside_not_archived (root, should be ignored)
+        #    - directory/file (target, should be included)
         FileUtils.touch(File.join("outside_not_archived"))
         Dir.mkdir("directory")
         FileUtils.touch(File.join("directory", "file"))
-        @git.commit_file("directory", "test")
+        @git.commit_file(".", "test") # Tag this state as 'test'
 
+        # Create a later file (should be ignored based on commit ID)
         FileUtils.touch(File.join("directory", "later_not_archived"))
+        @git.commit_file(".", "later")
 
-        @git.commit_file("directory", "later")
-
+        # This runs the Open3.pipeline(git, xz) logic
         destination_path = @git.archive("directory", @git.latest_id("test"), "archive.tar.xz")
-        expect(destination_path).to match(/archive.tar.xz$/)
 
+        expect(destination_path).to match(/archive.tar.xz$/)
+        expect(File).to exist("archive.tar.xz")
+        expect(File.size("archive.tar.xz")).to be > 0
+
+        # Verify contents using system tar to ensure xz compression worked
+        # and the git archive filter was correct
         file_list = `tar --list -f archive.tar.xz`.split
-        expect(file_list).not_to include("outside_not_archived")
+
         expect(file_list).to include("directory/file")
+        expect(file_list).not_to include("outside_not_archived")
         expect(file_list).not_to include("directory/later_not_archived")
       end
     end

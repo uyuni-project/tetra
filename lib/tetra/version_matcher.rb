@@ -1,4 +1,4 @@
-# encoding: UTF-8
+# frozen_string_literal: true
 
 module Tetra
   # heuristically matches version strings
@@ -10,62 +10,68 @@ module Tetra
     # by a ., -, _, ~ or space
     # returns a [name, version] pair
     def split_version(full_name)
-      matches = full_name.match(/\A(.*?)(?:[\.\-\_ ~,]?([0-9].*))\z/)
-      if !matches.nil? && matches.length > 1
-        [matches[1], matches[2]]
+      # 1. Match from the start (\A)
+      # 2. Capture everything that is NOT a digit (ZERO or more times) -> *?
+      # 3. Handle the optional separator
+      # 4. Capture the version (MUST start with a digit)
+      matches = full_name.match(/\A(?<name>[^0-9]*?)(?:[.\-_ ~,]?(?<version>[0-9].*))\z/)
+
+      if matches
+        [matches[:name], matches[:version]]
       else
         [full_name, nil]
       end
     end
 
     # returns the "best match" between a version number and a set of available version numbers
-    # using a heuristic criterion. Idea:
-    #  - split the version number in chunks divided by ., - etc.
-    #  - every chunk with same index is "compared", differences make up a score
-    #  - "comparison" is a subtraction if the chunk is an integer, a string distance measure otherwise
-    #  - score weighs differently on chunk index (first chunks are most important)
-    #  - lowest score wins
+    # using a heuristic criterion.
     def best_match(my_version, their_versions)
+      return nil if their_versions.nil? || their_versions.empty?
+
       log.debug("version comparison: #{my_version} vs #{their_versions.join(', ')}")
 
-      my_chunks = my_version.split(/[\.\-\_ ~,]/)
-      their_chunks_hash = Hash[
-                          their_versions.map do |their_version|
-                            their_chunks_for_version = (
-                              if !their_version.nil?
-                                their_version.split(/[\.\-\_ ~,]/)
-                              else
-                                []
-                              end
-                            )
-                            chunks_count = [my_chunks.length - their_chunks_for_version.length, 0].max
-                            their_chunks_for_version += [nil] * chunks_count
-                            [their_version, their_chunks_for_version]
-                          end
-      ]
+      my_chunks = my_version.split(Tetra::CHUNK_SEPARATOR_VERSION_MATCHER)
 
-      max_chunks_length = ([my_chunks.length] + their_chunks_hash.values.map(&:length)).max
+      # Use to_h (Ruby 2.6+) instead of Hash[]
+      # Pre-calculate chunks for all versions to avoid re-splitting in the loop
+      their_chunks_map = their_versions.to_h do |their_version|
+        chunks = their_version ? their_version.split(Tetra::CHUNK_SEPARATOR_VERSION_MATCHER) : []
 
-      scoreboard = []
-      their_versions.each do |their_version|
-        their_chunks = their_chunks_hash[their_version]
+        # Pad with nil to match my_chunks length if shorter
+        padding_needed = [my_chunks.length - chunks.length, 0].max
+        chunks.fill(nil, chunks.length, padding_needed)
+
+        [their_version, chunks]
+      end
+
+      # Calculate max length across all candidates (including myself)
+      max_chunks_length = ([my_chunks.length] + their_chunks_map.values.map(&:length)).max
+
+      # Calculate scores
+      scoreboard = their_versions.map do |their_version|
+        their_chunks = their_chunks_map[their_version]
         score = 0
+
         their_chunks.each_with_index do |their_chunk, i|
+          # Weighting: Earlier chunks are vastly more important
           score_multiplier = 100**(max_chunks_length - i - 1)
           my_chunk = my_chunks[i]
+
           score += chunk_distance(my_chunk, their_chunk) * score_multiplier
         end
-        scoreboard << { version: their_version, score: score }
+
+        { version: their_version, score: score }
       end
 
-      scoreboard = scoreboard.sort_by { |element| element[:score] }
+      # Sort by lowest score (best match)
+      sorted_scoreboard = scoreboard.sort_by { |entry| entry[:score] }
 
       log.debug("scoreboard: ")
-      scoreboard.each_with_index do |element, i|
-        log.debug("  #{i + 1}. #{element[:version]} (score: #{element[:score]})")
+      sorted_scoreboard.each_with_index do |entry, i|
+        log.debug("  #{i + 1}. #{entry[:version]} (score: #{entry[:score]})")
       end
 
-      return scoreboard.first[:version] unless scoreboard.first.nil?
+      sorted_scoreboard.first[:version]
     end
 
     # returns a score representing the distance between two version chunks
@@ -73,19 +79,31 @@ module Tetra
     # for strings, the score is the Levenshtein distance
     # in any case score is normalized between 0 (identical) and 99 (very different/uncomparable)
     def chunk_distance(my_chunk, their_chunk)
-      my_chunk = "0" if my_chunk.nil?
-      their_chunk = "0" if their_chunk.nil?
+      # Normalize nils to "0"
+      my_chunk ||= "0"
+      their_chunk ||= "0"
 
-      if i?(my_chunk) && i?(their_chunk)
-        return [(my_chunk.to_i - their_chunk.to_i).abs, 99].min
+      # If exact match, distance is 0
+      return 0 if my_chunk == their_chunk
+
+      if integer?(my_chunk) && integer?(their_chunk)
+        diff = (my_chunk.to_i - their_chunk.to_i).abs
+        [diff, 99].min
       else
-        return [Text::Levenshtein.distance(my_chunk.upcase, their_chunk.upcase), 99].min
+        dist = Text::Levenshtein.distance(my_chunk.upcase, their_chunk.upcase)
+        [dist, 99].min
       end
     end
 
+    private
+
     # true for integer strings
-    def i?(string)
-      string =~ /^[0-9]+$/
+    def integer?(string)
+      # Faster than regex for simple digit checks
+      Integer(string, 10)
+      true
+    rescue ArgumentError, TypeError
+      false
     end
   end
 end

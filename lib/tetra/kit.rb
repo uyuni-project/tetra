@@ -1,4 +1,4 @@
-# encoding: UTF-8
+# frozen_string_literal: true
 
 module Tetra
   # encapsulates a Tetra kit directory
@@ -13,12 +13,18 @@ module Tetra
     # returns nil if executable cannot be found
     def find_executable(name)
       @project.from_directory do
-        Find.find("kit") do |path|
-          next unless path =~ %r{(.*bin)/#{name}$} && File.executable?(path)
-          result = Regexp.last_match[1]
+        # The pattern `**/*bin/#{name}` matches:
+        #   - kit/bin/mvn
+        #   - kit/usr/local/bin/ant
+        #   - kit/sbin/service (matches your original regex .*bin)
+        Dir.glob(File.join("kit", "**", "*bin", name)).each do |path|
+          next unless File.executable?(path)
 
-          log.debug("found #{name} executable in #{result}")
-          return result
+          # Your original regex captured the directory part (.*bin)
+          dir = File.dirname(path)
+
+          log.debug("found #{name} executable in #{dir}")
+          return dir
         end
       end
 

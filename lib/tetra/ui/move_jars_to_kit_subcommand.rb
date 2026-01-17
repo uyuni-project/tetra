@@ -1,4 +1,4 @@
-# encoding: UTF-8
+# frozen_string_literal: true
 
 module Tetra
   # tetra move-jars-to-kit
@@ -9,7 +9,7 @@ module Tetra
 
         ensure_dry_running(:is_not_in_progress, project) do
           project.purge_jars.each do |original, final|
-            puts "Replaced #{original} with symlink pointing to to #{final}"
+            puts "Replaced #{original} with symlink pointing to #{final}"
           end
         end
       end
