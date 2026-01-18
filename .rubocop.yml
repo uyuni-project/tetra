@@ -7,7 +7,7 @@ plugins:
 
 AllCops:
   NewCops: enable
-  TargetRubyVersion: 3.4
+  TargetRubyVersion: 3.2
   Exclude:
     - "lib/template/*.spec"
     - "vendor/**/*"

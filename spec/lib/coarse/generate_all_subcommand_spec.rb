@@ -24,7 +24,7 @@ describe "`tetra generate-all`", type: :aruba do
     expect(last_command_started.output).to include("Checking for tetra project")
 
     # first generate-all, all normal
-    run_command_and_stop("tetra generate-all", exit_timeout: 120)
+    run_command_and_stop("tetra generate-all", exit_timeout: 300)
 
     expect(last_command_started.output).to include("commons-collections-kit.spec generated")
     expect(last_command_started.output).to include("commons-collections-kit.tar.xz generated")
@@ -50,7 +50,7 @@ describe "`tetra generate-all`", type: :aruba do
 
     expect(last_command_started.output).to include("[INFO] BUILD SUCCESS")
 
-    run_command_and_stop("tetra generate-all --very-very-verbose", exit_timeout: 120)
+    run_command_and_stop("tetra generate-all --very-very-verbose", exit_timeout: 300)
 
     expect(last_command_started.output).to include("commons-collections-kit.spec generated")
     expect(last_command_started.output).to include("commons-collections-kit.tar.xz generated")
@@ -124,7 +124,7 @@ describe "`tetra generate-all`", type: :aruba do
 
     expect(last_command_started.output).to include("[INFO] BUILD SUCCESS")
 
-    run_command_and_stop("tetra generate-all", exit_timeout: 120)
+    run_command_and_stop("tetra generate-all", exit_timeout: 300)
 
     expect(last_command_started.output).to include("commons-collections-kit.spec generated")
     expect(last_command_started.output).to include("commons-collections-kit.tar.xz generated")

@@ -14,7 +14,7 @@ See [MOTIVATION.md](MOTIVATION.md) for further information.
 
 ## Prerequisites
 
-- [Ruby 3.4](https://www.ruby-lang.org) or later;
+- [Ruby 3.2](https://www.ruby-lang.org) or later;
 - [git](https://git-scm.com) with your credentials set in `~/.gitconfig` (name and email);
 - some basic Unix commands: `bash`, `unzip`, `tar`;
 - a JDK > 8 that can compile whatever software you need to package;
@@ -25,7 +25,7 @@ See [MOTIVATION.md](MOTIVATION.md) for further information.
 You can install `tetra` via RubyGems or by building and installing it yourself.
 
 ```bash
-# via RubyGems (currently version 2.0.6 from 02/2020)
+# via RubyGems
 gem install tetra
 
 # from source
