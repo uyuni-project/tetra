@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-describe "tetra version flag", type: :aruba do
+describe "tetra --version and -v commands", type: :aruba do
   it "prints the version with --version" do
     # Run the command
     run_command_and_stop("tetra --version")
