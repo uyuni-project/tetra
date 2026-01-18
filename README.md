@@ -25,7 +25,7 @@ See [MOTIVATION.md](MOTIVATION.md) for further information.
 You can install `tetra` via RubyGems or by building and installing it yourself.
 
 ```bash
-# via RubyGems (currently version 2.0.6 from 02/2020)
+# via RubyGems
 gem install tetra
 
 # from source
