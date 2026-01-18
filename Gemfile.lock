@@ -5,7 +5,6 @@ PATH
       clamp (~> 1.3.2)
       erb (~> 6.0)
       json_pure (>= 2.6.3, < 2.9.0)
-      open4 (~> 1.3.4)
       rexml (>= 3.2.9, < 3.5.0)
       rubyzip (~> 3.2)
       text (~> 1.3.1)
@@ -72,7 +71,6 @@ GEM
     memoist3 (1.0.0)
     mini_mime (1.1.5)
     multi_test (1.1.0)
-    open4 (1.3.4)
     parallel (1.27.0)
     parser (3.3.10.1)
       ast (~> 2.4.1)
@@ -203,7 +201,6 @@ CHECKSUMS
   memoist3 (1.0.0) sha256=686e42402cf150a362050c23143dc57b0ef88f8c344943ff8b7845792b50d56f
   mini_mime (1.1.5) sha256=8681b7e2e4215f2a159f9400b5816d85e9d8c6c6b491e96a12797e798f8bccef
   multi_test (1.1.0) sha256=e9e550cdd863fb72becfe344aefdcd4cbd26ebf307847f4a6c039a4082324d10
-  open4 (1.3.4) sha256=a1df037310624ecc1ea1d81264b11c83e96d0c3c1c6043108d37d396dcd0f4b1
   parallel (1.27.0) sha256=4ac151e1806b755fb4e2dc2332cbf0e54f2e24ba821ff2d3dcf86bf6dc4ae130
   parser (3.3.10.1) sha256=06f6a725d2cd91e5e7f2b7c32ba143631e1f7c8ae2fb918fc4cebec187e6a688
   prism (1.8.0) sha256=84453a16ef5530ea62c5f03ec16b52a459575ad4e7b9c2b360fd8ce2c39c1254
