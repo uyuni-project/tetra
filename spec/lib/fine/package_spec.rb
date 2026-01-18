@@ -55,7 +55,7 @@ describe Tetra::Package do
         spec_lines = File.readlines(File.join("packages", "test-project", "test-project.spec"))
 
         expect(spec_lines).to include("Name:           test-project\n")
-        expect(spec_lines).to include("License:        The Apache Software License, Version 2.0\n")
+        expect(spec_lines).to include("License:        Apache-2.0\n")
         expect(spec_lines).to include("Summary:        Nailgun is a client, protocol, and server for running Java\n")
         expect(spec_lines).to include("URL:            http://martiansoftware.com/nailgun\n")
         expect(spec_lines).to include("Source0:        test-project-4.0.tar.gz\n")
@@ -64,6 +64,52 @@ describe Tetra::Package do
         expect(spec_lines).to include("Provides:       mvn(com.martiansoftware:nailgun-examples) == 0.9.1\n")
         expect(spec_lines).to include("cp -a out/test3.jar %{buildroot}%{_javadir}/test3.jar\n")
       end
+    end
+  end
+
+  describe "#license" do
+    it "returns the SPDX identifier for known licenses" do
+      # Mock the POM to return a known license string
+      allow(@package.instance_variable_get(:@pom)).to receive(:license_name)
+        .and_return("The Apache Software License, Version 2.0")
+
+      expect(@package.license).to eq("Apache-2.0")
+    end
+
+    it "returns the raw license name for unknown licenses" do
+      allow(@package.instance_variable_get(:@pom)).to receive(:license_name)
+        .and_return("My Custom License")
+
+      expect(@package.license).to eq("My Custom License")
+    end
+
+    it "returns 'unknown' when the POM license name is an empty string" do
+      allow(@package.instance_variable_get(:@pom)).to receive(:license_name).and_return("")
+      expect(@package.license).to eq("unknown")
+    end
+  end
+
+  describe "#license_files" do
+    it "detects license files in the project directory" do
+      @project.from_directory do
+        FileUtils.mkdir_p("src")
+        FileUtils.touch("src/LICENSE")
+        FileUtils.touch("src/COPYING")
+        FileUtils.touch("src/License.txt")
+        FileUtils.touch("src/README.md")
+      end
+
+      # Expect exactly these files, sorted alphabetically
+      expect(@package.license_files).to eq(["COPYING", "LICENSE", "License.txt"])
+    end
+
+    it "returns an empty array when no license files are present" do
+      @project.from_directory do
+        FileUtils.mkdir_p("src")
+        FileUtils.touch("src/README.md")
+        FileUtils.touch("src/random_file.java")
+      end
+      expect(@package.license_files).to eq([])
     end
   end
 
@@ -92,6 +138,14 @@ describe Tetra::Package do
     it "handles cut-off words" do
       # "This is a descrip" -> "This is a"
       expect(@package.cleanup_description("This is a description", 17)).to eq("This is a")
+    end
+
+    it "returns an empty string when input is nil" do
+      expect(@package.cleanup_description(nil, 150)).to eq("")
+    end
+
+    it "returns an empty string when input is an empty string" do
+      expect(@package.cleanup_description("", 150)).to eq("")
     end
   end
 end
