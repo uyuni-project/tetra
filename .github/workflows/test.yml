@@ -36,6 +36,10 @@ jobs:
         os: [ubuntu-latest]
         # Due to https://github.com/actions/runner/issues/849, we have to use quotes for '3.0'
         ruby: ['3.4', '4.0']
+        include:
+          # Necessary for testing the different shell and sub-shell behavior
+          - os: macos-latest
+            ruby: '4.0'
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout
