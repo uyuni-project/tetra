@@ -39,7 +39,7 @@ Gem::Specification.new do |spec|
   spec.rdoc_options << "--exclude=lib/template/bundled"
 
   # Dependencies
-  spec.add_runtime_dependency "clamp", "~> 1.4"
+  spec.add_runtime_dependency "clamp", "~> 1.5"
   spec.add_runtime_dependency "json_pure", ">= 2.6.3", "< 2.9.0"
   spec.add_runtime_dependency "rexml", ">= 3.2.9", "< 3.5.0"
   spec.add_runtime_dependency "rubyzip", "~> 3.2"
@@ -48,7 +48,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "aruba", "~> 2.3"
   spec.add_development_dependency "rake", "~> 13.3"
   spec.add_development_dependency "rspec", "~> 3.13"
-  spec.add_development_dependency "rubocop", "~> 1.84"
+  spec.add_development_dependency "rubocop", "~> 1.85"
   spec.add_development_dependency "rubocop-performance", "~> 1.26"
   spec.add_development_dependency "rubocop-rake", "~> 0.7"
   spec.add_development_dependency "rubocop-rspec", "~> 3.9.0"
