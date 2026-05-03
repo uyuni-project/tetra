@@ -1,7 +1,8 @@
-[![OpenSSF Best Practices](https://www.bestpractices.dev/projects/6678/badge)](https://www.bestpractices.dev/projects/6678)
 [![Tests](https://github.com/uyuni-project/tetra/actions/workflows/test.yml/badge.svg?branch=master)](https://github.com/uyuni-project/tetra/actions/workflows/test.yml)
 [![codecov](https://codecov.io/github/uyuni-project/tetra/branch/master/graph/badge.svg?token=iLBGZqGXwa)](https://codecov.io/github/uyuni-project/tetra)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=uyuni-project_tetra&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=uyuni-project_tetra)
+[![OpenSSF Best Practices](https://www.bestpractices.dev/projects/6678/badge)](https://www.bestpractices.dev/projects/6678)
+[![OpenSSF Baseline](https://www.bestpractices.dev/projects/6678/baseline)](https://www.bestpractices.dev/projects/6678)
 
 # tetra – builds RPMs for Java software
 
