@@ -31,8 +31,26 @@ Gem::Specification.new do |spec|
       "*.md",
       "LICENSE",
       "COPYING"
-    ]
+    ],
+    File::FNM_DOTMATCH
   ).select { |f| File.file?(f) }
+
+  required_template_paths = [
+    "lib/template/kit/",
+    "lib/template/packages/",
+    "lib/template/src/",
+    "lib/template/bashrc",
+    "lib/template/kit.spec",
+    "lib/template/package.spec"
+  ]
+
+  # lightweight spec asserting required template paths are present.
+  missing_template_paths = required_template_paths.reject do |path|
+    spec.files.any? { |file| file.start_with?(path) }
+  end
+  unless missing_template_paths.empty?
+    raise "gemspec packaging regression: missing template files under #{missing_template_paths.join(", ")}"
+  end
 
   spec.executables = spec.files.grep(%r{\Abin/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
@@ -45,10 +63,10 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency "rubyzip", "~> 3.2"
   spec.add_runtime_dependency "text", "~> 1.3"
 
-  spec.add_development_dependency "aruba", "~> 2.3"
-  spec.add_development_dependency "rake", "~> 13.3"
+  spec.add_development_dependency "aruba", "~> 2.4"
+  spec.add_development_dependency "rake", "~> 13.4"
   spec.add_development_dependency "rspec", "~> 3.13"
-  spec.add_development_dependency "rubocop", "~> 1.85"
+  spec.add_development_dependency "rubocop", "~> 1.86"
   spec.add_development_dependency "rubocop-performance", "~> 1.26"
   spec.add_development_dependency "rubocop-rake", "~> 0.7"
   spec.add_development_dependency "rubocop-rspec", "~> 3.9.0"
