@@ -27,7 +27,19 @@ style and reports any errors.
 In case you want to add new features, please be aware to also add the necessary fine grained or coarse grained tests
 for it.
 
-## Release
+## Maintainers
 
-Install gem-release: `gem install gem-release`
-Bump a patch version: `gem bump -v patch -p -t -r`
+### Release
+
+This is an example for the version number 2.0.9.
+
+1. Install release helper gem `gem install gem-release`
+1. Bump the version in `lib/tetra/version.rb`
+1. Regenerate `Gemfile.lock` with `bundle install`
+1. Build the gem with `gem build tetra.gemspec`
+1. Run the local tests with `rake`
+1. Add both files and commit them
+1. Tag new version: `git tag -am "tag v2.0.9" v2.0.9`
+1. Push to master: `git push upstream` and `git push --tags upstream`
+1. (Optional: Take a look at the GitHub Action tests)
+1. Release the gem on [rubygems.org](https://rubygems.org): `gem release --pretend` and `gem release`
