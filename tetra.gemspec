@@ -31,7 +31,8 @@ Gem::Specification.new do |spec|
       "*.md",
       "LICENSE",
       "COPYING"
-    ]
+    ],
+    File::FNM_DOTMATCH
   ).select { |f| File.file?(f) }
 
   spec.executables = spec.files.grep(%r{\Abin/}) { |f| File.basename(f) }
